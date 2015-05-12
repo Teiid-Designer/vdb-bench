@@ -14,8 +14,7 @@
   <description>hawtio :: Web Console</description>
 
   <properties>
-    <hawtio-console-url>https://github.com/hawtio/hawtio-integration/archive/v${hawtio-console-version}
-    </hawtio-console-url>
+    <hawtio-console-url>https://github.com/hawtio/openshift-jvm/archive/</hawtio-console-url>
     <destDir>target/hawtio-console</destDir>
   </properties>
 
@@ -97,7 +96,7 @@
             </goals>
             <configuration>
               <url>${hawtio-console-url}</url>
-              <fromFile>v${hawtio-console-version}.tar.gz</fromFile>
+              <fromFile>v${hawtio-console-version}-build.tar.gz</fromFile>
               <toFile>${project.build.directory}/hawtio-console-${hawtio-console-version}.tar.gz</toFile>
             </configuration>
           </execution>
@@ -119,17 +118,10 @@
                 <echo message="Decompress archive"/>
                 <gunzip src="${project.build.directory}/hawtio-console-${hawtio-console-version}.tar.gz"/>
                 <untar src="${project.build.directory}/hawtio-console-${hawtio-console-version}.tar"
-                       dest="${project.build.directory}"/>
+                       dest="${project.build.directory}/"/>
                 <echo message="moving resources"/>
                 <move todir="${destDir}" overwrite="yes">
-                  <fileset dir="${project.build.directory}/hawtio-integration-${hawtio-console-version}/dist"/>
-                </move>
-                <move todir="${destDir}/img" overwrite="yes">
-                  <fileset dir="${project.build.directory}/hawtio-integration-${hawtio-console-version}/img"/>
-                </move>
-                <move todir="${destDir}" overwrite="yes">
-                  <fileset dir="${project.build.directory}/hawtio-integration-${hawtio-console-version}"
-                           includes="index.html"/>
+                  <fileset dir="${project.build.directory}/openshift-jvm-${hawtio-console-version}-build"/>
                 </move>
               </target>
             </configuration>
@@ -190,7 +182,8 @@
           <webAppSourceDirectory>${project.build.directory}/${project.name}</webAppSourceDirectory>
           <scanIntervalSeconds>1</scanIntervalSeconds>
           <webAppConfig>
-            <contextPath>${context}</contextPath>
+            <contextPath>/</contextPath>
+            <!--<contextPath>${context}</contextPath>-->
           </webAppConfig>
           <classesDirectory>${project.build.directory}/${project.name}/WEB-INF/classes</classesDirectory>
           <systemProperties>
