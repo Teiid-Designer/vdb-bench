@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
-	  <groupId>io.hawt</groupId>
-	  <artifactId>project</artifactId>
+    <groupId>io.hawt</groupId>
+    <artifactId>project</artifactId>
     <version>2.0-SNAPSHOT</version>
   </parent>
 
@@ -11,6 +12,12 @@
   <packaging>war</packaging>
   <name>${project.artifactId}</name>
   <description>hawtio :: Web Console</description>
+
+  <properties>
+    <hawtio-console-url>https://github.com/hawtio/hawtio-integration/archive/v${hawtio-console-version}
+    </hawtio-console-url>
+    <destDir>target/hawtio-console</destDir>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -56,7 +63,108 @@
   </dependencies>
 
   <build>
+    <!-- we do not want version in the WAR name -->
+    <finalName>${project.artifactId}</finalName>
+
     <plugins>
+      <!-- Step 1. - Download Swagger UI project from GitHub -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>wagon-maven-plugin</artifactId>
+        <version>1.0</version>
+        <executions>
+          <execution>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>download-single</goal>
+            </goals>
+            <configuration>
+              <url>${hawtio-console-url}</url>
+              <fromFile>v${hawtio-console-version}.tar.gz</fromFile>
+              <toFile>${project.build.directory}/hawtio-console-${hawtio-console-version}.tar.gz</toFile>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Step 2. -  Decompress content and move it to target/hawtio-console folder -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <echo message="Decompress archive"/>
+                <gunzip src="${project.build.directory}/hawtio-console-${hawtio-console-version}.tar.gz"/>
+                <untar src="${project.build.directory}/hawtio-console-${hawtio-console-version}.tar"
+                       dest="${project.build.directory}"/>
+                <echo message="moving resources"/>
+                <move todir="${destDir}" overwrite="yes">
+                  <fileset dir="${project.build.directory}/hawtio-integration-${hawtio-console-version}/dist"/>
+                </move>
+                <move todir="${destDir}/img" overwrite="yes">
+                  <fileset dir="${project.build.directory}/hawtio-integration-${hawtio-console-version}/img"/>
+                </move>
+                <move todir="${destDir}" overwrite="yes">
+                  <fileset dir="${project.build.directory}/hawtio-integration-${hawtio-console-version}"
+                           includes="index.html"/>
+                </move>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Step 3. Copy Web Resources to target/classes but also to target/swagger-ui -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/classes/</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/webapp</directory>
+                  <filtering>false</filtering>
+                </resource>
+                <!-- Copy hawtio-console resources to classes directory to be able to use it with mvn jetty:run -->
+                <resource>
+                  <directory>${destDir}</directory>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Step 4. Add hawtio-console Resources to the WAR -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <webResources>
+            <resource>
+              <directory>target/hawtio-console/</directory>
+              <includes>
+                <include>**/*.*</include>
+              </includes>
+            </resource>
+          </webResources>
+        </configuration>
+      </plugin>
+
       <plugin>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
@@ -67,12 +175,6 @@
           <webAppConfig>
             <contextPath>${context}</contextPath>
           </webAppConfig>
-          <connectors>
-            <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-              <port>${jettyPort}</port>
-              <maxIdleTime>60000</maxIdleTime>
-            </connector>
-          </connectors>
           <systemProperties>
             <systemProperty>
               <key>hawtio.config.dir</key>
@@ -83,6 +185,8 @@
               <value>${hawtio-config-repo}</value>
             </systemProperty>
           </systemProperties>
+          <stopKey>stop</stopKey>
+          <stopPort>9999</stopPort>
         </configuration>
       </plugin>
 
@@ -101,6 +205,9 @@
           </filesets>
         </configuration>
       </plugin>
+
     </plugins>
+
   </build>
+
 </project>
