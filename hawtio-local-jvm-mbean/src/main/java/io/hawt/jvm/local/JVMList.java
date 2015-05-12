@@ -73,8 +73,9 @@ public class JVMList implements JVMListMBean {
     }
 
     public void init() {
-        try {
+        LOG.debug("Registering JVM discovery MBean: hawtio:type=JVMList");
 
+        try {
             try {
                 // let's just hit any errors we're going to hit before even creating the mbean
                 listLocalJVMs();
@@ -129,7 +130,6 @@ public class JVMList implements JVMListMBean {
 
                 String alias = getVmAlias(process.displayName(), dto.getAgentUrl());
                 dto.setAlias(alias);
-
 
                 // provide fine grained url details
                 if (dto.getAgentUrl() != null) {

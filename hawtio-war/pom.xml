@@ -44,6 +44,12 @@
       <artifactId>jolokia-core</artifactId>
       <version>${jolokia-version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.jolokia</groupId>
+      <artifactId>jolokia-jvm</artifactId>
+      <version>${jolokia-version}</version>
+      <classifier>agent</classifier>
+    </dependency>
 
     <dependency>
       <groupId>org.apache.aries.blueprint</groupId>
@@ -64,6 +70,11 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
+      <version>${slf4j-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
       <version>${slf4j-version}</version>
     </dependency>
   </dependencies>
@@ -181,6 +192,7 @@
           <webAppConfig>
             <contextPath>${context}</contextPath>
           </webAppConfig>
+          <classesDirectory>${project.build.directory}/${project.name}/WEB-INF/classes</classesDirectory>
           <systemProperties>
             <systemProperty>
               <key>hawtio.config.dir</key>
