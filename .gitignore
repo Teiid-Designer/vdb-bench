@@ -1,12 +1,23 @@
-*.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+target
+*.iml
+*.ipr
+*.iws
+*.log
+overlays
+.DS_Store
+.settings
+.project
+.classpath
+bin
+runtime-EclipseApplication-m2eclipse
+.metadata
+/runtime-*/
+./fabric
+./fuseenterprise
+.idea
+tags
+node_modules
+hawtio-config
+.tscache
+node/
+bower_components/
