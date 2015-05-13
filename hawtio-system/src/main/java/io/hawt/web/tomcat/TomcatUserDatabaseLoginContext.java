@@ -1,13 +1,9 @@
 package io.hawt.web.tomcat;
 
-import io.hawt.util.Predicate;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
+import java.io.File;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
@@ -18,10 +14,14 @@ import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+
+import io.hawt.util.Predicate;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * To use Apache Tomcat's conf/tomcat-users.xml user database as JAAS {@link javax.security.auth.login.LoginContext},
@@ -42,53 +42,53 @@ public class TomcatUserDatabaseLoginContext implements LoginModule {
     static {
         Map<String, Predicate<PasswordPair>> temp = new HashMap<>(6);
         temp.put(
-            "NONE",
-            new Predicate<PasswordPair>() {
-                @Override
-                public boolean evaluate(final PasswordPair passwordPair) {
-                    return passwordPair.getFilePassword().equals(passwordPair.getSuppliedPassword());
-                }
-            });
+                "NONE",
+                new Predicate<PasswordPair>() {
+                    @Override
+                    public boolean evaluate(final PasswordPair passwordPair) {
+                        return passwordPair.getFilePassword().equals(passwordPair.getSuppliedPassword());
+                    }
+                });
         temp.put(
-            "MD5",
-            new Predicate<PasswordPair>() {
-                @Override
-                public boolean evaluate(final PasswordPair passwordPair) {
-                    return passwordPair.getFilePassword().equals(DigestUtils.md5Hex(passwordPair.getSuppliedPassword()));
-                }
-            });
+                "MD5",
+                new Predicate<PasswordPair>() {
+                    @Override
+                    public boolean evaluate(final PasswordPair passwordPair) {
+                        return passwordPair.getFilePassword().equals(DigestUtils.md5Hex(passwordPair.getSuppliedPassword()));
+                    }
+                });
         temp.put(
-            "SHA-256",
-            new Predicate<PasswordPair>() {
-                @Override
-                public boolean evaluate(final PasswordPair passwordPair) {
-                    return passwordPair.getFilePassword().equals(DigestUtils.sha256Hex(passwordPair.getSuppliedPassword()));
-                }
-            });
+                "SHA-256",
+                new Predicate<PasswordPair>() {
+                    @Override
+                    public boolean evaluate(final PasswordPair passwordPair) {
+                        return passwordPair.getFilePassword().equals(DigestUtils.sha256Hex(passwordPair.getSuppliedPassword()));
+                    }
+                });
         temp.put(
-            "SHA",
-            new Predicate<PasswordPair>() {
-                @Override
-                public boolean evaluate(final PasswordPair passwordPair) {
-                    return passwordPair.getFilePassword().equals(DigestUtils.shaHex(passwordPair.getSuppliedPassword()));
-                }
-            });
+                "SHA",
+                new Predicate<PasswordPair>() {
+                    @Override
+                    public boolean evaluate(final PasswordPair passwordPair) {
+                        return passwordPair.getFilePassword().equals(DigestUtils.shaHex(passwordPair.getSuppliedPassword()));
+                    }
+                });
         temp.put(
-            "SHA-512",
-            new Predicate<PasswordPair>() {
-                @Override
-                public boolean evaluate(final PasswordPair passwordPair) {
-                    return passwordPair.getFilePassword().equals(DigestUtils.sha512Hex(passwordPair.getSuppliedPassword()));
-                }
-            });
+                "SHA-512",
+                new Predicate<PasswordPair>() {
+                    @Override
+                    public boolean evaluate(final PasswordPair passwordPair) {
+                        return passwordPair.getFilePassword().equals(DigestUtils.sha512Hex(passwordPair.getSuppliedPassword()));
+                    }
+                });
         temp.put(
-            "SHA-384",
-            new Predicate<PasswordPair>() {
-                @Override
-                public boolean evaluate(final PasswordPair passwordPair) {
-                    return passwordPair.getFilePassword().equals(DigestUtils.sha384Hex(passwordPair.getSuppliedPassword()));
-                }
-            });
+                "SHA-384",
+                new Predicate<PasswordPair>() {
+                    @Override
+                    public boolean evaluate(final PasswordPair passwordPair) {
+                        return passwordPair.getFilePassword().equals(DigestUtils.sha384Hex(passwordPair.getSuppliedPassword()));
+                    }
+                });
         PASSWORD_CHECKS = Collections.unmodifiableMap(temp);
     }
 

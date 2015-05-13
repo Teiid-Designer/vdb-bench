@@ -17,11 +17,6 @@
  */
 package io.hawt.blueprint;
 
-import org.apache.aries.blueprint.container.BlueprintContainerImpl;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,6 +28,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
+import org.apache.aries.blueprint.container.BlueprintContainerImpl;
 
 /**
  * Initialises all the blueprint XML files called <code>META-INF/blueprint.xml</code> on the classpath

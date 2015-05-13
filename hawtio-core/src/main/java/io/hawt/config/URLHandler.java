@@ -15,15 +15,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.hawt.git;
+package io.hawt.config;
 
-import java.io.IOException;
-
-import org.eclipse.jgit.api.errors.GitAPIException;
+import java.io.InputStream;
 
 /**
- * A callback to perform write operations on a git repository.
+ * A facade above the URLStreamHandler interface so we can use URL handlers with different kinds of class loaders
+ * and registration rather than relying on the global classpath like the java.net.URL class
  */
-public interface WriteCallback<T> {
-    T apply(WriteContext context) throws IOException, GitAPIException;
+public interface URLHandler {
+    /**
+     * Returns the stream  to the given URL
+     */
+    InputStream openStream(String url);
 }

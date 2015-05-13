@@ -1,12 +1,10 @@
 package io.hawt.web;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
-import java.util.regex.Pattern;
-import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -18,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.IOUtils;
 import io.hawt.system.Helpers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,10 +51,10 @@ public class SessionExpiryFilter implements Filter {
         response.setContentType("text/html;charset=UTF-8");
         OutputStream out = response.getOutputStream();
         try {
-          out.write("ok".getBytes());
-          out.flush();
+            out.write("ok".getBytes());
+            out.flush();
         } finally {
-          out.close();
+            out.close();
         }
     }
 
@@ -68,9 +65,9 @@ public class SessionExpiryFilter implements Filter {
 
     private void process(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         if (context == null || context.getAttribute("authenticationEnabled") == null) {
-          // most likely the authentication filter hasn't been started up yet, let this request through and it can be dealt with by the authentication filter
-          chain.doFilter(request, response);
-          return;
+            // most likely the authentication filter hasn't been started up yet, let this request through and it can be dealt with by the authentication filter
+            chain.doFilter(request, response);
+            return;
         }
         HttpSession session = request.getSession(false);
         boolean enabled = (boolean) context.getAttribute("authenticationEnabled");
@@ -93,7 +90,7 @@ public class SessionExpiryFilter implements Filter {
         }
         String myContext = uriParts[0];
         String subContext = uriParts[1];
-        if (session == null || session.getMaxInactiveInterval() < 0 ) {
+        if (session == null || session.getMaxInactiveInterval() < 0) {
             if (subContext.equals("refresh") && !enabled) {
                 LOG.debug("Authentication disabled, received refresh response, responding with ok");
                 writeOk(response);
@@ -106,13 +103,13 @@ public class SessionExpiryFilter implements Filter {
                     chain.doFilter(request, response);
                 } else {
                     if (subContext.equals("jolokia") ||
-                        subContext.equals("proxy") ||
-                        subContext.equals("user") ||
-                        subContext.equals("exportContext") ||
-                        subContext.equals("contextFormatter") ||
-                        subContext.equals("upload")) {
+                            subContext.equals("proxy") ||
+                            subContext.equals("user") ||
+                            subContext.equals("exportContext") ||
+                            subContext.equals("contextFormatter") ||
+                            subContext.equals("upload")) {
                         LOG.debug("Authentication enabled, denying request for {}", subContext);
-                        Helpers.doForbidden(response); 
+                        Helpers.doForbidden(response);
                     } else {
                         LOG.debug("Authentication enabled, but allowing request for {}", subContext);
                         chain.doFilter(request, response);
@@ -124,15 +121,15 @@ public class SessionExpiryFilter implements Filter {
         int maxInactiveInterval = session.getMaxInactiveInterval();
         long now = System.currentTimeMillis();
         if (session.getAttribute("LastAccess") != null) {
-          long lastAccess = (long) session.getAttribute("LastAccess");
-          long remainder = (now - lastAccess) / 1000;
-          LOG.debug("Session expiry: {}, duration since last access: {}", maxInactiveInterval, remainder);
-          if (remainder > maxInactiveInterval) {
-            LOG.info("Expiring session due to inactivity");
-            session.invalidate();
-            Helpers.doForbidden(response);
-            return;
-          }
+            long lastAccess = (long) session.getAttribute("LastAccess");
+            long remainder = (now - lastAccess) / 1000;
+            LOG.debug("Session expiry: {}, duration since last access: {}", maxInactiveInterval, remainder);
+            if (remainder > maxInactiveInterval) {
+                LOG.info("Expiring session due to inactivity");
+                session.invalidate();
+                Helpers.doForbidden(response);
+                return;
+            }
         }
         if (subContext.equals("refresh")) {
             updateLastAccess(session, now);

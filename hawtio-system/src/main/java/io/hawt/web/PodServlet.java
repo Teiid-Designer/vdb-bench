@@ -17,11 +17,11 @@
  */
 package io.hawt.web;
 
+import javax.servlet.http.HttpServletRequest;
+
 import io.hawt.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Proxies /pod/name/port/* to the pod IP/port for 'name' using the Kubernetes service lookup and then

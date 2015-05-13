@@ -25,7 +25,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import io.hawt.git.*;
+import io.hawt.git.GitFacade;
+import io.hawt.git.GitFileManager;
+import io.hawt.git.GitHelper;
+import io.hawt.git.WriteCallback;
+import io.hawt.git.WriteContext;
 import io.hawt.util.Files;
 import io.hawt.util.Function;
 import io.hawt.util.Strings;

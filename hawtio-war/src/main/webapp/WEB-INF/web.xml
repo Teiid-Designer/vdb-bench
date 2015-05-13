@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
-	      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	      xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
 	      http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
-	      version="2.4">
+         version="2.4">
 
   <description>hawtio</description>
   <display-name>hawtio</display-name>
@@ -219,24 +219,24 @@
     <url-pattern>/plugin/*</url-pattern>
   </servlet-mapping>
   -->
-<!--
-  <servlet>
-    <servlet-name>GitServlet</servlet-name>
-    <servlet-class>org.eclipse.jgit.http.server.GitServlet</servlet-class>
-    <init-param>
-      <param-name>base-path</param-name>
-      <param-value>/var/hawtio/git</param-value>
-    </init-param>
-    <init-param>
-      <param-name>export-all</param-name>
-      <param-value>0</param-value>
-    </init-param>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>GitServlet</servlet-name>
-    <url-pattern>/git/*</url-pattern>
-  </servlet-mapping>
--->
+  <!--
+    <servlet>
+      <servlet-name>GitServlet</servlet-name>
+      <servlet-class>org.eclipse.jgit.http.server.GitServlet</servlet-class>
+      <init-param>
+        <param-name>base-path</param-name>
+        <param-value>/var/hawtio/git</param-value>
+      </init-param>
+      <init-param>
+        <param-name>export-all</param-name>
+        <param-value>0</param-value>
+      </init-param>
+    </servlet>
+    <servlet-mapping>
+      <servlet-name>GitServlet</servlet-name>
+      <url-pattern>/git/*</url-pattern>
+    </servlet-mapping>
+  -->
   <!--
   <servlet>
     <servlet-name>gitServlet</servlet-name>
@@ -264,7 +264,7 @@
     <listener-class>io.hawt.HawtioContextListener</listener-class>
   </listener> -->
   <!--<listener>-->
-    <!--<listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>-->
+  <!--<listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>-->
   <!--</listener>-->
   <listener>
     <listener-class>io.hawt.blueprint.HawtioBlueprintContextListener</listener-class>
