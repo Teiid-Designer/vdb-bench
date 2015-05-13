@@ -19,6 +19,8 @@
   </properties>
 
   <dependencies>
+
+    <!-- servlet api is provided -->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
@@ -26,18 +28,36 @@
       <scope>provided</scope>
     </dependency>
 
+    <!-- mandatory core hawito modules -->
     <dependency>
       <groupId>io.hawt</groupId>
       <artifactId>hawtio-core</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>io.hawt</groupId>
+      <artifactId>hawtio-system</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.hawt</groupId>
+      <artifactId>hawtio-util</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
+    <!-- optional hawtio modules we want to use in this WAR -->
+    <dependency>
+      <groupId>io.hawt</groupId>
+      <artifactId>hawtio-git</artifactId>
+      <version>${project.version}</version>
+    </dependency>
     <dependency>
       <groupId>io.hawt</groupId>
       <artifactId>hawtio-local-jvm-mbean</artifactId>
       <version>${project.version}</version>
     </dependency>
 
+    <!-- jolokia is mandatory -->
     <dependency>
       <groupId>org.jolokia</groupId>
       <artifactId>jolokia-core</artifactId>
@@ -50,6 +70,7 @@
       <classifier>agent</classifier>
     </dependency>
 
+    <!-- blueprint is mandatory as its for dependency injection and bootstrapping services -->
     <dependency>
       <groupId>org.apache.aries.blueprint</groupId>
       <artifactId>org.apache.aries.blueprint.web</artifactId>
@@ -66,6 +87,8 @@
         </exclusion>
       </exclusions>
     </dependency>
+
+    <!-- logging -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
