@@ -66,6 +66,18 @@
     <jetty-webapp-artifactId>jetty-webapp</jetty-webapp-artifactId>
 
     <blueprint-web-version>1.1.0</blueprint-web-version>
+
+    <commons-codec-version>1.6</commons-codec-version>
+    <commons-fileupload-version>1.3.1</commons-fileupload-version>
+    <commons-httpclient-version>3.1</commons-httpclient-version>
+    <commons-io-version>2.2</commons-io-version>
+
+    <!-- TODO should be newer -->
+    <guava-version>10.0</guava-version>
+    <gitective-version>0.9.9</gitective-version>
+
+    <jcraft-jzlib-version>1.1.3</jcraft-jzlib-version>
+    <jgit-version>3.0.0.201306101825-r</jgit-version>
     <jolokia-version>1.3.0</jolokia-version>
     <junit-version>4.11</junit-version>
     <log4j-version>1.2.17</log4j-version>
@@ -78,7 +90,9 @@
   <modules>
     <module>hawtio-util</module>
     <module>hawtio-core</module>
+    <module>hawtio-git</module>
     <module>hawtio-local-jvm-mbean</module>
+    <module>hawtio-system</module>
     <module>hawtio-war</module>
   </modules>
 
