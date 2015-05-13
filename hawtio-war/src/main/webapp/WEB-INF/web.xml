@@ -56,7 +56,6 @@
     <env-entry-value></env-entry-value>
   </env-entry>
 
-  <!--
   <filter>
     <filter-name>SessionExpiryFilter</filter-name>
     <filter-class>io.hawt.web.SessionExpiryFilter</filter-class>
@@ -65,7 +64,6 @@
     <filter-name>SessionExpiryFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-
   <filter>
     <filter-name>XFrameOptionsFilter</filter-name>
     <filter-class>io.hawt.web.XFrameOptionsFilter</filter-class>
@@ -74,7 +72,6 @@
     <filter-name>XFrameOptionsFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-
   <filter>
     <filter-name>CORSFilter</filter-name>
     <filter-class>io.hawt.web.CORSFilter</filter-class>
@@ -83,7 +80,6 @@
     <filter-name>CORSFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-
   <filter>
     <filter-name>AuthenticationFilter</filter-name>
     <filter-class>io.hawt.web.AuthenticationFilter</filter-class>
@@ -96,10 +92,8 @@
     <filter-name>AuthenticationFilter</filter-name>
     <url-pattern>/auth/*</url-pattern>
   </filter-mapping>
-  -->
-  <!--
-       don't want to try and interpret the authentication header
-       intended for the proxy
+
+  <!-- don't want to try and interpret the authentication header intended for the proxy
   <filter-mapping>
     <filter-name>AuthenticationFilter</filter-name>
     <url-pattern>/proxy/*</url-pattern>
@@ -117,6 +111,7 @@
   </filter-mapping>
   -->
 
+  <!-- jolokia -->
   <servlet>
     <servlet-name>jolokia-agent</servlet-name>
     <servlet-class>org.jolokia.http.AgentServlet</servlet-class>
@@ -140,6 +135,16 @@
     <url-pattern>/proxy/*</url-pattern>
   </servlet-mapping>
 
+  <!-- to discover 3rd party plugins deployed in same JVM -->
+  <servlet>
+    <servlet-name>plugin</servlet-name>
+    <servlet-class>io.hawt.web.PluginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>plugin</servlet-name>
+    <url-pattern>/plugin/*</url-pattern>
+  </servlet-mapping>
+
   <!--
   <servlet>
     <servlet-name>kube-service</servlet-name>
@@ -161,17 +166,7 @@
   </servlet-mapping>
   -->
 
-  <!--
-  <servlet>
-    <servlet-name>file-upload</servlet-name>
-    <servlet-class>io.hawt.web.UploadServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>file-upload</servlet-name>
-    <url-pattern>/upload/*</url-pattern>
-  </servlet-mapping>
-
+  <!-- login/logout and security related servlets -->
   <servlet>
     <servlet-name>user</servlet-name>
     <servlet-class>io.hawt.web.UserServlet</servlet-class>
@@ -180,7 +175,6 @@
     <servlet-name>user</servlet-name>
     <url-pattern>/user/*</url-pattern>
   </servlet-mapping>
-
   <servlet>
     <servlet-name>login</servlet-name>
     <servlet-class>io.hawt.web.LoginServlet</servlet-class>
@@ -189,7 +183,6 @@
     <servlet-name>login</servlet-name>
     <url-pattern>/auth/login/*</url-pattern>
   </servlet-mapping>
-
   <servlet>
     <servlet-name>logout</servlet-name>
     <servlet-class>io.hawt.web.LogoutServlet</servlet-class>
@@ -198,7 +191,6 @@
     <servlet-name>logout</servlet-name>
     <url-pattern>/auth/logout/*</url-pattern>
   </servlet-mapping>
-
   <servlet>
     <servlet-name>keycloak</servlet-name>
     <servlet-class>io.hawt.web.keycloak.KeycloakServlet</servlet-class>
@@ -208,34 +200,16 @@
     <url-pattern>/keycloak/*</url-pattern>
   </servlet-mapping>
 
+  <!-- various other servlets -->
   <servlet>
-    <servlet-name>plugin</servlet-name>
-    <servlet-class>io.hawt.web.PluginServlet</servlet-class>
+    <servlet-name>file-upload</servlet-name>
+    <servlet-class>io.hawt.web.UploadServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
-    <servlet-name>plugin</servlet-name>
-    <url-pattern>/plugin/*</url-pattern>
+    <servlet-name>file-upload</servlet-name>
+    <url-pattern>/upload/*</url-pattern>
   </servlet-mapping>
-  -->
-  <!--
-    <servlet>
-      <servlet-name>GitServlet</servlet-name>
-      <servlet-class>org.eclipse.jgit.http.server.GitServlet</servlet-class>
-      <init-param>
-        <param-name>base-path</param-name>
-        <param-value>/var/hawtio/git</param-value>
-      </init-param>
-      <init-param>
-        <param-name>export-all</param-name>
-        <param-value>0</param-value>
-      </init-param>
-    </servlet>
-    <servlet-mapping>
-      <servlet-name>GitServlet</servlet-name>
-      <url-pattern>/git/*</url-pattern>
-    </servlet-mapping>
-  -->
-  <!--
   <servlet>
     <servlet-name>gitServlet</servlet-name>
     <servlet-class>io.hawt.web.GitServlet</servlet-class>
@@ -245,7 +219,6 @@
     <servlet-name>gitServlet</servlet-name>
     <url-pattern>/git/*</url-pattern>
   </servlet-mapping>
-
   <servlet>
     <servlet-name>maven-source</servlet-name>
     <servlet-class>io.hawt.web.JavaDocServlet</servlet-class>
@@ -255,14 +228,13 @@
     <servlet-name>maven-source</servlet-name>
     <url-pattern>/javadoc/*</url-pattern>
   </servlet-mapping>
-  -->
 
   <listener>
     <listener-class>io.hawt.HawtioContextListener</listener-class>
   </listener>
-  <!--<listener>-->
-  <!--<listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>-->
-  <!--</listener>-->
+  <listener>
+    <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>
+  </listener>
   <listener>
     <listener-class>io.hawt.blueprint.HawtioBlueprintContextListener</listener-class>
   </listener>
