@@ -14,7 +14,7 @@
   <description>hawtio :: Web Console</description>
 
   <properties>
-    <hawtio-console-url>https://github.com/hawtio/openshift-jvm/archive/</hawtio-console-url>
+    <hawtio-console-url>https://github.com/fabric8io/fabric8-console/archive/</hawtio-console-url>
     <destDir>target/hawtio-console</destDir>
   </properties>
 
@@ -119,7 +119,7 @@
             </goals>
             <configuration>
               <url>${hawtio-console-url}</url>
-              <fromFile>v${hawtio-console-version}-build.tar.gz</fromFile>
+              <fromFile>${hawtio-console-version}-build.tar.gz</fromFile>
               <toFile>${project.build.directory}/hawtio-console-${hawtio-console-version}.tar.gz</toFile>
             </configuration>
           </execution>
@@ -144,7 +144,7 @@
                        dest="${project.build.directory}/"/>
                 <echo message="moving resources"/>
                 <move todir="${destDir}" overwrite="yes">
-                  <fileset dir="${project.build.directory}/openshift-jvm-${hawtio-console-version}-build"/>
+                  <fileset dir="${project.build.directory}/fabric8-console-${hawtio-console-version}-build"/>
                 </move>
               </target>
             </configuration>
