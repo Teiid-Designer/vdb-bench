@@ -11,7 +11,7 @@
   <groupId>io.hawt</groupId>
   <artifactId>project</artifactId>
   <packaging>pom</packaging>
-  <version>2.1-SNAPSHOT</version>
+  <version>2.0.1</version>
   <name>hawtio-java-project</name>
   <description>hawtio :: project</description>
   <url>http://hawt.io/</url>
@@ -28,7 +28,7 @@
     <connection>scm:git:git@github.com:hawtio/hawtio-java.git</connection>
     <developerConnection>scm:git:git@github.com:hawtio/hawtio-java.git</developerConnection>
     <url>git@github.com:hawtio/hawtio-java.git</url>
-    <tag>HEAD</tag>
+    <tag>project-2.0.1</tag>
   </scm>
 
   <distributionManagement>
