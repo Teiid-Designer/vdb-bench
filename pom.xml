@@ -98,6 +98,20 @@
 
   <build>
     <defaultGoal>install</defaultGoal>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.4.1</version>
+        <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <!--
+          <tag>hawtio-${project.version}</tag>
+          -->
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 
   <profiles>
@@ -113,6 +127,75 @@
       <properties>
         <toolsjar>${java.home}/../lib/tools.jar</toolsjar>
       </properties>
+    </profile>
+
+    <profile>
+      <id>release</id>
+      <properties>
+      </properties>
+      <!--
+      TODO when using the release profile you should add your ~/.m2/settings.xml something like this:
+
+      <settings>
+        <profiles>
+          <profile>
+            <id>release</id>
+            <properties>
+              <gpg.passphrase>MyPassPhrase</gpg.passphrase>
+            </properties>
+          </profile>
+          ...
+      -->
+
+      <!--
+            Run the release /w the -P release flag to enable the release profile.
+          -->
+      <build>
+        <plugins>
+          <!-- We want to sign the artifact, the POM, and all attached artifacts -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <configuration>
+              <passphrase>${gpg.passphrase}</passphrase>
+            </configuration>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <configuration>
+              <encoding>${project.build.sourceEncoding}</encoding>
+            </configuration>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 
