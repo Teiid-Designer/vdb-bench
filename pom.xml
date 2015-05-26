@@ -97,6 +97,7 @@
     <module>hawtio-aether</module>
     <module>hawtio-core</module>
     <module>hawtio-git</module>
+    <module>hawtio-kubernetes</module>
     <module>hawtio-local-jvm-mbean</module>
     <module>hawtio-system</module>
     <module>hawtio-war</module>
