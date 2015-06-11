@@ -43,6 +43,11 @@
       <artifactId>hawtio-util</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>io.hawt</groupId>
+      <artifactId>hawtio-console-assembly</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
     <!-- optional hawtio modules we want to use in this WAR -->
     <dependency>
@@ -105,79 +110,6 @@
     <finalName>${project.artifactId}</finalName>
 
     <plugins>
-      <!-- Step 1. - Download Swagger UI project from GitHub -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>wagon-maven-plugin</artifactId>
-        <version>1.0</version>
-        <executions>
-          <execution>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>download-single</goal>
-            </goals>
-            <configuration>
-              <url>${hawtio-console-url}</url>
-              <fromFile>${hawtio-console-version}-build.tar.gz</fromFile>
-              <toFile>${project.build.directory}/hawtio-console-${hawtio-console-version}.tar.gz</toFile>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- Step 2. -  Decompress content and move it to target/hawtio-console folder -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target>
-                <echo message="Decompress archive" />
-                <gunzip src="${project.build.directory}/hawtio-console-${hawtio-console-version}.tar.gz" />
-                <untar src="${project.build.directory}/hawtio-console-${hawtio-console-version}.tar" dest="${project.build.directory}/" />
-                <echo message="moving resources" />
-                <move todir="${destDir}" overwrite="yes">
-                  <fileset dir="${project.build.directory}/fabric8-console-${hawtio-console-version}-build" />
-                </move>
-              </target>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- Step 3. Copy Web Resources to target/classes but also to target/swagger-ui -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-resources</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${basedir}/target/classes/</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>src/main/webapp</directory>
-                  <filtering>false</filtering>
-                </resource>
-                <!-- Copy hawtio-console resources to classes directory to be able to use it with mvn jetty:run -->
-                <resource>
-                  <directory>${destDir}</directory>
-                  <filtering>false</filtering>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
 
       <!-- Step 4. Add hawtio-console Resources to the WAR -->
       <plugin>
@@ -186,7 +118,7 @@
         <configuration>
           <webResources>
             <resource>
-              <directory>target/hawtio-console/</directory>
+              <directory>../hawtio-console-assembly/target/site/</directory>
               <includes>
                 <include>**/*.*</include>
               </includes>
@@ -200,7 +132,7 @@
         <artifactId>jetty-maven-plugin</artifactId>
         <version>${jetty-version}</version>
         <configuration>
-          <webAppSourceDirectory>${project.build.directory}/${project.name}</webAppSourceDirectory>
+          <webAppSourceDirectory>../hawtio-console-assembly/</webAppSourceDirectory>
           <scanIntervalSeconds>1</scanIntervalSeconds>
           <webAppConfig>
             <contextPath>/</contextPath>

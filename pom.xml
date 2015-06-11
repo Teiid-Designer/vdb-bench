@@ -93,6 +93,7 @@
   </properties>
 
   <modules>
+    <module>hawtio-console-assembly</module>
     <module>hawtio-util</module>
     <module>hawtio-aether</module>
     <module>hawtio-core</module>
