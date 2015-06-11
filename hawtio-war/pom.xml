@@ -13,6 +13,7 @@
   <description>hawtio :: Web Console</description>
 
   <properties>
+    <finalName>hawtio</finalName>
     <hawtio-console-url>https://github.com/fabric8io/fabric8-console/archive/</hawtio-console-url>
     <destDir>target/hawtio-console</destDir>
   </properties>
@@ -107,7 +108,7 @@
 
   <build>
     <!-- we do not want version in the WAR name -->
-    <finalName>${project.artifactId}</finalName>
+    <finalName>${finalName}</finalName>
 
     <plugins>
 

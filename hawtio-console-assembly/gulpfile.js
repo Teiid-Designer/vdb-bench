@@ -223,7 +223,7 @@ gulp.task('connect', ['watch'], function() {
       proto: 'http',
       port: 8080,
       hostname: 'localhost',
-      path: '/jolokia',
+      path: '/hawtio/jolokia',
       targetPath: '/jolokia'
     }
     /*
@@ -246,7 +246,7 @@ gulp.task('connect', ['watch'], function() {
     */
     ],
     staticAssets: [{
-      path: '/',
+      path: '/hawtio',
       dir: '.'
 
     }],
