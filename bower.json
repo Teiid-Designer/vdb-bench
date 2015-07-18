@@ -1,0 +1,29 @@
+{
+  "name": "vdbench",
+  "version": "0.1.0",
+  "main": [
+    "dist/vdbench.js"
+  ],
+  "ignore": [
+    ".bowerrc",
+    ".jshintrc",
+    "node_modules",
+    "libs",
+    "gulpfile.js",
+    "karma.conf.js",
+    "index.html",
+    "package.json",
+    "templates",
+    "vdbench.js",
+    "!dist/vdbench.js",
+    "test"
+  ],
+  "dependencies": {
+    "hawtio-core": "~2.0.0",
+    "hawtio-core-navigation": "~2.0.0"
+  },
+  "devDependencies": {
+    "bootstrap": "~3.3.1",
+    "patternfly": "~1.1.2"
+  }
+}
