@@ -2,7 +2,7 @@ var vdbBench = (function(vdbBench) {
 	vdbBench.pluginName = 'vdb-bench';
 	vdbBench.templatePath = 'plugins/vdb-bench/html';
 
-	vdbBench._module = angular.module(vdbBench.pluginName, []);
+	vdbBench._module = angular.module(vdbBench.pluginName, ['ui.bootstrap']);
 
 	var tab = undefined;
 

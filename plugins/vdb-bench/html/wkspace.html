@@ -37,45 +37,27 @@
 
             <div id="panel-repo-content" class="col-sm-12">
 
-                <div class="panel-group" id="repo-accordion" role="tablist" aria-multiselectable="true">
-
-                    <!-- Connections Collapseable Panel -->
-                    <div class="panel panel-default" style="width: 300px; position: inherit">
-                        <div class="panel-heading" role="tab" id="headingConns">
-                            <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#repo-accordion" href="#collapseConns" aria-expanded="false"
-                                    aria-controls="collapseConns"> Connections </a>
-                            </h4>
-                        </div>
-                        <div id="collapseConns" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingConns">
-                            <div class="panel-body">Connections to be displayed here</div>
-                        </div>
-                    </div>
-                    <!-- End of Connections Collapseable Panel -->
-
-                    <!-- Vdb Collapseable Panel -->
-                    <div class="panel panel-default" style="width: 300px; position: inherit">
-                        <div class="panel-heading" role="tab" id="headingVdbs">
-                            <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#repo-accordion" href="#collapseVdbs" aria-expanded="false"
-                                    aria-controls="collapseVdbs"> VDBs </a>
-                            </h4>
-                        </div>
-                        <div id="collapseVdbs" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingVdbs">
-                            <div class="panel-body">
-                                <div id="list-vdb" ng-controller="vdbBench.VdbController">
-                                    <div class="list-group">
-                                        <a class="list-group-item" ng-repeat="vdb in vdbs" ng-click="$parent.selected = vdb"
-                                            ng-class="{active:selected==vdb}"> {{vdb.name}} </a>
-                                    </div>
-                                    <h3>Vdb selected: {{selected.name || none}}</h3>
-                                </div>
+                <accordion close-others="false">
+                    <!-- Connections -->
+                    <accordion-group heading="Connections">
+                        Connections to be displayed here
+                    </accordion-group>
+                    <!-- Vdbs -->
+                    <accordion-group heading="Vdbs">
+                        <div id="list-vdb" ng-controller="vdbBench.VdbController">
+                            <div class="list-group">
+                                <a class="list-group-item" ng-repeat="vdb in vdbs" ng-click="$parent.selected = vdb" ng-class="{active:selected==vdb}">
+                                    {{vdb.name}}
+                                </a>
                             </div>
+                            <h3>Vdb selected: {{selected.name || none}}</h3>
                         </div>
-                    </div>
-                    <!-- End of Vdb Collapseable Panel -->
-                </div>
+                    </accordion-group>
+                </accordion>
+
             </div>
+
+            <!-- End of Repository Contents -->
         </div>
     </div>
 </div>
