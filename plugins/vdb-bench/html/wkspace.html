@@ -1,0 +1,27 @@
+<h1>Vdb Builder Workspace</h1>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-2">
+            <div id="repo-definition-panel"></div>
+            <div id="repo-content-panel">
+
+                <!-- Vdb panel -->
+                <div ng-controller="vdbBench.VdbController">
+                    <div class="list-group">
+                        <a class="list-group-item" ng-repeat="vdb in vdbs"
+                                                                  ng-click="$parent.selected = vdb"
+                                                                  ng-class="{active:selected==vdb}">
+                            {{vdb.name}}
+                        </a>
+                    </div>
+                    <h3>Vdb selected: {{selected.name || none}}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div id="details-deckpanel"></div>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+</div>

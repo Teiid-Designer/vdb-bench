@@ -1,8 +1,8 @@
 {
-  "name": "vdbench",
+  "name": "vdb-bench",
   "version": "0.1.0",
   "main": [
-    "dist/vdbench.js"
+    "dist/vdb-bench.js"
   ],
   "ignore": [
     ".bowerrc",
@@ -14,8 +14,8 @@
     "index.html",
     "package.json",
     "templates",
-    "vdbench.js",
-    "!dist/vdbench.js",
+    "vdb-bench.js",
+    "!dist/vdb-bench.js",
     "test"
   ],
   "dependencies": {
