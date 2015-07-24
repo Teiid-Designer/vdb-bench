@@ -136,7 +136,7 @@
           <webAppSourceDirectory>../hawtio-console-assembly/</webAppSourceDirectory>
           <scanIntervalSeconds>1</scanIntervalSeconds>
           <webAppConfig>
-            <contextPath>/</contextPath>
+            <contextPath>/hawtio/</contextPath>
             <!--<contextPath>${context}</contextPath>-->
           </webAppConfig>
           <classesDirectory>${project.build.directory}/${project.name}/WEB-INF/classes</classesDirectory>
