@@ -20,12 +20,8 @@
     "hawtio-core-navigation": "~2.0.0",
     "hawtio-utilities": "~2.0.0",
     "hawtio-dashboard": "~2.0.6",
-    "hawtio-jmx": "~2.0.50",
-    "hawtio-integration": "~2.0.3",
     "hawtio-preferences": "~2.0.3",
-    "hawtio-template-cache": "~2.0.3",
-    "hawtio-kubernetes": "~2.0.32",
-    "hawtio-wiki": "~2.0.33"
+    "hawtio-template-cache": "~2.0.3"
   },
   "devDependencies": {
     "bootstrap": "~3.3.1",
