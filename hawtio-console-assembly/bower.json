@@ -1,10 +1,11 @@
 {
-  "name": "hawtio-console-assembly",
-  "version": "2.0.0",
+  "name": "vdb-bench",
+  "version": "0.1.0",
   "keywords": [
     "hawtio"
   ],
   "main": [
+    "dist/vdb-bench.js",
     "dist/hawtio-console-assembly.js",
     "dist/hawtio-console-assembly.css"
   ],
@@ -18,10 +19,12 @@
   "dependencies": {
     "hawtio-core": "~2.0.0",
     "hawtio-core-navigation": "~2.0.0",
+    "hawtio-ui": "~2.0.0",
     "hawtio-utilities": "~2.0.0",
     "hawtio-dashboard": "~2.0.6",
     "hawtio-preferences": "~2.0.3",
-    "hawtio-template-cache": "~2.0.3"
+    "hawtio-template-cache": "~2.0.3",
+    "angular-bootstrap": "~0.13.0"
   },
   "devDependencies": {
     "bootstrap": "~3.3.1",
