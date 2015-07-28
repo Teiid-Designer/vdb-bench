@@ -1,0 +1,39 @@
+{
+  "name": "hawtio-console-assembly",
+  "version": "2.0.0",
+  "keywords": [
+    "hawtio"
+  ],
+  "main": [
+    "dist/hawtio-console-assembly.js",
+    "dist/hawtio-console-assembly.css"
+  ],
+  "ignore": [
+    "dist/hawtio-console-assembly-test.js",
+    "**/.*",
+    "node_modules",
+    "libs",
+    "plugins"
+  ],
+  "dependencies": {
+    "hawtio-core": "~2.0.0",
+    "hawtio-core-navigation": "~2.0.0",
+    "hawtio-utilities": "~2.0.0",
+    "hawtio-dashboard": "~2.0.6",
+    "hawtio-jmx": "~2.0.50",
+    "hawtio-integration": "~2.0.3",
+    "hawtio-preferences": "~2.0.3",
+    "hawtio-template-cache": "~2.0.3",
+    "hawtio-kubernetes": "~2.0.32",
+    "hawtio-wiki": "~2.0.33"
+  },
+  "devDependencies": {
+    "bootstrap": "~3.3.1",
+    "patternfly": "~1.1.2",
+    "hawtio-core-dts": "~2.0.0"
+  },
+  "resolutions": {
+    "lodash": "~3.2.0",
+    "codemirror": "~4.11.0"
+  }
+}
