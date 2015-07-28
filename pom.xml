@@ -8,13 +8,13 @@
     <version>14</version>
   </parent>
 
-  <groupId>io.hawt</groupId>
-  <artifactId>project</artifactId>
+  <groupId>org.teiid</groupId>
+  <artifactId>vdb-bench</artifactId>
   <packaging>pom</packaging>
-  <version>2.1-SNAPSHOT</version>
-  <name>hawtio-java-project</name>
-  <description>hawtio :: project</description>
-  <url>http://hawt.io/</url>
+  <version>0.1-SNAPSHOT</version>
+  <name>vdb-bench</name>
+  <description>vdb :: bench</description>
+  <url>http://www.jboss.org/teiiddesigner</url>
 
   <licenses>
     <license>
@@ -25,9 +25,9 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git@github.com:hawtio/hawtio-java.git</connection>
-    <developerConnection>scm:git:git@github.com:hawtio/hawtio-java.git</developerConnection>
-    <url>git@github.com:hawtio/hawtio-java.git</url>
+    <connection>scm:git:git@github.com/Teiid-Designer/vdb-bench.git</connection>
+    <developerConnection>scm:git:git@github.com/Teiid-Designer/vdb-bench.git</developerConnection>
+    <url>git@github.com/Teiid-Designer/vdb-bench.git</url>
     <tag>HEAD</tag>
   </scm>
 
@@ -50,7 +50,7 @@
 
   <properties>
     <jettyPort>8282</jettyPort>
-    <context>/hawtio</context>
+    <context>/vdb-bench</context>
     <hawtio-config-dir>${basedir}/hawtio-config</hawtio-config-dir>
     <hawtio-config-repo>https://github.com/hawtio/hawtio-config.git</hawtio-config-repo>
     <hawtio-console-version>1.0.0</hawtio-console-version>
@@ -93,7 +93,7 @@
   </properties>
 
   <modules>
-    <module>hawtio-console-assembly</module>
+    <module>vdb-bench-assembly</module>
     <module>hawtio-util</module>
     <module>hawtio-aether</module>
     <module>hawtio-core</module>
@@ -101,7 +101,7 @@
     <module>hawtio-kubernetes</module>
     <module>hawtio-local-jvm-mbean</module>
     <module>hawtio-system</module>
-    <module>hawtio-war</module>
+    <module>vdb-bench-war</module>
   </modules>
 
   <build>

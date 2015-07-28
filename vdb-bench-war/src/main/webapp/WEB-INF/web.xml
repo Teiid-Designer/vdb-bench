@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
          version="2.4">
 
-  <description>hawtio</description>
-  <display-name>hawtio</display-name>
+  <description>vdb bench</description>
+  <display-name>vdb-bench</display-name>
 
   <env-entry>
     <description>Enable/disable hawtio's authentication filter, value is really a boolean</description>
