@@ -1,4 +1,4 @@
-hawtio web console for Java
+vdb bench
 ---------------------------
 
 This is the default hawtio web console for Java that is a distributed as a .war deployment unit.
