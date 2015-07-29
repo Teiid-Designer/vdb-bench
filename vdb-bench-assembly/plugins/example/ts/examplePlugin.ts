@@ -28,6 +28,7 @@ module Example {
       .title(() => "Example")
       .href(() => "/example")
       .subPath("Page 1", "page1", builder.join(Example.templatePath, "page1.html"))
+      .subPath("Page 2", "page2", builder.join(Example.templatePath, 'page2.html'))
       .build();
     builder.configureRouting($routeProvider, tab);
     $locationProvider.html5Mode(true);
