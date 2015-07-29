@@ -182,7 +182,7 @@ gulp.task('watch', ['build', 'built-test'], function() {
   plugins.watch(['libs/**/*.js', 'libs/**/*.css', 'index.html', config.dist + '/' + config.pkgJs], function() {
     gulp.start('reload');
   });
-  plugins.watch(['libs/**/*.d.ts', config.ts, config.templates], function() {
+  plugins.watch(['libs/**/*.d.ts', config.ts, config.js, config.templates], function() {
     gulp.start(['tsc', 'template', 'concat', 'clean']);
   });
   plugins.watch([config.testTs, config.testTemplates], function() {
