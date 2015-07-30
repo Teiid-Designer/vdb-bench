@@ -3,8 +3,11 @@
 </div>
 
 <div ng-controller="vdbBench.RepoController">
+
     <div class="col-sm-12">
-        <select class="form-control" ng-model="repository" ng-options="repo as repo.hostname for repo in repositories"></select>
+        <select class="form-control" ng-model="selectedRepo" ng-options="repo as repo.hostname for repo in repositories()"
+                     ng-change="changeSelection(selectedRepo)">
+        </select>
     </div>
 
     <!-- Only shows buttons if the scope's edit field has been set -->
