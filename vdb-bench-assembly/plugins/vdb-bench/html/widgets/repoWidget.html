@@ -1,0 +1,30 @@
+<div class="col-sm-12">
+    <h3>Repository</h3>
+</div>
+
+<div ng-controller="vdbBench.RepoController">
+    <div class="col-sm-12">
+        <select class="form-control" ng-model="repository" ng-options="repo as repo.hostname for repo in repositories"></select>
+    </div>
+
+    <!-- Only shows buttons if the scope's edit field has been set -->
+    <div class="col-sm-12" ng-show="edit">
+        <div class="row" style="margin-top: 0.5em;">
+            <div class="col-sm-6">
+                <button id="btn-add-repo" class="btn btn-xs btn-default">Add</button>
+            </div>
+            <!-- Disables the remove button is the controller's selected field is undefined or no selection yet made -->
+            <div class="col-sm-6">
+                <button id="btn-remove-repo" class="btn btn-xs btn-default" ng-disabled="repository == undefined">Remove</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div id="panel-filter-buttons"></div>
+    </div>
+</div>
+
+<!--
+Arrange bj meeting for friday
+ -->
