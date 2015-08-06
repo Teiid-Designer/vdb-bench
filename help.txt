@@ -1,8 +1,0 @@
-=
-= Style guide available at https://github.com/toddmotto/angularjs-styleguide
-=
-
-=
-= Eclipse plugins and configuration at
-= https://github.com/angelozerr/angularjs-eclipse/wiki/Getting-Started
-=
