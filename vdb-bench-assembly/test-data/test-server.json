@@ -1,0 +1,13 @@
+{
+  "vdbs": [
+    {
+      "name": "portfolio"
+    },
+    {
+      "name": "tweet-example"
+    },
+    {
+      "name": "parts"
+    }
+  ]
+}

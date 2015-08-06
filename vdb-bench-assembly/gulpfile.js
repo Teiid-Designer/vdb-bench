@@ -10,7 +10,8 @@ var gulp = require('gulp'),
     s = require('underscore.string'),
     hawtio = require('hawtio-node-backend'),
     tslint = require('gulp-tslint'),
-    tslintRules = require('./tslint.json');
+    tslintRules = require('./tslint.json'),
+    jsonServer = require('gulp-json-srv');
 
 var plugins = gulpLoadPlugins({});
 var pkg = require('./package.json');
@@ -308,13 +309,19 @@ gulp.task('site', ['usemin'], function() {
   return gulp.src(patterns).pipe(plugins.debug({ title: 'img-copy' })).pipe(gulp.dest('target/site/img'));
 });
 
+gulp.task('test-json-server', function() {
+    jsonServer.start({
+        data: 'test-data/test-server.json'
+    });
+});
+
 gulp.task('mvn', ['build', 'site']);
 
 gulp.task('build', ['bower', 'path-adjust', 'tsc', 'less', 'template', 'concat', 'clean']);
 
 gulp.task('built-test', ['test-tsc', 'test-template', 'test-concat', 'test-clean']);
 
-gulp.task('default', ['connect']);
+gulp.task('default', ['test-json-server', 'connect']);
 
 
 
