@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path="vdb-bench-assembly/plugins/vdb-bench/js/services"/>
+	<classpathentry kind="src" path="vdb-bench-assembly/plugins/vdb-bench/js/controllers"/>
+	<classpathentry kind="src" path="vdb-bench-assembly/plugins/vdb-bench/js/widgets"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
