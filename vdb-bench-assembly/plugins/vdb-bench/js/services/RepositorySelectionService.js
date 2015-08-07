@@ -1,7 +1,13 @@
+/**
+ * Repository Selection Service
+ *
+ * Provides the collection of repositories {hostname, port} fetched
+ * from local storage and the active (selected) repository.
+ */
 var vdbBench = (function(vdbBench) {
 
-    vdbBench._module.factory('repositoryService',
-             function($rootScope, $storageService) {
+    vdbBench._module.factory('RepoSelectionService',
+             function($rootScope, StorageService) {
 
                 var defaultRepository = {
                     hostname : 'localhost',
@@ -16,10 +22,10 @@ var vdbBench = (function(vdbBench) {
                  * private function for initialising the repositories from local storage
                  */
                 function initRepositories() {
-                    var storageRepos = $storageService.getObject('repositories');
+                    var storageRepos = StorageService.getObject('repositories');
                     if (_.isEmpty(storageRepos)) {
                         storageRepos = [defaultRepository];
-                        $storageService.setObject('repositories', storageRepos);
+                        StorageService.setObject('repositories', storageRepos);
                     }
 
                     return storageRepos;
@@ -41,11 +47,11 @@ var vdbBench = (function(vdbBench) {
                  * from local storage
                  */
                 function initSelectedRepository() {
-                    var selectedName = $storageService.get('selectedRepositoryName');
+                    var selectedName = StorageService.get('selectedRepositoryName');
 
                     if (selectedName == null) {
                         selectedName = defaultRepository.hostname;
-                        $storageService.set('selectedRepositoryName', selectedName);
+                        StorageService.set('selectedRepositoryName', selectedName);
                     }
 
                     var currRepos = repositories();
@@ -77,7 +83,7 @@ var vdbBench = (function(vdbBench) {
                  */
                 service.setSelected = function(selectedRepo) {
                     // Save the selected repository name
-                    $storageService.set('selectedRepositoryName', selectedRepo.hostname);
+                    StorageService.set('selectedRepositoryName', selectedRepo.hostname);
 
                     // Set selected to the selected repository
                     selected = selectedRepo;
@@ -115,7 +121,7 @@ var vdbBench = (function(vdbBench) {
                  * Service : save the repositories to local storage
                  */
                 service.saveRepositories = function() {
-                    $storageService.setObject('repositories', repos);
+                    StorageService.setObject('repositories', repos);
 
                     //
                     // Need to save as well since the hostname of the selected repository
@@ -123,7 +129,7 @@ var vdbBench = (function(vdbBench) {
                     // hostname is used to select the correct repository
                     //
                     var hostname = _.isEmpty(selected) ? '' : selected.hostname;
-                    $storageService.set('selectedRepositoryName', hostname);
+                    StorageService.set('selectedRepositoryName', hostname);
                 };
 
                 /*

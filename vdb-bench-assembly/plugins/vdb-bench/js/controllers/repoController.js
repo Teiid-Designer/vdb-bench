@@ -5,8 +5,8 @@ var vdbBench = (function(vdbBench) {
                     'vdbBench.RepoController',
                     [
                             '$scope',
-                            'repositoryService',
-                            function($scope, repositoryService) {
+                            'RepoSelectionService',
+                            function($scope, RepoSelectionService) {
 
                                 var repoEditBaseConfig = {
                                         "id" : 'repoEditForm',
@@ -39,33 +39,33 @@ var vdbBench = (function(vdbBench) {
                                 $scope.repo = {};
 
                                 // model variable, supplies initial selected value
-                                $scope.repo.selected = repositoryService.getSelected();
+                                $scope.repo.selected = RepoSelectionService.getSelected();
 
                                 // Watch the selectedRepo so that if its properties change
                                 // they need to be preserved by the repository service
                                 $scope.$watch('repo.selected', function(newValue, oldValue) {
-                                    repositoryService.saveRepositories();
+                                    RepoSelectionService.saveRepositories();
                                 }, true);
 
                                 // Fetch the repositories from the service
                                 $scope.repositories = function() {
-                                    return repositoryService.getRepositories();
+                                    return RepoSelectionService.getRepositories();
                                 };
 
                                 // On change of selection update the service
                                 $scope.changeSelection = function(selectedRepo) {
-                                    repositoryService.setSelected(selectedRepo);
+                                    RepoSelectionService.setSelected(selectedRepo);
                                 };
 
                                 // Is a repository selected
                                 $scope.isRepositorySelected = function() {
-                                    return repositoryService
+                                    return RepoSelectionService
                                             .isRepositorySelected();
                                 }
 
                                 // Is localhost repository selected
                                 $scope.isLocalhostSelected = function() {
-                                    return repositoryService
+                                    return RepoSelectionService
                                             .isLocalhostSelected();
                                 }
 
@@ -83,7 +83,7 @@ var vdbBench = (function(vdbBench) {
                                             }
                                         };
 
-                                    if (repositoryService.isLocalhostSelected()) {
+                                    if (RepoSelectionService.isLocalhostSelected()) {
                                         repoEditConfig = _.merge(repoEditConfig, hostNameExt);
                                     }
 
@@ -101,20 +101,20 @@ var vdbBench = (function(vdbBench) {
 
                                                     // Refresh the selected repo field to in turn refresh
                                                     // any controls depending on it.
-                                                    if ($scope.repo.selected != repositoryService.getSelected())
-                                                        $scope.repo.selected = repositoryService.getSelected();
+                                                    if ($scope.repo.selected != RepoSelectionService.getSelected())
+                                                        $scope.repo.selected = RepoSelectionService.getSelected();
 
                                                     $scope.repo.editConfig = getRepoEditConfig();
                                                 });
 
                                 // Event handler for clicking the add button
                                 $scope.onAddClicked = function() {
-                                    repositoryService.newRepository();
+                                    RepoSelectionService.newRepository();
                                 };
 
                                 // Event handler for clicking the remove button
                                 $scope.onRemoveClicked = function() {
-                                    repositoryService.removeSelected();
+                                    RepoSelectionService.removeSelected();
                                 };
 
                             } ]);
