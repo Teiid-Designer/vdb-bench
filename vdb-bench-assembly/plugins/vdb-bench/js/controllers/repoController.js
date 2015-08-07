@@ -107,6 +107,16 @@ var vdbBench = (function(vdbBench) {
                                                     $scope.repo.editConfig = getRepoEditConfig();
                                                 });
 
+                                // Event handler for clicking the add button
+                                $scope.onAddClicked = function() {
+                                    repositoryService.newRepository();
+                                };
+
+                                // Event handler for clicking the remove button
+                                $scope.onRemoveClicked = function() {
+                                    repositoryService.removeSelected();
+                                };
+
                             } ]);
     return vdbBench;
 

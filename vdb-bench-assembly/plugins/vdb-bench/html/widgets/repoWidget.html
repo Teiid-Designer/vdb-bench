@@ -13,11 +13,16 @@
     <!-- Only shows buttons if the scope's edit field has been set -->
     <div class="col-sm-12" ng-show="edit">
         <div class="row" style="margin-top: 0.5em;">
+            <div class="col-sm-6">
+                <button id="btn-add-repo" class="btn btn-xs btn-default" ng-click="onAddClicked()">Add</button>
+            </div>
             <!--
                 Disables the remove button if the controller's selected field is undefined,
                 no selection yet made or locahost selected
             -->
-                <button id="btn-remove-repo" class="btn btn-xs btn-default" ng-disabled="!isRepositorySelected() || isLocalhostSelected()">Remove</button>
+            <div class="col-sm-6">
+                <button id="btn-remove-repo" class="btn btn-xs btn-default" ng-click="onRemoveClicked()" ng-disabled="!isRepositorySelected() || isLocalhostSelected()">Remove</button>
+            </div>
         </div>
     </div>
 

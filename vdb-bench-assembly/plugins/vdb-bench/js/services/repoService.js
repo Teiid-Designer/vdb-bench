@@ -8,11 +8,6 @@ var vdbBench = (function(vdbBench) {
                     port : 3000
                 };
 
-                var reposTest = {
-                    hostname : 'falcon1',
-                    port : 8080
-                };
-
                 var repos;
 
                 var selected;
@@ -23,7 +18,7 @@ var vdbBench = (function(vdbBench) {
                 function initRepositories() {
                     var storageRepos = $storageService.getObject('repositories');
                     if (_.isEmpty(storageRepos)) {
-                        storageRepos = [defaultRepository, reposTest];
+                        storageRepos = [defaultRepository];
                         $storageService.setObject('repositories', storageRepos);
                     }
 
@@ -103,7 +98,7 @@ var vdbBench = (function(vdbBench) {
                  * Service : is a repository selected
                  */
                 service.isRepositorySelected = function() {
-                    return _.isEmpty(selected);
+                    return ! _.isEmpty(selected);
                 },
 
                 /*
@@ -129,6 +124,64 @@ var vdbBench = (function(vdbBench) {
                     //
                     var hostname = _.isEmpty(selected) ? '' : selected.hostname;
                     $storageService.set('selectedRepositoryName', hostname);
+                };
+
+                /*
+                 * Service : add a new repository to the collection
+                 */
+                service.newRepository = function() {
+                    var baseName = "newhost";
+                    var currRepos = repositories();
+                    var newRepo = null;
+                    var index = 1;
+
+                    while(newRepo == null) {
+                        var testName = baseName + index;
+                        var exists = false;
+
+                        for (i = 0; i < currRepos.length; ++i) {
+                            if (currRepos[i].hostname == testName) {
+                                exists = true;
+                                break;
+                            }
+                        }
+
+                        if (! exists)
+                            newRepo = {
+                                hostname : testName,
+                                port : 8080
+                            };
+                        else
+                            index++;
+                    }
+
+                    // Add the new repository to the collection
+                    repos.push(newRepo);
+
+                    // Set the selected to the new repository
+                    service.setSelected(newRepo);
+
+                    // Save the new collection to local storage
+                    service.saveRepositories();
+                };
+
+                /*
+                 * Service : remove selected repository from the collection
+                 */
+                service.removeSelected = function() {
+                    if (selected == null)
+                        return;
+
+                    if (service.isLocalhostSelected())
+                        return;
+
+                    repos.pop(selected);
+
+                    // Set the selected to the first in the collection
+                    service.setSelected(repos[0]);
+
+                    // Save the new collection to local storage
+                    service.saveRepositories();
                 };
 
                 /*
