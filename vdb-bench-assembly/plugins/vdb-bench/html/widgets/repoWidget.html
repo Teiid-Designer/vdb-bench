@@ -5,8 +5,8 @@
 <div ng-controller="vdbBench.RepoController">
 
     <div class="col-sm-12">
-        <select class="form-control" ng-model="selectedRepo" ng-options="repo as repo.hostname for repo in repositories()"
-                     ng-change="changeSelection(selectedRepo)">
+        <select class="form-control" ng-model="repo.selected" ng-options="repo as repo.hostname for repo in repositories()"
+                     ng-change="changeSelection(repo.selected)">
         </select>
     </div>
 

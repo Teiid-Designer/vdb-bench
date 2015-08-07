@@ -35,12 +35,15 @@ var vdbBench = (function(vdbBench) {
                                         "type" : "java.lang.String"
                                     };
 
+                                // Use dot object to avoid javascript scope issue
+                                $scope.repo = {};
+
                                 // model variable, supplies initial selected value
-                                $scope.selectedRepo = repositoryService.getSelected();
+                                $scope.repo.selected = repositoryService.getSelected();
 
                                 // Watch the selectedRepo so that if its properties change
                                 // they need to be preserved by the repository service
-                                $scope.$watch('selectedRepo', function(newValue, oldValue) {
+                                $scope.$watch('repo.selected', function(newValue, oldValue) {
                                     repositoryService.saveRepositories();
                                 }, true);
 
@@ -87,7 +90,7 @@ var vdbBench = (function(vdbBench) {
                                     return repoEditConfig;
                                 };
 
-                                $scope.repoEditConfig = getRepoEditConfig();
+                                $scope.repo.editConfig = getRepoEditConfig();
 
                                 // If the service changes its selection then it
                                 // should notify this controller
@@ -98,10 +101,10 @@ var vdbBench = (function(vdbBench) {
 
                                                     // Refresh the selected repo field to in turn refresh
                                                     // any controls depending on it.
-                                                    if ($scope.selectedRepo != repositoryService.getSelected())
-                                                        $scope.selectedRepo = repositoryService.getSelected();
+                                                    if ($scope.repo.selected != repositoryService.getSelected())
+                                                        $scope.repo.selected = repositoryService.getSelected();
 
-                                                    $scope.repoEditConfig = getRepoEditConfig();
+                                                    $scope.repo.editConfig = getRepoEditConfig();
                                                 });
 
                             } ]);
