@@ -4,7 +4,7 @@ var vdbBench = (function(vdbBench) {
     vdbBench.pagePath = vdbBench.templatePath + "/pages";
     vdbBench.widgetPath = vdbBench.templatePath + "/widgets";
 
-    vdbBench._module = angular.module(vdbBench.pluginName, [ 'ui.bootstrap' ]);
+    vdbBench._module = angular.module(vdbBench.pluginName, [ 'ui.bootstrap', 'restangular' ]);
 
     var tab = undefined;
 
@@ -29,6 +29,18 @@ var vdbBench = (function(vdbBench) {
                                                 'repoPage.html')).build();
                 builder.configureRouting($routeProvider, tab);
             } ]);
+
+    /**
+     * Extends the exception handler to alert the user to an exception
+     */
+    vdbBench._module.config(function($provide) {
+        $provide.decorator("$exceptionHandler", function($delegate) {
+            return function(exception, cause) {
+                $delegate(exception, cause);
+                alert("An exception occurred:\n" + exception.message);
+            };
+        });
+    });
 
     vdbBench._module.run([ 'HawtioNav', 'preferencesRegistry',
             function(HawtioNav, preferencesRegistry) {

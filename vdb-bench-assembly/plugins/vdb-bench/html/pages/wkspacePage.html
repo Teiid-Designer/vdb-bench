@@ -29,7 +29,7 @@
                     <accordion-group heading="Vdbs">
                         <div id="list-vdb" ng-controller="vdbBench.VdbController">
                             <div class="list-group">
-                                <a class="list-group-item" ng-repeat="vdb in vdbs" ng-click="$parent.selected = vdb" ng-class="{active:selected==vdb}">
+                                <a class="list-group-item" ng-repeat="vdb in vdbObject.vdbs" ng-click="$parent.selected = vdb" ng-class="{active:selected==vdb}">
                                     {{vdb.name}}
                                 </a>
                             </div>

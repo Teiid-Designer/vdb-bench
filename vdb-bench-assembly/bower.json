@@ -23,7 +23,8 @@
     "hawtio-preferences": "~2.0.3",
     "hawtio-template-cache": "~2.0.3",
     "hawtio-forms": "~2.0.0",
-    "angular-bootstrap": "~0.13.0"
+    "angular-bootstrap": "~0.13.0",
+    "restangular": "~1.5.1"
   },
   "devDependencies": {
     "bootstrap": "~3.3.1",
