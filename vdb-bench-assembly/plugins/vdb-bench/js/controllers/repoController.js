@@ -2,7 +2,7 @@ var vdbBench = (function(vdbBench) {
 
     vdbBench.RepoController = vdbBench._module
             .controller(
-                    'vdbBench.RepoController',
+                    'RepoController',
                     [
                             '$scope',
                             'RepoSelectionService',

@@ -1,7 +1,7 @@
 var vdbBench = (function(vdbBench) {
 
     vdbBench.VdbController = vdbBench._module.controller(
-            'vdbBench.VdbController', [
+            'VdbController', [
                     '$scope',
                     'RepoRestService',
                     function($scope, RepoRestService) {
