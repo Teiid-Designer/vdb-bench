@@ -3,5 +3,6 @@
 	<classpathentry kind="src" path="vdb-bench-assembly/plugins/vdb-bench/js/services"/>
 	<classpathentry kind="src" path="vdb-bench-assembly/plugins/vdb-bench/js/controllers"/>
 	<classpathentry kind="src" path="vdb-bench-assembly/plugins/vdb-bench/js/widgets"/>
+	<classpathentry kind="lib" path="vdb-bench-assembly/libs"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

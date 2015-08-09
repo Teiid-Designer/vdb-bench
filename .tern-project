@@ -1,1 +1,1 @@
-{"ide":{"scriptPaths":[{"type":"FOLDER","path":"vdb-bench-assembly/plugins/example/ts"},{"type":"FOLDER","path":"vdb-bench-assembly/plugins/vdb-bench/js"}]},"plugins":{"guess-types":{},"angular":{}},"libs":["ecma5","browser"]}
+{"ide":{"scriptPaths":[{"type":"FOLDER","path":"vdb-bench-assembly/plugins/example/ts"},{"type":"FOLDER","path":"vdb-bench-assembly/libs"},{"type":"FOLDER","path":"vdb-bench-assembly/plugins"}]},"plugins":{"guess-types":{},"angular":{}},"libs":["ecma5","browser"]}
