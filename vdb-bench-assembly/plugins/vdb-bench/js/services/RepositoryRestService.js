@@ -91,6 +91,10 @@ var vdbBench = (function(vdbBench) {
                     return restService.all('vdbs').getList();
                 };
 
+                service.removeVdb = function(vdb) {
+                    return vdb.remove();
+                };
+
                 return service;
             } ]);
 

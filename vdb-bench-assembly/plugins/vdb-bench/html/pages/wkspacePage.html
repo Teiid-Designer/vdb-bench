@@ -19,24 +19,29 @@
             </div>
 
             <div id="panel-repo-content" class="col-sm-12">
-
+                <div ng-controller="VdbController">
                 <accordion close-others="false">
-                    <!-- Connections -->
-                    <accordion-group heading="Connections">
-                        Connections to be displayed here
-                    </accordion-group>
                     <!-- Vdbs -->
                     <accordion-group heading="Vdbs">
-                        <div id="list-vdb" ng-controller="vdbBench.VdbController">
+                        <accordion-heading>
+                            Vdbs
+                            <!-- Necessary to make it into a dropdown as they do not refresh the page when clicked -->
+                            <div class="pull-right" dropdown>
+                                <button type="button" class="glyphicon glyphicon-plus vdb-heading-btn" dropdown-toggle ng-click="onAddClicked($event)"></button>
+                                <button type="button" class="glyphicon glyphicon-minus vdb-heading-btn" dropdown-toggle ng-click="onRemoveClicked($event)"></button>
+                            </div>
+                        </accordion-heading>
+                        <div id="list-vdb">
                             <div class="list-group">
-                                <a class="list-group-item" ng-repeat="vdb in vdbObject.vdbs" ng-click="$parent.selected = vdb" ng-class="{active:selected==vdb}">
+                                <a class="list-group-item" ng-repeat="vdb in vdbObject.vdbs" ng-click="$parent.vdbObject.selected = vdb" ng-class="{active:vdbObject.selected==vdb}">
                                     {{vdb.name}}
                                 </a>
                             </div>
-                            <h3>Vdb selected: {{selected.name || none}}</h3>
+                            <h3>Vdb selected: {{vdbObject.selected.name || none}}</h3>
                         </div>
                     </accordion-group>
                 </accordion>
+                </div>
 
             </div>
 

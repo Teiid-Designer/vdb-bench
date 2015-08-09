@@ -1,12 +1,15 @@
 {
   "vdbs": [
     {
+      "id": 1,
       "name": "portfolio"
     },
     {
+      "id": 2,
       "name": "tweet-example"
     },
     {
+      "id": 3,
       "name": "parts"
     }
   ]

@@ -37,6 +37,36 @@ var vdbBench = (function(vdbBench) {
                             initVdbs();
                         });
 
+                        // Event handler for clicking the add button
+                        $scope.onAddClicked = function(event) {
+                            try {
+                                $window.alert("To be implemented");
+                            } catch (error) {
+
+                            } finally {
+                                // Essential to stop the accordion closing
+                                event.stopPropagation();
+                            }
+                        };
+
+                        // Event handler for clicking the remove button
+                        $scope.onRemoveClicked = function(event) {
+                            try {
+                                RepoRestService.removeVdb($scope.vdbObject.selected).then(
+                                        function() {
+                                            console.log("Removed vdb");
+                                            initVdbs();
+                                        }, function(response) {
+                                            // TODO better error handler
+                                            console.log("Error with status code", response.status);
+                                        });
+                            } catch (error) {
+                            } finally {
+                                // Essential to stop the accordion closing
+                                event.stopPropagation();
+                            }
+                        };
+
                         // Initialise vdb collection on loading
                         initVdbs();
 
