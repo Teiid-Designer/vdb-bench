@@ -21,7 +21,7 @@ var config = {
   ts: ['plugins/**/*.ts'],
   js: 'plugins/**/*.js',
   testTs: ['test-plugins/**/*.ts'],
-  less: './less/**/*.less',
+  less: ['./less/**/*.less', 'plugins/**/*.less'],
   templates: ['plugins/**/*.html'],
   testTemplates: ['test-plugins/**/*.html'],
   templateModule: pkg.name + '-templates',
