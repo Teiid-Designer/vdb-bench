@@ -22,7 +22,7 @@
                 <div ng-controller="VdbController">
                 <accordion close-others="false">
                     <!-- Vdbs -->
-                    <accordion-group heading="Vdbs">
+                    <accordion-group heading="Vdbs" ng-init="isOpen = true" is-open="isOpen">
                         <accordion-heading>
                             Vdbs
                             <!-- Necessary to make it into a dropdown as they do not refresh the page when clicked -->
