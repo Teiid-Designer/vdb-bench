@@ -214,7 +214,7 @@ gulp.task('connect', ['watch'], function() {
     }
     ],
     staticAssets: [{
-      path: '/',
+      path: '/vdb-bench',
       dir: '.'
 
     }],

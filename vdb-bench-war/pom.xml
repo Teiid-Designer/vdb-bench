@@ -135,7 +135,7 @@
           <webAppSourceDirectory>../vdb-bench-assembly/</webAppSourceDirectory>
           <scanIntervalSeconds>1</scanIntervalSeconds>
           <webAppConfig>
-            <contextPath>/</contextPath>
+            <contextPath>/vdb-bench/</contextPath>
             <!--<contextPath>${context}</contextPath>-->
           </webAppConfig>
           <classesDirectory>${project.build.directory}/${project.name}/WEB-INF/classes</classesDirectory>
