@@ -4,7 +4,7 @@ var vdbBench = (function(vdbBench) {
     vdbBench.pagePath = vdbBench.templatePath + "/pages";
     vdbBench.widgetPath = vdbBench.templatePath + "/widgets";
 
-    vdbBench._module = angular.module(vdbBench.pluginName, [ 'ui.bootstrap', 'restangular' ]);
+    vdbBench._module = angular.module(vdbBench.pluginName, [ 'ui.bootstrap', 'ui.codemirror', 'restangular' ]);
 
     var tab = undefined;
 
@@ -18,15 +18,18 @@ var vdbBench = (function(vdbBench) {
                         function() {
                             return 'Vdb Workbench';
                         }).href(function() {
-                    return '/vdb-bench';
-                }).subPath('Workspace', 'wkspace',
-                        builder.join(vdbBench.pagePath, 'wkspacePage.html'))
-                        .subPath(
-                                'Manage Repositories',
-                                'repos',
-                                builder
-                                        .join(vdbBench.pagePath,
+                                return '/vdb-bench';
+                            })
+                                .subPath('Workspace', 'wkspace',
+                                        builder.join(vdbBench.pagePath, 'wkspacePage.html')
+                                )
+                                .subPath(
+                                        'Manage Repositories',
+                                        'repos',
+                                        builder
+                                            .join(vdbBench.pagePath,
                                                 'repoPage.html')).build();
+
                 builder.configureRouting($routeProvider, tab);
             } ]);
 

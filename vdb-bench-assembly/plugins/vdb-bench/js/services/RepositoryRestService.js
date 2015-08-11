@@ -67,6 +67,10 @@ var vdbBench = (function(vdbBench) {
                     if (_.isEmpty(restService)) {
                         restService = Restangular.withConfig(function(RestangularConfigurer) {
                             RestangularConfigurer.setBaseUrl(baseUrl);
+                            RestangularConfigurer.setRestangularFields(
+                                    {
+                                        selfLink: '_links[0].href'
+                                    });
                         });
 
                         service.cachedServices[baseUrl] = restService;
@@ -86,14 +90,43 @@ var vdbBench = (function(vdbBench) {
                     Restangular.copy(src, dst);
                 };
 
+                /**
+                 * Service: return the list of existing vdbs
+                 */
                 service.getVdbs = function() {
                     var restService = getRestService();
                     return restService.all('vdbs').getList();
                 };
 
+                /**
+                 * Service: Remove the given vdb
+                 */
                 service.removeVdb = function(vdb) {
                     return vdb.remove();
                 };
+
+                /**
+                 * Service: Fetch the xml content of the vdb
+                 * Should be required only for preview purposes. Vdbs should be edited
+                 * using json, which is more efficient
+                 */
+                service.getVdbXml = function(vdb) {
+                    var links = vdb._links;
+                    var xmlLink;
+                    for (i = 0; i < links.length; ++i) {
+                        var link = links[i];
+                        if (links[i].rel == "xml") {
+                            xmlLink = links[i].href;
+                            break;
+                        }
+                    }
+
+                    if (xmlLink == null)
+                        return null;
+
+                    var restService = getRestService();
+                    return restService.one(xmlLink).get();
+                }
 
                 return service;
             } ]);

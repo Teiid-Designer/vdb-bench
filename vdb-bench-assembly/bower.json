@@ -24,7 +24,8 @@
     "hawtio-template-cache": "~2.0.3",
     "hawtio-forms": "~2.0.0",
     "angular-bootstrap": "~0.13.0",
-    "restangular": "~1.5.1"
+    "restangular": "~1.5.1",
+    "angular-ui-codemirror": "~0.3.0"
   },
   "devDependencies": {
     "bootstrap": "~3.3.1",

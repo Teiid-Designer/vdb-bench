@@ -1,16 +1,60 @@
 {
   "vdbs": [
     {
-      "id": 1,
-      "name": "portfolio"
+      "id": "portfolio",
+      "description": "Portfolio vdb",
+      "_links": [
+        {
+          "rel": "self",
+          "href": "/vdbs/portfolio"
+        },
+        {
+          "rel": "xml",
+          "href": "/xml/portfolio-vdb"
+        }
+      ]
     },
     {
-      "id": 2,
-      "name": "tweet-example"
+      "id": "tweet-example",
+      "description": "Tweet Example vdb",
+      "_links": [
+        {
+          "rel": "self",
+          "href": "/vdbs/tweet-example"
+        },
+        {
+          "rel": "xml",
+          "href": "/xml/tweet-example-vdb"
+        }
+      ]
     },
     {
-      "id": 3,
-      "name": "parts"
+      "id": "parts",
+      "description": "Parts vdb",
+      "_links": [
+        {
+          "rel": "self",
+          "href": "/vdbs/parts"
+        },
+        {
+          "rel": "xml",
+          "href": "/xml/parts-vdb"
+        }
+      ]
+    }
+  ],
+  "xml": [
+    {
+      "id": "portfolio-vdb",
+      "content": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><vdb name=\"Portfolio\" version=\"1\"><description>The Portfolio Dynamic VDB</description></vdb>"
+    },
+    {
+      "id": "tweet-example-vdb",
+      "content": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><vdb name=\"Tweet Example\" version=\"1\"><description>The Tweet Example VDB</description></vdb>"
+    },
+    {
+      "id": "parts-vdb",
+      "content": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><vdb name=\"Parts\" version=\"1\"><description>The Parts VDB</description></vdb>"
     }
   ]
 }

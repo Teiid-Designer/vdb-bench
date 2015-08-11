@@ -1,7 +1,7 @@
 <h1>Vdb Builder Workspace</h1>
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="row" ng-controller="VdbController">
         <div class="col-sm-2">
 
             <!-- Repository -->
@@ -19,7 +19,6 @@
             </div>
 
             <div id="panel-repo-content" class="col-sm-12">
-                <div ng-controller="VdbController">
                 <accordion close-others="false">
                     <!-- Vdbs -->
                     <accordion-group heading="Vdbs" ng-init="isOpen = true" is-open="isOpen">
@@ -34,18 +33,29 @@
                         <div id="list-vdb">
                             <div class="list-group">
                                 <a class="list-group-item" ng-repeat="vdb in vdbObject.vdbs" ng-click="$parent.vdbObject.selected = vdb" ng-class="{active:vdbObject.selected==vdb}">
-                                    {{vdb.name}}
+                                    {{vdb.id}}
                                 </a>
                             </div>
-                            <h3>Vdb selected: {{vdbObject.selected.name || none}}</h3>
+                            <h3>Vdb selected: {{vdbObject.selected.id || none}}</h3>
                         </div>
                     </accordion-group>
                 </accordion>
-                </div>
 
             </div>
 
             <!-- End of Repository Contents -->
+        </div>
+
+        <!-- Panel for editing the selected vdb properties -->
+        <div class=col-sm-10>
+            <div ng-show="vdbObject.selected">
+                <tabset>
+                    <tab heading="Static title" ng-click="onTabSelected('Static')">Static content</tab>
+                    <tab heading="Vdb Preview" ng-click="onTabSelected('Preview')">
+                        <ui-codemirror ng-model="vdbObject.previewContent" ui-refresh="vdbObject.previewRefresh" ui-codemirror-opts="xmlPreviewOptions"></ui-codemirror>
+                    </tab>
+                </tabset>
+            </div>
         </div>
     </div>
 </div>
