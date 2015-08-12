@@ -4,7 +4,8 @@ var vdbBench = (function (vdbBench) {
         'VdbController', [
                     '$scope',
                     'RepoRestService',
-                    function ($scope, RepoRestService) {
+                    '$filter',
+                    function ($scope, RepoRestService, $filter) {
 
                 $scope.vdbObject = {};
                 $scope.vdbObject.vdbs = [];
@@ -131,8 +132,7 @@ var vdbBench = (function (vdbBench) {
                     try {
                         RepoRestService.getVdbXml($scope.vdbObject.selected).then(
                             function (xml) {
-                                console.log("Returned content: " + xml.content);
-                                $scope.vdbObject.previewContent = xml.content;
+                                $scope.vdbObject.previewContent = $filter('prettyXml')(xml.content);
                             },
                             function (response) {
                                 // TODO better error handler

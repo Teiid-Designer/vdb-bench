@@ -4,7 +4,7 @@ var vdbBench = (function(vdbBench) {
     vdbBench.pagePath = vdbBench.templatePath + "/pages";
     vdbBench.widgetPath = vdbBench.templatePath + "/widgets";
 
-    vdbBench._module = angular.module(vdbBench.pluginName, [ 'ui.bootstrap', 'ui.codemirror', 'restangular' ]);
+    vdbBench._module = angular.module(vdbBench.pluginName, [ 'ui.bootstrap', 'ui.codemirror', 'prettyXml', 'restangular' ]);
 
     var tab = undefined;
 
