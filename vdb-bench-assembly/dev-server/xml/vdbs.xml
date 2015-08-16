@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<vdbs>
+	<vdb id="portfolio">
+		<links>
+			<link rel="self" href="/vdbs/portfolio"></link>
+			<link rel="content" href="/vdb/portfolio"></link>
+		</links>
+	</vdb>
+	<vdb id="tweet-example">
+		<links>
+			<link rel="self" href="/vdbs/tweet-example"></link>
+			<link rel="content" href="/vdb/tweet-example"></link>
+		</links>
+	</vdb>
+	<vdb id="parts">
+		<links>
+			<link rel="self" href="/vdbs/parts"></link>
+			<link rel="content" href="/vdb/parts"></link>
+		</links>
+	</vdb>
+</vdbs>

@@ -38,6 +38,8 @@
     "which": "^1.0.8",
     "wiredep": "^2.2.2",
     "gulp-flatten": "0.0.4",
-    "gulp-json-srv": "0.0.4"
+    "fs": "0.0.2",
+    "xmldom": "~0.1.19",
+    "restify": "~4.0.0"
   }
 }

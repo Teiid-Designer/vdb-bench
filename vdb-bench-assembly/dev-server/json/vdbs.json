@@ -1,0 +1,43 @@
+{
+    "vdbs": [
+        {
+            "id": "portfolio",
+            "_links": [
+                {
+                    "rel": "self",
+                    "href": "/vdbs/portfolio"
+                },
+                {
+                    "rel": "content",
+                    "href": "/vdb/portfolio"
+                }
+            ]
+        },
+        {
+            "id": "tweet-example",
+            "_links": [
+                {
+                    "rel": "self",
+                    "href": "/vdbs/tweet-example"
+                },
+                {
+                    "rel": "content",
+                    "href": "/vdb/tweet-example"
+                }
+            ]
+        },
+        {
+            "id": "parts",
+            "_links": [
+                {
+                    "rel": "self",
+                    "href": "/vdbs/parts"
+                },
+                {
+                    "rel": "content",
+                    "href": "/vdb/parts"
+                }
+            ]
+        }
+    ]
+}
