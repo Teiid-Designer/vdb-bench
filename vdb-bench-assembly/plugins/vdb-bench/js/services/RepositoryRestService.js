@@ -15,11 +15,11 @@ var vdbBench = (function(vdbBench) {
                  */
                 var service = {};
 
-                // Restangular services keyed by hostname:port
+                // Restangular services keyed by hostname:port/baseUrl
                 service.cachedServices = {};
 
                 function url(repo) {
-                    return "http://" + repo.hostname + ":" + repo.port + "/";
+                    return "http://" + repo.hostname + ":" + repo.port + repo.baseUrl;
                 }
 
                 function HostNotReachableException(host) {
@@ -79,6 +79,17 @@ var vdbBench = (function(vdbBench) {
                     return restService;
                 }
 
+                function getContentLink(vdb) {
+                    var links = vdb._links;
+                    for (i = 0; i < links.length; ++i) {
+                        var link = links[i];
+                        if (links[i].rel == "content")
+                            return links[i].href;
+                    }
+
+                    return null;
+                }
+
                 service.copy = function(src, dst) {
                     /*
                      * In normal $resource/ng projects use:
@@ -111,21 +122,16 @@ var vdbBench = (function(vdbBench) {
                  * using json, which is more efficient
                  */
                 service.getVdbXml = function(vdb) {
-                    var links = vdb._links;
-                    var xmlLink;
-                    for (i = 0; i < links.length; ++i) {
-                        var link = links[i];
-                        if (links[i].rel == "xml") {
-                            xmlLink = links[i].href;
-                            break;
-                        }
-                    }
-
-                    if (xmlLink == null)
+                    var contentLink = getContentLink(vdb);
+                    if (contentLink == null)
                         return null;
 
                     var restService = getRestService();
-                    return restService.one(xmlLink).get();
+                    /*
+                     * Uses the content link from the vdb and fetch the xml version of the content.
+                     * By passing the Accept header, we ensure that only the xml version can be returned.
+                     */
+                    return restService.one(contentLink).customGET("", {}, { 'Accept' : 'application/xml' });
                 }
 
                 return service;

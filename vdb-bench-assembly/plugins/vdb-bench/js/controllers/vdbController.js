@@ -132,7 +132,7 @@ var vdbBench = (function (vdbBench) {
                     try {
                         RepoRestService.getVdbXml($scope.vdbObject.selected).then(
                             function (xml) {
-                                $scope.vdbObject.previewContent = $filter('prettyXml')(xml.content);
+                                $scope.vdbObject.previewContent = $filter('prettyXml')(xml);
                             },
                             function (response) {
                                 // TODO better error handler
