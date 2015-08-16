@@ -11,7 +11,7 @@ var gulp = require('gulp'),
     hawtio = require('hawtio-node-backend'),
     tslint = require('gulp-tslint'),
     tslintRules = require('./tslint.json'),
-    jsonServer = require('gulp-json-srv');
+    childProc = require('child_process');
 
 var plugins = gulpLoadPlugins({});
 var pkg = require('./package.json');
@@ -223,22 +223,7 @@ gulp.task('connect', ['watch'], function() {
       enabled: true
     }
   });
-  /*
-   * Example middleware that returns a 404 for templates
-   * as they're already embedded in the js
-  hawtio.use('/', function(req, res, next) {
-          var path = req.originalUrl;
-          // avoid returning these files, they should get pulled from js
-          if (s.startsWith(path, '/plugins/') && s.endsWith(path, 'html')) {
-            console.log("returning 404 for: ", path);
-            res.statusCode = 404;
-            res.end();
-          } else {
-            console.log("allowing: ", path);
-            next();
-          }
-        });
-        */
+
   hawtio.listen(function(server) {
     var host = server.address().address;
     var port = server.address().port;
@@ -309,9 +294,28 @@ gulp.task('site', ['usemin'], function() {
   return gulp.src(patterns).pipe(plugins.debug({ title: 'img-copy' })).pipe(gulp.dest('target/site/img'));
 });
 
-gulp.task('test-json-server', function() {
-    jsonServer.start({
-        data: 'test-data/test-server.json'
+gulp.task('test-server', function (cb) {
+    function fork() {
+        var spawn = childProc.spawn;
+        var spawned = spawn('node', ['dev-server/server.js']);
+
+        spawned.stdout.on('data', function (data) {
+            console.log('' + data);
+        });
+
+        spawned.stderr.on('data', function (data) {
+            console.log('err: ' + data);
+        });
+
+        return spawned;
+    }
+
+    var proc = fork();
+    plugins.watch(['dev-server/**/*'], function () {
+            if (proc) {
+                proc.kill();
+                proc = fork();
+            }
     });
 });
 
@@ -321,7 +325,7 @@ gulp.task('build', ['bower', 'path-adjust', 'tsc', 'less', 'template', 'concat',
 
 gulp.task('built-test', ['test-tsc', 'test-template', 'test-concat', 'test-clean']);
 
-gulp.task('default', ['test-json-server', 'connect']);
+gulp.task('default', ['test-server', 'connect']);
 
 
 

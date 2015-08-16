@@ -1,0 +1,22 @@
+{
+    "vdb": [
+        {
+            "id": "portfolio",
+            "name": "Portfolio",
+            "version": 1,
+            "description": "The Portfolio Dynamic VDB"
+        },
+        {
+            "id": "tweet-example",
+            "name": "Tweet Example",
+            "version": 1,
+            "description": "The Tweet Example VDB"
+        },
+        {
+            "id": "parts",
+            "name": "Parts",
+            "version": 1,
+            "description": "The Parts VDB"
+        }
+    ]
+}
