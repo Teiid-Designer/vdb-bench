@@ -6,12 +6,15 @@
  */
 var vdbBench = (function(vdbBench) {
 
+    var BASE_URL = '/api/v1';
+
     vdbBench._module.factory('RepoSelectionService',
              function($rootScope, StorageService) {
 
                 var defaultRepository = {
                     hostname : 'localhost',
-                    port : 3000
+                    port : 3000,
+                    baseUrl : BASE_URL
                 };
 
                 var repos;
@@ -155,7 +158,8 @@ var vdbBench = (function(vdbBench) {
                         if (! exists)
                             newRepo = {
                                 hostname : testName,
-                                port : 8080
+                                port : 8080,
+                                baseUrl : BASE_URL
                             };
                         else
                             index++;

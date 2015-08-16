@@ -29,6 +29,12 @@ var vdbBench = (function(vdbBench) {
                                                     'min' : 1000,
                                                     'max' : 65535
                                                 }
+                                            },
+                                            "baseUrl" : {
+                                                type : 'text',
+                                                'input-attributes' : {
+                                                    'required' : 'true',
+                                                }
                                             }
                                         },
                                         "description" : "Repository Properties",
