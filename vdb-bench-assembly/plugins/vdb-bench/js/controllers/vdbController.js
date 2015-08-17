@@ -10,6 +10,13 @@ var vdbBench = (function (vdbBench) {
                 $scope.vdbObject = {};
                 $scope.vdbObject.vdbs = [];
 
+                 function RestServiceException(message) {
+                    this.message = message;
+                    this.toString = function() {
+                       return this.message;
+                    };
+                 }
+
                 /**
                  * Fetch the list of vdbs from the selected repository
                  */
@@ -22,8 +29,7 @@ var vdbBench = (function (vdbBench) {
                             function (response) {
                                 // Some kind of error has occurred
                                 $scope.vdbObject.vdbs = [];
-                                // TODO better error handler
-                                console.log("Error with status code", response.status);
+                                throw new RestServiceException("Failed to load vdbs from the host services.\n" + response.message);
                             });
                     } catch (error) {
                         $scope.vdbObject.vdbs = [];
@@ -62,15 +68,15 @@ var vdbBench = (function (vdbBench) {
                  * Event handler for clicking the remove button
                  */
                 $scope.onRemoveClicked = function (event) {
+                    var selected = $scope.vdbObject.selected;
                     try {
-                        RepoRestService.removeVdb($scope.vdbObject.selected).then(
+                        RepoRestService.removeVdb(selected).then(
                             function () {
                                 // Reinitialise the list of vdbs
                                 initVdbs();
                             },
                             function (response) {
-                                // TODO better error handler
-                                console.log("Error with status code", response.status);
+                                throw new RestServiceException("Failed to remove the vdb " + selected.id + "from the host services.\n" + response.message);
                             });
                     } catch (error) {} finally {
                         // Essential to stop the accordion closing
@@ -130,12 +136,13 @@ var vdbBench = (function (vdbBench) {
                  */
                 $scope.vdbXml = function () {
                     try {
+                        $scope.vdbObject.previewContent = "Loading ...";
+
                         RepoRestService.getVdbXml($scope.vdbObject.selected).then(
                             function (xml) {
                                 $scope.vdbObject.previewContent = $filter('prettyXml')(xml);
                             },
                             function (response) {
-                                // TODO better error handler
                                 $scope.vdbObject.previewContent = "Error occurred: ", response.message;
                             });
                     } catch (error) {
