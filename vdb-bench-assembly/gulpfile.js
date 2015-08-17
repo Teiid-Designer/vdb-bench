@@ -11,7 +11,8 @@ var gulp = require('gulp'),
     hawtio = require('hawtio-node-backend'),
     tslint = require('gulp-tslint'),
     tslintRules = require('./tslint.json'),
-    childProc = require('child_process');
+    childProc = require('child_process'),
+    raml2html = require('gulp-raml2html');
 
 var plugins = gulpLoadPlugins({});
 var pkg = require('./package.json');
@@ -319,7 +320,14 @@ gulp.task('test-server', function (cb) {
     });
 });
 
-gulp.task('mvn', ['build', 'site']);
+gulp.task('apidoc', function() {
+    process.chdir('spec');
+    return gulp.src('vdb-builder.raml')
+        .pipe(raml2html())
+        .pipe(gulp.dest('build'));
+});
+
+gulp.task('mvn', ['build', 'site', 'apidoc']);
 
 gulp.task('build', ['bower', 'path-adjust', 'tsc', 'less', 'template', 'concat', 'clean']);
 
