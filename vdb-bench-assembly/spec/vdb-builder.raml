@@ -1,0 +1,61 @@
+#%RAML 0.8
+---
+title: vdb-builder API
+version: v1
+baseUri: http://localhost:8080/vdb-bench/api/{version}
+mediaType: application/json
+
+/vdbs:
+    get:
+        description: List available vdbs
+        responses:
+            200:
+                body:
+                    application/json:
+                        example: !include ../dev-server/json/vdbs.json
+    put:
+    post:
+    /{vdbId}:
+        get:
+            description: Retrieve the meta data for the given vdb
+            headers:
+                        Accept: application/json
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: !include ../dev-server/json/vdbs.json
+                404:
+                    body:
+                        application/json:
+                            example: { error: "No vdb named portfolio" }
+        put:
+        delete:
+            responses:
+                200:
+                404:
+                    body:
+                        application/json:
+                            example: { error: "No vdb named portfolio" }
+/vdb:
+    /{vdbId}:
+        get:
+            description: Retrieve the content for the given vdb
+            headers:
+                Accept: [application/json, application/xml]
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: !include ../dev-server/json/vdbsContent.json
+                        application/xml:
+                            example: !include ../dev-server/xml/vdbsContent.xml
+                404:
+                    body:
+                        application/json:
+                            example: { error: "No vdb named portfolio" }
+                        application/xml:
+                            example: <error message="No vdb content for vdb named  {vdbId}></error>
+                406:
+                    description: Request has invalid Accept header
+        post:
