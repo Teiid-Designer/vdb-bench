@@ -2,7 +2,7 @@
 ---
 title: vdb-builder API
 version: v1
-baseUri: http://localhost:8080/vdb-bench/api/{version}
+baseUri: http://localhost:8080/vdb-builder/api/{version}
 mediaType: application/json
 
 /vdbs:
@@ -16,23 +16,6 @@ mediaType: application/json
     put:
     post:
     /{vdbId}:
-        get:
-            description: Retrieve the meta data for the given vdb
-            headers:
-                        Accept:
-                            enum: [application/json, application/xml]
-                            required: true
-            responses:
-                200:
-                    body:
-                        application/json:
-                            example: !include json/vdbs.json
-                        application/xml:
-                            example: !include xml/vdbs.xml
-                404:
-                    body:
-                        application/json:
-                            example: "No vdb named portfolio"
         put:
         delete:
             responses:
