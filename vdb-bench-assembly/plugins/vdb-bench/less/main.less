@@ -3,3 +3,41 @@
     border: none;
     color: black;
 }
+
+.vdb-diagram {
+    overflow: auto;
+    max-width: 1024px;
+    max-height: 768px;
+}
+
+svg {
+	display: block;
+  	width: 100%;
+  	height: 100%;
+  	pointer-events: all;
+}
+
+.node {
+  cursor: pointer;
+}
+
+.node circle {
+  fill: #fff;
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+
+.node text {
+  font: 10px sans-serif;
+}
+
+.node-selected {
+    stroke: red !important;
+    fill: transparent !important;
+}
+
+.link {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1.5px;
+}

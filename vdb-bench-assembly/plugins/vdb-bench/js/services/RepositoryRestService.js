@@ -105,6 +105,23 @@ var vdbBench = (function(vdbBench) {
                 };
 
                 /**
+                 * Service: Fetch the content (in json) of the vdb
+                 */
+                service.getVdbContent = function(vdb) {
+                    var contentLink = getContentLink(vdb);
+                    if (contentLink == null)
+                        return null;
+
+                    return getRestService().then(function(restService) {
+                        /*
+                        * Uses the content link from the vdb and fetch the xml version of the content.
+                        * By passing the Accept header, we ensure that only the xml version can be returned.
+                        */
+                        return restService.one(contentLink).customGET("", {}, { 'Accept' : 'application/json' });
+                    });
+                }
+
+                /**
                  * Service: Fetch the xml content of the vdb
                  * Should be required only for preview purposes. Vdbs should be edited
                  * using json, which is more efficient

@@ -1,8 +1,10 @@
 var vdbBench = (function(vdbBench) {
     vdbBench.pluginName = 'vdb-bench';
-    vdbBench.templatePath = 'plugins/vdb-bench/html';
+    vdbBench.pluginPath = 'plugins/vdb-bench';
+    vdbBench.templatePath = vdbBench.pluginPath + "/html";
     vdbBench.pagePath = vdbBench.templatePath + "/pages";
     vdbBench.widgetPath = vdbBench.templatePath + "/widgets";
+    vdbBench.imgPath = vdbBench.pluginPath + "/img";
 
     vdbBench._module = angular.module(vdbBench.pluginName, [ 'ui.bootstrap', 'ui.codemirror', 'prettyXml', 'restangular' ]);
 
