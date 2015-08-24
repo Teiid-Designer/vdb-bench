@@ -38,6 +38,7 @@ var vdbBench = (function (vdbBench) {
                 $scope.vdbObject.vdbs = [];
                 $scope.vdbObject.previewRefresh = false;
                 $scope.vdbObject.visibleTabId = DIAGRAM_TAB_ID;
+                $scope.vdbObject.selectedVdbComponent = [];
 
                 /**
                  * Options for the codemirror editor used for previewing vdb xml

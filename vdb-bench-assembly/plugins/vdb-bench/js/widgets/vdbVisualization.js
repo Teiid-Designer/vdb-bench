@@ -1,5 +1,5 @@
 var vdbBench = (function (vdbBench) {
-    vdbBench._module.directive('vdbVisualization', function () {
+    vdbBench._module.directive('vdbVisualization', function ($timeout) {
         var OPEN_BRACKET = "(";
         var CLOSE_BRACKET = ")";
         var OPEN_SQUARE_BRACKET = "[";
@@ -70,6 +70,7 @@ var vdbBench = (function (vdbBench) {
             // isolated scope
             scope: {
                 vdb: '=',
+                selectedVdbComponent: '=',
                 height: '=',
                 width: '='
             },
@@ -91,8 +92,8 @@ var vdbBench = (function (vdbBench) {
                  * appending an 'svg' div and inside that a 'g' div
                  */
                 var svg = d3.select(element[0]).append(SVG_ELEMENT)
-                    .attr("width", width + margin.right + margin.left)
-                    .attr("height", height + margin.top + margin.bottom);
+                    .attr(CSS_WIDTH, width + margin.right + margin.left)
+                    .attr(CSS_HEIGHT, height + margin.top + margin.bottom);
 
                 /*
                  * Create the root group element of the svg
@@ -111,7 +112,12 @@ var vdbBench = (function (vdbBench) {
                      */
                     svgGroup.selectAll('*').remove();
 
-                    var treeData = prepare(newVdb.clone().plain());
+                    /*
+                     * Index of all the contents of the vdb
+                     * indexed according to their self link
+                     */
+                    var dataIndex = {};
+                    var treeData = prepare(newVdb.clone().plain(), dataIndex);
 
                     /*
                      * Diagonal generator
@@ -142,26 +148,41 @@ var vdbBench = (function (vdbBench) {
 
                     root = treeData;
 
-                    update(root);
+                    // Will call update
+                    expandCollapseCallback(root);
 
-                    function prepare(dataObject) {
+                    /**
+                     * Recurse the vdb object and copy the properties
+                     * and assign 'parent' object and '_children' array
+                     * both being required for a tree layout
+                     */
+                    function prepare(dataObject, dataIndex) {
                         var newDataObj = {};
+                        var selfLink;
 
                         for (var key in dataObject) {
                             var value = dataObject[key];
 
                             // _links must be checked first since its an array
                             if (key == LINKS) {
-                                newDataObj.self = value[0].href;
+                                selfLink = value[0].href;
                             } else if (typeof(value) == 'string' || typeof(value) == 'number' ||
                                 Object.prototype.toString.call(value) === '[object Array]') {
-                                newDataObj[key] = value; 
+                                newDataObj[key] = value;
                             } else if (typeof(value) == 'object') {
-                                var child = prepare(value);
-                                (newDataObj._children || (newDataObj._children = [])).push(child);
-                                child.parent = newDataObj;
+                                var child = prepare(value, dataIndex);
+                                if (child) {
+                                    (newDataObj._children || (newDataObj._children = [])).push(child);
+                                    child.parent = newDataObj;
+                                }
                             }
                         }
+
+                        if (!selfLink)
+                            return null;
+
+                        newDataObj.self = selfLink;
+                        dataIndex[selfLink] = newDataObj;
 
                         return newDataObj;
                     }
@@ -257,20 +278,7 @@ var vdbBench = (function (vdbBench) {
                         enterNodesGroup.append(SVG_CIRCLE)
                             .attr(HTML_RADIUS, 1e-6)
                             .style(CSS_FILL, childStatusCallback)
-                            .on(HTML_CLICK, function (node) {
-                                if (node.children != null) {
-                                    node._children = node.children;
-                                    node.children = null;
-                                } else {
-                                    node.children = node._children;
-                                    node._children = null;
-                                }
-
-                                update(node);
-
-                                // Stop selection firing
-                                d3.event.stopPropagation();
-                            });
+                            .on(HTML_CLICK, expandCollapseCallback);
 
                         /*
                          * Animate new nodes, ie. child nodes being displayed after expanding parent, 
@@ -321,38 +329,84 @@ var vdbBench = (function (vdbBench) {
                     }
 
                     function selectionCallback (node) {
-                        if (! d3.event.shiftKey) {
-                            /*
-                             * As long as the shift key is not pressed, remove all selected
-                             * elements by finding all elements with the css selected class
-                             */
+                        var shiftKey = d3.event.shiftKey;
+
+                        if (!node) {
+
+                            // Cancel all selections unless shift key has been clicked
+                            if (shiftKey) {
+                                // Shift key pressed so nothing to do since current selection
+                                // remains the same as previously.
+                                return;
+                            }
+
+                            // Broadcast the lack of selection out of this directive
+                            scope.$apply($timeout(function() {
+                                scope.selectedVdbComponent = [];
+                            }), 300);
+
+                            // Remove all selections from the DOM
                             svgGroup.selectAll(DOT + CSS_SELECTED_CLASS).remove();
-                        }
 
-                        var id = this.id;
-                        try {
-                            if (! id)
-                                return;
+                        } else { // node is a selection
 
-                            if (! id.startsWith(NODE_ID_PREFIX))
-                                return;
+                            var id = this.id;
+                            if (!id || !id.startsWith(NODE_ID_PREFIX))
+                                return; // node not a valid selection
+
+                            // Broadcast the new selection out of this directive
+                            scope.$apply($timeout(function() {
+                                var newSelection = [ dataIndex[node.self] ];
+
+                                if (shiftKey) {
+                                    // Shift key pressed so add back the current selection
+                                    scope.selectedVdbComponent.forEach(function(selected) {
+                                        newSelection.push(selected);
+                                    });
+                                }
+
+                                scope.selectedVdbComponent = newSelection;
+                            }), 300);
+
+                            /*
+                             * Update the diagram with the new selection
+                             */
+                            if (!shiftKey) {
+                                // Remove all selections from the DOM
+                                svgGroup.selectAll(DOT + CSS_SELECTED_CLASS).remove();
+                            }
 
                             var boundingWidth = this.getBBox().width;
                             var boundingHeight = this.getBBox().height;
-
                             d3.select(this).insert(SVG_RECTANGLE, HTML_TEXT)
                                              .attr(HTML_X, -(boundingWidth / 2) - 5)
                                              .attr(HTML_Y, -boundingHeight)
                                              .attr(HTML_WIDTH, boundingWidth + 10)
                                              .attr(HTML_HEIGHT, boundingHeight)
                                              .attr(CSS_CLASS, CSS_SELECTED_CLASS);
-                        } finally {
-                            // Stop propagration of click event to parent svg
-                            d3.event.stopPropagation();
-
-                            // Broadcast the latest selection
-//                            fireSelectionEvent();
                         }
+
+                        // Stop propagration of click event to parent svg
+                        d3.event.stopPropagation();
+
+                        // Stop shift-left-click shortcut being fired (firefox opens a new tab/window)
+                        d3.event.preventDefault();
+                    }
+
+                    function expandCollapseCallback (node) {
+                        if (node.children != null) {
+                            node._children = node.children;
+                            node.children = null;
+                        } else {
+                            node.children = node._children;
+                            node._children = null;
+                        }
+
+                        update(node);
+
+                        // Stop selection firing
+                        if (d3.event)
+                            d3.event.stopPropagation();
                     }
 
                     function nodeLabelCallback(node) {
