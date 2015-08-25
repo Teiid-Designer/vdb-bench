@@ -51,8 +51,7 @@
             <div ng-show="vdbObject.selected">
                 <tabset>
                     <tab heading="Vdb Content" ng-click="onTabSelected('Diagram')">
-                        <!-- Enclosing div defined with css max-width and max-height and overflow:auto to display scrollbars for canvas -->
-                        <div class="vdb-diagram, col-sm-10">
+                        <div class="vdb-diagram col-sm-10">
                             <vdb-visualization vdb="vdbObject.vdbContent" selected-vdb-component="vdbObject.selectedVdbComponent" height="2048" width="1024"></vdb-visualization>
                         </div>
                         <div class="col-sm-2">
