@@ -15,14 +15,20 @@ var vdbBench = (function (vdbBench) {
 
         var TOP_MARGIN = 100;
         var DEPTH_HEIGHT = 100;
+        var NODE_HEIGHT = 200;
         var TRANSITION_DURATION = 750;
+        var TEXT_ORIGIN_Y = 10;
+        var TEXT_HEIGHT = 20;
         var IMAGE_X = -16;
-        var IMAGE_Y = -40;
+        var IMAGE_Y = TEXT_ORIGIN_Y + TEXT_HEIGHT + 5;
+        var CHILDREN_ICON_Y = IMAGE_Y + 32 + 5;
+        var WIDTH_PER_CHARACTER = 9;
 
         var SVG_ELEMENT = "svg";
         var GROUP_ELEMENT = "g";
         var SVG_PATH = "path";
         var SVG_CIRCLE = "circle";
+        var SVG_CIRCLE_Y = "cy";
         var SVG_RECTANGLE = "rect";
         var SVG_TRANSFORM = "transform";
         var SVG_DATA_ELEMENT = "d";
@@ -82,18 +88,18 @@ var vdbBench = (function (vdbBench) {
                     bottom: 20,
                     left: 120
                 };
-                var width = scope.width - margin.right - margin.left;
-                var height = scope.height - margin.top - margin.bottom;
+                var svgWidth = scope.width - margin.right - margin.left;
+                var svgHeight = scope.height - margin.top - margin.bottom;
 
-                var tree = d3.layout.tree().size([width, height]);
+                var tree = d3.layout.tree();
 
                 /*
                  * Create the svg canvas by selecting the 'div' of the widget and
                  * appending an 'svg' div and inside that a 'g' div
                  */
                 var svg = d3.select(element[0]).append(SVG_ELEMENT)
-                    .attr(CSS_WIDTH, width + margin.right + margin.left)
-                    .attr(CSS_HEIGHT, height + margin.top + margin.bottom);
+                    .attr(CSS_WIDTH, svgWidth + margin.right + margin.left)
+                    .attr(CSS_HEIGHT, svgHeight + margin.top + margin.bottom);
 
                 /*
                  * Create the root group element of the svg
@@ -123,10 +129,20 @@ var vdbBench = (function (vdbBench) {
                      * Diagonal generator
                      * Projection determines the location of the source and target points
                      * of the diagonal line to be drawn.
+                     *
+                     * The source and target accessors allow for the link path to start at the
+                     * children dot and finish just above the title of the child node
                      */
-                    var diagonal = d3.svg.diagonal().projection(function (node) {
-                        return [node.x, node.y];
-                    });
+                    var diagonal = d3.svg.diagonal()
+                                            .source(function(d) {
+                                                return { x: d.source.x, y: d.source.y + CHILDREN_ICON_Y};
+                                            })
+                                            .target(function(d) {
+                                                return { x: d.target.x, y: d.target.y - 4};
+                                            })
+                                            .projection(function(d) {
+                                                return [d.x, d.y];
+                                            });
 
                     /*
                      * Create zoom behaviour and assign the zoom listener callback
@@ -150,6 +166,7 @@ var vdbBench = (function (vdbBench) {
 
                     // Will call update
                     expandCollapseCallback(root);
+                    centerNode(root);
 
                     /**
                      * Recurse the vdb object and copy the properties
@@ -198,6 +215,17 @@ var vdbBench = (function (vdbBench) {
                     function update(source) {
                         if (source == null)
                             return;
+
+                        /*
+                         * Calculate the max label width of all visible nodes
+                         */
+                        var maxLabelLength = calcLabelWidth(root, 0);
+
+                        /*
+                         * Set the node size according to the maximum width of the labels
+                         * ensuring that no labels overlaps with another node
+                         */
+                        tree.nodeSize([maxLabelLength * WIDTH_PER_CHARACTER, NODE_HEIGHT]);
 
                         /*
                          * The layout converts the hierarchy of data nodes
@@ -250,7 +278,7 @@ var vdbBench = (function (vdbBench) {
                             .on(HTML_CLICK, selectionCallback);
 
                         /*
-                         * Append the label to each new node
+                         * Append the id to each new node
                          *
                          * text-anchor="middle" will anchor the text using the centre
                          * of the label at the location specified by the x attribute
@@ -260,9 +288,28 @@ var vdbBench = (function (vdbBench) {
                          */
                         enterNodesGroup.append(HTML_TEXT)
                             .attr(HTML_TEXT_ANCHOR, MIDDLE)
-                            .attr(HTML_DY, IMAGE_Y - 5)
+                            .attr(HTML_DY, TEXT_ORIGIN_Y)
                             .style(CSS_FILL_OPACITY, 1)
-                            .text(nodeLabelCallback);
+                            .text(function(node) {
+                                return node.id;
+                            });
+
+                        /*
+                         * Append the type to each new node
+                         *
+                         * text-anchor="middle" will anchor the text using the centre
+                         * of the label at the location specified by the x attribute
+                         *
+                         * Note: the y and dy attributes locate the text using the
+                         *          bottom-left of the text block
+                         */
+                        enterNodesGroup.append(HTML_TEXT)
+                            .attr(HTML_TEXT_ANCHOR, MIDDLE)
+                            .attr(HTML_DY, TEXT_ORIGIN_Y + TEXT_HEIGHT)
+                            .style(CSS_FILL_OPACITY, 1)
+                            .text(function(node) {
+                                return COLON + OPEN_SQUARE_BRACKET + node.type + CLOSE_SQUARE_BRACKET;
+                        });
 
                         /*
                          * Centre the icon above the circle
@@ -277,6 +324,7 @@ var vdbBench = (function (vdbBench) {
                          */
                         enterNodesGroup.append(SVG_CIRCLE)
                             .attr(HTML_RADIUS, 1e-6)
+                            .attr(SVG_CIRCLE_Y, CHILDREN_ICON_Y)
                             .style(CSS_FILL, childStatusCallback)
                             .on(HTML_CLICK, expandCollapseCallback);
 
@@ -326,6 +374,32 @@ var vdbBench = (function (vdbBench) {
                         });
 
                         updateLinks(source, nodes);
+                    }
+
+                    function calcLabelWidth (node, maxLabelLength) {
+                        var labelLength = Math.max(node.id.length, node.type.length);
+                        maxLabelLength = Math.max(labelLength, maxLabelLength);
+
+                        if (!node.children || node.children.length == 0)
+                            return maxLabelLength;
+
+                        node.children.forEach(function(d) {
+                            maxLabelLength = calcLabelWidth(d, maxLabelLength);
+                        });
+
+                        return maxLabelLength;
+                    }
+
+                    function centerNode(source) {
+                        var scale = zoomListener.scale();
+                        var x = -source.y0;
+                        var y = -source.x0;
+                        x = x * scale + svgWidth / 2;
+                        d3.select('g').transition()
+                                .duration(TRANSITION_DURATION)
+                                .attr("transform", "translate(" + (x + 400) + "," + y + ")scale(" + scale + ")");
+                        zoomListener.scale(scale);
+                        zoomListener.translate([x, y]);
                     }
 
                     function selectionCallback (node) {
@@ -380,7 +454,7 @@ var vdbBench = (function (vdbBench) {
                             var boundingHeight = this.getBBox().height;
                             d3.select(this).insert(SVG_RECTANGLE, HTML_TEXT)
                                              .attr(HTML_X, -(boundingWidth / 2) - 5)
-                                             .attr(HTML_Y, -boundingHeight)
+                                             .attr(HTML_Y, -boundingHeight + CHILDREN_ICON_Y)
                                              .attr(HTML_WIDTH, boundingWidth + 10)
                                              .attr(HTML_HEIGHT, boundingHeight)
                                              .attr(CSS_CLASS, CSS_SELECTED_CLASS);
@@ -407,10 +481,6 @@ var vdbBench = (function (vdbBench) {
                         // Stop selection firing
                         if (d3.event)
                             d3.event.stopPropagation();
-                    }
-
-                    function nodeLabelCallback(node) {
-                        return node.id + COLON + SPACE + OPEN_SQUARE_BRACKET + node.type + CLOSE_SQUARE_BRACKET;
                     }
 
                     function imageResourceCallback(node) {
