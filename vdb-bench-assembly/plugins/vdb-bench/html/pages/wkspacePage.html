@@ -51,18 +51,26 @@
             <div ng-show="vdbObject.selected">
                 <tabset>
                     <tab heading="Vdb Content" ng-click="onTabSelected('Diagram')">
-                        <div class="vdb-diagram col-sm-10">
+                        <div class="vdb-diagram col-sm-8">
                             <vdb-visualization vdb="vdbObject.vdbContent" selected-vdb-component="vdbObject.selectedVdbComponent" height="2048" width="1024"></vdb-visualization>
                         </div>
-                        <div class="col-sm-2">
-                            <div id="list-selected-vdb">
-                                <div class="list-group">
-                                    <a class="list-group-item" ng-repeat="selected in vdbObject.selectedVdbComponent">
-                                        {{selected.self}}
-                                    </a>
-                                </div>
-                            </div>
+
+                        <!-- Vertical tabbed page for displaying selected object properties -->
+                        <div class="vdb-diagram-nav-col col-sm-4">
+                            <divider-widget>
+                                <divider title="New">
+                                    <p>I am on the NEW page</p>
+                                </divider>
+                                <divider title="Edit">
+                                    <div class="list-group">
+                                        <a class="list-group-item" ng-repeat="selected in vdbObject.selectedVdbComponent">
+                                            Selected Object: {{selected._links[0].href}}
+                                        </a>
+                                    </div>
+                                </divider>
+                            </divider-widget>
                         </div>
+
                     </tab>
                     <tab heading="Vdb Preview" ng-click="onTabSelected('Preview')">
                         <ui-codemirror ng-model="vdbObject.previewContent" ui-refresh="vdbObject.previewRefresh" ui-codemirror-opts="xmlPreviewOptions"></ui-codemirror>

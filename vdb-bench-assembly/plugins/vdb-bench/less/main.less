@@ -3,41 +3,108 @@
     border: none;
     color: black;
 }
+.nav-content-outer {
+    float: left;
+    border-bottom: 1px solid #B1B1B1;
+    border-right: 1px solid #B1B1B1;
+}
+.nav-content-inner {
+    width: 100%;
+    height: 768px;
+}
 
+/*
+ * Class added to collapse divider in dividerWidget directive
+ */
+
+.collapsing-width {
+    position: relative;
+    overflow: hidden;
+    float: left;
+    -webkit-transition: width 0.35s ease;
+    -moz-transition: width 0.35s ease;
+    -o-transition: width 0.35s ease;
+    transition: width 0.35s ease;
+}
+.vdb-diagram-nav {
+    width: 2.5em;
+    float: left;
+    max-height: 768px;
+}
+.vdb-diagram-nav ul {
+    padding: 0;
+    margin: 0 auto;
+}
+.vdb-diagram-nav ul li {
+    list-style: none;
+    padding-top: 125px;
+}
+.vdb-diagram-nav ul li:first-child {
+    padding-top: 0;
+}
+.vdb-diagram-nav ul li a {
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+    transform-origin: 10%;
+    writing-mode: lr-tb;
+    width: 300%;
+    display: block;
+    background: #EDECEC;
+    background: linear-gradient(235deg, transparent 15px, #EDECEC 10px);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
+    color: #909090;
+    float: left;
+    text-decoration: none;
+    text-align: center;
+}
+.vdb-diagram-nav-list ul li a:hover {
+    background: #c93434;
+    background: linear-gradient(220deg, transparent 10px, #c93434 10px);
+}
+.vdb-diagram-nav-list ul li a:focus {
+    outline: 0;
+}
+.vdb-diagram-nav-list ul li a #current a {
+    background: #fff;
+    background: linear-gradient(220deg, transparent 10px, #fff 10px);
+    text-shadow: none;
+    color: #333;
+}
+.vdb-diagram-nav-col {
+    padding-left: 0;
+}
 .vdb-diagram {
     max-height: 768px;
     max-width: 1024px;
     border-left: 1px solid #B1B1B1;
     border-right: 1px solid #B1B1B1;
     border-bottom: 1px solid #B1B1B1;
+    overflow: hidden;
+    padding-right: 0;
 }
-
 svg {
-	display: block;
-  	pointer-events: all;
+    display: block;
+    pointer-events: all;
 }
-
 .node {
-  cursor: pointer;
+    cursor: pointer;
 }
-
 .node circle {
-  fill: #fff;
-  stroke: #000;
-  stroke-width: 1.5px;
+    fill: #fff;
+    stroke: #000;
+    stroke-width: 1.5px;
 }
-
 .node text {
-  font: 10px sans-serif;
+    font: 10px sans-serif;
 }
-
 .node-selected {
     stroke: red !important;
     fill: transparent !important;
 }
-
 .link {
-  fill: none;
-  stroke: #000;
-  stroke-width: 1.5px;
+    fill: none;
+    stroke: #000;
+    stroke-width: 1.5px;
 }

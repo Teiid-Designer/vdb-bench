@@ -1,0 +1,14 @@
+<div id="nav-content-parent">
+    <div class="nav-content-outer">
+        <div class="nav-content-inner">
+            <div ng-transclude></div>
+        </div>
+    </div>
+    <div class="vdb-diagram-nav">
+        <ul>
+            <li ng-repeat="divider in dividers" ng-class="{active:divider.selected}">
+                <a href="" ng-show="isVisible(divider)" ng-click="select(divider)">{{divider.title}}</a>
+            </li>
+        </ul>
+    </div>
+</div>

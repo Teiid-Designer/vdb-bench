@@ -6,7 +6,7 @@ var vdbBench = (function(vdbBench) {
     vdbBench.widgetPath = vdbBench.templatePath + "/widgets";
     vdbBench.imgPath = vdbBench.pluginPath + "/img";
 
-    vdbBench._module = angular.module(vdbBench.pluginName, [ 'ui.bootstrap', 'ui.codemirror', 'prettyXml', 'restangular' ]);
+    vdbBench._module = angular.module(vdbBench.pluginName, [ 'ngAnimate', 'ui.bootstrap', 'ui.codemirror', 'prettyXml', 'restangular' ]);
 
     var tab = undefined;
 

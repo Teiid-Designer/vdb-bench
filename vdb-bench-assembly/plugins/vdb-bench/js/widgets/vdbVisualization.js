@@ -123,7 +123,7 @@ var vdbBench = (function (vdbBench) {
                      * indexed according to their self link
                      */
                     var dataIndex = {};
-                    var treeData = prepare(newVdb.clone().plain(), dataIndex);
+                    var treeData = prepare(newVdb, dataIndex);
 
                     /*
                      * Diagonal generator
@@ -199,7 +199,7 @@ var vdbBench = (function (vdbBench) {
                             return null;
 
                         newDataObj.self = selfLink;
-                        dataIndex[selfLink] = newDataObj;
+                        dataIndex[selfLink] = dataObject;
 
                         return newDataObj;
                     }
