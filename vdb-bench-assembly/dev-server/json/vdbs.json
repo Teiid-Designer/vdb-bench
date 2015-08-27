@@ -1,20 +1,22 @@
 {
     "vdbs": [
         {
-            "id": "portfolio",
+            "id": "Portfolio",
+            "description": "The Portfolio Vdb",
             "_links": [
                 {
                     "rel": "self",
-                    "href": "/vdbs/portfolio"
+                    "href": "/vdbs/Portfolio"
                 },
                 {
                     "rel": "content",
-                    "href": "/vdb/portfolio"
+                    "href": "/vdb/Portfolio"
                 }
             ]
         },
         {
             "id": "tweet-example",
+            "description": "The Twitter Vdb",
             "_links": [
                 {
                     "rel": "self",
@@ -27,15 +29,16 @@
             ]
         },
         {
-            "id": "parts",
+            "id": "MyPartsVDB_Dynamic",
+            "description": "The Parts Vdb",
             "_links": [
                 {
                     "rel": "self",
-                    "href": "/vdbs/parts"
+                    "href": "/vdbs/MyPartsVDB_Dynamic"
                 },
                 {
                     "rel": "content",
-                    "href": "/vdb/parts"
+                    "href": "/vdb/MyPartsVDB_Dynamic"
                 }
             ]
         }
