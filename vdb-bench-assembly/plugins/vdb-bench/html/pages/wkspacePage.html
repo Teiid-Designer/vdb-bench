@@ -32,11 +32,11 @@
                         </accordion-heading>
                         <div id="list-vdb">
                             <div class="list-group">
-                                <a class="list-group-item" ng-repeat="vdb in vdbObject.vdbs" ng-click="$parent.vdbObject.selected = vdb" ng-class="{active:vdbObject.selected==vdb}">
+                                <a class="list-group-item" ng-repeat="vdb in vdbObject.vdbs" ng-click="$parent.select(vdb)" ng-class="{active:$parent.selected()==vdb}">
                                     {{vdb.id}}
                                 </a>
                             </div>
-                            <h3>Vdb selected: {{vdbObject.selected.id || none}}</h3>
+                            <h3>Vdb selected: {{selected().id || none}}</h3>
                         </div>
                     </accordion-group>
                 </accordion>
@@ -48,11 +48,11 @@
 
         <!-- Panel for editing the selected vdb properties -->
         <div class=col-sm-10>
-            <div ng-show="vdbObject.selected">
+            <div ng-show="selected()">
                 <tabset>
                     <tab heading="Vdb Content" ng-click="onTabSelected('Diagram')">
                         <div class="vdb-diagram col-sm-8">
-                            <vdb-visualization vdb="vdbObject.vdbContent" selected-vdb-component="vdbObject.selectedVdbComponent" height="2048" width="1024"></vdb-visualization>
+                            <vdb-visualization vdb="selected().content" selected-vdb-component="vdbObject.selectedVdbComponent" height="2048" width="1024"></vdb-visualization>
                         </div>
 
                         <!-- Vertical tabbed page for displaying selected object properties -->
@@ -63,8 +63,9 @@
                                 </divider>
                                 <divider title="Edit">
                                     <div class="list-group">
-                                        <a class="list-group-item" ng-repeat="selected in vdbObject.selectedVdbComponent">
-                                            Selected Object: {{selected._links[0].href}}
+                                        <a class="list-group-item" ng-repeat="component in vdbObject.selectedVdbComponent">
+                                            Selected Object: {{component._links[0].href}}
+                                            <attribute-widget selected="component"/>
                                         </a>
                                     </div>
                                 </divider>
@@ -73,7 +74,7 @@
 
                     </tab>
                     <tab heading="Vdb Preview" ng-click="onTabSelected('Preview')">
-                        <ui-codemirror ng-model="vdbObject.previewContent" ui-refresh="vdbObject.previewRefresh" ui-codemirror-opts="xmlPreviewOptions"></ui-codemirror>
+                        <ui-codemirror ng-model="selected().previewContent" ui-refresh="vdbObject.previewRefresh" ui-codemirror-opts="xmlPreviewOptions"></ui-codemirror>
                     </tab>
                 </tabset>
             </div>

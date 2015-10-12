@@ -140,6 +140,32 @@ var vdbBench = (function(vdbBench) {
                     });
                 }
 
+                /**
+                 * Service: Fetch the schema content for the given
+                 * element type, eg. Vdb, Model, Source, Translator.
+                 */
+                service.getSchemaById = function(id) {
+                    return getRestService().then(function(restService) {
+                        if (id == null)
+                            return null;
+
+                        return restService.one('schema', id).get();
+                    });
+                }
+
+                /**
+                 * Service: Fetch the schema content for the given
+                 * komodo type, eg. VDB, VDB_MODEL, VDB_MODEL_SOURCE
+                 */
+                service.getSchemaByKType = function(kType) {
+                    return getRestService().then(function(restService) {
+                        if (kType == null)
+                            return null;
+
+                        return restService.one('schema').customGET('', {ktype: kType});
+                    });
+                }
+
                 return service;
             } ]);
 

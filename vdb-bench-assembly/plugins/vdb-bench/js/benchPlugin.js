@@ -6,6 +6,13 @@ var vdbBench = (function(vdbBench) {
     vdbBench.widgetPath = vdbBench.templatePath + "/widgets";
     vdbBench.imgPath = vdbBench.pluginPath + "/img";
 
+    vdbBench.RestServiceException = function(message) {
+        this.message = message;
+        this.toString = function () {
+            return this.message;
+        };
+    }
+
     vdbBench._module = angular.module(vdbBench.pluginName, [ 'ngAnimate', 'ui.bootstrap', 'ui.codemirror', 'prettyXml', 'restangular' ]);
 
     var tab = undefined;
