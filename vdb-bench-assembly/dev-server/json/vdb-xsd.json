@@ -1,0 +1,370 @@
+{
+  "schema-1" : {
+    "vdb" : {
+      "keng-id" : "vdb",
+      "keng-kType" : "Vdb",
+      "keng-description" : "Describes the configuration for a VDB",
+      "keng-properties" : {
+        "version" : {
+          "keng-type" : "decimal",
+          "keng-required" : "true"
+        },
+        "name" : {
+          "keng-type" : "string",
+          "keng-required" : "true"
+        },
+        "description" : {
+          "keng-type" : "string",
+          "keng-required" : "false",
+          "keng-repeatable" : "false"
+        },
+        "connectionType" : {
+          "keng-type" : "string",
+          "keng-defaultValue" : "BY_VERSION",
+          "keng-required" : "false",
+          "keng-repeatable" : "false"
+        },
+        "property" : {
+          "keng-properties" : {
+            "value" : {
+              "keng-type" : "string",
+              "keng-required" : "false"
+            },
+            "name" : {
+              "keng-type" : "string",
+              "keng-required" : "false",
+              "keng-values" : [ "allowed-languages", "authentication-type", "cache-metadata", "connection.XXX", "gss-pattern", "lib", "model.visible", "password-pattern", "query-timeout", "security-domain", "{http://teiid.org/rest}auto-generate", "{http://teiid.org/rest}passthough-auth", "{http://teiid.org/rest}security-domain", "{http://teiid.org/rest}security-role", "{http://teiid.org/rest}security-type" ]
+            }
+          },
+          "keng-type" : "string",
+          "keng-required" : "false",
+          "keng-repeatable" : "true",
+          "keng-limit" : "-1"
+        }
+      },
+      "keng-children" : [ "importVdb", "model", "translator", "dataRole", "entry" ],
+      "keng-required" : "true",
+      "keng-repeatable" : "false"
+    },
+    "importVdb" : {
+      "keng-id" : "importVdb",
+      "keng-kType" : "VdbImport",
+      "keng-description" : "An imported VDB is reused in the context of this VDB.",
+      "keng-properties" : {
+        "version" : {
+          "keng-type" : "decimal",
+          "keng-required" : "true"
+        },
+        "importDataPolicies" : {
+          "keng-defaultValue" : "true",
+          "keng-type" : "boolean",
+          "keng-required" : "false"
+        },
+        "name" : {
+          "keng-type" : "string",
+          "keng-required" : "true"
+        }
+      },
+      "keng-required" : "false",
+      "keng-repeatable" : "true",
+      "keng-limit" : "-1"
+    },
+    "model" : {
+      "keng-id" : "model",
+      "keng-kType" : "Model",
+      "keng-description" : "A model defines the alias for the Schema the data being integrated. In the Designer built VDB, the Schema for this model is defined by external index files. In the \"Dynamic VDB\" this defines the importer properties along with \"source\" information the Schema is generated at deploy time.",
+      "keng-properties" : {
+        "modelType" : {
+          "keng-defaultValue" : "PHYSICAL",
+          "keng-type" : "string",
+          "keng-required" : "false"
+        },
+        "visible" : {
+          "keng-defaultValue" : "true",
+          "keng-type" : "boolean",
+          "keng-required" : "false"
+        },
+        "path" : {
+          "keng-type" : "string",
+          "keng-required" : "false"
+        },
+        "name" : {
+          "keng-type" : "string",
+          "keng-required" : "true"
+        },
+        "description" : {
+          "keng-type" : "string",
+          "keng-required" : "false",
+          "keng-repeatable" : "false"
+        },
+        "property" : {
+          "keng-properties" : {
+            "value" : {
+              "keng-type" : "string",
+              "keng-required" : "false"
+            },
+            "name" : {
+              "keng-type" : "string",
+              "keng-required" : "false",
+              "keng-values" : [ "cache-metadata", "importer.importKeys", "importer.importProcedures", "multisource", "multisource.addColumn", "multisource.columnName", "teiid_rel:data-ttl" ]
+            }
+          },
+          "keng-type" : "string",
+          "keng-required" : "false",
+          "keng-repeatable" : "true",
+          "keng-limit" : "-1"
+        }
+      },
+      "keng-children" : [ "source", "metadata", "validationError" ],
+      "keng-required" : "false",
+      "keng-repeatable" : "true",
+      "keng-limit" : "-1"
+    },
+    "source" : {
+      "keng-id" : "source",
+      "keng-kType" : "VdbModelSource",
+      "keng-description" : "A source defines access to physical data source with its connection-jndi-name. translator-name defines a translator. Translator is a layer between Teiid engine and data source that knows how to convert and execute commands native to source. Teiid offers various pre-built translators.",
+      "keng-properties" : {
+        "sourceTranslator" : {
+          "keng-type" : "string",
+          "keng-required" : "true"
+        },
+        "sourceJndiName" : {
+          "keng-type" : "string",
+          "keng-required" : "false"
+        },
+        "name" : {
+          "keng-type" : "string",
+          "keng-required" : "true"
+        }
+      },
+      "keng-required" : "false",
+      "keng-repeatable" : "true",
+      "keng-limit" : "-1"
+    },
+    "metadata" : {
+      "keng-id" : "metadata",
+      "keng-kType" : "Unknown",
+      "keng-description" : "Schema metadata (tables, views, stored procedures, functions) definitions of the model. If this defined on source model, it becomes source metadata, on virtual model it become view metadata where user can define the logical layer",
+      "keng-properties" : {
+        "type" : {
+          "keng-defaultValue" : "DDL",
+          "keng-type" : "string",
+          "keng-required" : "false"
+        }
+      },
+      "keng-type" : "string",
+      "keng-required" : "false",
+      "keng-repeatable" : "false"
+    },
+    "validationError" : {
+      "keng-id" : "validationError",
+      "keng-kType" : "Unknown",
+      "keng-description" : "When Schema files for model defined by Designer, the validation-errors define any errors in the schema. This is not applicable in the Dynamic VDB scenario.",
+      "keng-properties" : {
+        "severity" : {
+          "keng-type" : "string",
+          "keng-values" : [ "ERROR", "WARNING" ],
+          "keng-required" : "true"
+        },
+        "path" : {
+          "keng-type" : "string",
+          "keng-required" : "false"
+        }
+      },
+      "keng-type" : "string",
+      "keng-required" : "false",
+      "keng-repeatable" : "true",
+      "keng-limit" : "-1"
+    },
+    "translator" : {
+      "keng-id" : "translator",
+      "keng-kType" : "VdbTranslator",
+      "keng-description" : "When the pre-built translator's behavior need to be altered, this optional element need to be used to override them.",
+      "keng-properties" : {
+        "type" : {
+          "keng-type" : "string",
+          "keng-required" : "true"
+        },
+        "description" : {
+          "keng-type" : "string",
+          "keng-required" : "false"
+        },
+        "name" : {
+          "keng-type" : "string",
+          "keng-required" : "true"
+        },
+        "property" : {
+          "keng-properties" : {
+            "value" : {
+              "keng-type" : "string",
+              "keng-required" : "false"
+            },
+            "name" : {
+              "keng-type" : "string",
+              "keng-required" : "false",
+              "keng-values" : [ "CopyLobs", "DefaultBinding", "DefaultServiceMode", "DirectQueryProcedureName", "Immutable", "MaxDependentInPredicates", "MaxInCriteriaSize", "RequiresCriteria", "SupportedJoinCriteria", "SupportsDirectQueryProcedure", "SupportsFullOuterJoins", "SupportsInnerJoins", "SupportsLuceneSearching", "SupportsOdataFilter", "SupportsOrderBy", "SupportsOuterJoins", "ThreadBound" ]
+            }
+          },
+          "keng-type" : "string",
+          "keng-required" : "false",
+          "keng-repeatable" : "true",
+          "keng-limit" : "-1"
+        }
+      },
+      "keng-required" : "false",
+      "keng-repeatable" : "true",
+      "keng-limit" : "-1"
+    },
+    "dataRole" : {
+      "keng-id" : "dataRole",
+      "keng-kType" : "VdbDataRole",
+      "keng-description" : "This defines a data role. The \"resource-name\" element defines fully qualified name for a Schema, Table, Procedure, etc. The \"allows-*\" elements define the security access, which are applied to the resource and all child resources. The \"mapped-role-name\" defines the \"role\" name that user must have before they have access to this data. The \"role\" name matches to the JAAS based role that user has.",
+      "keng-properties" : {
+        "anyAuthenticated" : {
+          "keng-type" : "boolean",
+          "keng-required" : "false"
+        },
+        "grantAll" : {
+          "keng-type" : "boolean",
+          "keng-required" : "false"
+        },
+        "name" : {
+          "keng-type" : "string",
+          "keng-required" : "true"
+        },
+        "allowCreateTemporaryTables" : {
+          "keng-type" : "boolean",
+          "keng-required" : "false"
+        },
+        "description" : {
+          "keng-type" : "string",
+          "keng-required" : "false",
+          "keng-repeatable" : "false"
+        },
+        "mappedRoleNames" : {
+          "keng-type" : "string",
+          "keng-required" : "false",
+          "keng-repeatable" : "true",
+          "keng-limit" : "-1"
+        }
+      },
+      "keng-children" : [ "permission" ],
+      "keng-required" : "false",
+      "keng-repeatable" : "true",
+      "keng-limit" : "-1"
+    },
+    "permission" : {
+      "keng-id" : "permission",
+      "keng-kType" : "VdbPermission",
+      "keng-properties" : {
+        "resourceName" : {
+          "keng-type" : "string",
+          "keng-required" : "true",
+          "keng-repeatable" : "false"
+        },
+        "allowCreate" : {
+          "keng-type" : "boolean",
+          "keng-required" : "false",
+          "keng-repeatable" : "false"
+        },
+        "allowRead" : {
+          "keng-type" : "boolean",
+          "keng-required" : "false",
+          "keng-repeatable" : "false"
+        },
+        "allowUpdate" : {
+          "keng-type" : "boolean",
+          "keng-required" : "false",
+          "keng-repeatable" : "false"
+        },
+        "allowDelete" : {
+          "keng-type" : "boolean",
+          "keng-required" : "false",
+          "keng-repeatable" : "false"
+        },
+        "allowExecute" : {
+          "keng-type" : "boolean",
+          "keng-required" : "false",
+          "keng-repeatable" : "false"
+        },
+        "allowAlter" : {
+          "keng-type" : "boolean",
+          "keng-required" : "false",
+          "keng-repeatable" : "false"
+        },
+        "allowLanguage" : {
+          "keng-type" : "boolean",
+          "keng-required" : "false",
+          "keng-repeatable" : "false"
+        }
+      },
+      "keng-children" : [ "condition", "mask" ],
+      "keng-required" : "false",
+      "keng-repeatable" : "true",
+      "keng-limit" : "-1"
+    },
+    "condition" : {
+      "keng-id" : "condition",
+      "keng-kType" : "VdbCondition",
+      "keng-properties" : {
+        "constraint" : {
+          "keng-defaultValue" : "true",
+          "keng-type" : "boolean",
+          "keng-required" : "false"
+        }
+      },
+      "keng-type" : "string",
+      "keng-required" : "false",
+      "keng-repeatable" : "false"
+    },
+    "mask" : {
+      "keng-id" : "mask",
+      "keng-kType" : "VdbMask",
+      "keng-properties" : {
+        "order" : {
+          "keng-type" : "string",
+          "keng-required" : "false"
+        }
+      },
+      "keng-type" : "string",
+      "keng-required" : "false",
+      "keng-repeatable" : "false"
+    },
+    "entry" : {
+      "keng-id" : "entry",
+      "keng-kType" : "VdbEntry",
+      "keng-description" : "With Designer based VDBs, this element is used to define extra files that are defined inside the VDB archive. Not applicable for Dynamic VDBs",
+      "keng-properties" : {
+        "path" : {
+          "keng-type" : "string",
+          "keng-required" : "true"
+        },
+        "description" : {
+          "keng-type" : "string",
+          "keng-required" : "false",
+          "keng-repeatable" : "false"
+        },
+        "property" : {
+          "keng-properties" : {
+            "value" : {
+              "keng-type" : "string",
+              "keng-required" : "false"
+            },
+            "name" : {
+              "keng-type" : "string",
+              "keng-required" : "false"
+            }
+          },
+          "keng-type" : "string",
+          "keng-required" : "false",
+          "keng-repeatable" : "true",
+          "keng-limit" : "-1"
+        }
+      },
+      "keng-required" : "false",
+      "keng-repeatable" : "true",
+      "keng-limit" : "-1"
+    }
+  }
+}

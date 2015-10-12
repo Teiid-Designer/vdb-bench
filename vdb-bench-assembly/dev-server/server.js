@@ -25,6 +25,63 @@ function readXml(filename) {
 var jsonVdbs = readJson('vdbs.json');
 var jsonVdbContent = readJson('vdbsContent.json');
 var xmlVdbContentDoc = readXml('vdbsContent.xml');
+var jsonVdbSchema = readJson('vdb-xsd.json');
+
+/**
+ * View the vdb metadata for id
+ *
+ * http://localhost:3000/api/v1/schema/Condition
+ * http://localhost:3000/api/v1/schema?ktype=VDB_CONDITION
+ */
+function viewSchema(req, res, next) {
+    console.log("Returning schema specification");
+
+    var schemaId = req.params == null ? null : req.params.schemaId;
+    var ktype = req.query == null ? null : req.query.ktype;
+
+    if (schemaId != null) {
+        console.log("Fetching schema config for id " + schemaId);
+
+        var schema = jsonVdbSchema['schema-1'];
+        var element = schema[schemaId];
+        if (element == null) {
+            res.send(404, { error: "No vdb schema for element named " + schemaId });
+            return next();
+        }
+
+        console.log("Returning json schema for id " + schemaId);
+        res.send(200, element);
+        return next();
+    }
+    else if (ktype != null) {
+        var schema = jsonVdbSchema['schema-1'];
+        Object.keys(schema).forEach(
+            function(key){
+                var schObj = schema[key];
+                if (ktype == schObj['keng-kType']) {
+                    console.log("Fetching schema config for ktype query " + ktype);
+                    element = schObj;
+                }
+            }
+        );
+
+        if (element == null) {
+            res.send(404, { error: "No vdb schema for element with ktype " + ktype });
+            return next();
+        }
+
+        console.log("Returning json schema for ktype " + ktype);
+        res.send(200, element);
+        return next();
+    }
+    else {
+        // Return all of schema
+        console.log(jsonVdbSchema['schema-1']);
+
+        res.send(200, jsonVdbSchema['schema-1']);
+        return next();
+    }
+}
 
 /**
  * View the vdb metadata
@@ -212,6 +269,11 @@ server.del({path : baseUrl + '/vdbs/:vdbId' }, deleteVdb);
 server.get({ path: baseUrl + '/vdb/:vdbId' }, viewVdbContent);
 //server.post({path : PATH , version: '0.0.1'} ,postNewJob);
 
+/*
+ * Vdb Schema Specification
+ */
+server.get({ path: baseUrl + '/schema' }, viewSchema);
+server.get({ path: baseUrl + '/schema/:schemaId' }, viewSchema);
 
 /*
  * Start server listening
