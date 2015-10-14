@@ -1,9 +1,9 @@
 {
     "vdbs": [
         {
-            "id": "Portfolio",
-            "description": "The Portfolio Vdb",
-            "_links": [
+            "keng__id": "Portfolio",
+            "keng__description": "The Portfolio Vdb",
+            "keng___links": [
                 {
                     "rel": "self",
                     "href": "/vdbs/Portfolio"
@@ -15,9 +15,9 @@
             ]
         },
         {
-            "id": "tweet-example",
-            "description": "The Twitter Vdb",
-            "_links": [
+            "keng__id": "tweet-example",
+            "keng__description": "The Twitter Vdb",
+            "keng___links": [
                 {
                     "rel": "self",
                     "href": "/vdbs/tweet-example"
@@ -29,9 +29,9 @@
             ]
         },
         {
-            "id": "MyPartsVDB_Dynamic",
-            "description": "The Parts Vdb",
-            "_links": [
+            "keng__id": "MyPartsVDB_Dynamic",
+            "keng__description": "The Parts Vdb",
+            "keng___links": [
                 {
                     "rel": "self",
                     "href": "/vdbs/MyPartsVDB_Dynamic"

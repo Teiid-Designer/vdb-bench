@@ -33,10 +33,10 @@
                         <div id="list-vdb">
                             <div class="list-group">
                                 <a class="list-group-item" ng-repeat="vdb in vdbObject.vdbs" ng-click="$parent.select(vdb)" ng-class="{active:$parent.selected()==vdb}">
-                                    {{vdb.id}}
+                                    {{vdb.keng__id}}
                                 </a>
                             </div>
-                            <h3>Vdb selected: {{selected().id || none}}</h3>
+                            <h3>Vdb selected: {{selected().keng__id || none}}</h3>
                         </div>
                     </accordion-group>
                 </accordion>
@@ -64,7 +64,7 @@
                                 <divider title="Edit">
                                     <div class="list-group">
                                         <a class="list-group-item" ng-repeat="component in vdbObject.selectedVdbComponent">
-                                            Selected Object: {{component._links[0].href}}
+                                            Selected Object: {{component.keng___links[0].href}}
                                             <attribute-widget selected="component"/>
                                         </a>
                                     </div>

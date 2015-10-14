@@ -6,12 +6,11 @@
 var vdbBench = (function(vdbBench) {
 
     vdbBench._module.factory('VdbSelectionService', [
+             'VDB_KEYS',
              'RepoRestService',
              '$rootScope',
              '$filter',
-             function(RepoRestService, $rootScope, $filter) {
-
-                var LINKS = "_links";
+             function(VDB_KEYS, RepoRestService, $rootScope, $filter) {
 
                 var selectedVdb;
 
@@ -29,15 +28,12 @@ var vdbBench = (function(vdbBench) {
                      var selfLink;
 
                      for (var key in dataObject) {
-                         console.log("KEY: " + key);
                          var value = dataObject[key];
 
-                         if (key == LINKS) {
-                             selfLink = value[0].href;
-                             console.log("Self Link: " + selfLink);
+                         if (key == VDB_KEYS.LINKS) {
+                             selfLink = value[0][VDB_KEYS.LINK_HREF];
                              dataIndex[selfLink] = dataObject;
                          } else if (typeof(value) == 'object') {
-                             console.log("Object: " + value);
                              indexInternal(value, dataIndex);
                          }
                      }
@@ -108,7 +104,7 @@ var vdbBench = (function(vdbBench) {
                                 selectedVdb.content = content;
                             },
                             function (response) {
-                                throw new vdbBench.RestServiceException("Failed to retrieve the content of the vdb " + selectedVdb.id + "from the host services.\n" + response.message);
+                                throw new vdbBench.RestServiceException("Failed to retrieve the content of the vdb " + selectedVdb[VDB_KEYS.ID] + "from the host services.\n" + response.message);
                             });
                     } catch (error) {
                         throw new vdbBench.RestServiceException("Failed to retrieve the content of the selected vdb from the host services.\n" + error.message);

@@ -6,11 +6,14 @@
 var vdbBench = (function(vdbBench) {
 
     vdbBench._module.factory('RepoRestService', [
+            'SYNTAX',
+            'VDB_SCHEMA',
+            'VDB_KEYS',
             'RepoSelectionService',
             'Restangular',
             '$http',
             '$q',
-            function(RepoSelectionService, Restangular, $http, $q) {
+            function(SYNTAX, VDB_SCHEMA, VDB_KEYS, RepoSelectionService, Restangular, $http, $q) {
 
                 /*
                  * Service instance to be returned
@@ -45,14 +48,14 @@ var vdbBench = (function(vdbBench) {
                         return $q.when(restService);
                     }
 
-                    var testUrl = baseUrl + "/vdbs";
+                    var testUrl = baseUrl + SYNTAX.FORWARD_SLASH + VDB_KEYS.VDBS;
                     return $http.get(testUrl).
                         then(function (response) {
                             restService = Restangular.withConfig(function (RestangularConfigurer) {
                                 RestangularConfigurer.setBaseUrl(baseUrl);
                                 RestangularConfigurer.setRestangularFields(
                                     {
-                                        selfLink: '_links[0].href'
+                                        selfLink: VDB_KEYS.LINKS + '[0].href'
                                     });
                             });
 
@@ -67,11 +70,11 @@ var vdbBench = (function(vdbBench) {
                 }
 
                 function getContentLink(vdb) {
-                    var links = vdb._links;
+                    var links = vdb[VDB_KEYS.LINKS];
                     for (i = 0; i < links.length; ++i) {
                         var link = links[i];
-                        if (links[i].rel == "content")
-                            return links[i].href;
+                        if (links[i][VDB_KEYS.LINK_NAME] == "content")
+                            return links[i][VDB_KEYS.LINK_HREF];
                     }
 
                     return null;
@@ -93,7 +96,7 @@ var vdbBench = (function(vdbBench) {
                  */
                 service.getVdbs = function() {
                     return getRestService().then(function(restService) {
-                        return restService.all('vdbs').getList();
+                        return restService.all(VDB_KEYS.VDBS).getList();
                     });
                 };
 
@@ -149,7 +152,7 @@ var vdbBench = (function(vdbBench) {
                         if (id == null)
                             return null;
 
-                        return restService.one('schema', id).get();
+                        return restService.one(VDB_SCHEMA.SCHEMA, id).get();
                     });
                 }
 
@@ -162,7 +165,7 @@ var vdbBench = (function(vdbBench) {
                         if (kType == null)
                             return null;
 
-                        return restService.one('schema').customGET('', {ktype: kType});
+                        return restService.one(VDB_SCHEMA.SCHEMA).customGET('', { ktype : kType });
                     });
                 }
 

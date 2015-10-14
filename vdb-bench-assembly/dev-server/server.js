@@ -58,7 +58,7 @@ function viewSchema(req, res, next) {
         Object.keys(schema).forEach(
             function(key){
                 var schObj = schema[key];
-                if (ktype == schObj['keng-kType']) {
+                if (ktype == schObj['keng__kType']) {
                     console.log("Fetching schema config for ktype query " + ktype);
                     element = schObj;
                 }
@@ -160,7 +160,7 @@ function deleteVdb(req, res, next) {
  */
 function indexVdbContents(vdbId) {
     for (var i = 0; i < jsonVdbContent.vdb.length; ++i) {
-        if (jsonVdbContent.vdb[i].id == vdbId)
+        if (jsonVdbContent.vdb[i]['keng__id'] == vdbId)
             return i;
     }
 

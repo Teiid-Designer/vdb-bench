@@ -1,18 +1,5 @@
 var vdbBench = (function (vdbBench) {
-    vdbBench._module.directive('vdbVisualization', function ($timeout) {
-        var OPEN_BRACKET = "(";
-        var CLOSE_BRACKET = ")";
-        var OPEN_SQUARE_BRACKET = "[";
-        var CLOSE_SQUARE_BRACKET = "]";
-        var COMMA = ",";
-        var COLON = ":";
-        var HYPHEN = "-";
-        var UNDERSCORE = "_";
-        var SPACE = " ";
-        var DOT = ".";
-
-        var LINKS = "_links";
-
+    vdbBench._module.directive('vdbVisualization', ['SYNTAX', 'VDB_KEYS', '$timeout', function (SYNTAX, VDB_KEYS, $timeout) {
         var TOP_MARGIN = 100;
         var DEPTH_HEIGHT = 100;
         var NODE_HEIGHT = 200;
@@ -68,7 +55,7 @@ var vdbBench = (function (vdbBench) {
         var LINK = "link";
         var ID = "id";
 
-        var NODE_ID_PREFIX = GROUP_ELEMENT + HYPHEN + NODE;
+        var NODE_ID_PREFIX = GROUP_ELEMENT + SYNTAX.HYPHEN + NODE;
 
         return {
             // used as element only
@@ -105,7 +92,8 @@ var vdbBench = (function (vdbBench) {
                  * Create the root group element of the svg
                  */
                 var svgGroup = svg.append(GROUP_ELEMENT)
-                    .attr(SVG_TRANSFORM, SVG_TRANSLATE + OPEN_BRACKET + margin.left + COMMA + margin.top + CLOSE_BRACKET);
+                    .attr(SVG_TRANSFORM, 
+                                SVG_TRANSLATE + SYNTAX.OPEN_BRACKET + margin.left + SYNTAX.COMMA + margin.top + SYNTAX.CLOSE_BRACKET);
 
                 scope.$watch('vdb', function (newVdb, oldVdb) {
                     // if 'vdb' is undefined, exit
@@ -116,7 +104,7 @@ var vdbBench = (function (vdbBench) {
                     /*
                      * clear the elements inside of the directive
                      */
-                    svgGroup.selectAll('*').remove();
+                    svgGroup.selectAll(SYNTAX.STAR).remove();
 
                     /*
                      * Index of all the contents of the vdb
@@ -150,10 +138,10 @@ var vdbBench = (function (vdbBench) {
                     var zoomListener = d3.behavior.zoom().scaleExtent([0.1, 3])
                                         .on("zoom", function() {
                                             svgGroup.attr(SVG_TRANSFORM,
-                                                                    SVG_TRANSLATE + OPEN_BRACKET +
-                                                                    d3.event.translate + CLOSE_BRACKET +
-                                                                    SVG_SCALE + OPEN_BRACKET +
-                                                                    d3.event.scale + CLOSE_BRACKET);
+                                                                    SVG_TRANSLATE + SYNTAX.OPEN_BRACKET +
+                                                                    d3.event.translate + SYNTAX.CLOSE_BRACKET +
+                                                                    SVG_SCALE + SYNTAX.OPEN_BRACKET +
+                                                                    d3.event.scale + SYNTAX.CLOSE_BRACKET);
                                         });
 
                     /*
@@ -181,7 +169,7 @@ var vdbBench = (function (vdbBench) {
                             var value = dataObject[key];
 
                             // _links must be checked first since its an array
-                            if (key == LINKS) {
+                            if (key == VDB_KEYS.LINKS) {
                                 selfLink = value[0].href;
                             } else if (typeof(value) == 'string' || typeof(value) == 'number' ||
                                 Object.prototype.toString.call(value) === '[object Array]') {
@@ -241,7 +229,7 @@ var vdbBench = (function (vdbBench) {
                         /*
                          * Select all existing nodes
                          */
-                        var nodeSelection = svgGroup.selectAll("g.node");
+                        var nodeSelection = svgGroup.selectAll(GROUP_ELEMENT + SYNTAX.DOT + NODE);
 
                         /*
                          * Map and append all new nodes from the data array
@@ -270,7 +258,7 @@ var vdbBench = (function (vdbBench) {
                          */
                         enterNodesGroup.attr("class", "node")
                             .attr(SVG_TRANSFORM, function (node) {
-                                return SVG_TRANSLATE + OPEN_BRACKET + source.x + COMMA + source.y + CLOSE_BRACKET;
+                                return SVG_TRANSLATE + SYNTAX.OPEN_BRACKET + source.x + SYNTAX.COMMA + source.y + SYNTAX.CLOSE_BRACKET;
                             })
                             .attr(ID, function (node) {
                                 return NODE_ID_PREFIX + node.self;
@@ -291,7 +279,7 @@ var vdbBench = (function (vdbBench) {
                             .attr(HTML_DY, TEXT_ORIGIN_Y)
                             .style(CSS_FILL_OPACITY, 1)
                             .text(function(node) {
-                                return node.id;
+                                return node[VDB_KEYS.ID];
                             });
 
                         /*
@@ -308,7 +296,7 @@ var vdbBench = (function (vdbBench) {
                             .attr(HTML_DY, TEXT_ORIGIN_Y + TEXT_HEIGHT)
                             .style(CSS_FILL_OPACITY, 1)
                             .text(function(node) {
-                                return COLON + OPEN_SQUARE_BRACKET + node.type + CLOSE_SQUARE_BRACKET;
+                                return SYNTAX.COLON + SYNTAX.OPEN_SQUARE_BRACKET + node[VDB_KEYS.TYPE] + SYNTAX.CLOSE_SQUARE_BRACKET;
                         });
 
                         /*
@@ -336,7 +324,7 @@ var vdbBench = (function (vdbBench) {
                         var nodeUpdate = updateNodeSelection.transition()
                             .duration(TRANSITION_DURATION)
                             .attr(SVG_TRANSFORM, function(node) {
-                                return SVG_TRANSLATE + OPEN_BRACKET + node.x + COMMA + node.y + CLOSE_BRACKET;
+                                return SVG_TRANSLATE + SYNTAX.OPEN_BRACKET + node.x + SYNTAX.COMMA + node.y + SYNTAX.CLOSE_BRACKET;
                             });
 
                         /*
@@ -354,7 +342,7 @@ var vdbBench = (function (vdbBench) {
                         var nodeExit = updateNodeSelection.exit().transition()
                             .duration(TRANSITION_DURATION)
                             .attr(SVG_TRANSFORM, function(node) {
-                                return SVG_TRANSLATE + OPEN_BRACKET + source.x + COMMA + source.y + CLOSE_BRACKET;
+                                return SVG_TRANSLATE + SYNTAX.OPEN_BRACKET + source.x + SYNTAX.COMMA + source.y + SYNTAX.CLOSE_BRACKET;
                             })
                             .remove();
 
@@ -377,7 +365,7 @@ var vdbBench = (function (vdbBench) {
                     }
 
                     function calcLabelWidth (node, maxLabelLength) {
-                        var labelLength = Math.max(node.id.length, node.type.length);
+                        var labelLength = Math.max(node[VDB_KEYS.ID].length, node[VDB_KEYS.TYPE].length);
                         maxLabelLength = Math.max(labelLength, maxLabelLength);
 
                         if (!node.children || node.children.length == 0)
@@ -391,13 +379,18 @@ var vdbBench = (function (vdbBench) {
                     }
 
                     function centerNode(source) {
+                        if (source == null)
+                            return;
+
                         var scale = zoomListener.scale();
                         var x = -source.y0;
                         var y = -source.x0;
                         x = x * scale + svgWidth / 2;
                         d3.select('g').transition()
                                 .duration(TRANSITION_DURATION)
-                                .attr("transform", "translate(" + (x + 400) + "," + y + ")scale(" + scale + ")");
+                                .attr(SVG_TRANSFORM, SVG_TRANSLATE + SYNTAX.OPEN_BRACKET +
+                                                                                (x + 400) + SYNTAX.COMMA + y + SYNTAX.CLOSE_BRACKET +
+                                                                                SVG_SCALE + SYNTAX.OPEN_BRACKET + scale + SYNTAX.CLOSE_BRACKET);
                         zoomListener.scale(scale);
                         zoomListener.translate([x, y]);
                     }
@@ -420,7 +413,7 @@ var vdbBench = (function (vdbBench) {
                             }), 300);
 
                             // Remove all selections from the DOM
-                            svgGroup.selectAll(DOT + CSS_SELECTED_CLASS).remove();
+                            svgGroup.selectAll(SYNTAX.DOT + CSS_SELECTED_CLASS).remove();
 
                         } else { // node is a selection
 
@@ -447,7 +440,7 @@ var vdbBench = (function (vdbBench) {
                              */
                             if (!shiftKey) {
                                 // Remove all selections from the DOM
-                                svgGroup.selectAll(DOT + CSS_SELECTED_CLASS).remove();
+                                svgGroup.selectAll(SYNTAX.DOT + CSS_SELECTED_CLASS).remove();
                             }
 
                             var boundingWidth = this.getBBox().width;
@@ -468,6 +461,9 @@ var vdbBench = (function (vdbBench) {
                     }
 
                     function expandCollapseCallback (node) {
+                        if (node == null)
+                            return;
+
                         if (node.children != null) {
                             node._children = node.children;
                             node.children = null;
@@ -484,13 +480,13 @@ var vdbBench = (function (vdbBench) {
                     }
 
                     function imageResourceCallback(node) {
-                        var kType = node.type;
+                        var kType = node[VDB_KEYS.TYPE];
                         var imgName ='';
 
                         for (var i = 0; i < kType.length; ++i) {
                             var c = kType.charAt(i);
                             if (i > 0 && c == c.toUpperCase())
-                                imgName = imgName + HYPHEN;
+                                imgName = imgName + SYNTAX.HYPHEN;
 
                             imgName = imgName + c.toLowerCase();
                         }
@@ -530,7 +526,7 @@ var vdbBench = (function (vdbBench) {
                          * in the links data. Links with an invalid target are those
                          * where the child has been collapsed away.
                          */
-                        var linkSelection = svgGroup.selectAll(SVG_PATH + DOT + LINK)
+                        var linkSelection = svgGroup.selectAll(SVG_PATH + SYNTAX.DOT + LINK)
                                                 .data(links, function(link) {
                                                     return link.target.self;
                                                 });
@@ -539,7 +535,7 @@ var vdbBench = (function (vdbBench) {
                          * For all links not yet drawn, build an svg path using the
                          * co-ordinates of the source, ie. parent.
                          */
-                        linkSelection.enter().insert(SVG_ELEMENT + COLON + SVG_PATH, GROUP_ELEMENT)
+                        linkSelection.enter().insert(SVG_ELEMENT + SYNTAX.COLON + SVG_PATH, GROUP_ELEMENT)
                                         .attr(CSS_CLASS, LINK)
                                         .attr(SVG_DATA_ELEMENT, function(link) {
                                             var o = {x: source.x0, y: source.y0};
@@ -567,7 +563,7 @@ var vdbBench = (function (vdbBench) {
                 }); // End of scope.$watch(vdb ...)
             }
         };
-    });
+    }]);
 
     return vdbBench;
 

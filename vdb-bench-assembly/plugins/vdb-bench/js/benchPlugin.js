@@ -15,6 +15,47 @@ var vdbBench = (function(vdbBench) {
 
     vdbBench._module = angular.module(vdbBench.pluginName, [ 'ngAnimate', 'ui.bootstrap', 'ui.codemirror', 'prettyXml', 'restangular' ]);
 
+    vdbBench._module.constant("SYNTAX", {
+                                                    FORWARD_SLASH : "/",
+                                                    OPEN_BRACKET : "(",
+                                                    CLOSE_BRACKET : ")",
+                                                    OPEN_SQUARE_BRACKET : "[",
+                                                    CLOSE_SQUARE_BRACKET : "]",
+                                                    COMMA : ",",
+                                                    COLON : ":",
+                                                    HYPHEN : "-",
+                                                    UNDERSCORE : "_",
+                                                    SPACE : " ",
+                                                    DOT : "."
+                                                }
+                                            );
+
+    vdbBench._module.constant("VDB_KEYS", {
+                                                    "VDBS" : "vdbs",
+                                                    "ID" : "keng__id",
+                                                    "DESCRIPTION" : "keng__description",
+                                                    "TYPE" : "keng__kType",
+                                                    "LINKS" : "keng___links",
+                                                    "LINK_NAME" : "rel",
+                                                    "LINK_HREF" : "href",
+                                                    "PROPERTIES" : "keng__properties"
+                                                }
+                                             );
+
+    vdbBench._module.constant("VDB_SCHEMA", {
+                                                    "SCHEMA" : "schema",
+                                                    "ID" : "keng__id",
+                                                    "DESCRIPTION" : "keng__description",
+                                                    "K_TYPE" : "keng__kType",
+                                                    "VALUE_TYPE" : "keng__type",
+                                                    "REQUIRED" : "keng__required",
+                                                    "REPEATABLE" : "keng__repeatable",
+                                                    "LIMIT" : "keng__limit",
+                                                    "PROPERTIES" : "keng__properties",
+                                                    "CHILDREN" : "keng__children",
+                                                    "SCHEMA_PROPERTY" : "property"
+                                                }
+                                             );
     var tab = undefined;
 
     vdbBench._module.config([
