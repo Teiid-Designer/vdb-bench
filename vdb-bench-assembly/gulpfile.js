@@ -11,8 +11,7 @@ var gulp = require('gulp'),
     hawtio = require('hawtio-node-backend'),
     tslint = require('gulp-tslint'),
     tslintRules = require('./tslint.json'),
-    childProc = require('child_process'),
-    raml2html = require('gulp-raml2html');
+    childProc = require('child_process');
 
 var plugins = gulpLoadPlugins({});
 var pkg = require('./package.json');
@@ -180,7 +179,7 @@ gulp.task('clean', ['concat'], function() {
     .pipe(plugins.clean());
 });
 
-gulp.task('watch', ['build', 'built-test'], function() {
+gulp.task('watch', ['build', 'build-test'], function() {
   plugins.watch(['libs/**/*.js', 'libs/**/*.css', 'index.html', config.dist + '/' + config.pkgJs], function() {
     gulp.start('reload');
   });
@@ -320,11 +319,11 @@ gulp.task('test-server', function (cb) {
     });
 });
 
-gulp.task('mvn', ['build', 'site']);
+gulp.task('mvn', ['build', 'build-test', 'site']);
 
 gulp.task('build', ['bower', 'path-adjust', 'tsc', 'less', 'template', 'concat', 'clean']);
 
-gulp.task('built-test', ['test-tsc', 'test-template', 'test-concat', 'test-clean']);
+gulp.task('build-test', ['test-tsc', 'test-template', 'test-concat', 'test-clean']);
 
 gulp.task('default', ['test-server', 'connect']);
 
