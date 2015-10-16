@@ -59,6 +59,8 @@
     <webapp-dir>${project.artifactId}-${project.version}</webapp-dir>
     <webapp-outdir>${basedir}/target/${webapp-dir}</webapp-outdir>
 
+    <hawtio.version>2.0.0</hawtio.version>
+
     <maven-bundle-plugin-version>2.5.4</maven-bundle-plugin-version>
 
     <jetty-version>9.2.10.v20150310</jetty-version>

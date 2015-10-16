@@ -29,19 +29,19 @@
 
     <!-- mandatory core hawito modules -->
     <dependency>
-      <groupId>org.teiid</groupId>
+      <groupId>io.hawt</groupId>
       <artifactId>hawtio-core</artifactId>
-      <version>${project.version}</version>
+      <version>${hawtio.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.teiid</groupId>
+      <groupId>io.hawt</groupId>
       <artifactId>hawtio-system</artifactId>
-      <version>${project.version}</version>
+      <version>${hawtio.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.teiid</groupId>
+      <groupId>io.hawt</groupId>
       <artifactId>hawtio-util</artifactId>
-      <version>${project.version}</version>
+      <version>${hawtio.version}</version>
     </dependency>
     <dependency>
       <groupId>org.teiid</groupId>
@@ -51,14 +51,14 @@
 
     <!-- optional hawtio modules we want to use in this WAR -->
     <dependency>
-      <groupId>org.teiid</groupId>
+      <groupId>io.hawt</groupId>
       <artifactId>hawtio-git</artifactId>
-      <version>${project.version}</version>
+      <version>${hawtio.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.teiid</groupId>
+      <groupId>io.hawt</groupId>
       <artifactId>hawtio-local-jvm-mbean</artifactId>
-      <version>${project.version}</version>
+      <version>${hawtio.version}</version>
     </dependency>
 
     <!-- jolokia is mandatory -->
