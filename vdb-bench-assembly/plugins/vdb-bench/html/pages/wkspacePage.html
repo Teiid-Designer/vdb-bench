@@ -51,22 +51,21 @@
             <div ng-show="selected()">
                 <tabset>
                     <tab heading="Vdb Content" ng-click="onTabSelected('Diagram')">
-                        <div class="vdb-diagram col-sm-8">
+                        <div class="vdb-diagram col-sm-7">
                             <vdb-visualization vdb="selected().content" selected-vdb-component="vdbObject.selectedVdbComponent" height="2048" width="1024"></vdb-visualization>
                         </div>
 
                         <!-- Vertical tabbed page for displaying selected object properties -->
-                        <div class="vdb-diagram-nav-col col-sm-4">
+                        <div class="vdb-diagram-nav-col col-sm-5">
                             <divider-widget>
                                 <divider title="New">
                                     <p>I am on the NEW page</p>
                                 </divider>
                                 <divider title="Edit">
                                     <div class="list-group">
-                                        <a class="list-group-item" ng-repeat="component in vdbObject.selectedVdbComponent">
-                                            Selected Object: {{component.keng___links[0].href}}
+                                        <div class="list-group-item" ng-repeat="component in vdbObject.selectedVdbComponent">
                                             <attribute-widget selected="component"/>
-                                        </a>
+                                        </div>
                                     </div>
                                 </divider>
                             </divider-widget>

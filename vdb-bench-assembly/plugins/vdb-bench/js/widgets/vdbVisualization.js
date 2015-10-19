@@ -385,7 +385,7 @@ var vdbBench = (function (vdbBench) {
                         var scale = zoomListener.scale();
                         var x = -source.y0;
                         var y = -source.x0;
-                        x = x * scale + svgWidth / 2;
+                        x = x * scale + svgWidth / 10;
                         d3.select('g').transition()
                                 .duration(TRANSITION_DURATION)
                                 .attr(SVG_TRANSFORM, SVG_TRANSLATE + SYNTAX.OPEN_BRACKET +

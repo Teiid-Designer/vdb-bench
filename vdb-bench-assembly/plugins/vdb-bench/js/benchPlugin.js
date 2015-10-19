@@ -26,7 +26,8 @@ var vdbBench = (function(vdbBench) {
                                                     HYPHEN : "-",
                                                     UNDERSCORE : "_",
                                                     SPACE : " ",
-                                                    DOT : "."
+                                                    DOT : ".",
+                                                    STAR : "*"
                                                 }
                                             );
 
@@ -38,7 +39,8 @@ var vdbBench = (function(vdbBench) {
                                                     "LINKS" : "keng___links",
                                                     "LINK_NAME" : "rel",
                                                     "LINK_HREF" : "href",
-                                                    "PROPERTIES" : "keng__properties"
+                                                    "PROPERTIES" : "keng__properties",
+                                                    "DDL" : "keng__ddl"
                                                 }
                                              );
 
@@ -53,9 +55,24 @@ var vdbBench = (function(vdbBench) {
                                                     "LIMIT" : "keng__limit",
                                                     "PROPERTIES" : "keng__properties",
                                                     "CHILDREN" : "keng__children",
-                                                    "SCHEMA_PROPERTY" : "property"
+                                                    "SCHEMA_PROPERTY" : "property",
+                                                    "SCHEMA_NAME" : "name",
+                                                    "SCHEMA_VALUE" : "value",
+                                                    "SUGGESTED_VALUES" : "keng__values",
+                                                    "DESCRIPTION_PROPERTY" : "vdb__description"
                                                 }
                                              );
+    
+    vdbBench._module.constant("HAWTIO_FORM", {
+                                                    PROPERTIES : "properties",
+                                                    INPUT_ATTR : "input-attributes",
+                                                    TYPE_AHEAD_DATA : "typeaheadData",
+                                                    TYPE_AHEAD : "typeahead",
+                                                    CONTROLS : "controls",
+                                                    TABS : "tabs"
+                                                }
+                                             );
+
     var tab = undefined;
 
     vdbBench._module.config([

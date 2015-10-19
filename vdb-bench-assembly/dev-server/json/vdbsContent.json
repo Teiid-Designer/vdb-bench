@@ -11,7 +11,8 @@
         "vdb__name" : "Portfolio",
         "keng__properties" : [
             {
-                "UseConnectorMetadata" : "true"
+                "name" : "UseConnectorMetadata",
+                "value" : "true"
             }
         ],
         "keng___links" : [
