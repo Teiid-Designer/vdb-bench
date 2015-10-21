@@ -71,7 +71,7 @@ var vdbBench = (function(vdbBench) {
 
                 function getContentLink(vdb) {
                     var links = vdb[VDB_KEYS.LINKS];
-                    for (i = 0; i < links.length; ++i) {
+                    for (var i = 0; i < links.length; ++i) {
                         var link = links[i];
                         if (links[i][VDB_KEYS.LINK_NAME] == "content")
                             return links[i][VDB_KEYS.LINK_HREF];

@@ -1,0 +1,132 @@
+{
+    "digest" :
+    {
+        "keng__id" : "tweet-example-vdb.xml",
+        "keng__dataPath" : "/tko__komodo/tko__workspace/tweet-example-vdb.xml",
+        "keng__kType" : "Vdb",
+        "vdb__description" : "Shows how to call Web Services",
+        "vdb__preview" : "false",
+        "vdb__version" : 1,
+        "vdb__name" : "twitter",
+        "keng__properties" : [
+            {
+                "UseConnectorMetadata" : "cached"
+            }
+        ],
+        "keng___links" : [
+            {
+                "rel" : "self",
+                "href" : "/vdbs/tweet-example-vdb.xml"
+            },
+            {
+                "rel": "imports",
+                "href": "/vdbs/tweet-example-vdb.xml/VdbImports"
+            },
+            {
+                "rel": "models",
+                "href": "/vdbs/tweet-example-vdb.xml/Models"
+            },
+            {
+                "rel": "translators",
+                "href": "/vdbs/tweet-example-vdb.xml/VdbTranslators"
+            },
+            {
+                "rel": "dataRoles",
+                "href": "/vdbs/tweet-example-vdb.xml/VdbDataRoles"
+            }
+        ]
+    },
+    "translators" : [
+        {
+            "keng__id" : "rest",
+            "keng__dataPath" : "/tko__komodo/tko__workspace/tweet-example-vdb.xml/vdb__translators/rest",
+            "keng__kType" : "VdbTranslator",
+            "vdb__description" : "Rest Web Service translator",
+            "vdb__type" : "ws",
+            "keng__properties" : [
+                {
+                    "DefaultBinding" : "HTTP"
+                },
+                {
+                    "DefaultServiceMode" : "MESSAGE"
+                }
+            ],
+            "keng___links" : [
+                {
+                    "rel" : "self",
+                    "href" : "/vdbs/tweet-example-vdb.xml/VdbTranslators/rest"
+                },
+                {
+                    "rel" : "parent",
+                    "href" : "/vdbs/tweet-example-vdb.xml"
+                }
+            ]
+        }
+    ],
+    "models" : [
+        {
+            "keng__id" : "twitter",
+            "keng__dataPath" : "/tko__komodo/tko__workspace/tweet-example-vdb.xml/twitter",
+            "keng__kType" : "Model",
+            "mmcore__modelType" : "PHYSICAL",
+            "vdb__visible" : "true",
+            "vdb__metadataType" : "DDL",
+            "keng___links" : [
+                {
+                    "rel" : "self",
+                    "href" : "/vdbs/tweet-example-vdb.xml/Models/twitter"
+                },
+                {
+                    "rel" : "parent",
+                    "href" : "/vdbs/tweet-example-vdb.xml"
+                },
+                {
+                    "rel": "sources",
+                    "href": "/vdbs/tweet-example-vdb.xml/Models/twitter/VdbModelSources"
+                }
+            ]
+        },
+        {
+            "keng__id" : "twitterview",
+            "keng__dataPath" : "/tko__komodo/tko__workspace/tweet-example-vdb.xml/twitterview",
+            "keng__kType" : "Model",
+            "mmcore__modelType" : "VIRTUAL",
+            "vdb__visible" : "true",
+            "vdb__metadataType" : "DDL",
+            "keng__ddl" : "CREATE VIRTUAL PROCEDURE getTweets(IN query varchar) RETURNS TABLE (created_on varchar(25), from_user varchar(25), to_user varchar(25), profile_image_url varchar(25), source varchar(25), text varchar(140))\nAS\nSELECT tweet.* FROM (EXEC twitter.invokeHTTP(action => 'GET', endpoint => QUERYSTRING('', query AS q))) AS w, XMLTABLE('results' PASSING JSONTOXML('myxml', w.result) COLUMNS created_on string PATH 'created_at',  from_user string PATH 'from_user',  to_user string PATH 'to_user',  profile_image_url string PATH 'profile_image_url',  source string PATH 'source',  text string PATH 'text') AS tweet;\n\nCREATE VIEW Tweet\nAS\nSELECT * FROM twitterview.getTweets;\n",
+            "keng___links" : [
+                {
+                    "rel" : "self",
+                    "href" : "/vdbs/tweet-example-vdb.xml/Models/twitterview"
+                },
+                {
+                    "rel" : "parent",
+                    "href" : "/vdbs/tweet-example-vdb.xml"
+                },
+                {
+                    "rel": "sources",
+                    "href": "/vdbs/tweet-example-vdb.xml/Models/twitterview/VdbModelSources"
+                }
+            ]
+        }
+    ],
+    "sources" : [
+        {
+            "keng__id" : "twitter",
+            "keng__dataPath" : "/tko__komodo/tko__workspace/tweet-example-vdb.xml/twitter/vdb__sources/twitter",
+            "keng__kType" : "VdbModelSource",
+            "vdb__sourceJndiName" : "java__/twitterDS",
+            "vdb__sourceTranslator" : "rest",
+            "keng___links" : [
+                {
+                    "rel" : "self",
+                    "href" : "/vdbs/tweet-example-vdb.xml/Models/twitter/VdbModelSources/twitter"
+                },
+                {
+                    "rel" : "parent",
+                    "href" : "/vdbs/tweet-example-vdb.xml/Models/twitter"
+                }
+            ]
+        }
+    ]
+}
