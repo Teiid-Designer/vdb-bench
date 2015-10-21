@@ -36,11 +36,21 @@ var vdbBench = (function(vdbBench) {
                                                     "ID" : "keng__id",
                                                     "DESCRIPTION" : "keng__description",
                                                     "TYPE" : "keng__kType",
-                                                    "LINKS" : "keng___links",
-                                                    "LINK_NAME" : "rel",
-                                                    "LINK_HREF" : "href",
+                                                    "LINKS" : {
+                                                        "ID" : "keng___links",
+                                                        "NAME" : "rel",
+                                                        "HREF" : "href",
+                                                        "SELF" : "self",
+                                                        "PARENT" : "parent",
+                                                        "IMPORTS" : "imports",
+                                                        "MODELS" : "models",
+                                                        "TRANSLATORS" : "translators",
+                                                        "DATA_ROLES" : "dataRoles",
+                                                        "SOURCES" : "sources"
+                                                    },
                                                     "PROPERTIES" : "keng__properties",
-                                                    "DDL" : "keng__ddl"
+                                                    "DDL" : "keng__ddl",
+                                                    "HAS_CHILDREN" : "keng__hasChildren"
                                                 }
                                              );
 

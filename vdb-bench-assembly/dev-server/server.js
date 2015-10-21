@@ -262,11 +262,13 @@ function viewVdb(req, res, next) {
         return next();
     }
 
+    console.log("Request Accept headers: " + req.headers.accept);
+
     /*
      * If request has the content type of application/xml
      * then respond with the xml version
      */
-    if (req.is(xmlContentType)) {
+    if (req.accepts(xmlContentType)) {
         console.log("Returning xml content for id " + vdbId);
 
         var vdbNodes = vdb.xml.getElementsByTagName("vdb");
@@ -297,7 +299,7 @@ function viewVdb(req, res, next) {
         res.end();
         return next();
 
-    } else if (req.is(jsonContentType)) {
+    } else if (req.accepts(jsonContentType)) {
         /*
          * json format
          */
@@ -371,7 +373,7 @@ function viewTranslators(req, res, next) {
 
     var translators = vdb[TRANSLATORS];
     var returnId = 200;
-    var returnObj = translators;
+    var returnObj = translators ? translators : [];
 
     if (translatorId) {
         var translator = findObjectById(translators, translatorId);
@@ -452,6 +454,32 @@ function viewSources(req, res, next) {
     return next();
 }
 
+/**
+ * View a vdb imports
+ */
+function viewImports(req, res, next) {
+    console.log("View imports to be implemented");
+
+    var returnId = 200;
+    var returnObj = [];
+
+    res.send(returnId, returnObj);
+    return next();
+}
+
+/**
+ * View a vdb data role
+ */
+function viewDataRoles(req, res, next) {
+    console.log("View data roles to be implemented");
+
+    var returnId = 200;
+    var returnObj = [];
+
+    res.send(returnId, returnObj);
+    return next();
+}
+
 // =============== END OF TEST DATA CONFIGURATION =============
 
 /*
@@ -485,6 +513,10 @@ server.get({ path: baseUrl + '/vdbs/:vdbId/Models/:modelId/VdbModelSources' }, v
 server.get({ path: baseUrl + '/vdbs/:vdbId/Models/:modelId/VdbModelSources/:sourceId' }, viewSources);
 server.get({ path: baseUrl + '/vdbs/:vdbId/VdbTranslators' }, viewTranslators);
 server.get({ path: baseUrl + '/vdbs/:vdbId/VdbTranslators/:translatorId' }, viewTranslators);
+server.get({ path: baseUrl + '/vdbs/:vdbId/VdbImports' }, viewImports);
+server.get({ path: baseUrl + '/vdbs/:vdbId/VdbImports/:importId' }, viewImports);
+server.get({ path: baseUrl + '/vdbs/:vdbId/VdbDataRoles' }, viewDataRoles);
+server.get({ path: baseUrl + '/vdbs/:vdbId/VdbDataRoles/:dataRoleId' }, viewDataRoles);
 
 server.del({path : baseUrl + '/vdbs/:vdbId' }, deleteVdb);
 //server.post({path : PATH , version: '0.0.1'} ,postNewJob);

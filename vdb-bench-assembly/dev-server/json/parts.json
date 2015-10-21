@@ -8,6 +8,7 @@
         "vdb__connectionType" : "BY_VERSION",
         "vdb__version" : 1,
         "vdb__name" : "MyPartsVDB_Dynamic",
+        "keng__hasChildren": "true",
         "keng___links" : [
             {
                 "rel" : "self",
@@ -40,6 +41,7 @@
             "vdb__visible" : "true",
             "vdb__metadataType" : "DDL",
             "keng__ddl" : "CREATE VIEW PartsSummary (\n PART_ID string(50) NOT NULL OPTIONS (SEARCHABLE 'Searchable'),\n    PART_NAME string(255) OPTIONS (SEARCHABLE 'Searchable'),\n  PART_COLOR string(30) OPTIONS (SEARCHABLE 'Searchable'),\n  PART_WEIGHT string(255) OPTIONS (SEARCHABLE 'Searchable'),\n    SUPPLIER_ID string(10) NOT NULL OPTIONS (SEARCHABLE 'Searchable'),\n    QUANTITY bigdecimal(3) OPTIONS (SEARCHABLE 'All_Except_Like', FIXED_LENGTH TRUE),\n SHIPPER_ID bigdecimal(2) OPTIONS (SEARCHABLE 'All_Except_Like', FIXED_LENGTH TRUE)\n) OPTIONS (UPDATABLE TRUE)\nAS\nSELECT PartsSS.PARTS.PART_ID, PartsSS.PARTS.PART_NAME, PartsSS.PARTS.PART_COLOR, PartsSS.PARTS.PART_WEIGHT, PartsSS.SUPPLIER_PARTS.SUPPLIER_ID, PartsSS.SUPPLIER_PARTS.QUANTITY, PartsSS.SUPPLIER_PARTS.SHIPPER_ID FROM PartsSS.PARTS, PartsSS.SUPPLIER_PARTS WHERE PartsSS.PARTS.PART_ID = PartsSS.SUPPLIER_PARTS.PART_ID;\n",
+            "keng__hasChildren": "false",
             "keng___links" : [
                 {
                     "rel" : "self",
@@ -59,6 +61,7 @@
             "vdb__visible" : "true",
             "vdb__metadataType" : "DDL",
             "keng__ddl" : "CREATE FOREIGN TABLE PARTS (\n   PART_ID string(50) NOT NULL OPTIONS (NAMEINSOURCE '\"PART_ID\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar'),\n PART_NAME string(255) OPTIONS (NAMEINSOURCE '\"PART_NAME\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar'),\n PART_COLOR string(30) OPTIONS (NAMEINSOURCE '\"PART_COLOR\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar'),\n    PART_WEIGHT string(255) OPTIONS (NAMEINSOURCE '\"PART_WEIGHT\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar')\n) OPTIONS (UPDATABLE TRUE, NAMEINSOURCE '\"partssupplier\".\"dbo\".\"PARTS\"');\n\nCREATE FOREIGN TABLE SHIP_VIA (\n  SHIPPER_ID bigdecimal(2) NOT NULL OPTIONS (NAMEINSOURCE '\"SHIPPER_ID\"', SEARCHABLE 'All_Except_Like', NATIVE_TYPE 'numeric', FIXED_LENGTH TRUE),\n    SHIPPER_NAME string(30) OPTIONS (NAMEINSOURCE '\"SHIPPER_NAME\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar')\n) OPTIONS (UPDATABLE TRUE, NAMEINSOURCE '\"partssupplier\".\"dbo\".\"SHIP_VIA\"');\n\nCREATE FOREIGN TABLE STATUS (\n    STATUS_ID bigdecimal(2) NOT NULL OPTIONS (NAMEINSOURCE '\"STATUS_ID\"', SEARCHABLE 'All_Except_Like', NATIVE_TYPE 'numeric', FIXED_LENGTH TRUE),\n  STATUS_NAME string(30) OPTIONS (NAMEINSOURCE '\"STATUS_NAME\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar')\n) OPTIONS (UPDATABLE TRUE, NAMEINSOURCE '\"partssupplier\".\"dbo\".\"STATUS\"');\n\nCREATE FOREIGN TABLE SUPPLIER (\n  SUPPLIER_ID string(10) NOT NULL OPTIONS (NAMEINSOURCE '\"SUPPLIER_ID\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar'),\n SUPPLIER_NAME string(30) OPTIONS (NAMEINSOURCE '\"SUPPLIER_NAME\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar'),\n  SUPPLIER_STATUS bigdecimal(2) OPTIONS (NAMEINSOURCE '\"SUPPLIER_STATUS\"', SEARCHABLE 'All_Except_Like', NATIVE_TYPE 'numeric', FIXED_LENGTH TRUE),\n   SUPPLIER_CITY string(30) OPTIONS (NAMEINSOURCE '\"SUPPLIER_CITY\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar'),\n  SUPPLIER_STATE string(2) OPTIONS (NAMEINSOURCE '\"SUPPLIER_STATE\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar')\n) OPTIONS (UPDATABLE TRUE, NAMEINSOURCE '\"partssupplier\".\"dbo\".\"SUPPLIER\"');\n\nCREATE FOREIGN TABLE SUPPLIER_PARTS (\n SUPPLIER_ID string(10) NOT NULL OPTIONS (NAMEINSOURCE '\"SUPPLIER_ID\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar'),\n PART_ID string(50) NOT NULL OPTIONS (NAMEINSOURCE '\"PART_ID\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar'),\n QUANTITY bigdecimal(3) OPTIONS (NAMEINSOURCE '\"QUANTITY\"', SEARCHABLE 'All_Except_Like', NATIVE_TYPE 'numeric', FIXED_LENGTH TRUE),\n SHIPPER_ID bigdecimal(2) OPTIONS (NAMEINSOURCE '\"SHIPPER_ID\"', SEARCHABLE 'All_Except_Like', NATIVE_TYPE 'numeric', FIXED_LENGTH TRUE)\n) OPTIONS (UPDATABLE TRUE, NAMEINSOURCE '\"partssupplier\".\"dbo\".\"SUPPLIER_PARTS\"');\n",
+            "keng__hasChildren": "true",
             "keng___links" : [
                 {
                     "rel" : "self",
@@ -78,6 +81,7 @@
             "keng__kType" : "VdbModelSource",
             "vdb__sourceJndiName" : "PartsSS",
             "vdb__sourceTranslator" : "sqlserver",
+            "keng__hasChildren": "false",
             "keng___links" : [
                 {
                     "rel" : "self",

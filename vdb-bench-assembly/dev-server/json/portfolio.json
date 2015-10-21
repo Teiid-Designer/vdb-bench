@@ -15,6 +15,7 @@
                 "value" : "true"
             }
         ],
+        "keng__hasChildren": "true",
         "keng___links": [
             {
                 "rel": "self",
@@ -46,6 +47,7 @@
             "mmcore__modelType" : "PHYSICAL",
             "vdb__visible" : "true",
             "vdb__metadataType" : "DDL",
+            "keng__hasChildren": "true",
             "keng___links" : [
                 {
                     "rel" : "self",
@@ -68,6 +70,7 @@
             "mmcore__modelType" : "PHYSICAL",
             "vdb__visible" : "true",
             "vdb__metadataType" : "DDL",
+            "keng__hasChildren": "true",
             "keng___links" : [
                 {
                     "rel" : "self",
@@ -91,6 +94,7 @@
             "vdb__visible" : "true",
             "vdb__metadataType" : "DDL",
             "keng__ddl" : "SET NAMESPACE 'http__//www.teiid.org/translator/excel/2014' AS teiid_excel;\n\nCREATE FOREIGN TABLE Sheet1 (\n   ROW_ID integer OPTIONS (SEARCHABLE 'All_Except_Like', \"teiid_excel__CELL_NUMBER\" 'ROW_ID'),\n ACCOUNT_ID integer OPTIONS (SEARCHABLE 'Unsearchable', \"teiid_excel__CELL_NUMBER\" '1'),\n PRODUCT_TYPE string OPTIONS (SEARCHABLE 'Unsearchable', \"teiid_excel__CELL_NUMBER\" '2'),\n    PRODUCT_VALUE string OPTIONS (SEARCHABLE 'Unsearchable', \"teiid_excel__CELL_NUMBER\" '3'),\n   PRIMARY KEY(ROW_ID)\n) OPTIONS (\"teiid_excel__FIRST_DATA_ROW_NUMBER\" '2', \"teiid_excel__FILE\" 'otherholdings.xls');\n",
+            "keng__hasChildren": "true",
             "keng___links" : [
                 {
                     "rel" : "self",
@@ -114,6 +118,7 @@
             "vdb__visible" : "true",
             "vdb__metadataType" : "DDL",
             "keng__ddl" : "CREATE VIEW StockPrices (\n  symbol string,\n    price bigdecimal\n)\nAS\nSELECT SP.symbol, SP.price FROM (EXEC MarketData.getTextFiles('*.txt')) AS f, TEXTTABLE(f.file COLUMNS symbol string, price bigdecimal HEADER) AS SP;\n\nCREATE VIEW Stock (\n product_id integer,\n   symbol string,\n    price bigdecimal,\n company_name varchar(256)\n)\nAS\nSELECT A.ID, S.symbol, S.price, A.COMPANY_NAME FROM StockPrices AS S, Accounts.PRODUCT AS A WHERE S.symbol = A.SYMBOL;\n",
+            "keng__hasChildren": "false",
             "keng___links" : [
                 {
                     "rel" : "self",
@@ -137,6 +142,7 @@
             "vdb__visible" : "true",
             "vdb__metadataType" : "DDL",
             "keng__ddl" : "CREATE VIEW stockPricesMatView (\n   product_id integer,\n   symbol string,\n    price bigdecimal,\n company_name varchar(256)\n) OPTIONS (UPDATABLE TRUE, \"teiid_relALLOW_MATVIEW_MANAGEMENT\" 'true', \"teiid_relMATVIEW_ONERROR_ACTION\" 'THROW_EXCEPTION', \"teiid_relMATVIEW_AFTER_LOAD_SCRIPT\" 'execute accounts.native('''')', \"teiid_relMATVIEW_SHARE_SCOPE\" 'NONE', MATERIALIZED_TABLE 'Accounts.h2_stock_mat', \"teiid_relMATVIEW_TTL\" '120000', \"teiid_relON_VDB_DROP_SCRIPT\" 'DELETE FROM Accounts.status WHERE Name=''stock'' AND schemaname = ''Stocks''', \"teiid_relMATVIEW_STATUS_TABLE\" 'status', MATERIALIZED TRUE, \"teiid_relMATVIEW_BEFORE_LOAD_SCRIPT\" 'execute accounts.native(''truncate table h2_stock_mat'');', \"teiid_relMATERIALIZED_STAGE_TABLE\" 'Accounts.h2_stock_mat')\nAS\nSELECT A.ID, S.symbol, S.price, A.COMPANY_NAME FROM Stocks.StockPrices AS S, Accounts.PRODUCT AS A WHERE S.symbol = A.SYMBOL;\n",
+            "keng__hasChildren": "false",
             "keng___links" : [
                 {
                     "rel" : "self",
@@ -160,14 +166,15 @@
             "keng__kType" : "VdbModelSource",
             "vdb__sourceJndiName" : "java__/marketdata-file",
             "vdb__sourceTranslator" : "file",
+            "keng__hasChildren": "false",
             "keng___links" : [
                 {
                     "rel" : "self",
-                    "href" : "/vdb/Portfolio/Models/MarketData/VdbModelSources/text-connector"
+                    "href" : "/vdbs/Portfolio/Models/MarketData/VdbModelSources/text-connector"
                 },
                 {
                     "rel" : "parent",
-                    "href" : "/vdb/Portfolio/Models/MarketData"
+                    "href" : "/vdbs/Portfolio/Models/MarketData"
                 }
             ]
         },
@@ -177,14 +184,15 @@
             "keng__kType" : "VdbModelSource",
             "vdb__sourceJndiName" : "java__/accounts-ds",
             "vdb__sourceTranslator" : "h2",
+            "keng__hasChildren": "false",
             "keng___links" : [
                 {
                     "rel" : "self",
-                    "href" : "/vdb/Portfolio/Models/Accounts/VdbModelSources/h2-connector"
+                    "href" : "/vdbs/Portfolio/Models/Accounts/VdbModelSources/h2-connector"
                 },
                 {
                     "rel" : "parent",
-                    "href" : "/vdb/Portfolio/Models/Accounts"
+                    "href" : "/vdbs/Portfolio/Models/Accounts"
                 }
             ]
         },
@@ -194,6 +202,7 @@
             "keng__kType" : "VdbModelSource",
             "vdb__sourceJndiName" : "java__/excel-file",
             "vdb__sourceTranslator" : "excel",
+            "keng__hasChildren": "false",
             "keng___links" : [
                 {
                     "rel" : "self",

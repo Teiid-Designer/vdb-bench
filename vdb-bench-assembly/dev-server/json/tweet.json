@@ -13,6 +13,7 @@
                 "UseConnectorMetadata" : "cached"
             }
         ],
+        "keng__hasChildren": "true",
         "keng___links" : [
             {
                 "rel" : "self",
@@ -43,12 +44,15 @@
             "keng__kType" : "VdbTranslator",
             "vdb__description" : "Rest Web Service translator",
             "vdb__type" : "ws",
+            "keng__hasChildren": "false",
             "keng__properties" : [
                 {
-                    "DefaultBinding" : "HTTP"
+                    "name" : "DefaultBinding",
+                    "value" : "HTTP"
                 },
                 {
-                    "DefaultServiceMode" : "MESSAGE"
+                    "name" : "DefaultServiceMode",
+                    "value" : "MESSAGE"
                 }
             ],
             "keng___links" : [
@@ -71,6 +75,7 @@
             "mmcore__modelType" : "PHYSICAL",
             "vdb__visible" : "true",
             "vdb__metadataType" : "DDL",
+            "keng__hasChildren": "true",
             "keng___links" : [
                 {
                     "rel" : "self",
@@ -94,6 +99,7 @@
             "vdb__visible" : "true",
             "vdb__metadataType" : "DDL",
             "keng__ddl" : "CREATE VIRTUAL PROCEDURE getTweets(IN query varchar) RETURNS TABLE (created_on varchar(25), from_user varchar(25), to_user varchar(25), profile_image_url varchar(25), source varchar(25), text varchar(140))\nAS\nSELECT tweet.* FROM (EXEC twitter.invokeHTTP(action => 'GET', endpoint => QUERYSTRING('', query AS q))) AS w, XMLTABLE('results' PASSING JSONTOXML('myxml', w.result) COLUMNS created_on string PATH 'created_at',  from_user string PATH 'from_user',  to_user string PATH 'to_user',  profile_image_url string PATH 'profile_image_url',  source string PATH 'source',  text string PATH 'text') AS tweet;\n\nCREATE VIEW Tweet\nAS\nSELECT * FROM twitterview.getTweets;\n",
+            "keng__hasChildren": "false",
             "keng___links" : [
                 {
                     "rel" : "self",
@@ -117,6 +123,7 @@
             "keng__kType" : "VdbModelSource",
             "vdb__sourceJndiName" : "java__/twitterDS",
             "vdb__sourceTranslator" : "rest",
+            "keng__hasChildren": "false",
             "keng___links" : [
                 {
                     "rel" : "self",

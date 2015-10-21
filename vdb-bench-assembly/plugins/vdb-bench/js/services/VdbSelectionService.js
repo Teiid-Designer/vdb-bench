@@ -89,40 +89,16 @@ var vdbBench = (function(vdbBench) {
                 };
 
                 /**
-                 * Retrieve the contents of the vdb (in json)
-                 */
-                service.selectedContent = function () {
-                    if (selectedVdb == null)
-                        return null;
-
-                    if (selectedVdb.content != null)
-                        return selectedVdb.content;
-
-                    try {
-                        RepoRestService.getVdbContent(selectedVdb).then(
-                            function (content) {
-                                selectedVdb.content = content;
-                            },
-                            function (response) {
-                                throw new vdbBench.RestServiceException("Failed to retrieve the content of the vdb " + selectedVdb[VDB_KEYS.ID] + "from the host services.\n" + response.message);
-                            });
-                    } catch (error) {
-                        throw new vdbBench.RestServiceException("Failed to retrieve the content of the selected vdb from the host services.\n" + error.message);
-                    }
-                };
-
-                /**
                  * Retrieve the vdb xml for the selected vdb
                  */
                 service.selectedXml = function () {
-                    console.log("SelectedXML callled");
                     if (selectedVdb == null)
                         return;
 
                     try {                        
                         selectedVdb.previewContent = "Loading ...";
 
-                        RepoRestService.getVdbXml(selectedVdb).then(
+                        RepoRestService.getXml(selectedVdb).then(
                             function (xml) {
                                 selectedVdb.previewContent = $filter('prettyXml')(xml);
                             },

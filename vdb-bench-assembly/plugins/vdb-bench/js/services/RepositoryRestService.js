@@ -69,17 +69,29 @@ var vdbBench = (function(vdbBench) {
                         });
                 }
 
-                function getContentLink(vdb) {
-                    var links = vdb[VDB_KEYS.LINKS];
+                /**
+                 * Service: return the link HREF value for the given
+                 * link type from the given rest object
+                 */
+                service.getLink = function(linkType, restObject) {
+                    if (! linkType || ! restObject)
+                        return null;
+
+                    var links = restObject[VDB_KEYS.LINKS.ID];
+                    if (! links)
+                        return null;
+
                     for (var i = 0; i < links.length; ++i) {
-                        var link = links[i];
-                        if (links[i][VDB_KEYS.LINK_NAME] == "content")
-                            return links[i][VDB_KEYS.LINK_HREF];
+                        if (links[i][VDB_KEYS.LINKS.NAME] == linkType)
+                            return links[i][VDB_KEYS.LINKS.HREF];
                     }
 
                     return null;
                 }
 
+                /**
+                 * Copy the source object to the destination
+                 */
                 service.copy = function(src, dst) {
                     /*
                      * In normal $resource/ng projects use:
@@ -93,6 +105,7 @@ var vdbBench = (function(vdbBench) {
 
                 /**
                  * Service: return the list of existing vdbs
+                 * Returns: promise object for the vdb collection
                  */
                 service.getVdbs = function() {
                     return getRestService().then(function(restService) {
@@ -102,44 +115,51 @@ var vdbBench = (function(vdbBench) {
 
                 /**
                  * Service: Remove the given vdb
+                 * Returns: promise object for the removal
                  */
                 service.removeVdb = function(vdb) {
                     return vdb.remove();
                 };
 
                 /**
-                 * Service: Fetch the content (in json) of the vdb
+                 * Service: Fetch the content from the link (in json)
+                 * Returns: promise object for the content
                  */
-                service.getVdbContent = function(vdb) {
-                    var contentLink = getContentLink(vdb);
-                    if (contentLink == null)
+                service.getContent = function(link) {
+                    if (! link)
                         return null;
 
                     return getRestService().then(function(restService) {
                         /*
-                        * Uses the content link from the vdb and fetch the xml version of the content.
-                        * By passing the Accept header, we ensure that only the xml version can be returned.
+                        * Uses the link from the parent object to fetch the content.
+                        * By passing the Accept header, we ensure that only the json version can be returned.
                         */
-                        return restService.one(contentLink).customGET("", {}, { 'Accept' : 'application/json' });
+                        return restService.all(link).customGETLIST("", {}, { 'Accept' : 'application/json' });
                     });
                 }
 
                 /**
                  * Service: Fetch the xml content of the vdb
+                 * Returns: promise object for the xml content
+                 *
                  * Should be required only for preview purposes. Vdbs should be edited
                  * using json, which is more efficient
                  */
-                service.getVdbXml = function(vdb) {
-                    var contentLink = getContentLink(vdb);
-                    if (contentLink == null)
+                service.getXml = function(vdb) {
+                    if (!vdb)
                         return null;
 
+                    var vdbId = vdb[VDB_KEYS.ID];
+                    if (!vdbId)
+                        return null;
+
+                    var link = VDB_KEYS.VDBS + SYNTAX.FORWARD_SLASH + vdbId;
                     return getRestService().then(function(restService) {
                         /*
                         * Uses the content link from the vdb and fetch the xml version of the content.
                         * By passing the Accept header, we ensure that only the xml version can be returned.
                         */
-                        return restService.one(contentLink).customGET("", {}, { 'Accept' : 'application/xml' });
+                        return restService.one(link).customGET("", {}, { 'Accept' : 'application/xml' });
                     });
                 }
 

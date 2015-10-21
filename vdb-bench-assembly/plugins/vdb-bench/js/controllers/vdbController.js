@@ -104,13 +104,10 @@ var vdbBench = (function (vdbBench) {
                     //
                     if ($scope.vdbObject.visibleTabId == PREVIEW_TAB_ID)
                         VdbSelectionService.selectedXml();
-                    else if ($scope.vdbObject.visibleTabId == DIAGRAM_TAB_ID)
-                        VdbSelectionService.selectedContent();
                 }
 
                 $scope.$on('selectedVdbChanged', function () {
                     tabUpdate();
-                    VdbSelectionService.selectedContent();
                 });
 
                 /**
