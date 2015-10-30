@@ -1,137 +1,144 @@
 {
-    "digest" :
-    {
-        "keng__id" : "tweet-example-vdb.xml",
-        "keng__dataPath" : "/tko__komodo/tko__workspace/tweet-example-vdb.xml",
-        "keng__kType" : "Vdb",
-        "vdb__description" : "Shows how to call Web Services",
-        "vdb__preview" : "false",
-        "vdb__version" : 1,
-        "vdb__name" : "twitter",
-        "keng__properties" : [
+    "digest": {
+        "keng__id": "tweet-example-vdb.xml",
+        "keng__dataPath": "/tko__komodo/tko__workspace/tweet-example-vdb.xml",
+        "keng__kType": "Vdb",
+        "keng__hasChildren": true,
+        "vdb__name": "tweet-example-vdb.xml",
+        "vdb__description": "Shows how to call Web Services",
+        "vdb__originalFile": "/tko:komodo/tko:workspace/tweet-example-vdb.xml",
+        "vdb__preview": false,
+        "vdb__connectionType": "BY_VERSION",
+        "vdb__version": 1,
+        "keng__properties": [
             {
-                "UseConnectorMetadata" : "cached"
+                "name": "UseConnectorMetadata",
+                "value": "cached"
             }
         ],
-        "keng__hasChildren": "true",
-        "keng___links" : [
+        "keng___links": [
             {
-                "rel" : "self",
-                "href" : "/vdbs/tweet-example-vdb.xml"
+                "rel": "self",
+                "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml"
+            },
+            {
+                "rel": "parent",
+                "href": "http://localhost:9090/v1/workspace/vdbs"
             },
             {
                 "rel": "imports",
-                "href": "/vdbs/tweet-example-vdb.xml/VdbImports"
+                "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml/VdbImports"
             },
             {
                 "rel": "models",
-                "href": "/vdbs/tweet-example-vdb.xml/Models"
+                "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml/Models"
             },
             {
                 "rel": "translators",
-                "href": "/vdbs/tweet-example-vdb.xml/VdbTranslators"
+                "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml/VdbTranslators"
             },
             {
                 "rel": "dataRoles",
-                "href": "/vdbs/tweet-example-vdb.xml/VdbDataRoles"
+                "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml/VdbDataRoles"
             }
         ]
     },
-    "translators" : [
+    "translators": [
         {
-            "keng__id" : "rest",
-            "keng__dataPath" : "/tko__komodo/tko__workspace/tweet-example-vdb.xml/vdb__translators/rest",
-            "keng__kType" : "VdbTranslator",
-            "vdb__description" : "Rest Web Service translator",
-            "vdb__type" : "ws",
-            "keng__hasChildren": "false",
-            "keng__properties" : [
+            "keng__id": "rest",
+            "keng__dataPath": "/tko__komodo/tko__workspace/tweet-example-vdb.xml/vdb__translators/rest",
+            "keng__kType": "VdbTranslator",
+            "keng__hasChildren": false,
+            "vdb__type": "ws",
+            "vdb__description": "Rest Web Service translator",
+            "keng__properties": [
                 {
-                    "name" : "DefaultBinding",
-                    "value" : "HTTP"
+                    "name": "DefaultBinding",
+                    "value": "HTTP"
                 },
                 {
-                    "name" : "DefaultServiceMode",
-                    "value" : "MESSAGE"
+                    "name": "DefaultServiceMode",
+                    "value": "MESSAGE"
                 }
             ],
-            "keng___links" : [
+            "keng___links": [
                 {
-                    "rel" : "self",
-                    "href" : "/vdbs/tweet-example-vdb.xml/VdbTranslators/rest"
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml/VdbTranslators/rest"
                 },
                 {
-                    "rel" : "parent",
-                    "href" : "/vdbs/tweet-example-vdb.xml"
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml"
                 }
             ]
         }
     ],
-    "models" : [
+    "models": [
         {
-            "keng__id" : "twitter",
-            "keng__dataPath" : "/tko__komodo/tko__workspace/tweet-example-vdb.xml/twitter",
-            "keng__kType" : "Model",
-            "mmcore__modelType" : "PHYSICAL",
-            "vdb__visible" : "true",
-            "vdb__metadataType" : "DDL",
-            "keng__hasChildren": "true",
-            "keng___links" : [
+            "keng__id": "twitter",
+            "keng__dataPath": "/tko__komodo/tko__workspace/tweet-example-vdb.xml/twitter",
+            "keng__kType": "Model",
+            "keng__hasChildren": true,
+            "mmcore__modelType": "PHYSICAL",
+            "vdb__visible": true,
+            "vdb__metadataType": "DDL",
+            "keng__ddl": "",
+            "keng___links": [
                 {
-                    "rel" : "self",
-                    "href" : "/vdbs/tweet-example-vdb.xml/Models/twitter"
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml/Models/twitter"
                 },
                 {
-                    "rel" : "parent",
-                    "href" : "/vdbs/tweet-example-vdb.xml"
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml"
                 },
                 {
                     "rel": "sources",
-                    "href": "/vdbs/tweet-example-vdb.xml/Models/twitter/VdbModelSources"
+                    "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml/Models/twitter/VdbModelSources"
                 }
             ]
         },
         {
-            "keng__id" : "twitterview",
-            "keng__dataPath" : "/tko__komodo/tko__workspace/tweet-example-vdb.xml/twitterview",
-            "keng__kType" : "Model",
-            "mmcore__modelType" : "VIRTUAL",
-            "vdb__visible" : "true",
-            "vdb__metadataType" : "DDL",
-            "keng__ddl" : "CREATE VIRTUAL PROCEDURE getTweets(IN query varchar) RETURNS TABLE (created_on varchar(25), from_user varchar(25), to_user varchar(25), profile_image_url varchar(25), source varchar(25), text varchar(140))\nAS\nSELECT tweet.* FROM (EXEC twitter.invokeHTTP(action => 'GET', endpoint => QUERYSTRING('', query AS q))) AS w, XMLTABLE('results' PASSING JSONTOXML('myxml', w.result) COLUMNS created_on string PATH 'created_at',  from_user string PATH 'from_user',  to_user string PATH 'to_user',  profile_image_url string PATH 'profile_image_url',  source string PATH 'source',  text string PATH 'text') AS tweet;\n\nCREATE VIEW Tweet\nAS\nSELECT * FROM twitterview.getTweets;\n",
-            "keng__hasChildren": "false",
-            "keng___links" : [
+            "keng__id": "twitterview",
+            "keng__dataPath": "/tko__komodo/tko__workspace/tweet-example-vdb.xml/twitterview",
+            "keng__kType": "Model",
+            "keng__hasChildren": true,
+            "mmcore__modelType": "VIRTUAL",
+            "vdb__visible": true,
+            "vdb__metadataType": "DDL",
+            "keng__ddl": "CREATE VIRTUAL PROCEDURE getTweets(IN query varchar) RETURNS TABLE (created_on varchar(25), from_user varchar(25), to_user varchar(25), profile_image_url varchar(25), source varchar(25), text varchar(140))\nAS\nSELECT tweet.* FROM (EXEC twitter.invokeHTTP(action \u003d\u003e \u0027GET\u0027, endpoint \u003d\u003e QUERYSTRING(\u0027\u0027, query AS q))) AS w, XMLTABLE(\u0027results\u0027 PASSING JSONTOXML(\u0027myxml\u0027, w.result) COLUMNS created_on string PATH \u0027created_at\u0027,  from_user string PATH \u0027from_user\u0027,  to_user string PATH \u0027to_user\u0027,  profile_image_url string PATH \u0027profile_image_url\u0027,  source string PATH \u0027source\u0027,  text string PATH \u0027text\u0027) AS tweet;\n\nCREATE VIEW Tweet\nAS\nSELECT * FROM twitterview.getTweets;\n",
+            "keng___links": [
                 {
-                    "rel" : "self",
-                    "href" : "/vdbs/tweet-example-vdb.xml/Models/twitterview"
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml/Models/twitterview"
                 },
                 {
-                    "rel" : "parent",
-                    "href" : "/vdbs/tweet-example-vdb.xml"
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml"
                 },
                 {
                     "rel": "sources",
-                    "href": "/vdbs/tweet-example-vdb.xml/Models/twitterview/VdbModelSources"
+                    "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml/Models/twitterview/VdbModelSources"
                 }
             ]
         }
     ],
-    "sources" : [
+    "sources": [
         {
-            "keng__id" : "twitter",
-            "keng__dataPath" : "/tko__komodo/tko__workspace/tweet-example-vdb.xml/twitter/vdb__sources/twitter",
-            "keng__kType" : "VdbModelSource",
-            "vdb__sourceJndiName" : "java__/twitterDS",
-            "vdb__sourceTranslator" : "rest",
-            "keng__hasChildren": "false",
-            "keng___links" : [
+            "keng__id": "twitter",
+            "keng__dataPath": "/tko__komodo/tko__workspace/tweet-example-vdb.xml/twitter/vdb__sources/twitter",
+            "keng__kType": "VdbModelSource",
+            "keng__hasChildren": false,
+            "vdb__sourceJndiName": "java:/twitterDS",
+            "vdb__sourceTranslator": "rest",
+            "keng___links": [
                 {
-                    "rel" : "self",
-                    "href" : "/vdbs/tweet-example-vdb.xml/Models/twitter/VdbModelSources/twitter"
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml/Models/twitter/VdbModelSources/twitter"
                 },
                 {
-                    "rel" : "parent",
-                    "href" : "/vdbs/tweet-example-vdb.xml/Models/twitter"
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml/Models/twitter"
                 }
             ]
         }

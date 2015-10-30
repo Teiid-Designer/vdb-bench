@@ -1,0 +1,315 @@
+{
+    "digest": {
+        "keng__id": "teiid-vdb-all-elements.xml",
+        "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml",
+        "keng__kType": "Vdb",
+        "keng__hasChildren": true,
+        "vdb__name": "teiid-vdb-all-elements.xml",
+        "vdb__description": "vdb description",
+        "vdb__originalFile": "/tko:komodo/tko:workspace/teiid-vdb-all-elements.xml",
+        "vdb__preview": false,
+        "vdb__connectionType": "BY_VERSION",
+        "vdb__version": 1,
+        "keng__properties": [
+            {
+                "name": "vdb-property",
+                "value": "vdb-value"
+            },
+            {
+                "name": "vdb-property2",
+                "value": "vdb-value2"
+            }
+        ],
+        "keng___links": [
+            {
+                "rel": "self",
+                "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml"
+            },
+            {
+                "rel": "parent",
+                "href": "http://localhost:9090/v1/workspace/vdbs"
+            },
+            {
+                "rel": "imports",
+                "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbImports"
+            },
+            {
+                "rel": "models",
+                "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/Models"
+            },
+            {
+                "rel": "translators",
+                "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbTranslators"
+            },
+            {
+                "rel": "dataRoles",
+                "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles"
+            }
+        ]
+    },
+    "imports": [
+        {
+            "keng__id": "x",
+            "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__importVdbs/x",
+            "keng__kType": "VdbImport",
+            "keng__hasChildren": false,
+            "vdb__importVdb": "x",
+            "vdb__version": 2,
+            "vdb__importDataPolicies": false,
+            "keng___links": [
+                {
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbImports/x"
+                },
+                {
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml"
+                }
+            ]
+        }
+    ],
+    "translators": [
+        {
+            "keng__id": "oracleOverride",
+            "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__translators/oracleOverride",
+            "keng__kType": "VdbTranslator",
+            "keng__hasChildren": false,
+            "vdb__type": "oracle",
+            "vdb__description": "hello world",
+            "keng__properties": [
+                {
+                    "name": "my-property",
+                    "value": "my-value"
+                }
+            ],
+            "keng___links": [
+                {
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbTranslators/oracleOverride"
+                },
+                {
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml"
+                }
+            ]
+        }
+    ],
+    "dataRoles": [
+        {
+            "keng__id": "roleOne",
+            "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne",
+            "keng__kType": "VdbDataRole",
+            "keng__hasChildren": true,
+            "vdb__dataRole": "roleOne",
+            "vdb__description": "roleOne described",
+            "vdb__allowCreateTemporaryTables": true,
+            "vdb__anyAuthenticated": false,
+            "vdb__grantAll": true,
+            "vdb__mappedRoleNames": [
+                "ROLE1",
+                "ROLE2"
+            ],
+            "vdb__permissions": [
+                {
+                    "keng__id": "myTable.T1",
+                    "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne/vdb__permissions/myTable.T1",
+                    "keng__kType": "VdbPermission",
+                    "keng__hasChildren": false,
+                    "vdb__permission": "myTable.T1",
+                    "vdb__allowAlter": false,
+                    "vdb__allowCreate": false,
+                    "vdb__allowDelete": false,
+                    "vdb__allowExecute": false,
+                    "vdb__allowLanguage": false,
+                    "vdb__allowRead": true,
+                    "vdb__allowUpdate": false,
+                    "vdb__conditions": [],
+                    "vdb__masks": []
+                },
+                {
+                    "keng__id": "myTable.T2",
+                    "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne/vdb__permissions/myTable.T2",
+                    "keng__kType": "VdbPermission",
+                    "keng__hasChildren": true,
+                    "vdb__permission": "myTable.T2",
+                    "vdb__allowAlter": true,
+                    "vdb__allowCreate": true,
+                    "vdb__allowDelete": true,
+                    "vdb__allowExecute": true,
+                    "vdb__allowLanguage": false,
+                    "vdb__allowRead": false,
+                    "vdb__allowUpdate": true,
+                    "vdb__conditions": [
+                        {
+                            "keng__id": "col1 \u003d user()",
+                            "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne/vdb__permissions/myTable.T2/vdb__conditions/col1 \u003d user()",
+                            "keng__kType": "VdbCondition",
+                            "keng__hasChildren": false,
+                            "vdb__condition": "col1 \u003d user()",
+                            "vdb__constraint": false
+                        }
+                    ],
+                    "vdb__masks": []
+                },
+                {
+                    "keng__id": "myTable.T2.col1",
+                    "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne/vdb__permissions/myTable.T2.col1",
+                    "keng__kType": "VdbPermission",
+                    "keng__hasChildren": true,
+                    "vdb__permission": "myTable.T2.col1",
+                    "vdb__allowAlter": false,
+                    "vdb__allowCreate": false,
+                    "vdb__allowDelete": false,
+                    "vdb__allowExecute": false,
+                    "vdb__allowLanguage": false,
+                    "vdb__allowRead": false,
+                    "vdb__allowUpdate": false,
+                    "vdb__conditions": [],
+                    "vdb__masks": [
+                        {
+                            "keng__id": "col2",
+                            "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne/vdb__permissions/myTable.T2.col1/vdb__masks/col2",
+                            "keng__kType": "VdbMask",
+                            "keng__hasChildren": false,
+                            "vdb__mask": "col2",
+                            "vdb__order": "1"
+                        }
+                    ]
+                },
+                {
+                    "keng__id": "javascript",
+                    "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne/vdb__permissions/javascript",
+                    "keng__kType": "VdbPermission",
+                    "keng__hasChildren": false,
+                    "vdb__permission": "javascript",
+                    "vdb__allowAlter": false,
+                    "vdb__allowCreate": false,
+                    "vdb__allowDelete": false,
+                    "vdb__allowExecute": false,
+                    "vdb__allowLanguage": true,
+                    "vdb__allowRead": false,
+                    "vdb__allowUpdate": false,
+                    "vdb__conditions": [],
+                    "vdb__masks": []
+                }
+            ],
+            "keng___links": [
+                {
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne"
+                },
+                {
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml"
+                }
+            ]
+        }
+    ],
+    "models": [
+        {
+            "keng__id": "model-one",
+            "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/model-one",
+            "keng__kType": "Model",
+            "keng__hasChildren": true,
+            "vdb__description": "model description",
+            "mmcore__modelType": "PHYSICAL",
+            "vdb__visible": false,
+            "vdb__metadataType": "DDL",
+            "keng__ddl": "",
+            "keng___links": [
+                {
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/Models/model-one"
+                },
+                {
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml"
+                },
+                {
+                    "rel": "sources",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/Models/model-one/VdbModelSources"
+                }
+            ]
+        },
+        {
+            "keng__id": "model-two",
+            "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/model-two",
+            "keng__kType": "Model",
+            "keng__hasChildren": true,
+            "mmcore__modelType": "VIRTUAL",
+            "vdb__visible": true,
+            "vdb__metadataType": "DDL",
+            "keng__ddl": "CREATE VIEW Test\nAS\nSELECT * FROM Test.getTest;\n",
+            "keng___links": [
+                {
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/Models/model-two"
+                },
+                {
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml"
+                },
+                {
+                    "rel": "sources",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/Models/model-two/VdbModelSources"
+                }
+            ]
+        }
+    ],
+    "sources": [
+        {
+            "keng__id": "s1",
+            "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/model-one/vdb__sources/s1",
+            "keng__kType": "VdbModelSource",
+            "keng__hasChildren": false,
+            "vdb__sourceJndiName": "java:mybinding",
+            "vdb__sourceTranslator": "translator",
+            "keng___links": [
+                {
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/Models/model-one/VdbModelSources/s1"
+                },
+                {
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/Models/model-one"
+                }
+            ]
+        },
+        {
+            "keng__id": "s1",
+            "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/model-two/vdb__sources/s1",
+            "keng__kType": "VdbModelSource",
+            "keng__hasChildren": false,
+            "vdb__sourceJndiName": "java:binding-one",
+            "vdb__sourceTranslator": "translator",
+            "keng___links": [
+                {
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/Models/model-two/VdbModelSources/s1"
+                },
+                {
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/Models/model-two"
+                }
+            ]
+        },
+        {
+            "keng__id": "s2",
+            "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/model-two/vdb__sources/s2",
+            "keng__kType": "VdbModelSource",
+            "keng__hasChildren": false,
+            "vdb__sourceJndiName": "java:binding-two",
+            "vdb__sourceTranslator": "translator",
+            "keng___links": [
+                {
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/Models/model-two/VdbModelSources/s2"
+                },
+                {
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/Models/model-two"
+                }
+            ]
+        }
+    ]
+}

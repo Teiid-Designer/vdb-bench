@@ -1,216 +1,222 @@
 {
-    "digest" :
-    {
-        "keng__id" : "Portfolio",
-        "keng__dataPath" : "/tko__komodo/tko__workspace/Portfolio",
-        "keng__kType" : "Vdb",
-        "vdb__description" : "The Portfolio Dynamic VDB",
-        "vdb__preview" : "false",
-        "vdb__connectionType" : "BY_VERSION",
-        "vdb__version" : 1,
-        "vdb__name" : "Portfolio",
-        "keng__properties" : [
+    "digest": {
+        "keng__id": "portfolio-vdb.xml",
+        "keng__dataPath": "/tko__komodo/tko__workspace/portfolio-vdb.xml",
+        "keng__kType": "Vdb",
+        "keng__hasChildren": true,
+        "vdb__name": "portfolio-vdb.xml",
+        "vdb__description": "The Portfolio Dynamic VDB",
+        "vdb__originalFile": "/tko:komodo/tko:workspace/portfolio-vdb.xml",
+        "vdb__preview": false,
+        "vdb__connectionType": "BY_VERSION",
+        "vdb__version": 1,
+        "keng__properties": [
             {
-                "name" : "UseConnectorMetadata",
-                "value" : "true"
+                "name": "UseConnectorMetadata",
+                "value": "true"
             }
         ],
-        "keng__hasChildren": "true",
         "keng___links": [
             {
                 "rel": "self",
-                "href": "/vdbs/Portfolio"
+                "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml"
+            },
+            {
+                "rel": "parent",
+                "href": "http://localhost:3000/v1/workspace/vdbs"
             },
             {
                 "rel": "imports",
-                "href": "/vdbs/Portfolio/VdbImports"
+                "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/VdbImports"
             },
             {
                 "rel": "models",
-                "href": "/vdbs/Portfolio/Models"
+                "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/Models"
             },
             {
                 "rel": "translators",
-                "href": "/vdbs/Portfolio/VdbTranslators"
+                "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/VdbTranslators"
             },
             {
                 "rel": "dataRoles",
-                "href": "/vdbs/Portfolio/VdbDataRoles"
+                "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/VdbDataRoles"
             }
         ]
     },
-    "models" : [
+    "models": [
         {
-            "keng__id" : "MarketData",
-            "keng__dataPath" : "/tko__komodo/tko__workspace/Portfolio/MarketData",
-            "keng__kType" : "Model",
-            "mmcore__modelType" : "PHYSICAL",
-            "vdb__visible" : "true",
-            "vdb__metadataType" : "DDL",
-            "keng__hasChildren": "true",
-            "keng___links" : [
+            "keng__id": "MarketData",
+            "keng__dataPath": "/tko__komodo/tko__workspace/portfolio-vdb.xml/MarketData",
+            "keng__kType": "Model",
+            "keng__hasChildren": true,
+            "mmcore__modelType": "PHYSICAL",
+            "vdb__visible": true,
+            "vdb__metadataType": "DDL",
+            "keng__ddl": "",
+            "keng___links": [
                 {
-                    "rel" : "self",
-                    "href" : "/vdbs/Portfolio/Models/MarketData"
+                    "rel": "self",
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/Models/MarketData"
                 },
                 {
-                    "rel" : "parent",
-                    "href" : "/vdbs/Portfolio"
+                    "rel": "parent",
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml"
                 },
                 {
                     "rel": "sources",
-                    "href": "/vdbs/Portfolio/Models/MarketData/VdbModelSources"
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/Models/MarketData/VdbModelSources"
                 }
             ]
         },
         {
-            "keng__id" : "Accounts",
-            "keng__dataPath" : "/tko__komodo/tko__workspace/Portfolio/Accounts",
-            "keng__kType" : "Model",
-            "mmcore__modelType" : "PHYSICAL",
-            "vdb__visible" : "true",
-            "vdb__metadataType" : "DDL",
-            "keng__hasChildren": "true",
-            "keng___links" : [
+            "keng__id": "Accounts",
+            "keng__dataPath": "/tko__komodo/tko__workspace/portfolio-vdb.xml/Accounts",
+            "keng__kType": "Model",
+            "keng__hasChildren": true,
+            "mmcore__modelType": "PHYSICAL",
+            "vdb__visible": true,
+            "vdb__metadataType": "DDL",
+            "keng__ddl": "",
+            "keng___links": [
                 {
-                    "rel" : "self",
-                    "href" : "/vdbs/Portfolio/Models/Accounts"
+                    "rel": "self",
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/Models/Accounts"
                 },
                 {
-                    "rel" : "parent",
-                    "href" : "/vdbs/Portfolio"
+                    "rel": "parent",
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml"
                 },
                 {
                     "rel": "sources",
-                    "href": "/vdbs/Portfolio/Models/Accounts/VdbModelSources"
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/Models/Accounts/VdbModelSources"
                 }
             ]
         },
         {
-            "keng__id" : "PersonalValuations",
-            "keng__dataPath" : "/tko__komodo/tko__workspace/Portfolio/PersonalValuations",
-            "keng__kType" : "Model",
-            "mmcore__modelType" : "PHYSICAL",
-            "vdb__visible" : "true",
-            "vdb__metadataType" : "DDL",
-            "keng__ddl" : "SET NAMESPACE 'http__//www.teiid.org/translator/excel/2014' AS teiid_excel;\n\nCREATE FOREIGN TABLE Sheet1 (\n   ROW_ID integer OPTIONS (SEARCHABLE 'All_Except_Like', \"teiid_excel__CELL_NUMBER\" 'ROW_ID'),\n ACCOUNT_ID integer OPTIONS (SEARCHABLE 'Unsearchable', \"teiid_excel__CELL_NUMBER\" '1'),\n PRODUCT_TYPE string OPTIONS (SEARCHABLE 'Unsearchable', \"teiid_excel__CELL_NUMBER\" '2'),\n    PRODUCT_VALUE string OPTIONS (SEARCHABLE 'Unsearchable', \"teiid_excel__CELL_NUMBER\" '3'),\n   PRIMARY KEY(ROW_ID)\n) OPTIONS (\"teiid_excel__FIRST_DATA_ROW_NUMBER\" '2', \"teiid_excel__FILE\" 'otherholdings.xls');\n",
-            "keng__hasChildren": "true",
-            "keng___links" : [
+            "keng__id": "PersonalValuations",
+            "keng__dataPath": "/tko__komodo/tko__workspace/portfolio-vdb.xml/PersonalValuations",
+            "keng__kType": "Model",
+            "keng__hasChildren": true,
+            "mmcore__modelType": "PHYSICAL",
+            "vdb__visible": true,
+            "vdb__metadataType": "DDL",
+            "keng__ddl": "SET NAMESPACE \u0027http://www.teiid.org/translator/excel/2014\u0027 AS teiid_excel;\n\nCREATE FOREIGN TABLE Sheet1 (\n\tROW_ID integer OPTIONS (SEARCHABLE \u0027All_Except_Like\u0027, \"teiid_excel:CELL_NUMBER\" \u0027ROW_ID\u0027),\n\tACCOUNT_ID integer OPTIONS (SEARCHABLE \u0027Unsearchable\u0027, \"teiid_excel:CELL_NUMBER\" \u00271\u0027),\n\tPRODUCT_TYPE string OPTIONS (SEARCHABLE \u0027Unsearchable\u0027, \"teiid_excel:CELL_NUMBER\" \u00272\u0027),\n\tPRODUCT_VALUE string OPTIONS (SEARCHABLE \u0027Unsearchable\u0027, \"teiid_excel:CELL_NUMBER\" \u00273\u0027),\n\tPRIMARY KEY(ROW_ID)\n) OPTIONS (\"teiid_excel:FIRST_DATA_ROW_NUMBER\" \u00272\u0027, \"teiid_excel:FILE\" \u0027otherholdings.xls\u0027);\n",
+            "keng___links": [
                 {
-                    "rel" : "self",
-                    "href" : "/vdbs/Portfolio/Models/PersonalValuations"
+                    "rel": "self",
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/Models/PersonalValuations"
                 },
                 {
-                    "rel" : "parent",
-                    "href" : "/vdbs/Portfolio"
+                    "rel": "parent",
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml"
                 },
                 {
                     "rel": "sources",
-                    "href": "/vdbs/Portfolio/Models/PersonalValuations/VdbModelSources"
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/Models/PersonalValuations/VdbModelSources"
                 }
             ]
         },
         {
-            "keng__id" : "Stocks",
-            "keng__dataPath" : "/tko__komodo/tko__workspace/Portfolio/Stocks",
-            "keng__kType" : "Model",
-            "mmcore__modelType" : "VIRTUAL",
-            "vdb__visible" : "true",
-            "vdb__metadataType" : "DDL",
-            "keng__ddl" : "CREATE VIEW StockPrices (\n  symbol string,\n    price bigdecimal\n)\nAS\nSELECT SP.symbol, SP.price FROM (EXEC MarketData.getTextFiles('*.txt')) AS f, TEXTTABLE(f.file COLUMNS symbol string, price bigdecimal HEADER) AS SP;\n\nCREATE VIEW Stock (\n product_id integer,\n   symbol string,\n    price bigdecimal,\n company_name varchar(256)\n)\nAS\nSELECT A.ID, S.symbol, S.price, A.COMPANY_NAME FROM StockPrices AS S, Accounts.PRODUCT AS A WHERE S.symbol = A.SYMBOL;\n",
-            "keng__hasChildren": "false",
-            "keng___links" : [
+            "keng__id": "Stocks",
+            "keng__dataPath": "/tko__komodo/tko__workspace/portfolio-vdb.xml/Stocks",
+            "keng__kType": "Model",
+            "keng__hasChildren": true,
+            "mmcore__modelType": "VIRTUAL",
+            "vdb__visible": true,
+            "vdb__metadataType": "DDL",
+            "keng__ddl": "CREATE VIEW StockPrices (\n\tsymbol string,\n\tprice bigdecimal\n)\nAS\nSELECT SP.symbol, SP.price FROM (EXEC MarketData.getTextFiles(\u0027*.txt\u0027)) AS f, TEXTTABLE(f.file COLUMNS symbol string, price bigdecimal HEADER) AS SP;\n\nCREATE VIEW Stock (\n\tproduct_id integer,\n\tsymbol string,\n\tprice bigdecimal,\n\tcompany_name varchar(256)\n)\nAS\nSELECT A.ID, S.symbol, S.price, A.COMPANY_NAME FROM StockPrices AS S, Accounts.PRODUCT AS A WHERE S.symbol \u003d A.SYMBOL;\n",
+            "keng___links": [
                 {
-                    "rel" : "self",
-                    "href" : "/vdbs/Portfolio/Models/Stocks"
+                    "rel": "self",
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/Models/Stocks"
                 },
                 {
-                    "rel" : "parent",
-                    "href" : "/vdb/Portfolio"
+                    "rel": "parent",
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml"
                 },
                 {
                     "rel": "sources",
-                    "href": "/vdbs/Portfolio/Models/Stocks/VdbModelSources"
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/Models/Stocks/VdbModelSources"
                 }
             ]
         },
         {
-            "keng__id" : "StocksMatModel",
-            "keng__dataPath" : "/tko__komodo/tko__workspace/Portfolio/StocksMatModel",
-            "keng__kType" : "Model",
-            "mmcore__modelType" : "VIRTUAL",
-            "vdb__visible" : "true",
-            "vdb__metadataType" : "DDL",
-            "keng__ddl" : "CREATE VIEW stockPricesMatView (\n   product_id integer,\n   symbol string,\n    price bigdecimal,\n company_name varchar(256)\n) OPTIONS (UPDATABLE TRUE, \"teiid_relALLOW_MATVIEW_MANAGEMENT\" 'true', \"teiid_relMATVIEW_ONERROR_ACTION\" 'THROW_EXCEPTION', \"teiid_relMATVIEW_AFTER_LOAD_SCRIPT\" 'execute accounts.native('''')', \"teiid_relMATVIEW_SHARE_SCOPE\" 'NONE', MATERIALIZED_TABLE 'Accounts.h2_stock_mat', \"teiid_relMATVIEW_TTL\" '120000', \"teiid_relON_VDB_DROP_SCRIPT\" 'DELETE FROM Accounts.status WHERE Name=''stock'' AND schemaname = ''Stocks''', \"teiid_relMATVIEW_STATUS_TABLE\" 'status', MATERIALIZED TRUE, \"teiid_relMATVIEW_BEFORE_LOAD_SCRIPT\" 'execute accounts.native(''truncate table h2_stock_mat'');', \"teiid_relMATERIALIZED_STAGE_TABLE\" 'Accounts.h2_stock_mat')\nAS\nSELECT A.ID, S.symbol, S.price, A.COMPANY_NAME FROM Stocks.StockPrices AS S, Accounts.PRODUCT AS A WHERE S.symbol = A.SYMBOL;\n",
-            "keng__hasChildren": "false",
-            "keng___links" : [
+            "keng__id": "StocksMatModel",
+            "keng__dataPath": "/tko__komodo/tko__workspace/portfolio-vdb.xml/StocksMatModel",
+            "keng__kType": "Model",
+            "keng__hasChildren": true,
+            "mmcore__modelType": "VIRTUAL",
+            "vdb__visible": true,
+            "vdb__metadataType": "DDL",
+            "keng__ddl": "CREATE VIEW stockPricesMatView (\n\tproduct_id integer,\n\tsymbol string,\n\tprice bigdecimal,\n\tcompany_name varchar(256)\n) OPTIONS (UPDATABLE TRUE, \"teiid_relALLOW_MATVIEW_MANAGEMENT\" \u0027true\u0027, \"teiid_relMATVIEW_ONERROR_ACTION\" \u0027THROW_EXCEPTION\u0027, \"teiid_relMATVIEW_AFTER_LOAD_SCRIPT\" \u0027execute accounts.native(\u0027\u0027\u0027\u0027)\u0027, \"teiid_relMATVIEW_SHARE_SCOPE\" \u0027NONE\u0027, MATERIALIZED_TABLE \u0027Accounts.h2_stock_mat\u0027, \"teiid_relMATVIEW_TTL\" \u0027120000\u0027, \"teiid_relON_VDB_DROP_SCRIPT\" \u0027DELETE FROM Accounts.status WHERE Name\u003d\u0027\u0027stock\u0027\u0027 AND schemaname \u003d \u0027\u0027Stocks\u0027\u0027\u0027, \"teiid_relMATVIEW_STATUS_TABLE\" \u0027status\u0027, MATERIALIZED TRUE, \"teiid_relMATVIEW_BEFORE_LOAD_SCRIPT\" \u0027execute accounts.native(\u0027\u0027truncate table h2_stock_mat\u0027\u0027);\u0027, \"teiid_relMATERIALIZED_STAGE_TABLE\" \u0027Accounts.h2_stock_mat\u0027)\nAS\nSELECT A.ID, S.symbol, S.price, A.COMPANY_NAME FROM Stocks.StockPrices AS S, Accounts.PRODUCT AS A WHERE S.symbol \u003d A.SYMBOL;\n",
+            "keng___links": [
                 {
-                    "rel" : "self",
-                    "href" : "/vdbs/Portfolio/Models/StocksMatModel"
+                    "rel": "self",
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/Models/StocksMatModel"
                 },
                 {
-                    "rel" : "parent",
-                    "href" : "/vdbs/Portfolio"
+                    "rel": "parent",
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml"
                 },
                 {
                     "rel": "sources",
-                    "href": "/vdbs/Portfolio/Models/StocksMatModel/VdbModelSources"
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/Models/StocksMatModel/VdbModelSources"
                 }
             ]
         }
     ],
-    "sources" : [
+    "sources": [
         {
-            "keng__id" : "text-connector",
-            "keng__dataPath" : "/tko__komodo/tko__workspace/Portfolio/MarketData/vdb__sources/text-connector",
-            "keng__kType" : "VdbModelSource",
-            "vdb__sourceJndiName" : "java__/marketdata-file",
-            "vdb__sourceTranslator" : "file",
-            "keng__hasChildren": "false",
-            "keng___links" : [
+            "keng__id": "text-connector",
+            "keng__dataPath": "/tko__komodo/tko__workspace/portfolio-vdb.xml/MarketData/vdb__sources/text-connector",
+            "keng__kType": "VdbModelSource",
+            "keng__hasChildren": false,
+            "vdb__sourceJndiName": "java:/marketdata-file",
+            "vdb__sourceTranslator": "file",
+            "keng___links": [
                 {
-                    "rel" : "self",
-                    "href" : "/vdbs/Portfolio/Models/MarketData/VdbModelSources/text-connector"
+                    "rel": "self",
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/Models/MarketData/VdbModelSources/text-connector"
                 },
                 {
-                    "rel" : "parent",
-                    "href" : "/vdbs/Portfolio/Models/MarketData"
+                    "rel": "parent",
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/Models/MarketData"
                 }
             ]
         },
         {
-            "keng__id" : "h2-connector",
-            "keng__dataPath" : "/tko__komodo/tko__workspace/Portfolio/Accounts/vdb__sources/h2-connector",
-            "keng__kType" : "VdbModelSource",
-            "vdb__sourceJndiName" : "java__/accounts-ds",
-            "vdb__sourceTranslator" : "h2",
-            "keng__hasChildren": "false",
-            "keng___links" : [
+            "keng__id": "h2-connector",
+            "keng__dataPath": "/tko__komodo/tko__workspace/portfolio-vdb.xml/Accounts/vdb__sources/h2-connector",
+            "keng__kType": "VdbModelSource",
+            "keng__hasChildren": false,
+            "vdb__sourceJndiName": "java:/accounts-ds",
+            "vdb__sourceTranslator": "h2",
+            "keng___links": [
                 {
-                    "rel" : "self",
-                    "href" : "/vdbs/Portfolio/Models/Accounts/VdbModelSources/h2-connector"
+                    "rel": "self",
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/Models/Accounts/VdbModelSources/h2-connector"
                 },
                 {
-                    "rel" : "parent",
-                    "href" : "/vdbs/Portfolio/Models/Accounts"
+                    "rel": "parent",
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/Models/Accounts"
                 }
             ]
         },
         {
-            "keng__id" : "excelconnector",
-            "keng__dataPath" : "/tko__komodo/tko__workspace/Portfolio/PersonalValuations/vdb__sources/excelconnector",
-            "keng__kType" : "VdbModelSource",
-            "vdb__sourceJndiName" : "java__/excel-file",
-            "vdb__sourceTranslator" : "excel",
-            "keng__hasChildren": "false",
-            "keng___links" : [
+            "keng__id": "excelconnector",
+            "keng__dataPath": "/tko__komodo/tko__workspace/portfolio-vdb.xml/PersonalValuations/vdb__sources/excelconnector",
+            "keng__kType": "VdbModelSource",
+            "keng__hasChildren": false,
+            "vdb__sourceJndiName": "java:/excel-file",
+            "vdb__sourceTranslator": "excel",
+            "keng___links": [
                 {
-                    "rel" : "self",
-                    "href" : "/vdbs/Portfolio/Models/PersonalValuations/VdbModelSources/excelconnector"
+                    "rel": "self",
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/Models/PersonalValuations/VdbModelSources/excelconnector"
                 },
                 {
-                    "rel" : "parent",
-                    "href" : "/vdbs/Portfolio/Models/PersonalValuations"
+                    "rel": "parent",
+                    "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/Models/PersonalValuations"
                 }
             ]
         }

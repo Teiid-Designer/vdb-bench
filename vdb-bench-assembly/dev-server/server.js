@@ -4,7 +4,7 @@ var fs = require('fs');
 
 var host = 'localhost';
 var port = '3000';
-var baseUrl = '/api/v1';
+var baseUrl = '/v1/workspace';
 var xmlContentType = "application/xml";
 var jsonContentType = "application/json";
 
@@ -22,6 +22,7 @@ function readXml(filename) {
 var PORTFOLIO = 'portfolio';
 var PARTS = 'parts';
 var TWEET = 'tweet';
+var ALL_ELEMENTS = 'all-elements';
 var ID = 'keng__id';
 var MODELS = 'models';
 var TRANSLATORS = 'translators';
@@ -39,10 +40,12 @@ var vdbs = {};
 vdbs[PORTFOLIO] = readJson(PORTFOLIO + '.json');
 vdbs[PARTS] = readJson(PARTS + '.json');
 vdbs[TWEET] = readJson(TWEET + '.json');
+vdbs[ALL_ELEMENTS] = readJson(ALL_ELEMENTS + '.json');
 
 vdbs[PORTFOLIO].xml = readXml(PORTFOLIO + '.xml');
 vdbs[PARTS].xml = readXml(PARTS + '.xml');
 vdbs[TWEET].xml = readXml(TWEET + '.xml');
+vdbs[ALL_ELEMENTS].xml = readXml(ALL_ELEMENTS + '.xml');
 
 var jsonVdbSchema = readJson('vdb-xsd.json');
 
@@ -194,7 +197,7 @@ function viewVdbs(req, res, next) {
     /*
      * json format
      */
-    var vdbDigests = [ vdbs[PORTFOLIO].digest, vdbs[PARTS].digest, vdbs[TWEET].digest];
+    var vdbDigests = [ vdbs[PORTFOLIO].digest, vdbs[PARTS].digest, vdbs[TWEET].digest, vdbs[ALL_ELEMENTS].digest];
     res.send(200, vdbDigests);
     return next();
 }
@@ -525,7 +528,6 @@ server.del({path : baseUrl + '/vdbs/:vdbId' }, deleteVdb);
  * Vdb Schema Specification
  */
 server.get({ path: baseUrl + '/schema' }, viewSchema);
-server.get({ path: baseUrl + '/schema/:schemaId' }, viewSchema);
 
 /*
  * Start server listening

@@ -1,95 +1,107 @@
 {
-    "digest" :
-    {
-        "keng__id" : "MyPartsVDB_Dynamic",
-        "keng__dataPath" : "/tko__komodo/tko__workspace/MyPartsVDB_Dynamic",
-        "keng__kType" : "Vdb",
-        "vdb__preview" : "false",
-        "vdb__connectionType" : "BY_VERSION",
-        "vdb__version" : 1,
-        "vdb__name" : "MyPartsVDB_Dynamic",
-        "keng__hasChildren": "true",
-        "keng___links" : [
+    "digest": {
+        "keng__id": "parts_dynamic-vdb.xml",
+        "keng__dataPath": "/tko__komodo/tko__workspace/parts_dynamic-vdb.xml",
+        "keng__kType": "Vdb",
+        "keng__hasChildren": true,
+        "vdb__name": "parts_dynamic-vdb.xml",
+        "vdb__originalFile": "/tko:komodo/tko:workspace/parts_dynamic-vdb.xml",
+        "vdb__preview": false,
+        "vdb__connectionType": "BY_VERSION",
+        "vdb__version": 1,
+        "keng___links": [
             {
-                "rel" : "self",
-                "href" : "/vdbs/MyPartsVDB_Dynamic"
+                "rel": "self",
+                "href": "http://localhost:9090/v1/workspace/vdbs/parts_dynamic-vdb.xml"
+            },
+            {
+                "rel": "parent",
+                "href": "http://localhost:9090/v1/workspace/vdbs"
             },
             {
                 "rel": "imports",
-                "href": "/vdbs/MyPartsVDB_Dynamic/VdbImports"
+                "href": "http://localhost:9090/v1/workspace/vdbs/parts_dynamic-vdb.xml/VdbImports"
             },
             {
                 "rel": "models",
-                "href": "/vdbs/MyPartsVDB_Dynamic/Models"
+                "href": "http://localhost:9090/v1/workspace/vdbs/parts_dynamic-vdb.xml/Models"
             },
             {
                 "rel": "translators",
-                "href": "/vdbs/MyPartsVDB_Dynamic/VdbTranslators"
+                "href": "http://localhost:9090/v1/workspace/vdbs/parts_dynamic-vdb.xml/VdbTranslators"
             },
             {
                 "rel": "dataRoles",
-                "href": "/vdbs/MyPartsVDB_Dynamic/VdbDataRoles"
+                "href": "http://localhost:9090/v1/workspace/vdbs/parts_dynamic-vdb.xml/VdbDataRoles"
             }
         ]
     },
-    "models" : [
+    "models": [
         {
-            "keng__id" : "PartsViewModel",
-            "keng__dataPath" : "/tko__komodo/tko__workspace/MyPartsVDB_Dynamic/PartsViewModel",
-            "keng__kType" : "Model",
-            "mmcore__modelType" : "VIRTUAL",
-            "vdb__visible" : "true",
-            "vdb__metadataType" : "DDL",
-            "keng__ddl" : "CREATE VIEW PartsSummary (\n PART_ID string(50) NOT NULL OPTIONS (SEARCHABLE 'Searchable'),\n    PART_NAME string(255) OPTIONS (SEARCHABLE 'Searchable'),\n  PART_COLOR string(30) OPTIONS (SEARCHABLE 'Searchable'),\n  PART_WEIGHT string(255) OPTIONS (SEARCHABLE 'Searchable'),\n    SUPPLIER_ID string(10) NOT NULL OPTIONS (SEARCHABLE 'Searchable'),\n    QUANTITY bigdecimal(3) OPTIONS (SEARCHABLE 'All_Except_Like', FIXED_LENGTH TRUE),\n SHIPPER_ID bigdecimal(2) OPTIONS (SEARCHABLE 'All_Except_Like', FIXED_LENGTH TRUE)\n) OPTIONS (UPDATABLE TRUE)\nAS\nSELECT PartsSS.PARTS.PART_ID, PartsSS.PARTS.PART_NAME, PartsSS.PARTS.PART_COLOR, PartsSS.PARTS.PART_WEIGHT, PartsSS.SUPPLIER_PARTS.SUPPLIER_ID, PartsSS.SUPPLIER_PARTS.QUANTITY, PartsSS.SUPPLIER_PARTS.SHIPPER_ID FROM PartsSS.PARTS, PartsSS.SUPPLIER_PARTS WHERE PartsSS.PARTS.PART_ID = PartsSS.SUPPLIER_PARTS.PART_ID;\n",
-            "keng__hasChildren": "false",
-            "keng___links" : [
+            "keng__id": "PartsViewModel",
+            "keng__dataPath": "/tko__komodo/tko__workspace/parts_dynamic-vdb.xml/PartsViewModel",
+            "keng__kType": "Model",
+            "keng__hasChildren": true,
+            "mmcore__modelType": "VIRTUAL",
+            "vdb__visible": true,
+            "vdb__metadataType": "DDL",
+            "keng__ddl": "CREATE VIEW PartsSummary (\n\tPART_ID string(50) NOT NULL OPTIONS (SEARCHABLE \u0027Searchable\u0027),\n\tPART_NAME string(255) OPTIONS (SEARCHABLE \u0027Searchable\u0027),\n\tPART_COLOR string(30) OPTIONS (SEARCHABLE \u0027Searchable\u0027),\n\tPART_WEIGHT string(255) OPTIONS (SEARCHABLE \u0027Searchable\u0027),\n\tSUPPLIER_ID string(10) NOT NULL OPTIONS (SEARCHABLE \u0027Searchable\u0027),\n\tQUANTITY bigdecimal(3) OPTIONS (SEARCHABLE \u0027All_Except_Like\u0027, FIXED_LENGTH TRUE),\n\tSHIPPER_ID bigdecimal(2) OPTIONS (SEARCHABLE \u0027All_Except_Like\u0027, FIXED_LENGTH TRUE)\n) OPTIONS (UPDATABLE TRUE)\nAS\nSELECT PartsSS.PARTS.PART_ID, PartsSS.PARTS.PART_NAME, PartsSS.PARTS.PART_COLOR, PartsSS.PARTS.PART_WEIGHT, PartsSS.SUPPLIER_PARTS.SUPPLIER_ID, PartsSS.SUPPLIER_PARTS.QUANTITY, PartsSS.SUPPLIER_PARTS.SHIPPER_ID FROM PartsSS.PARTS, PartsSS.SUPPLIER_PARTS WHERE PartsSS.PARTS.PART_ID \u003d PartsSS.SUPPLIER_PARTS.PART_ID;\n",
+            "keng___links": [
                 {
-                    "rel" : "self",
-                    "href" : "/vdbs/MyPartsVDB_Dynamic/Models/PartsViewModel"
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/parts_dynamic-vdb.xml/Models/PartsViewModel"
                 },
                 {
-                    "rel" : "parent",
-                    "href" : "/vdbs/MyPartsVDB_Dynamic"
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/parts_dynamic-vdb.xml"
+                },
+                {
+                    "rel": "sources",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/parts_dynamic-vdb.xml/Models/PartsViewModel/VdbModelSources"
                 }
             ]
         },
         {
-            "keng__id" : "PartsSS",
-            "keng__dataPath" : "/tko__komodo/tko__workspace/MyPartsVDB_Dynamic/PartsSS",
-            "keng__kType" : "Model",
-            "mmcore__modelType" : "PHYSICAL",
-            "vdb__visible" : "true",
-            "vdb__metadataType" : "DDL",
-            "keng__ddl" : "CREATE FOREIGN TABLE PARTS (\n   PART_ID string(50) NOT NULL OPTIONS (NAMEINSOURCE '\"PART_ID\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar'),\n PART_NAME string(255) OPTIONS (NAMEINSOURCE '\"PART_NAME\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar'),\n PART_COLOR string(30) OPTIONS (NAMEINSOURCE '\"PART_COLOR\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar'),\n    PART_WEIGHT string(255) OPTIONS (NAMEINSOURCE '\"PART_WEIGHT\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar')\n) OPTIONS (UPDATABLE TRUE, NAMEINSOURCE '\"partssupplier\".\"dbo\".\"PARTS\"');\n\nCREATE FOREIGN TABLE SHIP_VIA (\n  SHIPPER_ID bigdecimal(2) NOT NULL OPTIONS (NAMEINSOURCE '\"SHIPPER_ID\"', SEARCHABLE 'All_Except_Like', NATIVE_TYPE 'numeric', FIXED_LENGTH TRUE),\n    SHIPPER_NAME string(30) OPTIONS (NAMEINSOURCE '\"SHIPPER_NAME\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar')\n) OPTIONS (UPDATABLE TRUE, NAMEINSOURCE '\"partssupplier\".\"dbo\".\"SHIP_VIA\"');\n\nCREATE FOREIGN TABLE STATUS (\n    STATUS_ID bigdecimal(2) NOT NULL OPTIONS (NAMEINSOURCE '\"STATUS_ID\"', SEARCHABLE 'All_Except_Like', NATIVE_TYPE 'numeric', FIXED_LENGTH TRUE),\n  STATUS_NAME string(30) OPTIONS (NAMEINSOURCE '\"STATUS_NAME\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar')\n) OPTIONS (UPDATABLE TRUE, NAMEINSOURCE '\"partssupplier\".\"dbo\".\"STATUS\"');\n\nCREATE FOREIGN TABLE SUPPLIER (\n  SUPPLIER_ID string(10) NOT NULL OPTIONS (NAMEINSOURCE '\"SUPPLIER_ID\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar'),\n SUPPLIER_NAME string(30) OPTIONS (NAMEINSOURCE '\"SUPPLIER_NAME\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar'),\n  SUPPLIER_STATUS bigdecimal(2) OPTIONS (NAMEINSOURCE '\"SUPPLIER_STATUS\"', SEARCHABLE 'All_Except_Like', NATIVE_TYPE 'numeric', FIXED_LENGTH TRUE),\n   SUPPLIER_CITY string(30) OPTIONS (NAMEINSOURCE '\"SUPPLIER_CITY\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar'),\n  SUPPLIER_STATE string(2) OPTIONS (NAMEINSOURCE '\"SUPPLIER_STATE\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar')\n) OPTIONS (UPDATABLE TRUE, NAMEINSOURCE '\"partssupplier\".\"dbo\".\"SUPPLIER\"');\n\nCREATE FOREIGN TABLE SUPPLIER_PARTS (\n SUPPLIER_ID string(10) NOT NULL OPTIONS (NAMEINSOURCE '\"SUPPLIER_ID\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar'),\n PART_ID string(50) NOT NULL OPTIONS (NAMEINSOURCE '\"PART_ID\"', SEARCHABLE 'Searchable', NATIVE_TYPE 'varchar'),\n QUANTITY bigdecimal(3) OPTIONS (NAMEINSOURCE '\"QUANTITY\"', SEARCHABLE 'All_Except_Like', NATIVE_TYPE 'numeric', FIXED_LENGTH TRUE),\n SHIPPER_ID bigdecimal(2) OPTIONS (NAMEINSOURCE '\"SHIPPER_ID\"', SEARCHABLE 'All_Except_Like', NATIVE_TYPE 'numeric', FIXED_LENGTH TRUE)\n) OPTIONS (UPDATABLE TRUE, NAMEINSOURCE '\"partssupplier\".\"dbo\".\"SUPPLIER_PARTS\"');\n",
-            "keng__hasChildren": "true",
-            "keng___links" : [
+            "keng__id": "PartsSS",
+            "keng__dataPath": "/tko__komodo/tko__workspace/parts_dynamic-vdb.xml/PartsSS",
+            "keng__kType": "Model",
+            "keng__hasChildren": true,
+            "mmcore__modelType": "PHYSICAL",
+            "vdb__visible": true,
+            "vdb__metadataType": "DDL",
+            "keng__ddl": "CREATE FOREIGN TABLE PARTS (\n\tPART_ID string(50) NOT NULL OPTIONS (NAMEINSOURCE \u0027\"PART_ID\"\u0027, SEARCHABLE \u0027Searchable\u0027, NATIVE_TYPE \u0027varchar\u0027),\n\tPART_NAME string(255) OPTIONS (NAMEINSOURCE \u0027\"PART_NAME\"\u0027, SEARCHABLE \u0027Searchable\u0027, NATIVE_TYPE \u0027varchar\u0027),\n\tPART_COLOR string(30) OPTIONS (NAMEINSOURCE \u0027\"PART_COLOR\"\u0027, SEARCHABLE \u0027Searchable\u0027, NATIVE_TYPE \u0027varchar\u0027),\n\tPART_WEIGHT string(255) OPTIONS (NAMEINSOURCE \u0027\"PART_WEIGHT\"\u0027, SEARCHABLE \u0027Searchable\u0027, NATIVE_TYPE \u0027varchar\u0027)\n) OPTIONS (UPDATABLE TRUE, NAMEINSOURCE \u0027\"partssupplier\".\"dbo\".\"PARTS\"\u0027);\n\nCREATE FOREIGN TABLE SHIP_VIA (\n\tSHIPPER_ID bigdecimal(2) NOT NULL OPTIONS (NAMEINSOURCE \u0027\"SHIPPER_ID\"\u0027, SEARCHABLE \u0027All_Except_Like\u0027, NATIVE_TYPE \u0027numeric\u0027, FIXED_LENGTH TRUE),\n\tSHIPPER_NAME string(30) OPTIONS (NAMEINSOURCE \u0027\"SHIPPER_NAME\"\u0027, SEARCHABLE \u0027Searchable\u0027, NATIVE_TYPE \u0027varchar\u0027)\n) OPTIONS (UPDATABLE TRUE, NAMEINSOURCE \u0027\"partssupplier\".\"dbo\".\"SHIP_VIA\"\u0027);\n\nCREATE FOREIGN TABLE STATUS (\n\tSTATUS_ID bigdecimal(2) NOT NULL OPTIONS (NAMEINSOURCE \u0027\"STATUS_ID\"\u0027, SEARCHABLE \u0027All_Except_Like\u0027, NATIVE_TYPE \u0027numeric\u0027, FIXED_LENGTH TRUE),\n\tSTATUS_NAME string(30) OPTIONS (NAMEINSOURCE \u0027\"STATUS_NAME\"\u0027, SEARCHABLE \u0027Searchable\u0027, NATIVE_TYPE \u0027varchar\u0027)\n) OPTIONS (UPDATABLE TRUE, NAMEINSOURCE \u0027\"partssupplier\".\"dbo\".\"STATUS\"\u0027);\n\nCREATE FOREIGN TABLE SUPPLIER (\n\tSUPPLIER_ID string(10) NOT NULL OPTIONS (NAMEINSOURCE \u0027\"SUPPLIER_ID\"\u0027, SEARCHABLE \u0027Searchable\u0027, NATIVE_TYPE \u0027varchar\u0027),\n\tSUPPLIER_NAME string(30) OPTIONS (NAMEINSOURCE \u0027\"SUPPLIER_NAME\"\u0027, SEARCHABLE \u0027Searchable\u0027, NATIVE_TYPE \u0027varchar\u0027),\n\tSUPPLIER_STATUS bigdecimal(2) OPTIONS (NAMEINSOURCE \u0027\"SUPPLIER_STATUS\"\u0027, SEARCHABLE \u0027All_Except_Like\u0027, NATIVE_TYPE \u0027numeric\u0027, FIXED_LENGTH TRUE),\n\tSUPPLIER_CITY string(30) OPTIONS (NAMEINSOURCE \u0027\"SUPPLIER_CITY\"\u0027, SEARCHABLE \u0027Searchable\u0027, NATIVE_TYPE \u0027varchar\u0027),\n\tSUPPLIER_STATE string(2) OPTIONS (NAMEINSOURCE \u0027\"SUPPLIER_STATE\"\u0027, SEARCHABLE \u0027Searchable\u0027, NATIVE_TYPE \u0027varchar\u0027)\n) OPTIONS (UPDATABLE TRUE, NAMEINSOURCE \u0027\"partssupplier\".\"dbo\".\"SUPPLIER\"\u0027);\n\nCREATE FOREIGN TABLE SUPPLIER_PARTS (\n\tSUPPLIER_ID string(10) NOT NULL OPTIONS (NAMEINSOURCE \u0027\"SUPPLIER_ID\"\u0027, SEARCHABLE \u0027Searchable\u0027, NATIVE_TYPE \u0027varchar\u0027),\n\tPART_ID string(50) NOT NULL OPTIONS (NAMEINSOURCE \u0027\"PART_ID\"\u0027, SEARCHABLE \u0027Searchable\u0027, NATIVE_TYPE \u0027varchar\u0027),\n\tQUANTITY bigdecimal(3) OPTIONS (NAMEINSOURCE \u0027\"QUANTITY\"\u0027, SEARCHABLE \u0027All_Except_Like\u0027, NATIVE_TYPE \u0027numeric\u0027, FIXED_LENGTH TRUE),\n\tSHIPPER_ID bigdecimal(2) OPTIONS (NAMEINSOURCE \u0027\"SHIPPER_ID\"\u0027, SEARCHABLE \u0027All_Except_Like\u0027, NATIVE_TYPE \u0027numeric\u0027, FIXED_LENGTH TRUE)\n) OPTIONS (UPDATABLE TRUE, NAMEINSOURCE \u0027\"partssupplier\".\"dbo\".\"SUPPLIER_PARTS\"\u0027);\n",
+            "keng___links": [
                 {
-                    "rel" : "self",
-                    "href" : "/vdbs/MyPartsVDB_Dynamic/Models/PartsSS"
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/parts_dynamic-vdb.xml/Models/PartsSS"
                 },
                 {
-                    "rel" : "parent",
-                    "href" : "/vdbs/MyPartsVDB_Dynamic"
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/parts_dynamic-vdb.xml"
+                },
+                {
+                    "rel": "sources",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/parts_dynamic-vdb.xml/Models/PartsSS/VdbModelSources"
                 }
             ]
         }
     ],
-    "sources" : [
+    "sources": [
         {
-            "keng__id" : "PartsSS",
-            "keng__dataPath" : "/tko__komodo/tko__workspace/MyPartsVDB_Dynamic/PartsSS/vdb__sources/PartsSS",
-            "keng__kType" : "VdbModelSource",
-            "vdb__sourceJndiName" : "PartsSS",
-            "vdb__sourceTranslator" : "sqlserver",
-            "keng__hasChildren": "false",
-            "keng___links" : [
+            "keng__id": "PartsSS",
+            "keng__dataPath": "/tko__komodo/tko__workspace/parts_dynamic-vdb.xml/PartsSS/vdb__sources/PartsSS",
+            "keng__kType": "VdbModelSource",
+            "keng__hasChildren": false,
+            "vdb__sourceJndiName": "PartsSS",
+            "vdb__sourceTranslator": "sqlserver",
+            "keng___links": [
                 {
-                    "rel" : "self",
-                    "href" : "/vdbs/MyPartsVDB_Dynamic/Models/PartsSS/VdbModelSources/PartsSS"
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/parts_dynamic-vdb.xml/Models/PartsSS/VdbModelSources/PartsSS"
                 },
                 {
-                    "rel" : "parent",
-                    "href" : "/vdbs/MyPartsVDB_Dynamic/Models/PartsSS"
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/parts_dynamic-vdb.xml/Models/PartsSS"
                 }
             ]
         }
