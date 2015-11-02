@@ -4,41 +4,53 @@ var vdbBench = (function(vdbBench) {
             .controller(
                     'RepoController',
                     [
+                            'REST_URI',
                             '$scope',
                             'RepoSelectionService',
-                            function($scope, RepoSelectionService) {
+                            function(REST_URI, $scope, RepoSelectionService) {
 
                                 var repoEditBaseConfig = {
-                                        "id" : 'repoEditForm',
-                                        "style" : HawtioForms.FormStyle.HORIZONTAL,
-                                        "mode" : HawtioForms.FormMode.EDIT,
-                                        "disableHumanizeLabel" : false,
-                                        "hideLegend" : false,
-                                        "controls" : [ "*" ],
-                                        "properties" : {
-                                            "hostname" : {
-                                                type : 'text',
+                                        'id' : 'repoEditForm',
+                                        'style' : HawtioForms.FormStyle.HORIZONTAL,
+                                        'mode' : HawtioForms.FormMode.EDIT,
+                                        'disableHumanizeLabel' : false,
+                                        'hideLegend' : false,
+                                        'controls' : [ '*' ],
+                                        'properties' : {
+                                            'name' : {
+                                                'type' : 'text',
+                                                'label' : 'Display Name',
                                                 'input-attributes' : {
                                                     'required' : 'true',
                                                 }
                                             },
-                                            "port" : {
-                                                "type": "Integer",
-                                                "input-attributes": {
+                                            'host' : {
+                                                type : 'text',
+                                                label : 'Host Name',
+                                                'input-attributes' : {
+                                                    'required' : 'true',
+                                                }
+                                            },
+                                            'port' : {
+                                                'type': 'Integer',
+                                                'label' : 'Port',
+                                                'input-attributes': {
                                                     'required' : 'true',
                                                     'min' : 1000,
                                                     'max' : 65535
                                                 }
                                             },
-                                            "baseUrl" : {
-                                                type : 'text',
+                                            'baseUrl' : {
+                                                'type' : 'text',
                                                 'input-attributes' : {
                                                     'required' : 'true',
+                                                    'readOnly' : 'true',
+                                                    'placeholder': REST_URI.BASE_URL
                                                 }
                                             }
                                         },
-                                        "description" : "Repository Properties",
-                                        "type" : "java.lang.String"
+                                        'description' : 'Repository Properties',
+                                        'type' : 'java.lang.String'
                                     };
 
                                 // Use dot object to avoid javascript scope issue
@@ -70,17 +82,18 @@ var vdbBench = (function(vdbBench) {
                                 }
 
                                 // Is localhost repository selected
-                                $scope.isLocalhostSelected = function() {
+                                $scope.isDefaultSelected = function() {
                                     return RepoSelectionService
-                                            .isLocalhostSelected();
+                                            .isDefaultSelected();
                                 }
 
                                 function getRepoEditConfig() {
                                     var repoEditConfig = _.clone(repoEditBaseConfig, true);
-                                    var hostNameExt = {
-                                            "properties" : {
-                                                "hostname" : {
-                                                    type : 'text',
+                                    var nameExt = {
+                                            'properties' : {
+                                                'name' : {
+                                                    'type' : 'text',
+                                                    'label' : 'Display Name',
                                                     'input-attributes' : {
                                                         'required' : 'true',
                                                         'readOnly' : 'true'
@@ -89,8 +102,8 @@ var vdbBench = (function(vdbBench) {
                                             }
                                         };
 
-                                    if (RepoSelectionService.isLocalhostSelected()) {
-                                        repoEditConfig = _.merge(repoEditConfig, hostNameExt);
+                                    if (RepoSelectionService.isDefaultSelected()) {
+                                        repoEditConfig = _.merge(repoEditConfig, nameExt);
                                     }
 
                                     return repoEditConfig;

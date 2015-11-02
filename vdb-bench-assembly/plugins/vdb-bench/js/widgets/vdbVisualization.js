@@ -123,6 +123,8 @@ var vdbBench = (function (vdbBench) {
 
                         var treeData = initNode(newVdb);
 
+                        console.log("tree data " + treeData);
+
                         /*
                          * Diagonal generator
                          * Projection determines the location of the source and target points
@@ -205,9 +207,11 @@ var vdbBench = (function (vdbBench) {
                                         else
                                             childLinks.push(link[VDB_KEYS.LINKS.HREF]);
                                     }
-                                } else if (typeof (value) == 'string' || typeof (value) == 'number' ||
+                                } else if (typeof (value) == 'string' || typeof (value) == 'number' || typeof (value) == 'boolean' ||
                                     Object.prototype.toString.call(value) === '[object Array]') {
                                     newDataObj[key] = value;
+                                } else {
+                                    console.log(key + typeof(value));
                                 }
                             }
 
@@ -535,7 +539,7 @@ var vdbBench = (function (vdbBench) {
                                 if (_.isEmpty(node.childLinks))
                                     return;
 
-                                if (node[VDB_KEYS.HAS_CHILDREN] == "false")
+                                if (node[VDB_KEYS.HAS_CHILDREN] == false)
                                     return;
 
                                 for (var i = 0; i < node.childLinks.length; ++i) {
@@ -573,6 +577,20 @@ var vdbBench = (function (vdbBench) {
                                             },
                                             function (response) {
                                                 // Nothing to do
+                                                var msg = "";
+                                                if (response.config)
+                                                    msg = "url : " + response.config.url + SYNTAX.NEWLINE;
+
+                                                msg = msg + "status : " + response.status + SYNTAX.NEWLINE;
+                                                msg = msg + "data : " + response.data + SYNTAX.NEWLINE;
+                                                msg = msg + "status message : " + response.statusText + SYNTAX.NEWLINE;
+
+                                                console.error("An error occurred whilst trying to fetch children: " + msg);
+                                                update(node);
+
+                                                // Stop selection firing
+                                                if (d3.event)
+                                                    d3.event.stopPropagation();
                                             });
                                     } catch (error) {
                                         throw new vdbBench.RestServiceException("Failed to retrieve the content of the node from the host services.\n" + error.message);
@@ -612,7 +630,15 @@ var vdbBench = (function (vdbBench) {
                             if (_.isEmpty(node.childLinks))
                                 return HAS_NO_CHILDREN;
 
-                            return node[VDB_KEYS.HAS_CHILDREN] == "true" ? HAS_CHILDREN :  HAS_NO_CHILDREN;
+//                            return node[VDB_KEYS.HAS_CHILDREN] == true ? HAS_CHILDREN :  HAS_NO_CHILDREN;
+                            
+                            if (node[VDB_KEYS.HAS_CHILDREN] == true) {
+                                console.log(node.selfLink + " CHILDREN");    
+                                return HAS_CHILDREN;
+                            }
+
+                            console.log(node.selfLink + " NO CHILDREN");
+                            return HAS_NO_CHILDREN;
                         }
 
                         /*

@@ -109,90 +109,6 @@
                 "ROLE1",
                 "ROLE2"
             ],
-            "vdb__permissions": [
-                {
-                    "keng__id": "myTable.T1",
-                    "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne/vdb__permissions/myTable.T1",
-                    "keng__kType": "VdbPermission",
-                    "keng__hasChildren": false,
-                    "vdb__permission": "myTable.T1",
-                    "vdb__allowAlter": false,
-                    "vdb__allowCreate": false,
-                    "vdb__allowDelete": false,
-                    "vdb__allowExecute": false,
-                    "vdb__allowLanguage": false,
-                    "vdb__allowRead": true,
-                    "vdb__allowUpdate": false,
-                    "vdb__conditions": [],
-                    "vdb__masks": []
-                },
-                {
-                    "keng__id": "myTable.T2",
-                    "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne/vdb__permissions/myTable.T2",
-                    "keng__kType": "VdbPermission",
-                    "keng__hasChildren": true,
-                    "vdb__permission": "myTable.T2",
-                    "vdb__allowAlter": true,
-                    "vdb__allowCreate": true,
-                    "vdb__allowDelete": true,
-                    "vdb__allowExecute": true,
-                    "vdb__allowLanguage": false,
-                    "vdb__allowRead": false,
-                    "vdb__allowUpdate": true,
-                    "vdb__conditions": [
-                        {
-                            "keng__id": "col1 \u003d user()",
-                            "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne/vdb__permissions/myTable.T2/vdb__conditions/col1 \u003d user()",
-                            "keng__kType": "VdbCondition",
-                            "keng__hasChildren": false,
-                            "vdb__condition": "col1 \u003d user()",
-                            "vdb__constraint": false
-                        }
-                    ],
-                    "vdb__masks": []
-                },
-                {
-                    "keng__id": "myTable.T2.col1",
-                    "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne/vdb__permissions/myTable.T2.col1",
-                    "keng__kType": "VdbPermission",
-                    "keng__hasChildren": true,
-                    "vdb__permission": "myTable.T2.col1",
-                    "vdb__allowAlter": false,
-                    "vdb__allowCreate": false,
-                    "vdb__allowDelete": false,
-                    "vdb__allowExecute": false,
-                    "vdb__allowLanguage": false,
-                    "vdb__allowRead": false,
-                    "vdb__allowUpdate": false,
-                    "vdb__conditions": [],
-                    "vdb__masks": [
-                        {
-                            "keng__id": "col2",
-                            "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne/vdb__permissions/myTable.T2.col1/vdb__masks/col2",
-                            "keng__kType": "VdbMask",
-                            "keng__hasChildren": false,
-                            "vdb__mask": "col2",
-                            "vdb__order": "1"
-                        }
-                    ]
-                },
-                {
-                    "keng__id": "javascript",
-                    "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne/vdb__permissions/javascript",
-                    "keng__kType": "VdbPermission",
-                    "keng__hasChildren": false,
-                    "vdb__permission": "javascript",
-                    "vdb__allowAlter": false,
-                    "vdb__allowCreate": false,
-                    "vdb__allowDelete": false,
-                    "vdb__allowExecute": false,
-                    "vdb__allowLanguage": true,
-                    "vdb__allowRead": false,
-                    "vdb__allowUpdate": false,
-                    "vdb__conditions": [],
-                    "vdb__masks": []
-                }
-            ],
             "keng___links": [
                 {
                     "rel": "self",
@@ -201,6 +117,180 @@
                 {
                     "rel": "parent",
                     "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml"
+                },
+                {
+                    "rel": "permissions",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne/VdbPermissions"
+                }
+            ]
+        }
+    ],
+    "permissions": [
+        {
+            "keng__id": "myTable.T1",
+            "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne/vdb__permissions/myTable.T1",
+            "keng__kType": "VdbPermission",
+            "keng__hasChildren": false,
+            "vdb__permission": "myTable.T1",
+            "vdb__allowAlter": false,
+            "vdb__allowCreate": false,
+            "vdb__allowDelete": false,
+            "vdb__allowExecute": false,
+            "vdb__allowLanguage": false,
+            "vdb__allowRead": true,
+            "vdb__allowUpdate": false,
+            "keng___links": [
+                {
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne/VdbPermissions/myTable.T1"
+                },
+                {
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne"
+                },
+                {
+                    "rel": "conditions",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne/VdbPermissions/myTable.T1/VdbConditions"
+                },
+                {
+                    "rel": "masks",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne/VdbPermissions/myTable.T1/VdbMasks"
+                }
+            ]
+        },
+        {
+            "keng__id": "myTable.T2",
+            "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne/vdb__permissions/myTable.T2",
+            "keng__kType": "VdbPermission",
+            "keng__hasChildren": true,
+            "vdb__permission": "myTable.T2",
+            "vdb__allowAlter": true,
+            "vdb__allowCreate": true,
+            "vdb__allowDelete": true,
+            "vdb__allowExecute": true,
+            "vdb__allowLanguage": false,
+            "vdb__allowRead": false,
+            "vdb__allowUpdate": true,
+            "keng___links": [
+                {
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne/VdbPermissions/myTable.T2"
+                },
+                {
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne"
+                },
+                {
+                    "rel": "conditions",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne/VdbPermissions/myTable.T2/VdbConditions"
+                },
+                {
+                    "rel": "masks",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne/VdbPermissions/myTable.T2/VdbMasks"
+                }
+            ]
+        },
+        {
+            "keng__id": "myTable.T2.col1",
+            "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne/vdb__permissions/myTable.T2.col1",
+            "keng__kType": "VdbPermission",
+            "keng__hasChildren": true,
+            "vdb__permission": "myTable.T2.col1",
+            "vdb__allowAlter": false,
+            "vdb__allowCreate": false,
+            "vdb__allowDelete": false,
+            "vdb__allowExecute": false,
+            "vdb__allowLanguage": false,
+            "vdb__allowRead": false,
+            "vdb__allowUpdate": false,
+            "keng___links": [
+                {
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne/VdbPermissions/myTable.T2.col1"
+                },
+                {
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne"
+                },
+                {
+                    "rel": "conditions",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne/VdbPermissions/myTable.T2.col1/VdbConditions"
+                },
+                {
+                    "rel": "masks",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne/VdbPermissions/myTable.T2.col1/VdbMasks"
+                }
+            ]
+        },
+        {
+            "keng__id": "javascript",
+            "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne/vdb__permissions/javascript",
+            "keng__kType": "VdbPermission",
+            "keng__hasChildren": false,
+            "vdb__permission": "javascript",
+            "vdb__allowAlter": false,
+            "vdb__allowCreate": false,
+            "vdb__allowDelete": false,
+            "vdb__allowExecute": false,
+            "vdb__allowLanguage": true,
+            "vdb__allowRead": false,
+            "vdb__allowUpdate": false,
+            "keng___links": [
+                {
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne/VdbPermissions/javascript"
+                },
+                {
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne"
+                },
+                {
+                    "rel": "conditions",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne/VdbPermissions/javascript/VdbConditions"
+                },
+                {
+                    "rel": "masks",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne/VdbPermissions/javascript/VdbMasks"
+                }
+            ]
+        }
+    ],
+    "conditions": [
+        {
+            "keng__id": "col1 = user()",
+            "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne/vdb__permissions/myTable.T2/vdb__conditions/col1 = user()",
+            "keng__kType": "VdbCondition",
+            "keng__hasChildren": false,
+            "vdb__condition": "col1 = user()",
+            "vdb__constraint": false,
+            "keng___links": [
+                {
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne/VdbPermissions/myTable.T2/VdbConditions/col1%20=%20user()"
+                },
+                {
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne/VdbPermissions/myTable.T2"
+                }
+            ]
+        }
+    ],
+    "masks": [
+        {
+            "keng__id": "col2",
+            "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml/vdb__dataRoles/roleOne/vdb__permissions/myTable.T2.col1/vdb__masks/col2",
+            "keng__kType": "VdbMask",
+            "keng__hasChildren": false,
+            "vdb__mask": "col2",
+            "vdb__order": "1",
+            "keng___links": [
+                {
+                    "rel": "self",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne/VdbPermissions/myTable.T2.col1/VdbMasks/col2"
+                },
+                {
+                    "rel": "parent",
+                    "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles/roleOne/VdbPermissions/myTable.T2.col1"
                 }
             ]
         }

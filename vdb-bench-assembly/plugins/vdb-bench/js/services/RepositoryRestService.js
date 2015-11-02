@@ -7,34 +7,40 @@ var vdbBench = (function(vdbBench) {
 
     vdbBench._module.factory('RepoRestService', [
             'SYNTAX',
+            'REST_URI',
             'VDB_SCHEMA',
             'VDB_KEYS',
             'RepoSelectionService',
             'Restangular',
             '$http',
             '$q',
-            function(SYNTAX, VDB_SCHEMA, VDB_KEYS, RepoSelectionService, Restangular, $http, $q) {
+            function(SYNTAX, REST_URI, VDB_SCHEMA, VDB_KEYS, RepoSelectionService, Restangular, $http, $q) {
 
                 /*
                  * Service instance to be returned
                  */
                 var service = {};
 
-                // Restangular services keyed by hostname:port/baseUrl
+                // Restangular services keyed by host:port/baseUrl
                 service.cachedServices = {};
 
                 function url(repo) {
-                    return "http://" + repo.hostname + ":" + repo.port + repo.baseUrl;
+                    return "http://" + repo.host + ":" + repo.port + repo.baseUrl;
                 }
 
-                function HostNotReachableException(host) {
+                function HostNotReachableException(host, reason) {
                     this.host = host;
-                    this.message = "The host '" + host + "' is not reachable";
+                    this.message = "The host '" + host + "' is not reachable: " + reason;
                     this.toString = function() {
                        return this.message;
                     };
                  }
 
+                /**
+                 * Get the rest service based on the selected repo's baseUrl value.
+                 * Used in most cases when the URI has segments to be appended
+                 * to this baseUrl.
+                 */
                 function getRestService() {
                     // Selected repo - should not be null
                     var repo = RepoSelectionService.getSelected();
@@ -48,7 +54,7 @@ var vdbBench = (function(vdbBench) {
                         return $q.when(restService);
                     }
 
-                    var testUrl = baseUrl + SYNTAX.FORWARD_SLASH + VDB_KEYS.VDBS;
+                    var testUrl = baseUrl + REST_URI.WORKSPACE + REST_URI.VDBS;
                     return $http.get(testUrl).
                         then(function (response) {
                             restService = Restangular.withConfig(function (RestangularConfigurer) {
@@ -65,7 +71,7 @@ var vdbBench = (function(vdbBench) {
                         }, function (response) {
                             // called asynchronously if an error occurs
                             // or server returns response with an error status.
-                            throw new HostNotReachableException(baseUrl);
+                            throw new HostNotReachableException(baseUrl, 'Status code: ' + response.status);
                         });
                 }
 
@@ -109,7 +115,7 @@ var vdbBench = (function(vdbBench) {
                  */
                 service.getVdbs = function() {
                     return getRestService().then(function(restService) {
-                        return restService.all(VDB_KEYS.VDBS).getList();
+                        return restService.all(REST_URI.WORKSPACE + REST_URI.VDBS).getList();
                     });
                 };
 
@@ -129,13 +135,29 @@ var vdbBench = (function(vdbBench) {
                     if (! link)
                         return null;
 
-                    return getRestService().then(function(restService) {
-                        /*
-                        * Uses the link from the parent object to fetch the content.
-                        * By passing the Accept header, we ensure that only the json version can be returned.
-                        */
-                        return restService.all(link).customGETLIST("", {}, { 'Accept' : 'application/json' });
-                    });
+                    if (_.startsWith(link, 'http')) {
+                        //
+                        // Link is absolute so need to realize a new service
+                        // and use 'allUrl' to fetch the results
+                        //  
+                        var restService = Restangular.withConfig(function (RestangularConfigurer) {
+                                RestangularConfigurer.setRestangularFields(
+                                    {
+                                        selfLink: VDB_KEYS.LINKS + '[0].href'
+                                    });
+                            });
+                        return restService.allUrl(link, link).customGETLIST("", {}, { 'Accept' : 'application/json' });
+
+                    } else {
+
+                        return getRestService().then(function(restService) {
+                            /*
+                             * Uses the link from the parent object to fetch the content.
+                             * By passing the Accept header, we ensure that only the json version can be returned.
+                             */
+                            return restService.all(link).customGETLIST("", {}, { 'Accept' : 'application/json' });
+                        });
+                    }
                 }
 
                 /**
@@ -153,7 +175,7 @@ var vdbBench = (function(vdbBench) {
                     if (!vdbId)
                         return null;
 
-                    var link = VDB_KEYS.VDBS + SYNTAX.FORWARD_SLASH + vdbId;
+                    var link = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbId;
                     return getRestService().then(function(restService) {
                         /*
                         * Uses the content link from the vdb and fetch the xml version of the content.
@@ -172,7 +194,7 @@ var vdbBench = (function(vdbBench) {
                         if (id == null)
                             return null;
 
-                        return restService.one(VDB_SCHEMA.SCHEMA, id).get();
+                        return restService.one(REST_URI.SERVICE + REST_URI.SCHEMA, id).get();
                     });
                 }
 
@@ -185,7 +207,7 @@ var vdbBench = (function(vdbBench) {
                         if (kType == null)
                             return null;
 
-                        return restService.one(VDB_SCHEMA.SCHEMA).customGET('', { ktype : kType });
+                        return restService.one(REST_URI.SERVICE + REST_URI.SCHEMA).customGET('', { ktype : kType });
                     });
                 }
 

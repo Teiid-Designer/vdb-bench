@@ -1,18 +1,19 @@
 /**
  * Repository Selection Service
  *
- * Provides the collection of repositories {hostname, port} fetched
+ * Provides the collection of repositories {name, host, port, baseUrl} fetched
  * from local storage and the active (selected) repository.
  */
 var vdbBench = (function(vdbBench) {
 
-    var BASE_URL = '/api/v1';
+    var BASE_URL = '/v1';
 
     vdbBench._module.factory('RepoSelectionService',
              function($rootScope, StorageService) {
 
                 var defaultRepository = {
-                    hostname : 'localhost',
+                    name : 'default',
+                    host : 'localhost',
                     port : 3000,
                     baseUrl : BASE_URL
                 };
@@ -53,13 +54,13 @@ var vdbBench = (function(vdbBench) {
                     var selectedName = StorageService.get('selectedRepositoryName');
 
                     if (selectedName == null) {
-                        selectedName = defaultRepository.hostname;
+                        selectedName = defaultRepository.name;
                         StorageService.set('selectedRepositoryName', selectedName);
                     }
 
                     var currRepos = repositories();
                     for (i = 0; i < currRepos.length; ++i) {
-                        if (currRepos[i].hostname == selectedName)
+                        if (currRepos[i].name == selectedName)
                             return currRepos[i];
                     }
 
@@ -86,7 +87,7 @@ var vdbBench = (function(vdbBench) {
                  */
                 service.setSelected = function(selectedRepo) {
                     // Save the selected repository name
-                    StorageService.set('selectedRepositoryName', selectedRepo.hostname);
+                    StorageService.set('selectedRepositoryName', selectedRepo.name);
 
                     // Set selected to the selected repository
                     selected = selectedRepo;
@@ -113,11 +114,11 @@ var vdbBench = (function(vdbBench) {
                 /*
                  * Service : is the localhost repository selected
                  */
-                service.isLocalhostSelected = function() {
+                service.isDefaultSelected = function() {
                     if (_.isEmpty(selected))
                         return false;
 
-                    return selected.hostname == "localhost";
+                    return selected.name == "default";
                 }
 
                 /*
@@ -127,12 +128,12 @@ var vdbBench = (function(vdbBench) {
                     StorageService.setObject('repositories', repos);
 
                     //
-                    // Need to save as well since the hostname of the selected repository
+                    // Need to save as well since the name of the selected repository
                     // may have been edited. Ensures that next time of loading the 'new'
-                    // hostname is used to select the correct repository
+                    // name is used to select the correct repository
                     //
-                    var hostname = _.isEmpty(selected) ? '' : selected.hostname;
-                    StorageService.set('selectedRepositoryName', hostname);
+                    var name = _.isEmpty(selected) ? '' : selected.name;
+                    StorageService.set('selectedRepositoryName', name);
                 };
 
                 /*
@@ -149,7 +150,7 @@ var vdbBench = (function(vdbBench) {
                         var exists = false;
 
                         for (i = 0; i < currRepos.length; ++i) {
-                            if (currRepos[i].hostname == testName) {
+                            if (currRepos[i].name == testName) {
                                 exists = true;
                                 break;
                             }
@@ -157,7 +158,8 @@ var vdbBench = (function(vdbBench) {
 
                         if (! exists)
                             newRepo = {
-                                hostname : testName,
+                                name : testName,
+                                host : 'localhost',
                                 port : 8080,
                                 baseUrl : BASE_URL
                             };
@@ -182,7 +184,7 @@ var vdbBench = (function(vdbBench) {
                     if (selected == null)
                         return;
 
-                    if (service.isLocalhostSelected())
+                    if (service.isDefaultSelected())
                         return;
 
                     repos.pop(selected);

@@ -15,71 +15,80 @@ var vdbBench = (function(vdbBench) {
 
     vdbBench._module = angular.module(vdbBench.pluginName, [ 'ngAnimate', 'ui.bootstrap', 'ui.codemirror', 'prettyXml', 'restangular' ]);
 
-    vdbBench._module.constant("SYNTAX", {
-                                                    FORWARD_SLASH : "/",
-                                                    OPEN_BRACKET : "(",
-                                                    CLOSE_BRACKET : ")",
-                                                    OPEN_SQUARE_BRACKET : "[",
-                                                    CLOSE_SQUARE_BRACKET : "]",
-                                                    COMMA : ",",
-                                                    COLON : ":",
-                                                    HYPHEN : "-",
-                                                    UNDERSCORE : "_",
-                                                    SPACE : " ",
-                                                    DOT : ".",
-                                                    STAR : "*"
+    vdbBench._module.constant('SYNTAX', {
+                                                    FORWARD_SLASH : '/',
+                                                    OPEN_BRACKET : '(',
+                                                    CLOSE_BRACKET : ')',
+                                                    OPEN_SQUARE_BRACKET : '[',
+                                                    CLOSE_SQUARE_BRACKET : ']',
+                                                    COMMA : ',',
+                                                    COLON : ':',
+                                                    HYPHEN : '-',
+                                                    UNDERSCORE : '_',
+                                                    SPACE : ' ',
+                                                    DOT : '.',
+                                                    STAR : '*',
+                                                    NEWLINE : '\n'
+                                                }
+                                            );
+    vdbBench._module.constant('REST_URI', {
+                                                    BASE_URL : '/v1',
+                                                    WORKSPACE : '/workspace',
+                                                    VDBS : '/vdbs',
+                                                    SERVICE : '/service',
+                                                    SCHEMA : '/schema'
                                                 }
                                             );
 
-    vdbBench._module.constant("VDB_KEYS", {
-                                                    "VDBS" : "vdbs",
-                                                    "ID" : "keng__id",
-                                                    "DESCRIPTION" : "keng__description",
-                                                    "TYPE" : "keng__kType",
-                                                    "LINKS" : {
-                                                        "ID" : "keng___links",
-                                                        "NAME" : "rel",
-                                                        "HREF" : "href",
-                                                        "SELF" : "self",
-                                                        "PARENT" : "parent",
-                                                        "IMPORTS" : "imports",
-                                                        "MODELS" : "models",
-                                                        "TRANSLATORS" : "translators",
-                                                        "DATA_ROLES" : "dataRoles",
-                                                        "SOURCES" : "sources"
+    vdbBench._module.constant('VDB_KEYS', {
+                                                    VDBS : 'vdbs',
+                                                    ID : 'keng__id',
+                                                    DESCRIPTION : 'keng__description',
+                                                    TYPE : 'keng__kType',
+                                                    LINKS : {
+                                                        ID : 'keng___links',
+                                                        NAME : 'rel',
+                                                        HREF : 'href',
+                                                        SELF : 'self',
+                                                        PARENT : 'parent',
+                                                        IMPORTS : 'imports',
+                                                        MODELS : 'models',
+                                                        TRANSLATORS : 'translators',
+                                                        DATA_ROLES : 'dataRoles',
+                                                        SOURCES : 'sources'
                                                     },
-                                                    "PROPERTIES" : "keng__properties",
-                                                    "DDL" : "keng__ddl",
-                                                    "HAS_CHILDREN" : "keng__hasChildren"
+                                                    PROPERTIES : 'keng__properties',
+                                                    DDL : 'keng__ddl',
+                                                    HAS_CHILDREN : 'keng__hasChildren'
                                                 }
                                              );
 
-    vdbBench._module.constant("VDB_SCHEMA", {
-                                                    "SCHEMA" : "schema",
-                                                    "ID" : "keng__id",
-                                                    "DESCRIPTION" : "keng__description",
-                                                    "K_TYPE" : "keng__kType",
-                                                    "VALUE_TYPE" : "keng__type",
-                                                    "REQUIRED" : "keng__required",
-                                                    "REPEATABLE" : "keng__repeatable",
-                                                    "LIMIT" : "keng__limit",
-                                                    "PROPERTIES" : "keng__properties",
-                                                    "CHILDREN" : "keng__children",
-                                                    "SCHEMA_PROPERTY" : "property",
-                                                    "SCHEMA_NAME" : "name",
-                                                    "SCHEMA_VALUE" : "value",
-                                                    "SUGGESTED_VALUES" : "keng__values",
-                                                    "DESCRIPTION_PROPERTY" : "vdb__description"
+    vdbBench._module.constant('VDB_SCHEMA', {
+                                                    SCHEMA : 'schema',
+                                                    ID : 'keng__id',
+                                                    DESCRIPTION : 'keng__description',
+                                                    K_TYPE : 'keng__kType',
+                                                    VALUE_TYPE : 'keng__type',
+                                                    REQUIRED : 'keng__required',
+                                                    REPEATABLE : 'keng__repeatable',
+                                                    LIMIT : 'keng__limit',
+                                                    PROPERTIES : 'keng__properties',
+                                                    CHILDREN : 'keng__children',
+                                                    SCHEMA_PROPERTY : 'property',
+                                                    SCHEMA_NAME : 'name',
+                                                    SCHEMA_VALUE : 'value',
+                                                    SUGGESTED_VALUES : 'keng__values',
+                                                    DESCRIPTION_PROPERTY : 'vdb__description'
                                                 }
                                              );
     
-    vdbBench._module.constant("HAWTIO_FORM", {
-                                                    PROPERTIES : "properties",
-                                                    INPUT_ATTR : "input-attributes",
-                                                    TYPE_AHEAD_DATA : "typeaheadData",
-                                                    TYPE_AHEAD : "typeahead",
-                                                    CONTROLS : "controls",
-                                                    TABS : "tabs"
+    vdbBench._module.constant('HAWTIO_FORM', {
+                                                    PROPERTIES : 'properties',
+                                                    INPUT_ATTR : 'input-attributes',
+                                                    TYPE_AHEAD_DATA : 'typeaheadData',
+                                                    TYPE_AHEAD : 'typeahead',
+                                                    CONTROLS : 'controls',
+                                                    TABS : 'tabs'
                                                 }
                                              );
 

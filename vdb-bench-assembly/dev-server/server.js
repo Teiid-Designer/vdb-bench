@@ -27,6 +27,11 @@ var ID = 'keng__id';
 var MODELS = 'models';
 var TRANSLATORS = 'translators';
 var SOURCES = 'sources';
+var IMPORTS = 'imports';
+var DATA_ROLES = 'dataRoles';
+var PERMISSIONS = 'permissions';
+var CONDITIONS = 'conditions';
+var MASKS = 'masks';
 var LINKS = 'keng___links';
 var SELF = 'self';
 var PARENT = 'parent';
@@ -95,6 +100,36 @@ function findObjectById(parentArr, id) {
     }
 
     return null;
+}
+
+/**
+ * Iterator the vdb object named 'childType' to find all the
+ * children of the given parent
+ */
+function findChildren(parent, vdb, childType, childId, vdbId) {
+    console.log("Finding children of type " + childType + " of parent " + parent[ID] + " with optional childId of " + childId);
+
+    var parentSelfLink = findLink(parent, SELF);
+    console.log("Self link of parent " + parentSelfLink);
+    var children = [];
+    
+    for (var i = 0; i < vdb[childType].length; ++i) {
+        var child = vdb[childType][i];
+        console.log("Checking child " + child[ID] + " in vdb " + vdbId);
+        
+        var childParentLink = findLink(child, PARENT);
+        console.log("Parent link of child " + childParentLink);
+        
+        if (parentSelfLink != childParentLink) {
+            continue;
+        }
+        
+        console.log("Comparing childId " + childId + " with " + child[ID]);
+        if (childId == null || child[ID] == childId)
+            children.push(child);
+    }
+
+    return children;
 }
 
 /**
@@ -414,46 +449,24 @@ function viewSources(req, res, next) {
     }
 
     var models = vdb[MODELS];
-    var returnId = 200;
-    var returnObj = models;
-
-    if (modelId) {
-        var model = findObjectById(models, modelId);
-        if (! model) {
-            returnId = 404;
-            returnObj = { error: "No model named " + modelId };
-        } else {
-
-            /*
-             * Need to iterate the vdb's sources to find those that match
-             * first the modelId and secondly the sourceId (if required)
-             */
-            var modelLink = findLink(model, SELF);
-            console.log("Self link of model " + modelLink);
-            var sources = [];
-
-            for (var i = 0; i < vdb[SOURCES].length; ++i) {
-                var source = vdb[SOURCES][i];
-                console.log("Checking source " + source[ID] + " in vdb " + vdbId);
-
-                var sourceParentLink = findLink(source, PARENT);
-                console.log("Parent link of source " + sourceParentLink);
-
-                if (sourceParentLink != modelLink) {
-                    continue;
-                }
-
-                console.log("Comparing sourceId " + sourceId + " with " + source[ID]);
-                if (sourceId == null || source[ID] == sourceId)
-                    sources.push(source);
-            }
-
-            returnId = sources.length > 0 ? 200 : 404;
-            returnObj = sources;
-        }
+    var model = findObjectById(models, modelId);
+    if (! model) {
+        res.send(404, { error: "No model named " + modelId });
+        return next();
     }
 
-    res.send(returnId, returnObj);
+    var sources = findChildren(model, vdb, SOURCES, sourceId, vdbId);
+    if (! sourceId) {
+        res.send(200, sources);
+        return next();    
+    }
+
+    if (sources.length == 0) {
+        res.send(404, { error: "No source named " + sourceId });
+        return next();
+    }
+
+    res.send(200, sources[0]);
     return next();
 }
 
@@ -461,10 +474,34 @@ function viewSources(req, res, next) {
  * View a vdb imports
  */
 function viewImports(req, res, next) {
-    console.log("View imports to be implemented");
+    var vdbId = req.params == null ? null : req.params.vdbId;
+    var importId = req.params == null ? null : req.params.importId;
 
+    console.log("Viewing import for vdb id " + vdbId);
+    console.log("Viewing import for import id " + importId);
+
+    var vdb = findVdb(vdbId);
+    if (vdb)
+        console.log("Found vdb id " + vdbId);
+    else {
+        console.log("Failed to find vdb with id " + vdbId);
+        res.send(404, { error: "No vdb named " + vdbId });
+        return next();
+    }
+
+    var imports = vdb[IMPORTS];
     var returnId = 200;
-    var returnObj = [];
+    var returnObj = imports ? imports : [];
+
+    if (importId) {
+        var vdbImport = findObjectById(imports, importId);
+        if (! vdbImport) {
+            returnId = 404;
+            returnObj = { error: "No import named " + importId };
+        } else {
+            returnObj = vdbImport;
+        }
+    }
 
     res.send(returnId, returnObj);
     return next();
@@ -474,12 +511,181 @@ function viewImports(req, res, next) {
  * View a vdb data role
  */
 function viewDataRoles(req, res, next) {
-    console.log("View data roles to be implemented");
+    var vdbId = req.params == null ? null : req.params.vdbId;
+    var dataRoleId = req.params == null ? null : req.params.dataRoleId;
 
-    var returnId = 200;
-    var returnObj = [];
+    console.log("Viewing dataRole for vdb id " + vdbId);
+    console.log("Viewing dataRole for dataRole id " + dataRoleId);
 
-    res.send(returnId, returnObj);
+    var vdb = findVdb(vdbId);
+    if (vdb)
+        console.log("Found vdb id " + vdbId);
+    else {
+        console.log("Failed to find vdb with id " + vdbId);
+        res.send(404, { error: "No vdb named " + vdbId });
+        return next();
+    }
+
+    var dataRoles = vdb[DATA_ROLES];
+    if (! dataRoleId) {
+        res.send(200, dataRoles);
+        return next();
+    }
+
+    var dataRole = findObjectById(dataRoles, dataRoleId);
+    if (! dataRole) {
+        res.send(404, { error: "No dataRole named " + dataRoleId });
+        return next();
+    }
+
+    res.send(200, dataRole);
+    return next();
+}
+
+/**
+ * View a vdb data role permissions
+ */
+function viewPermissions(req, res, next) {
+    var vdbId = req.params == null ? null : req.params.vdbId;
+    var dataRoleId = req.params == null ? null : req.params.dataRoleId;
+    var permissionId = req.params == null ? null : req.params.permissionId;
+
+    console.log("Viewing dataRole for vdb id " + vdbId);
+    console.log("Viewing dataRole for dataRole id " + dataRoleId);
+    console.log("Viewing permission for permission id " + permissionId);
+
+    var vdb = findVdb(vdbId);
+    if (vdb)
+        console.log("Found vdb id " + vdbId);
+    else {
+        console.log("Failed to find vdb with id " + vdbId);
+        res.send(404, { error: "No vdb named " + vdbId });
+        return next();
+    }
+
+    var dataRoles = vdb[DATA_ROLES];
+    var dataRole = findObjectById(dataRoles, dataRoleId);
+    if (! dataRole) {
+        res.send(404, { error: "No dataRole named " + dataRoleId });
+        return next();
+    }
+
+    var permissions = findChildren(dataRole, vdb, PERMISSIONS, permissionId, vdbId);
+    if (! permissionId) {
+        res.send(200, permissions);
+        return next();    
+    }
+
+    if (permissions.length == 0) {
+        res.send(404, { error: "No permission named " + permissionId });
+        return next();
+    }
+
+    res.send(200, permissions[0]);
+    return next();
+}
+
+/**
+ * View a vdb data role permission conditions
+ */
+function viewConditions(req, res, next) {
+    var vdbId = req.params == null ? null : req.params.vdbId;
+    var dataRoleId = req.params == null ? null : req.params.dataRoleId;
+    var permissionId = req.params == null ? null : req.params.permissionId;
+    var conditionId = req.params == null ? null : req.params.conditionId;
+
+    console.log("Viewing dataRole for vdb id " + vdbId);
+    console.log("Viewing dataRole for dataRole id " + dataRoleId);
+    console.log("Viewing permission for permission id " + permissionId);
+    console.log("Viewing condition for condition id " + conditionId);
+
+    var vdb = findVdb(vdbId);
+    if (vdb)
+        console.log("Found vdb id " + vdbId);
+    else {
+        console.log("Failed to find vdb with id " + vdbId);
+        res.send(404, { error: "No vdb named " + vdbId });
+        return next();
+    }
+
+    var dataRoles = vdb[DATA_ROLES];
+
+    var dataRole = findObjectById(dataRoles, dataRoleId);
+    if (! dataRole) {
+        res.send(404, { error: "No dataRole named " + dataRoleId });
+        return next();
+    }
+
+    var permissions = findChildren(dataRole, vdb, PERMISSIONS, permissionId, vdbId);
+    if (permissions.length == 0) {
+        res.send(404, { error: "No permission named " + permissionId });
+        return next();
+    }
+
+    var conditions = findChildren(permissions[0], vdb, CONDITIONS, conditionId, vdbId);
+    if (! conditionId) {
+        res.send(200, conditions);
+        return next();    
+    }
+
+    if (conditions.length == 0) {
+        res.send(404, { error: "No condition named " + conditionId });
+        return next();
+    }
+
+    res.send(200, conditions[0]);
+    return next();
+}
+
+/**
+ * View a vdb data role permission masks
+ */
+function viewMasks(req, res, next) {
+    var vdbId = req.params == null ? null : req.params.vdbId;
+    var dataRoleId = req.params == null ? null : req.params.dataRoleId;
+    var permissionId = req.params == null ? null : req.params.permissionId;
+    var maskId = req.params == null ? null : req.params.maskId;
+
+    console.log("Viewing dataRole for vdb id " + vdbId);
+    console.log("Viewing dataRole for dataRole id " + dataRoleId);
+    console.log("Viewing permission for permission id " + permissionId);
+    console.log("Viewing masks for masks id " + maskId);
+
+    var vdb = findVdb(vdbId);
+    if (vdb)
+        console.log("Found vdb id " + vdbId);
+    else {
+        console.log("Failed to find vdb with id " + vdbId);
+        res.send(404, { error: "No vdb named " + vdbId });
+        return next();
+    }
+
+    var dataRoles = vdb[DATA_ROLES];
+
+    var dataRole = findObjectById(dataRoles, dataRoleId);
+    if (! dataRole) {
+        res.send(404, { error: "No dataRole named " + dataRoleId });
+        return next();
+    }
+
+    var permissions = findChildren(dataRole, vdb, PERMISSIONS, permissionId, vdbId);
+    if (permissions.length == 0) {
+        res.send(404, { error: "No permission named " + permissionId });
+        return next();
+    }
+
+    var masks = findChildren(permissions[0], vdb, MASKS, maskId, vdbId);
+    if (! maskId) {
+        res.send(200, masks);
+        return next();
+    }
+
+    if (masks.length == 0) {
+        res.send(404, { error: "No masks named " + maskId });
+        return next();
+    }
+
+    res.send(200, masks[0]);
     return next();
 }
 
@@ -520,6 +726,12 @@ server.get({ path: baseUrl + '/vdbs/:vdbId/VdbImports' }, viewImports);
 server.get({ path: baseUrl + '/vdbs/:vdbId/VdbImports/:importId' }, viewImports);
 server.get({ path: baseUrl + '/vdbs/:vdbId/VdbDataRoles' }, viewDataRoles);
 server.get({ path: baseUrl + '/vdbs/:vdbId/VdbDataRoles/:dataRoleId' }, viewDataRoles);
+server.get({ path: baseUrl + '/vdbs/:vdbId/VdbDataRoles/:dataRoleId/VdbPermissions' }, viewPermissions);
+server.get({ path: baseUrl + '/vdbs/:vdbId/VdbDataRoles/:dataRoleId/VdbPermissions/:permissionId' }, viewPermissions);
+server.get({ path: baseUrl + '/vdbs/:vdbId/VdbDataRoles/:dataRoleId/VdbPermissions/:permissionId/VdbConditions' }, viewConditions);
+server.get({ path: baseUrl + '/vdbs/:vdbId/VdbDataRoles/:dataRoleId/VdbPermissions/:permissionId/VdbConditions/:conditionId' }, viewConditions);
+server.get({ path: baseUrl + '/vdbs/:vdbId/VdbDataRoles/:dataRoleId/VdbPermissions/:permissionId/VdbMasks' }, viewMasks);
+server.get({ path: baseUrl + '/vdbs/:vdbId/VdbDataRoles/:dataRoleId/VdbPermissions/:permissionId/VdbConditions/:maskId' }, viewMasks);
 
 server.del({path : baseUrl + '/vdbs/:vdbId' }, deleteVdb);
 //server.post({path : PATH , version: '0.0.1'} ,postNewJob);
