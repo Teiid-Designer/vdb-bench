@@ -38,6 +38,7 @@
   "resolutions": {
     "lodash": "~3.2.0",
     "codemirror": "~4.11.0",
-    "angular": "1.4.7"
+    "angular": "1.4.7",
+    "angular-bootstrap": "~0.13.0"
   }
 }

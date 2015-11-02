@@ -21,7 +21,7 @@
             <div id="panel-repo-content" class="col-sm-12">
                 <accordion close-others="false">
                     <!-- Vdbs -->
-                    <accordion-group heading="Vdbs" ng-init="isOpen = true" is-open="isOpen">
+                    <accordion-group heading="Vdbs" ng-init="vdbsIsOpen = true" is-open="vdbsIsOpen">
                         <accordion-heading>
                             Vdbs
                             <!-- Necessary to make it into a dropdown as they do not refresh the page when clicked -->
@@ -32,12 +32,24 @@
                         </accordion-heading>
                         <div id="list-vdb">
                             <div class="list-group">
-                                <a class="list-group-item" ng-repeat="vdb in vdbObject.vdbs" ng-click="$parent.select(vdb)" ng-class="{active:$parent.selected()==vdb}">
+                                <a class="list-group-item" ng-repeat="vdb in vdbOrbit.vdbs" ng-click="$parent.vdbOrbit.selectVdb(vdb)" ng-class="{active:$parent.vdbOrbit.vdbSelected()==vdb}">
                                     {{vdb.keng__id}}
                                 </a>
                             </div>
-                            <h3>Vdb selected: {{selected().keng__id || none}}</h3>
                         </div>
+                    </accordion-group>
+                    <accordion-group heading="Search">
+                        <form name="search" role="form">
+                            <div class="input-group input-group-search">
+                                <input class="col-sm-12" type="text" class="form-control" ng-model="searchOrbit.searchTerm" name="searchElement" required>
+                                <span class="vdb-search-span">
+                                    <button class="btn-clear vdb-search-btn-clear" ng-click="searchOrbit.clear()">Clear</button>
+                                    <button class="btn-search vdb-search-btn-search" ng-disabled="search.$invalid" ng-click="searchOrbit.submit()">
+                                        Search<span class="glyphicon glyphicon-search vdb-search-btn-icon" aria-hidden="true"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
                     </accordion-group>
                 </accordion>
 
@@ -48,11 +60,14 @@
 
         <!-- Panel for editing the selected vdb properties -->
         <div class=col-sm-10>
-            <div ng-show="selected()">
+
+            <!-- Tab set for displaying selected vdb contents -->
+            <!-- Only displayed is a vdb is selected in the vdbSelectionService -->
+            <div ng-show="vdbOrbit.vdbSelected()">
                 <tabset>
                     <tab heading="Vdb Content" ng-click="onTabSelected('Diagram')">
                         <div class="vdb-diagram col-sm-7">
-                            <vdb-visualization vdb="selected()" selected-vdb-component="vdbObject.selectedVdbComponent" height="2048" width="1024"></vdb-visualization>
+                            <vdb-visualization vdb="vdbOrbit.vdbSelected()" selected-vdb-component="vdbOrbit.selectedVdbComponent" height="2048" width="1024"></vdb-visualization>
                         </div>
 
                         <!-- Vertical tabbed page for displaying selected object properties -->
@@ -63,7 +78,7 @@
                                 </divider>
                                 <divider title="Edit">
                                     <div class="list-group">
-                                        <div class="list-group-item" ng-repeat="component in vdbObject.selectedVdbComponent">
+                                        <div class="list-group-item" ng-repeat="component in vdbOrbit.selectedVdbComponent">
                                             <attribute-widget selected="component"/>
                                         </div>
                                     </div>
@@ -73,9 +88,15 @@
 
                     </tab>
                     <tab heading="Vdb Preview" ng-click="onTabSelected('Preview')">
-                        <ui-codemirror ng-model="selected().previewContent" ui-refresh="vdbObject.previewRefresh" ui-codemirror-opts="xmlPreviewOptions"></ui-codemirror>
+                        <ui-codemirror ng-model="vdbOrbit.vdbSelected().previewContent" ui-refresh="vdbOrbit.previewRefresh" ui-codemirror-opts="xmlPreviewOptions"></ui-codemirror>
                     </tab>
                 </tabset>
+            </div>
+
+            <!-- Tab set for displaying the search results of the search made -->
+            <!-- Only displayed if search button has been clicked -->
+            <div ng-show="searchOrbit.isVisible() == true">
+                Search Results
             </div>
         </div>
     </div>

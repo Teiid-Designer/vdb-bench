@@ -1,8 +1,12 @@
 var vdbBench = (function (vdbBench) {
 
-    vdbBench.VdbController = vdbBench._module.controller(
-        'VdbController', ['$scope', 'RepoRestService', 'VdbSelectionService',
-            function ($scope, RepoRestService, VdbSelectionService) {
+    vdbBench.VdbController = vdbBench._module.controller('VdbController',
+                                                         ['$scope',
+                                                          'RepoRestService',
+                                                          'VdbSelectionService',
+                                                          'SearchService',
+                                                          'SYNTAX',
+            function ($scope, RepoRestService, VdbSelectionService, SearchService, SYNTAX) {
 
                 var DIAGRAM_TAB_ID = "Diagram";
                 var PREVIEW_TAB_ID = "Preview";
@@ -14,15 +18,15 @@ var vdbBench = (function (vdbBench) {
                     try {
                         RepoRestService.getVdbs().then(
                             function (newVdbs) {
-                                RepoRestService.copy(newVdbs, $scope.vdbObject.vdbs);
+                                RepoRestService.copy(newVdbs, $scope.vdbOrbit.vdbs);
                             },
                             function (response) {
                                 // Some kind of error has occurred
-                                $scope.vdbObject.vdbs = [];
+                                $scope.vdbOrbit.vdbs = [];
                                 throw new vdbBench.RestServiceException("Failed to load vdbs from the host services.\n" + response.message);
                             });
                     } catch (error) {
-                        $scope.vdbObject.vdbs = [];
+                        $scope.vdbOrbit.vdbs = [];
                         alert("An exception occurred:\n" + error.message);
                     }
 
@@ -30,19 +34,65 @@ var vdbBench = (function (vdbBench) {
                     VdbSelectionService.setSelected(null);
                 }
 
-                $scope.vdbObject = {};
-                $scope.vdbObject.vdbs = [];
-                $scope.vdbObject.previewRefresh = false;
-                $scope.vdbObject.visibleTabId = DIAGRAM_TAB_ID;
-                $scope.vdbObject.selectedVdbComponent = [];
+                $scope.vdbOrbit = {};
+                $scope.vdbOrbit.vdbs = [];
+                $scope.vdbOrbit.previewRefresh = false;
+                $scope.vdbOrbit.visibleTabId = DIAGRAM_TAB_ID;
+                $scope.vdbOrbit.selectedVdbComponent = [];
 
-                $scope.selected = function () {
+                $scope.vdbOrbit.selectVdb = function(vdb) {
+                    //
+                    // Ensure that the search results pane is hidden
+                    //
+                    $scope.searchOrbit.setVisible(false);
+
+                    //
+                    // Set the selected vdb
+                    //
+                    VdbSelectionService.setSelected(vdb);
+                };
+
+                $scope.vdbOrbit.vdbSelected = function() {
                     return VdbSelectionService.selected();
                 }
 
-                $scope.select = function (vdb) {
-                    VdbSelectionService.setSelected(vdb);
+                $scope.searchOrbit = {};
+                $scope.searchOrbit.searchTerm = '';
+                $scope.searchOrbit.visible = false;
+
+                $scope.searchOrbit.isVisible = function() {
+                    return $scope.searchOrbit.visible;
                 }
+
+                $scope.searchOrbit.setVisible = function(visible) {
+                    if ($scope.searchOrbit.visible == visible)
+                        return;
+
+                    $scope.searchOrbit.visible = visible;
+                }
+
+                $scope.searchOrbit.clear = function() {
+                    $scope.searchOrbit.searchTerm = '';
+                    SearchService.clearSearch();
+                }
+                
+                $scope.searchOrbit.submit = function() {
+                    if ($scope.searchOrbit.searchTerm == '')
+                        return;
+
+                    //
+                    // Ensure there is no vdb selected so that the
+                    // vdb visualisation pane is hidden
+                    //
+                    $scope.vdbOrbit.selectVdb(null);
+
+                    //
+                    // Display the search results pane
+                    //
+                    $scope.searchOrbit.setVisible(true);
+
+                    SearchService.submitSearch($scope.searchOrbit.searchTerm);
+                };
 
                 /**
                  * Options for the codemirror editor used for previewing vdb xml
@@ -56,7 +106,7 @@ var vdbBench = (function (vdbBench) {
 
                 $scope.destroy = function (vdb) {
                     vdb.remove().then(function () {
-                        $scope.vdbObject.vdbs = _.without($scope.vdbObject.vdbs, vdb);
+                        $scope.vdbOrbit.vdbs = _.without($scope.vdbOrbit.vdbs, vdb);
                     });
                 };
 
@@ -102,7 +152,7 @@ var vdbBench = (function (vdbBench) {
                     //
                     // However, need to update the tab if it is displayed
                     //
-                    if ($scope.vdbObject.visibleTabId == PREVIEW_TAB_ID)
+                    if ($scope.vdbOrbit.visibleTabId == PREVIEW_TAB_ID)
                         VdbSelectionService.selectedXml();
                 }
 
@@ -116,14 +166,14 @@ var vdbBench = (function (vdbBench) {
                  */
                 $scope.onTabSelected = function (tabId) {
                     // Stash the tab id for use with updating the preview tab
-                    $scope.vdbObject.visibleTabId = tabId;
+                    $scope.vdbOrbit.visibleTabId = tabId;
 
                     tabUpdate();
 
                     // This does not seem to work but leave it here for now
                     // and come back later
                     setTimeout(function () {
-                        $scope.vdbObject.previewRefresh = !$scope.vdbObject.previewRefresh;
+                        $scope.vdbOrbit.previewRefresh = !$scope.vdbOrbit.previewRefresh;
                     }, 2000);
                 };
 

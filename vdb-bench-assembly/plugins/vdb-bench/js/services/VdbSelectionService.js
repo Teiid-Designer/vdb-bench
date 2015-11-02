@@ -69,7 +69,9 @@ var vdbBench = (function(vdbBench) {
                  * Service : set selected vdb
                  */
                 service.setSelected = function(selected) {
-                    
+                    if (selected == selectedVdb)
+                        return; // already selected
+
                     // Set selected to the selected repository
                     selectedVdb = selected;
 
