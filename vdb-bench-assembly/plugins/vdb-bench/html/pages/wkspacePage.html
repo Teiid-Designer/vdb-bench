@@ -20,6 +20,19 @@
 
             <div id="panel-repo-content" class="col-sm-12">
                 <accordion close-others="false">
+                    <accordion-group heading="Search">
+                        <form name="search" role="form">
+                            <div class="input-group input-group-search">
+                                <input class="col-sm-12" type="text" class="form-control" ng-model="searchOrbit.searchTerm" name="searchElement" required>
+                                <span class="vdb-search-span">
+                                    <button class="btn-clear vdb-search-btn-clear" ng-click="searchOrbit.clear()">Clear</button>
+                                    <button class="btn-search vdb-search-btn-search" ng-disabled="search.$invalid" ng-click="searchOrbit.submit()">
+                                        Search<span class="glyphicon glyphicon-search vdb-search-btn-icon" aria-hidden="true"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                    </accordion-group>
                     <!-- Vdbs -->
                     <accordion-group heading="Vdbs" ng-init="vdbsIsOpen = true" is-open="vdbsIsOpen">
                         <accordion-heading>
@@ -37,19 +50,6 @@
                                 </a>
                             </div>
                         </div>
-                    </accordion-group>
-                    <accordion-group heading="Search">
-                        <form name="search" role="form">
-                            <div class="input-group input-group-search">
-                                <input class="col-sm-12" type="text" class="form-control" ng-model="searchOrbit.searchTerm" name="searchElement" required>
-                                <span class="vdb-search-span">
-                                    <button class="btn-clear vdb-search-btn-clear" ng-click="searchOrbit.clear()">Clear</button>
-                                    <button class="btn-search vdb-search-btn-search" ng-disabled="search.$invalid" ng-click="searchOrbit.submit()">
-                                        Search<span class="glyphicon glyphicon-search vdb-search-btn-icon" aria-hidden="true"></span>
-                                    </button>
-                                </span>
-                            </div>
-                        </form>
                     </accordion-group>
                 </accordion>
 

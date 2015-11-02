@@ -101,7 +101,7 @@ var vdbBench = (function (vdbBench) {
                     lineWrapping: true,
                     lineNumbers: true,
                     readOnly: 'nocursor',
-                    mode: 'xml',
+                    mode: 'xml'
                 };
 
                 $scope.destroy = function (vdb) {
