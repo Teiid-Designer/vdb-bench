@@ -57,7 +57,6 @@ var vdbBench = (function (vdbBench) {
                             var configProperties = widgetConfig[HAWTIO_FORM.PROPERTIES];
 
                             var componentType = $scope.component[VDB_KEYS.TYPE];
-                            console.log("Component Type: " + componentType);
                             if (componentType == "Model") {
                                 //
                                 // Model type requires a general tab and a ddl tab
@@ -96,6 +95,7 @@ var vdbBench = (function (vdbBench) {
 
                             var schemaProperties = schema[VDB_SCHEMA.PROPERTIES];
                             for (var key in schemaProperties) {
+
                                 //
                                 // Iterator through each of the schema's properties
                                 // and apply its metadata to the widget configuration

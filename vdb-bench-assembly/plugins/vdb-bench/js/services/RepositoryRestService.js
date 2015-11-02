@@ -187,19 +187,6 @@ var vdbBench = (function(vdbBench) {
 
                 /**
                  * Service: Fetch the schema content for the given
-                 * element type, eg. Vdb, Model, Source, Translator.
-                 */
-                service.getSchemaById = function(id) {
-                    return getRestService().then(function(restService) {
-                        if (id == null)
-                            return null;
-
-                        return restService.one(REST_URI.SERVICE + REST_URI.SCHEMA, id).get();
-                    });
-                }
-
-                /**
-                 * Service: Fetch the schema content for the given
                  * komodo type, eg. VDB, VDB_MODEL, VDB_MODEL_SOURCE
                  */
                 service.getSchemaByKType = function(kType) {

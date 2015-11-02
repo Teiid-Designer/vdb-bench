@@ -123,8 +123,6 @@ var vdbBench = (function (vdbBench) {
 
                         var treeData = initNode(newVdb);
 
-                        console.log("tree data " + treeData);
-
                         /*
                          * Diagonal generator
                          * Projection determines the location of the source and target points
@@ -210,8 +208,6 @@ var vdbBench = (function (vdbBench) {
                                 } else if (typeof (value) == 'string' || typeof (value) == 'number' || typeof (value) == 'boolean' ||
                                     Object.prototype.toString.call(value) === '[object Array]') {
                                     newDataObj[key] = value;
-                                } else {
-                                    console.log(key + typeof(value));
                                 }
                             }
 
@@ -633,7 +629,6 @@ var vdbBench = (function (vdbBench) {
 //                            return node[VDB_KEYS.HAS_CHILDREN] == true ? HAS_CHILDREN :  HAS_NO_CHILDREN;
                             
                             if (node[VDB_KEYS.HAS_CHILDREN] == true) {
-                                console.log(node.selfLink + " CHILDREN");    
                                 return HAS_CHILDREN;
                             }
 
