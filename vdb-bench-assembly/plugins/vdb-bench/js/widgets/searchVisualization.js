@@ -1,5 +1,5 @@
 var vdbBench = (function (vdbBench) {
-    vdbBench._module.directive('vdbVisualization', [
+    vdbBench._module.directive('searchVisualization', [
         'SYNTAX',
         'VDB_KEYS',
         'D3V',
@@ -15,11 +15,18 @@ var vdbBench = (function (vdbBench) {
             var TEXT_HEIGHT = 20;
             var IMAGE_X = -16;
             var IMAGE_Y = TEXT_ORIGIN_Y + TEXT_HEIGHT + 5;
+            var PARENT_ICON_Y = -5;
             var CHILDREN_ICON_Y = IMAGE_Y + 32 + 5;
             var WIDTH_PER_CHARACTER = 9;
 
+            var HAS_NO_PARENT = "#fff";
+            var HAS_PARENT = "#000";
+
             var HAS_NO_CHILDREN = "#fff";
             var HAS_CHILDREN = "#000";
+
+            var PARENT_BUTTON_ID = "parentButtonId";
+            var CHILD_BUTTON_ID = "childButtonId";
 
             var NODE_ID_PREFIX = D3V.GROUP_ELEMENT + SYNTAX.HYPHEN + D3V.NODE;
 
@@ -28,8 +35,7 @@ var vdbBench = (function (vdbBench) {
                 restrict: 'E',
                 // isolated scope
                 scope: {
-                    vdb: '=',
-                    selectedVdbComponent: '=',
+                    searchEntry: '=',
                     height: '=',
                     width: '='
                 },
@@ -67,9 +73,9 @@ var vdbBench = (function (vdbBench) {
                         .attr(D3V.SVG_TRANSFORM,
                             D3V.SVG_TRANSLATE + SYNTAX.OPEN_BRACKET + margin.left + SYNTAX.COMMA + margin.top + SYNTAX.CLOSE_BRACKET);
 
-                    scope.$watch('vdb', function (newVdb, oldVdb) {
-                        // if 'vdb' is undefined, exit
-                        if (!newVdb || newVdb == oldVdb) {
+                    scope.$watch('searchEntry', function (newSearchEntry, oldSearchEntry) {
+                        // if 'searchEntry' is undefined, exit
+                        if (!newSearchEntry || newSearchEntry == oldSearchEntry) {
                             return;
                         }
 
@@ -78,7 +84,7 @@ var vdbBench = (function (vdbBench) {
                          */
                         svgGroup.selectAll(SYNTAX.STAR).remove();
 
-                        var treeData = initNode(newVdb);
+                        var treeData = initNode(newSearchEntry);
 
                         /*
                          * Diagonal generator
@@ -112,7 +118,7 @@ var vdbBench = (function (vdbBench) {
                             .on("zoom", function () {
                                 svgGroup.attr(D3V.SVG_TRANSFORM,
                                     D3V.SVG_TRANSLATE + SYNTAX.OPEN_BRACKET +
-                                    d3.event.translate + SYNTAX.CLOSE_BRACKET +
+                                    d3.event.translate + SYNTAX.CLOSE_BRACKET + SYNTAX.SPACE +
                                     D3V.SVG_SCALE + SYNTAX.OPEN_BRACKET +
                                     d3.event.scale + SYNTAX.CLOSE_BRACKET);
                             });
@@ -126,7 +132,7 @@ var vdbBench = (function (vdbBench) {
                         root = treeData;
 
                         // Will call update
-                        expandCollapseCallback(root);
+                        expandCollapseChildCallback(root);
                         centerNode(root);
 
                         /**
@@ -252,6 +258,16 @@ var vdbBench = (function (vdbBench) {
                                 });
 
                             /*
+                             * Add parent indicator circles below the image 
+                             */
+                            enterNodesGroup.append(D3V.SVG_CIRCLE)
+                                .attr(D3V.ID, PARENT_BUTTON_ID)
+                                .attr(D3V.HTML_RADIUS, 1e-6)
+                                .attr(D3V.SVG_CIRCLE_Y, PARENT_ICON_Y)
+                                .style(D3V.CSS_FILL, parentStatusCallback)
+                                .on(D3V.HTML_CLICK, expandCollapseParentCallback);
+
+                            /*
                              * Append the id to each new node
                              *
                              * text-anchor="middle" will anchor the text using the centre
@@ -300,10 +316,11 @@ var vdbBench = (function (vdbBench) {
                              * Add children indicator circles below the image 
                              */
                             enterNodesGroup.append(D3V.SVG_CIRCLE)
+                                .attr(D3V.ID, CHILD_BUTTON_ID)
                                 .attr(D3V.HTML_RADIUS, 1e-6)
                                 .attr(D3V.SVG_CIRCLE_Y, CHILDREN_ICON_Y)
                                 .style(D3V.CSS_FILL, childStatusCallback)
-                                .on(D3V.HTML_CLICK, expandCollapseCallback);
+                                .on(D3V.HTML_CLICK, expandCollapseChildCallback);
 
                             /*
                              * Animate new nodes, ie. child nodes being displayed after expanding parent, 
@@ -320,8 +337,12 @@ var vdbBench = (function (vdbBench) {
                              * All circles currently being updated have their radius enlarged to their
                              * destination visible size.
                              */
-                            nodeUpdate.select(D3V.SVG_CIRCLE)
-                                .attr(D3V.HTML_RADIUS, 4.5)
+                            nodeUpdate.select(SYNTAX.HASH + PARENT_BUTTON_ID)
+                                .attr(D3V.HTML_RADIUS, 3.5)
+                                .style(D3V.CSS_FILL, parentStatusCallback);
+
+                            nodeUpdate.select(SYNTAX.HASH + CHILD_BUTTON_ID)
+                                .attr(D3V.HTML_RADIUS, 3.5)
                                 .style(D3V.CSS_FILL, childStatusCallback);
 
                             /*
@@ -338,7 +359,7 @@ var vdbBench = (function (vdbBench) {
                             /*
                              * Make the removed nodes circles too small to be visible
                              */
-                            nodeExit.select(D3V.SVG_CIRCLE)
+                            nodeExit.selectAll(D3V.SVG_CIRCLE)
                                 .attr(D3V.HTML_RADIUS, 1e-6);
 
                             /*
@@ -373,6 +394,9 @@ var vdbBench = (function (vdbBench) {
                         function updateNodeStopPropogation(node) {
                             update(node);
 
+                            if (node === root)
+                                centerNode(node);
+
                             // Stop selection firing
                             if (d3.event)
                                 d3.event.stopPropagation();
@@ -392,7 +416,7 @@ var vdbBench = (function (vdbBench) {
                             svgGroup.transition()
                                 .duration(TRANSITION_DURATION)
                                 .attr(D3V.SVG_TRANSFORM, D3V.SVG_TRANSLATE + SYNTAX.OPEN_BRACKET +
-                                    x + SYNTAX.COMMA + y + SYNTAX.CLOSE_BRACKET +
+                                    x + SYNTAX.COMMA + y + SYNTAX.CLOSE_BRACKET + SYNTAX.SPACE +
                                     D3V.SVG_SCALE + SYNTAX.OPEN_BRACKET + scale + SYNTAX.CLOSE_BRACKET);
                             zoomListener.scale(scale);
                             zoomListener.translate([x, y]);
@@ -474,7 +498,90 @@ var vdbBench = (function (vdbBench) {
                             d3.event.preventDefault();
                         }
 
-                        function expandCollapseCallback(node) {
+                        function expandCollapseParentCallback(node) {
+                            if (node == null)
+                                return;
+
+                            if (node.parent || node._parent) {
+                                if (node.parent != null) {
+                                    //
+                                    // Collapsing
+                                    //
+                                    node._parent = node.parent;
+                                    node.parent = null;
+
+                                    root = node;
+
+                                } else if (node._parent != null) {
+                                    //
+                                    // Expanding
+                                    //
+                                    node.parent = node._parent;
+                                    node._parent = null;
+
+                                    root = node.parent;
+                                }
+
+                                updateNodeStopPropogation(root);
+                            }
+                            else {
+                                //
+                                // Both parent and _parent are null
+                                // so check the parent Link to determine
+                                // whether this has a parent
+                                //
+
+                                if (_.isEmpty(node.parentLink)) {
+                                    updateNodeStopPropogation(node);
+                                    return;
+                                }
+
+                                var link = node.parentLink;
+
+                                // Have parentLink so find the parent,
+                                // add it to node.parent
+                                try {
+                                    RepoRestService.getTarget(node.parentLink, false).then(
+                                        function (content) {
+                                            if (! _.isEmpty(content)) {
+
+                                                var parent = {};
+                                                RepoRestService.copy(content, parent);
+
+                                                var parentNode = initNode(parent);
+                                                if (parentNode) {
+                                                    node.parent = parentNode;
+                                                    parentNode.children = [];
+                                                    parentNode.children.push(node);
+
+                                                    root = parentNode;
+                                                    updateNodeStopPropogation(root);
+                                                }
+                                            } else {
+                                                updateNodeStopPropogation(node);
+                                            }
+                                        },
+                                        function (response) {
+                                            // Nothing to do
+                                            var msg = "";
+                                            if (response.config)
+                                                msg = "url : " + response.config.url + SYNTAX.NEWLINE;
+
+                                            msg = msg + "status : " + response.status + SYNTAX.NEWLINE;
+                                            msg = msg + "data : " + response.data + SYNTAX.NEWLINE;
+                                            msg = msg + "status message : " + response.statusText + SYNTAX.NEWLINE;
+
+                                            console.error("An error occurred whilst trying to fetch children: " + msg);
+                                            updateNodeStopPropogation(node);
+                                        }
+                                    );
+                                } catch (error) {
+                                    throw new vdbBench.RestServiceException("Failed to retrieve the content of the node from the host services.\n" + error.message);
+                                }
+                            }
+                        }
+
+                        function expandCollapseChildCallback(node) {
                             if (node == null)
                                 return;
 
@@ -571,6 +678,17 @@ var vdbBench = (function (vdbBench) {
                             this.setAttributeNS(D3V.XLINK_NAMESPACE, D3V.HTML_HREF, uri);
                             this.setAttribute(D3V.HTML_WIDTH, 32);
                             this.setAttribute(D3V.HTML_HEIGHT, 32);
+                        }
+
+                        /*
+                         * If we have children then return the colour black else return white
+                         * Used for the fill style in the circles beneath the images
+                         */
+                        function parentStatusCallback(node) {
+                            if (node[VDB_KEYS.TYPE] == "Vdb")
+                                return HAS_NO_PARENT;
+
+                            return HAS_PARENT;
                         }
 
                         /*

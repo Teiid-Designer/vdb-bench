@@ -128,10 +128,11 @@ var vdbBench = (function(vdbBench) {
                 };
 
                 /**
-                 * Service: Fetch the content from the link (in json)
-                 * Returns: promise object for the content
+                 * Service: Fetch the elements pointed at by the link (in json)
+                 * Returns: promise object for a single or list of elements
+                 *
                  */
-                service.getContent = function(link) {
+                service.getTarget = function(link, isList) {
                     if (! link)
                         return null;
 
@@ -146,7 +147,10 @@ var vdbBench = (function(vdbBench) {
                                         selfLink: VDB_KEYS.LINKS + '[0].href'
                                     });
                             });
-                        return restService.allUrl(link, link).customGETLIST("", {}, { 'Accept' : 'application/json' });
+                        if (isList)
+                            return restService.allUrl(link, link).customGETLIST("", {}, { 'Accept' : 'application/json' });
+
+                        return restService.allUrl(link, link).customGET("", {}, { 'Accept' : 'application/json' });
 
                     } else {
 
@@ -155,7 +159,10 @@ var vdbBench = (function(vdbBench) {
                              * Uses the link from the parent object to fetch the content.
                              * By passing the Accept header, we ensure that only the json version can be returned.
                              */
-                            return restService.all(link).customGETLIST("", {}, { 'Accept' : 'application/json' });
+                            if (isList)
+                                return restService.all(link).customGETLIST("", {}, { 'Accept' : 'application/json' });
+
+                            return restService.all(link).customGET("", {}, { 'Accept' : 'application/json' });
                         });
                     }
                 }
@@ -195,6 +202,26 @@ var vdbBench = (function(vdbBench) {
                             return null;
 
                         return restService.one(REST_URI.SERVICE + REST_URI.SCHEMA).customGET('', { ktype : kType });
+                    });
+                }
+
+                /**
+                 * Service: Search the resposiory with the given criteria
+                 * formatted with the following object:
+                 *
+                 * {
+                 *    type: <type of objects to return,
+                 *    parent: <the object who is the root of the search
+                 *    path: <the datapath of a specific object,
+                 *    contains: <contains term>,
+                 * }
+                 */
+                service.search = function(criteria) {
+                    return getRestService().then(function(restService) {
+                        if (criteria == null)
+                            return null;
+
+                        return restService.one(REST_URI.WORKSPACE + REST_URI.SEARCH).customGET('', criteria);
                     });
                 }
 

@@ -44,7 +44,6 @@ var vdbBench = (function(vdbBench) {
                                                 'type' : 'text',
                                                 'input-attributes' : {
                                                     'required' : 'true',
-                                                    'readOnly' : 'true',
                                                     'placeholder': REST_URI.BASE_URL
                                                 }
                                             }

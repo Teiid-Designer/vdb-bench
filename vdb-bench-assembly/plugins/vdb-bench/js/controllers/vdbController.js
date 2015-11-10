@@ -4,9 +4,10 @@ var vdbBench = (function (vdbBench) {
                                                          ['$scope',
                                                           'RepoRestService',
                                                           'VdbSelectionService',
-                                                          'SearchService',
                                                           'SYNTAX',
-            function ($scope, RepoRestService, VdbSelectionService, SearchService, SYNTAX) {
+                                                          'REST_URI',
+                                                          'VDB_KEYS',
+            function ($scope, RepoRestService, VdbSelectionService, SYNTAX, REST_URI, VDB_KEYS) {
 
                 var DIAGRAM_TAB_ID = "Diagram";
                 var PREVIEW_TAB_ID = "Preview";
@@ -56,9 +57,56 @@ var vdbBench = (function (vdbBench) {
                     return VdbSelectionService.selected();
                 }
 
+                /**
+                 * Options for the codemirror editor used for previewing vdb xml
+                 */
+                $scope.vdbOrbit.xmlPreviewOptions = {
+                    lineWrapping: true,
+                    lineNumbers: true,
+                    readOnly: 'nocursor',
+                    mode: 'xml'
+                };
+
+                function tabUpdate() {
+                    //
+                    // Only update preview tab if it is currently visible
+                    // Setting the value of the codemirror editor before its visible
+                    // causes it to not display when its tab is clicked on (requires an extra click)
+                    //
+                    // However, need to update the tab if it is displayed
+                    //
+                    if ($scope.vdbOrbit.visibleTabId == PREVIEW_TAB_ID)
+                        VdbSelectionService.selectedXml();
+                }
+
+                $scope.$on('selectedVdbChanged', function () {
+                    tabUpdate();
+                });
+
+                /**
+                 * When the preview tab is selected, fetch the selected vdb xml
+                 * and display it in the code mirror editor
+                 */
+                $scope.vdbOrbit.onTabSelected = function (tabId) {
+                    // Stash the tab id for use with updating the preview tab
+                    $scope.vdbOrbit.visibleTabId = tabId;
+
+                    tabUpdate();
+
+                    // This does not seem to work but leave it here for now
+                    // and come back later
+                    setTimeout(function () {
+                        $scope.vdbOrbit.previewRefresh = !$scope.vdbOrbit.previewRefresh;
+                    }, 2000);
+                };
+
                 $scope.searchOrbit = {};
-                $scope.searchOrbit.searchTerm = '';
+                $scope.searchOrbit.containsTerm = '';
+                $scope.searchOrbit.typeTerm = '';
+                $scope.searchOrbit.pathTerm = '';
+                $scope.searchOrbit.parentTerm = '';
                 $scope.searchOrbit.visible = false;
+                $scope.searchOrbit.results = '';
 
                 $scope.searchOrbit.isVisible = function() {
                     return $scope.searchOrbit.visible;
@@ -72,12 +120,17 @@ var vdbBench = (function (vdbBench) {
                 }
 
                 $scope.searchOrbit.clear = function() {
-                    $scope.searchOrbit.searchTerm = '';
-                    SearchService.clearSearch();
+                    $scope.searchOrbit.containsTerm = '';
+                    $scope.searchOrbit.typeTerm = '';
+                    $scope.searchOrbit.pathTerm = '';
+                    $scope.searchOrbit.parentTerm = '';
                 }
-                
+
                 $scope.searchOrbit.submit = function() {
-                    if ($scope.searchOrbit.searchTerm == '')
+                    if (_.isEmpty($scope.searchOrbit.containsTerm) &&
+                        _.isEmpty($scope.searchOrbit.typeTerm) &&
+                        _.isEmpty($scope.searchOrbit.pathTerm) &&
+                        _.isEmpty($scope.searchOrbit.parentTerm))
                         return;
 
                     //
@@ -91,18 +144,50 @@ var vdbBench = (function (vdbBench) {
                     //
                     $scope.searchOrbit.setVisible(true);
 
-                    SearchService.submitSearch($scope.searchOrbit.searchTerm);
+                    var term = {}
+                    if (! _.isEmpty($scope.searchOrbit.containsTerm))
+                        term[REST_URI.SEARCH_CONTAINS] = $scope.searchOrbit.containsTerm;
+
+                    if (! _.isEmpty($scope.searchOrbit.typeTerm))
+                        term[REST_URI.SEARCH_TYPE] = $scope.searchOrbit.typeTerm;
+
+                    if (! _.isEmpty($scope.searchOrbit.pathTerm))
+                        term[REST_URI.SEARCH_PATH] = $scope.searchOrbit.pathTerm;
+
+                    if (! _.isEmpty($scope.searchOrbit.parentTerm))
+                        term[REST_URI.SEARCH_PARENT] = $scope.searchOrbit.parentTerm;
+
+                    RepoRestService.search(term).then(
+                        function (results) {
+                            if (_.isEmpty(results)) {
+                                $scope.searchOrbit.results = [];
+                                $scope.searchOrbit.results[0] = {};
+                                $scope.searchOrbit.results[0][VDB_KEYS.ID] = "No search results found";
+                            }
+                            else
+                                $scope.searchOrbit.results = results;
+                        },
+                        function (response) {
+                            var msg = "";
+                            if (response.config)
+                                msg = "url : " + response.config.url + SYNTAX.NEWLINE;
+
+                            msg = msg + "status : " + response.status + SYNTAX.NEWLINE;
+                            msg = msg + "data : " + response.data + SYNTAX.NEWLINE;
+                            msg = msg + "status message : " + response.statusText + SYNTAX.NEWLINE;
+
+                            $scope.searchOrbit.results = "Error occurred while searching the repository:\n" + msg;
+                        }
+                    );
                 };
 
-                /**
-                 * Options for the codemirror editor used for previewing vdb xml
-                 */
-                $scope.xmlPreviewOptions = {
-                    lineWrapping: true,
-                    lineNumbers: true,
-                    readOnly: 'nocursor',
-                    mode: 'xml'
-                };
+                $scope.searchOrbit.setSelectedResult = function(result) {
+                    $scope.searchOrbit.resultSelected = result;
+                }
+
+                $scope.searchOrbit.selectedResult = function() {
+                    return $scope.searchOrbit.resultSelected;
+                }
 
                 $scope.destroy = function (vdb) {
                     vdb.remove().then(function () {
@@ -142,39 +227,6 @@ var vdbBench = (function (vdbBench) {
                         // Essential to stop the accordion closing
                         event.stopPropagation();
                     }
-                };
-
-                function tabUpdate() {
-                    //
-                    // Only update preview tab if it is currently visible
-                    // Setting the value of the codemirror editor before its visible
-                    // causes it to not display when its tab is clicked on (requires an extra click)
-                    //
-                    // However, need to update the tab if it is displayed
-                    //
-                    if ($scope.vdbOrbit.visibleTabId == PREVIEW_TAB_ID)
-                        VdbSelectionService.selectedXml();
-                }
-
-                $scope.$on('selectedVdbChanged', function () {
-                    tabUpdate();
-                });
-
-                /**
-                 * When the preview tab is selected, fetch the selected vdb xml
-                 * and display it in the code mirror editor
-                 */
-                $scope.onTabSelected = function (tabId) {
-                    // Stash the tab id for use with updating the preview tab
-                    $scope.vdbOrbit.visibleTabId = tabId;
-
-                    tabUpdate();
-
-                    // This does not seem to work but leave it here for now
-                    // and come back later
-                    setTimeout(function () {
-                        $scope.vdbOrbit.previewRefresh = !$scope.vdbOrbit.previewRefresh;
-                    }, 2000);
                 };
 
                 // Initialise vdb collection on loading

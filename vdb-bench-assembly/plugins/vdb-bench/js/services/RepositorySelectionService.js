@@ -200,7 +200,7 @@ var vdbBench = (function(vdbBench) {
                  * Initialise the cached vars
                  */
                 repos = initRepositories();
-                selected = initSelectedRepository;
+                selected = initSelectedRepository();
 
                 return service;
             });

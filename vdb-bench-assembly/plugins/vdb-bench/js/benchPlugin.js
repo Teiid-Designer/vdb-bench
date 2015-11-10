@@ -13,7 +13,12 @@ var vdbBench = (function(vdbBench) {
         };
     }
 
-    vdbBench._module = angular.module(vdbBench.pluginName, [ 'ngAnimate', 'ui.bootstrap', 'ui.codemirror', 'prettyXml', 'restangular' ]);
+    vdbBench._module = angular.module(vdbBench.pluginName, [   'ngAnimate',
+                                                                                                    'ui.bootstrap',
+                                                                                                    'ui.codemirror',
+                                                                                                    'prettyXml',
+                                                                                                    'restangular',
+                                                                                                    'angularUtils.directives.dirPagination']);
 
     vdbBench._module.constant('SYNTAX', {
                                                     FORWARD_SLASH : '/',
@@ -28,7 +33,8 @@ var vdbBench = (function(vdbBench) {
                                                     SPACE : ' ',
                                                     DOT : '.',
                                                     STAR : '*',
-                                                    NEWLINE : '\n'
+                                                    NEWLINE : '\n',
+                                                    HASH : '#'
                                                 }
                                             );
     vdbBench._module.constant('REST_URI', {
@@ -36,7 +42,14 @@ var vdbBench = (function(vdbBench) {
                                                     WORKSPACE : '/workspace',
                                                     VDBS : '/vdbs',
                                                     SERVICE : '/service',
-                                                    SCHEMA : '/schema'
+                                                    SCHEMA : '/schema',
+                                                    SEARCH : '/search',
+                                                    SEARCH_CONTAINS : 'contains',
+                                                    SEARCH_TYPE : 'type',
+                                                    SEARCH_PATH : 'path',
+                                                    SEARCH_PARENT : 'parent',
+                                                    DATA_KOMODO : 'tko:komodo',
+                                                    DATA_WORKSPACE : 'tko:workspace'
                                                 }
                                             );
 
@@ -89,6 +102,53 @@ var vdbBench = (function(vdbBench) {
                                                     TYPE_AHEAD : 'typeahead',
                                                     CONTROLS : 'controls',
                                                     TABS : 'tabs'
+                                                }
+                                             );
+
+    vdbBench._module.constant('D3V', {
+                                                    SVG_ELEMENT : 'svg',
+                                                    GROUP_ELEMENT : 'g',
+                                                    SVG_PATH : 'path',
+                                                    SVG_CIRCLE : 'circle',
+                                                    SVG_CIRCLE_Y : 'cy',
+                                                    SVG_RECTANGLE : 'rect',
+                                                    SVG_TRANSFORM : 'transform',
+                                                    SVG_DATA_ELEMENT : 'd',
+                                                    SVG_TRANSLATE : 'translate',
+                                                    SVG_SCALE : 'scale',
+
+                                                    CSS_CLASS : 'class',
+                                                    CSS_FILL : 'fill',
+                                                    CSS_FILL_OPACITY : 'fill-opacity',
+                                                    CSS_WIDTH : 'width',
+                                                    CSS_HEIGHT : 'height',
+                                                    CSS_SELECTED_CLASS : 'node-selected',
+
+                                                    JS_NO_CHILDREN : '_children',
+                                                    JS_CHILDREN : 'children',
+
+                                                    XLINK_NAMESPACE : 'http://www.w3.org/1999/xlink',
+                                                    XLINK : 'xlink',
+                                                    HTML_XLINK_REF : 'xlink:href',
+                                                    HTML_HREF : 'href',
+                                                    HTML_X : 'x',
+                                                    HTML_X0 : 'x0',
+                                                    HTML_Y : 'y',
+                                                    HTML_Y0 : 'y0',
+                                                    HTML_WIDTH : 'width',
+                                                    HTML_HEIGHT : 'height',
+                                                    HTML_RADIUS : 'r',
+                                                    HTML_IMAGE : 'image',
+                                                    HTML_TEXT : 'text',
+                                                    HTML_DX : 'dx',
+                                                    HTML_DY : 'dy',
+                                                    HTML_TEXT_ANCHOR : 'text-anchor',
+                                                    HTML_CLICK : 'click',
+
+                                                    MIDDLE : 'middle',
+                                                    NODE : 'node',
+                                                    LINK : 'link',
+                                                    ID : 'id'
                                                 }
                                              );
 
