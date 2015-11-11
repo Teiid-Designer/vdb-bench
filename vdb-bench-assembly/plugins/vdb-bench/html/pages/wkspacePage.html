@@ -25,7 +25,7 @@
                     <!-- Search Group -->
                     <!-- -->
                     <!-- -->
-                    <accordion-group heading="Search">
+                    <accordion-group heading="Search" ng-init="searchIsOpen = true" is-open="searchIsOpen">
                         <form name="search" role="form">
                             <div class="input-group input-group-search">
                                 <input  class="col-sm-12" type="text" class="form-control" ng-model="searchOrbit.containsTerm"
@@ -38,7 +38,7 @@
                                 </span>
                             </div>
                             <div id="advanced-search">
-                                <h4><a ng-click="searchOrbit.advancedToggle = !searchOrbit.advancedToggle" href="#">Advanced</a></h4>
+                                <h5><a ng-click="searchOrbit.advancedToggle = !searchOrbit.advancedToggle" href="#">Advanced</a></h5>
                             </div>
                             <div id="search-filters" class="well" ng-show="searchOrbit.advancedToggle">
                                 <span>
@@ -74,10 +74,15 @@
                             </div>
                         </accordion-heading>
                         <div id="list-vdb">
-                            <div class="list-group">
-                                <a class="list-group-item" ng-repeat="vdb in vdbOrbit.vdbs" ng-click="$parent.vdbOrbit.selectVdb(vdb)" ng-class="{active:$parent.vdbOrbit.vdbSelected()==vdb}">
+                            <input class="vdbs-list-filter" type="text" ng-model="vdbOrbit.searchFilter" placeholder="filter...">
+                            <div class="list-group vdbs-list">
+                                <a class="list-group-item"
+                                     pagination-id="vdb-paginate"
+                                     dir-paginate="vdb in vdbOrbit.vdbs|filter:vdbOrbit.searchFilter|orderBy:'keng__id'|itemsPerPage:3"
+                                     ng-click="$parent.vdbOrbit.selectVdb(vdb)" ng-class="{active:$parent.vdbOrbit.vdbSelected()==vdb}">
                                     {{vdb.keng__id}}
                                 </a>
+                                <dir-pagination-controls pagination-id="vdb-paginate" max-size="3" direction-links="true" boundary-links="true"></dir-pagination-controls>
                             </div>
                         </div>
                     </accordion-group>
@@ -106,7 +111,7 @@
                                 <divider title="New">
                                     <p>I am on the NEW page</p>
                                 </divider>
-                                <divider title="Edit">
+                                <divider title="Properties">
                                     <div class="list-group">
                                         <div class="list-group-item" ng-repeat="component in vdbOrbit.selectedVdbComponent">
                                             <attribute-widget selected="component"/>
@@ -125,12 +130,13 @@
 
             <!-- Tab set for displaying the search results of the search made -->
             <!-- Only displayed if search button has been clicked -->
-            <div ng-show="searchOrbit.isVisible() == true">
-                <div class="col-sm-4 vdb-search-results-panel">
+            <div class="vdb-search-results-pane" ng-show="searchOrbit.isVisible() == true">
+                <div class="col-sm-3 vdb-search-results-panel">
                     <h4 class="vdb-search-results-title">Search Results</h4>
                     <input class="vdb-search-results-filter" type="text" ng-model="searchOrbit.searchFilter" placeholder="filter...">
                     <ul class="list-group pagination vdb-search-results-list">
                         <a class="list-group-item vdb-search-results-entry" href="#"
+                             pagination-id="search-results-paginate"
                              dir-paginate="result in searchOrbit.results|filter:searchOrbit.searchFilter|orderBy:'keng__dataPath'|itemsPerPage:7"
                              ng-click="searchOrbit.setSelectedResult(result)" ng-class="{active:searchOrbit.selectedResult()==result}">
                             <h4 class="list-group-item-heading vdb-search-results-id">{{result.keng__id}}</h4>
@@ -138,10 +144,23 @@
                             <p class="list-group-item-text vdb-search-results-data-path">{{result.keng__dataPath}}</p>
                         </a>
                     </ul>
-                    <dir-pagination-controls max-size="7" direction-links="true" boundary-links="true" ></dir-pagination-controls>
+                    <dir-pagination-controls pagination-id="search-results-paginate" max-size="7" direction-links="true" boundary-links="true" ></dir-pagination-controls>
                 </div>
-                <div class="vdb-diagram col-sm-8">
-                    <search-visualization search-entry="searchOrbit.selectedResult()" height="2048" width="1024"></search-visualization>
+                <div class="vdb-diagram col-sm-5">
+                    <search-visualization search-entry="searchOrbit.selectedResult()" selected-vdb-component="searchOrbit.selectedVdbComponent" height="2048" width="1024"></search-visualization>
+                </div>
+
+                <!-- Vertical tabbed page for displaying selected object properties -->
+                <div class="vdb-diagram-nav-col col-sm-4">
+                    <divider-widget>
+                        <divider title="Properties">
+                            <div class="list-group">
+                                <div class="list-group-item" ng-repeat="component in searchOrbit.selectedVdbComponent">
+                                    <attribute-widget selected="component"/>
+                                </div>
+                            </div>
+                        </divider>
+                    </divider-widget>
                 </div>
         </div>
     </div>

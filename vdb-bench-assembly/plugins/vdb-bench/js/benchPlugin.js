@@ -64,6 +64,7 @@ var vdbBench = (function(vdbBench) {
                                                         HREF : 'href',
                                                         SELF : 'self',
                                                         PARENT : 'parent',
+                                                        CHILDREN : 'children',
                                                         IMPORTS : 'imports',
                                                         MODELS : 'models',
                                                         TRANSLATORS : 'translators',
@@ -151,6 +152,18 @@ var vdbBench = (function(vdbBench) {
                                                     ID : 'id'
                                                 }
                                              );
+
+    vdbBench.isArray = function(obj) {
+        // Use compiler's own isArray when available
+        if (Array.isArray) {
+            return Array.isArray(obj);
+        }
+ 
+        var objectToStringFn = Object.prototype.toString;
+        var arrayToStringResult = objectToStringFn.call([]);
+ 
+        return objectToStringFn.call(obj) === arrayToStringResult;
+    };
 
     var tab = undefined;
 

@@ -29,7 +29,7 @@ var vdbBench = (function (vdbBench) {
                                     buildAttributeWidgets(content);
                                 },
                                 function (response) {
-                                    console.log("Rest service response from fetching schema for " + $scope.component[VDB_KEYS.TYPE] + ": " + response.statusCode);
+                                    buildAttributeWidgets();
                                 });
                         } catch (error) {
                             console.error("Error occurred: ", error.message);
@@ -39,7 +39,7 @@ var vdbBench = (function (vdbBench) {
                             //
                             // Get the description of the object from the schema
                             //
-                            var description = schema[VDB_KEYS.DESCRIPTION];
+                            var description = (schema ? schema[VDB_KEYS.DESCRIPTION] : '');
 
                             //
                             // The base hawtio form widget configuration object
@@ -78,6 +78,11 @@ var vdbBench = (function (vdbBench) {
                                 template = template + "</div>";
                                 configProperty.type = "string";
                                 configProperty.formTemplate = template;
+
+                                //  Set all properties read-only for now
+                                configProperty[HAWTIO_FORM.INPUT_ATTR] = {
+                                    'readOnly' : 'true'
+                                };
                                 configProperties[VDB_KEYS.DDL] = configProperty;
                             }
                             else {
@@ -93,67 +98,71 @@ var vdbBench = (function (vdbBench) {
 
                             createIdWidget(configProperties);
 
-                            var schemaProperties = schema[VDB_SCHEMA.PROPERTIES];
-                            for (var key in schemaProperties) {
+                            if (schema) {
+                                var schemaProperties = schema[VDB_SCHEMA.PROPERTIES];
+                                for (var key in schemaProperties) {
 
-                                //
-                                // Iterator through each of the schema's properties
-                                // and apply its metadata to the widget configuration
-                                //
-                                if (key == VDB_SCHEMA.SCHEMA_NAME
-                                    || _.endsWith(key, SYNTAX.UNDERSCORE + SYNTAX.UNDERSCORE + VDB_SCHEMA.SCHEMA_NAME)) {
-                                    // Name widgets are covered by the id widget
-                                    continue;
+                                    //
+                                    // Iterator through each of the schema's properties
+                                    // and apply its metadata to the widget configuration
+                                    //
+                                    if (key == VDB_SCHEMA.SCHEMA_NAME
+                                        || _.endsWith(key, SYNTAX.UNDERSCORE + SYNTAX.UNDERSCORE + VDB_SCHEMA.SCHEMA_NAME)) {
+                                        // Name widgets are covered by the id widget
+                                        continue;
+                                    }
+
+                                    var configProperty = {};
+                                    var schemaProperty = schemaProperties[key];
+
+                                    //
+                                    // The 'property' schema is treated differently since
+                                    // it requires adding name/value pairs to a table widget
+                                    //
+                                    if (key == VDB_SCHEMA.SCHEMA_PROPERTY) {
+                                        createPropertyTable(schemaProperty, configProperties);
+                                        continue;
+                                    }
+
+                                    //
+                                    // Make description widgets use text areas instead of inputs
+                                    //
+                                    if (key == VDB_SCHEMA.DESCRIPTION_PROPERTY) {
+                                        var template = "<div class=\"form-group\">";
+                                        template = template + "<label ng-hide=\"\" class=\"col-sm-2 control-label\">Description</label>";
+                                        template = template + "<div class=\"col-sm-10\">";
+                                        template = template + "<textarea class='property-editor-input input-xlarge' rows='2' ng-model=\"entity." + key + "\" readonly=\"readonly\"></textarea>";
+                                        template = template + "</div>";
+                                        configProperty.formTemplate = template;
+                                    }
+
+                                    var valueType = schemaProperty[VDB_SCHEMA.VALUE_TYPE];
+
+                                    //
+                                    // decimal is not a hawtio-form type so need to map it
+                                    //
+                                    if (valueType == "decimal")
+                                        valueType = "number";
+
+                                    configProperty.type = valueType;
+                                    configProperty.label = key.replace(/[a-z]+__/, '')
+                                                                            .replace(/([A-Z])/g, ' $1')
+                                                                            .replace(/^./, function(str){ return str.toUpperCase(); });
+                                    //
+                                    // Configure the attributes of the input element, eg. add a css class and
+                                    // make it required if the schema wants it to be
+                                    //
+                                    configProperty[HAWTIO_FORM.INPUT_ATTR] = {
+                                        "class" : "property-editor-input",
+                                        //  Set all properties read-only for now
+                                        'readOnly' : 'true'
+                                    };
+                                    var required = schemaProperty[VDB_SCHEMA.REQUIRED];
+                                    if (required == "true")
+                                        configProperty[HAWTIO_FORM.INPUT_ATTR].required = required;
+
+                                    configProperties[key] = configProperty;
                                 }
-
-                                var configProperty = {};
-                                var schemaProperty = schemaProperties[key];
-
-                                //
-                                // The 'property' schema is treated differently since
-                                // it requires adding name/value pairs to a table widget
-                                //
-                                if (key == VDB_SCHEMA.SCHEMA_PROPERTY) {
-                                    createPropertyTable(schemaProperty, configProperties);
-                                    continue;
-                                }
-
-                                //
-                                // Make description widgets use text areas instead of inputs
-                                //
-                                if (key == VDB_SCHEMA.DESCRIPTION_PROPERTY) {
-                                    var template = "<div class=\"form-group\">";
-                                    template = template + "<label ng-hide=\"\" class=\"col-sm-2 control-label\">Description</label>";
-                                    template = template + "<div class=\"col-sm-10\">";
-                                    template = template + "<textarea class='property-editor-input input-xlarge' rows='2' ng-model=\"entity." + key + "\"></textarea>";
-                                    template = template + "</div>";
-                                    configProperty.formTemplate = template;
-                                }
-
-                                var valueType = schemaProperty[VDB_SCHEMA.VALUE_TYPE];
-
-                                //
-                                // decimal is not a hawtio-form type so need to map it
-                                //
-                                if (valueType == "decimal")
-                                    valueType = "number";
-
-                                configProperty.type = valueType;
-                                configProperty.label = key.replace(/[a-z]+__/, '')
-                                                                        .replace(/([A-Z])/g, ' $1')
-                                                                        .replace(/^./, function(str){ return str.toUpperCase(); });
-                                //
-                                // Configure the attributes of the input element, eg. add a css class and
-                                // make it required if the schema wants it to be
-                                //
-                                configProperty[HAWTIO_FORM.INPUT_ATTR] = {
-                                    "class" : "property-editor-input"
-                                };
-                                var required = schemaProperty[VDB_SCHEMA.REQUIRED];
-                                if (required == "true")
-                                    configProperty[HAWTIO_FORM.INPUT_ATTR].required = required;
-
-                                configProperties[key] = configProperty;
                             }
 
                             //
@@ -170,9 +179,11 @@ var vdbBench = (function (vdbBench) {
                             configProperty.type = 'text';
                             configProperty.label = 'Name';
                             configProperty[HAWTIO_FORM.INPUT_ATTR] = {
-                                "class" : "property-editor-input"
+                                "class" : "property-editor-input",
+                                'required' : 'true',
+                                //  Set all properties read-only for now
+                                'readOnly' : 'true'
                             };
-                            configProperty[HAWTIO_FORM.INPUT_ATTR].required = 'true';
                             configProperties[VDB_KEYS.ID] = configProperty;
                         }
 
@@ -190,14 +201,18 @@ var vdbBench = (function (vdbBench) {
                                         "type" : "string",
                                         "label" : "Name",
                                         "input-attributes" : {
-                                            "required" : "true"
+                                            "required" : "true",
+                                            //  Set all properties read-only for now
+                                            'readOnly' : 'true'
                                         }
                                     },
                                     "value" : {
                                         "type" : "string",
                                         "label" : "Value",
                                         "input-attributes" : {
-                                            "required" : "true"
+                                            "required" : "true",
+                                            //  Set all properties read-only for now
+                                            'readOnly' : 'true'
                                         }
                                     }
                                 }

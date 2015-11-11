@@ -18,8 +18,9 @@ var vdbBench = (function (vdbBench) {
             var CHILDREN_ICON_Y = IMAGE_Y + 32 + 5;
             var WIDTH_PER_CHARACTER = 9;
 
-            var HAS_NO_CHILDREN = "#fff";
-            var HAS_CHILDREN = "#000";
+            var BLACK = "#000";
+
+            var CHILD_BUTTON_ID = "childButtonId";
 
             var NODE_ID_PREFIX = D3V.GROUP_ELEMENT + SYNTAX.HYPHEN + D3V.NODE;
 
@@ -138,7 +139,7 @@ var vdbBench = (function (vdbBench) {
                             var newDataObj = {};
                             var selfLink;
                             var parentLink;
-                            var childLinks = [];
+                            var childrenLink;
 
                             for (var key in dataObject) {
                                 var value = dataObject[key];
@@ -147,23 +148,10 @@ var vdbBench = (function (vdbBench) {
                                 if (key == VDB_KEYS.LINKS.ID) {
                                     selfLink = RepoRestService.getLink(VDB_KEYS.LINKS.SELF, dataObject);
                                     parentLink = RepoRestService.getLink(VDB_KEYS.LINKS.PARENT, dataObject);
+                                    childrenLink = RepoRestService.getLink(VDB_KEYS.LINKS.CHILDREN, dataObject);
 
-                                    //
-                                    // Add remaining links as children
-                                    //
-                                    var links = dataObject[key];
-                                    for (var i = 0; i < links.length; ++i) {
-                                        var link = links[i];
-                                        var linkName = link[VDB_KEYS.LINKS.NAME];
-                                        if (linkName == VDB_KEYS.LINKS.SELF)
-                                            selfLink = link[VDB_KEYS.LINKS.HREF];
-                                        else if (linkName == VDB_KEYS.LINKS.PARENT)
-                                            parentLink = link[VDB_KEYS.LINKS.HREF];
-                                        else
-                                            childLinks.push(link[VDB_KEYS.LINKS.HREF]);
-                                    }
                                 } else if (typeof (value) == 'string' || typeof (value) == 'number' || typeof (value) == 'boolean' ||
-                                    Object.prototype.toString.call(value) === '[object Array]') {
+                                    vdbBench.isArray(value)) {
                                     newDataObj[key] = value;
                                 }
                             }
@@ -173,7 +161,7 @@ var vdbBench = (function (vdbBench) {
 
                             newDataObj.selfLink = selfLink;
                             newDataObj.parentLink = parentLink;
-                            newDataObj.childLinks = childLinks;
+                            newDataObj.childrenLink = childrenLink;
                             dataIndex[selfLink] = dataObject;
 
                             return newDataObj;
@@ -300,9 +288,10 @@ var vdbBench = (function (vdbBench) {
                              * Add children indicator circles below the image 
                              */
                             enterNodesGroup.append(D3V.SVG_CIRCLE)
+                                .attr(D3V.ID, CHILD_BUTTON_ID)
                                 .attr(D3V.HTML_RADIUS, 1e-6)
                                 .attr(D3V.SVG_CIRCLE_Y, CHILDREN_ICON_Y)
-                                .style(D3V.CSS_FILL, childStatusCallback)
+                                .style(D3V.CSS_FILL, BLACK)
                                 .on(D3V.HTML_CLICK, expandCollapseCallback);
 
                             /*
@@ -320,9 +309,11 @@ var vdbBench = (function (vdbBench) {
                              * All circles currently being updated have their radius enlarged to their
                              * destination visible size.
                              */
-                            nodeUpdate.select(D3V.SVG_CIRCLE)
-                                .attr(D3V.HTML_RADIUS, 4.5)
-                                .style(D3V.CSS_FILL, childStatusCallback);
+                            nodeUpdate.select(SYNTAX.HASH + CHILD_BUTTON_ID)
+                                .attr(D3V.HTML_RADIUS, function (node) {
+                                    return node[VDB_KEYS.HAS_CHILDREN] == true ? 3.5 : 1e-10;
+                                })
+                                .style(D3V.CSS_FILL, BLACK);
 
                             /*
                              * Animate the removal of nodes being removed from the diagram
@@ -372,6 +363,9 @@ var vdbBench = (function (vdbBench) {
 
                         function updateNodeStopPropogation(node) {
                             update(node);
+
+                            if (node === root)
+                                centerNode(node);
 
                             // Stop selection firing
                             if (d3.event)
@@ -492,60 +486,67 @@ var vdbBench = (function (vdbBench) {
                             else {
                                 //
                                 // Both children and _children are null
-                                // so check the childLinks to determine
+                                // so check the childrenLink to determine
                                 // whether this has any children
                                 //
 
-                                if (_.isEmpty(node.childLinks) || node[VDB_KEYS.HAS_CHILDREN] == false) {
+                                if (_.isEmpty(node.childrenLink) || node[VDB_KEYS.HAS_CHILDREN] == false) {
                                     updateNodeStopPropogation(node);
                                     return;
                                 }
 
-                                for (var i = 0; i < node.childLinks.length; ++i) {
-                                    var link = node.childLinks[i];
+                                // Have childrenLink so find the children,
+                                // add them to node.children
+                                try {
+                                    RepoRestService.getTarget(node.childrenLink).then(
+                                        function (content) {
+                                            if (! node.children)
+                                                node.children = [];
 
-                                    // Have childLinks so find the children,
-                                    // add them to node.children
-                                    try {
-                                        RepoRestService.getTarget(link, true).then(
-                                            function (content) {
-                                                if (! node.children)
-                                                    node.children = [];
+                                            if (! _.isEmpty(content)) {
 
-                                                if (! _.isEmpty(content)) {
-
-                                                    var children = [];
+                                                //
+                                                // We expect an array so even if the link returns
+                                                // a single object, add it to an array
+                                                //
+                                                var children = [];
+                                                if (vdbBench.isArray(content))
                                                     RepoRestService.copy(content, children);
-
-                                                    for (var i = 0; i < children.length; ++i) {
-                                                        var child = children[i];
-                                                        var childNode = initNode(child);
-                                                        if (! childNode)
-                                                            continue;
-
-                                                        childNode.parent = node;
-                                                        node.children.push(childNode);
-                                                    }
+                                                else {
+                                                    var child = {};
+                                                    RepoRestService.copy(content, child);
+                                                    children.push(child);
                                                 }
 
-                                                updateNodeStopPropogation(node);
-                                            },
-                                            function (response) {
-                                                // Nothing to do
-                                                var msg = "";
-                                                if (response.config)
-                                                    msg = "url : " + response.config.url + SYNTAX.NEWLINE;
+                                                for (var i = 0; i < children.length; ++i) {
+                                                    var child = children[i];
+                                                    var childNode = initNode(child);
+                                                    if (! childNode)
+                                                        continue;
 
-                                                msg = msg + "status : " + response.status + SYNTAX.NEWLINE;
-                                                msg = msg + "data : " + response.data + SYNTAX.NEWLINE;
-                                                msg = msg + "status message : " + response.statusText + SYNTAX.NEWLINE;
+                                                    childNode.parent = node;
+                                                    node.children.push(childNode);
+                                                }
+                                            }
 
-                                                console.error("An error occurred whilst trying to fetch children: " + msg);
-                                                updateNodeStopPropogation(node);
-                                            });
-                                    } catch (error) {
-                                        throw new vdbBench.RestServiceException("Failed to retrieve the content of the node from the host services.\n" + error.message);
-                                    }
+                                            updateNodeStopPropogation(node);
+                                        },
+                                        function (response) {
+                                            // Nothing to do
+                                            var msg = "";
+                                            if (response.config)
+                                                msg = "url : " + response.config.url + SYNTAX.NEWLINE;
+
+                                            msg = msg + "status : " + response.status + SYNTAX.NEWLINE;
+                                            msg = msg + "data : " + response.data + SYNTAX.NEWLINE;
+                                            msg = msg + "status message : " + response.statusText + SYNTAX.NEWLINE;
+
+                                            console.error("An error occurred whilst trying to fetch children: " + msg);
+                                            updateNodeStopPropogation(node);
+                                        }
+                                    );
+                                } catch (error) {
+                                    throw new vdbBench.RestServiceException("Failed to retrieve the content of the node from the host services.\n" + error.message);
                                 }
                             }
                         }
@@ -571,21 +572,6 @@ var vdbBench = (function (vdbBench) {
                             this.setAttributeNS(D3V.XLINK_NAMESPACE, D3V.HTML_HREF, uri);
                             this.setAttribute(D3V.HTML_WIDTH, 32);
                             this.setAttribute(D3V.HTML_HEIGHT, 32);
-                        }
-
-                        /*
-                         * If we have children then return the colour black else return white
-                         * Used for the fill style in the circles beneath the images
-                         */
-                        function childStatusCallback(node) {
-                            if (_.isEmpty(node.childLinks))
-                                return HAS_NO_CHILDREN;
-                            
-                            if (node[VDB_KEYS.HAS_CHILDREN] == true) {
-                                return HAS_CHILDREN;
-                            }
-
-                            return HAS_NO_CHILDREN;
                         }
 
                         /*

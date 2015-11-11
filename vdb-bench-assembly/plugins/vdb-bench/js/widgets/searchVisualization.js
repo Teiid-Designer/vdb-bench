@@ -19,12 +19,7 @@ var vdbBench = (function (vdbBench) {
             var CHILDREN_ICON_Y = IMAGE_Y + 32 + 5;
             var WIDTH_PER_CHARACTER = 9;
 
-            var HAS_NO_PARENT = "#fff";
-            var HAS_PARENT = "#000";
-
-            var HAS_NO_CHILDREN = "#fff";
-            var HAS_CHILDREN = "#000";
-
+            var BLACK = "#000";
             var PARENT_BUTTON_ID = "parentButtonId";
             var CHILD_BUTTON_ID = "childButtonId";
 
@@ -36,6 +31,7 @@ var vdbBench = (function (vdbBench) {
                 // isolated scope
                 scope: {
                     searchEntry: '=',
+                    selectedVdbComponent: '=',
                     height: '=',
                     width: '='
                 },
@@ -118,7 +114,7 @@ var vdbBench = (function (vdbBench) {
                             .on("zoom", function () {
                                 svgGroup.attr(D3V.SVG_TRANSFORM,
                                     D3V.SVG_TRANSLATE + SYNTAX.OPEN_BRACKET +
-                                    d3.event.translate + SYNTAX.CLOSE_BRACKET + SYNTAX.SPACE +
+                                    d3.event.translate + SYNTAX.CLOSE_BRACKET +
                                     D3V.SVG_SCALE + SYNTAX.OPEN_BRACKET +
                                     d3.event.scale + SYNTAX.CLOSE_BRACKET);
                             });
@@ -144,7 +140,7 @@ var vdbBench = (function (vdbBench) {
                             var newDataObj = {};
                             var selfLink;
                             var parentLink;
-                            var childLinks = [];
+                            var childrenLink;
 
                             for (var key in dataObject) {
                                 var value = dataObject[key];
@@ -153,23 +149,10 @@ var vdbBench = (function (vdbBench) {
                                 if (key == VDB_KEYS.LINKS.ID) {
                                     selfLink = RepoRestService.getLink(VDB_KEYS.LINKS.SELF, dataObject);
                                     parentLink = RepoRestService.getLink(VDB_KEYS.LINKS.PARENT, dataObject);
+                                    childrenLink = RepoRestService.getLink(VDB_KEYS.LINKS.CHILDREN, dataObject);
 
-                                    //
-                                    // Add remaining links as children
-                                    //
-                                    var links = dataObject[key];
-                                    for (var i = 0; i < links.length; ++i) {
-                                        var link = links[i];
-                                        var linkName = link[VDB_KEYS.LINKS.NAME];
-                                        if (linkName == VDB_KEYS.LINKS.SELF)
-                                            selfLink = link[VDB_KEYS.LINKS.HREF];
-                                        else if (linkName == VDB_KEYS.LINKS.PARENT)
-                                            parentLink = link[VDB_KEYS.LINKS.HREF];
-                                        else
-                                            childLinks.push(link[VDB_KEYS.LINKS.HREF]);
-                                    }
                                 } else if (typeof (value) == 'string' || typeof (value) == 'number' || typeof (value) == 'boolean' ||
-                                    Object.prototype.toString.call(value) === '[object Array]') {
+                                    vdbBench.isArray(value)) {
                                     newDataObj[key] = value;
                                 }
                             }
@@ -179,7 +162,7 @@ var vdbBench = (function (vdbBench) {
 
                             newDataObj.selfLink = selfLink;
                             newDataObj.parentLink = parentLink;
-                            newDataObj.childLinks = childLinks;
+                            newDataObj.childrenLink = childrenLink;
                             dataIndex[selfLink] = dataObject;
 
                             return newDataObj;
@@ -258,13 +241,13 @@ var vdbBench = (function (vdbBench) {
                                 });
 
                             /*
-                             * Add parent indicator circles below the image 
+                             * Add parent indicator circles above the image 
                              */
                             enterNodesGroup.append(D3V.SVG_CIRCLE)
                                 .attr(D3V.ID, PARENT_BUTTON_ID)
                                 .attr(D3V.HTML_RADIUS, 1e-6)
                                 .attr(D3V.SVG_CIRCLE_Y, PARENT_ICON_Y)
-                                .style(D3V.CSS_FILL, parentStatusCallback)
+                                .style(D3V.CSS_FILL, BLACK)
                                 .on(D3V.HTML_CLICK, expandCollapseParentCallback);
 
                             /*
@@ -319,7 +302,7 @@ var vdbBench = (function (vdbBench) {
                                 .attr(D3V.ID, CHILD_BUTTON_ID)
                                 .attr(D3V.HTML_RADIUS, 1e-6)
                                 .attr(D3V.SVG_CIRCLE_Y, CHILDREN_ICON_Y)
-                                .style(D3V.CSS_FILL, childStatusCallback)
+                                .style(D3V.CSS_FILL, BLACK)
                                 .on(D3V.HTML_CLICK, expandCollapseChildCallback);
 
                             /*
@@ -338,12 +321,16 @@ var vdbBench = (function (vdbBench) {
                              * destination visible size.
                              */
                             nodeUpdate.select(SYNTAX.HASH + PARENT_BUTTON_ID)
-                                .attr(D3V.HTML_RADIUS, 3.5)
-                                .style(D3V.CSS_FILL, parentStatusCallback);
+                                .attr(D3V.HTML_RADIUS, function (node) {
+                                    return hasParent(node) ? 3.5 : 1e-10;
+                                })
+                                .style(D3V.CSS_FILL, BLACK);
 
                             nodeUpdate.select(SYNTAX.HASH + CHILD_BUTTON_ID)
-                                .attr(D3V.HTML_RADIUS, 3.5)
-                                .style(D3V.CSS_FILL, childStatusCallback);
+                                .attr(D3V.HTML_RADIUS, function (node) {
+                                    return node[VDB_KEYS.HAS_CHILDREN] == true ? 3.5 : 1e-10;
+                                })
+                                .style(D3V.CSS_FILL, BLACK);
 
                             /*
                              * Animate the removal of nodes being removed from the diagram
@@ -407,7 +394,7 @@ var vdbBench = (function (vdbBench) {
                                 return;
 
                             var scale = zoomListener.scale();
-                            var x = (svgWidth / 2) * scale;
+                            var x = (svgWidth / 3) * scale;
                             var y = TOP_MARGIN;
 
                             source.x = x;
@@ -416,7 +403,7 @@ var vdbBench = (function (vdbBench) {
                             svgGroup.transition()
                                 .duration(TRANSITION_DURATION)
                                 .attr(D3V.SVG_TRANSFORM, D3V.SVG_TRANSLATE + SYNTAX.OPEN_BRACKET +
-                                    x + SYNTAX.COMMA + y + SYNTAX.CLOSE_BRACKET + SYNTAX.SPACE +
+                                    x + SYNTAX.COMMA + y + SYNTAX.CLOSE_BRACKET +
                                     D3V.SVG_SCALE + SYNTAX.OPEN_BRACKET + scale + SYNTAX.CLOSE_BRACKET);
                             zoomListener.scale(scale);
                             zoomListener.translate([x, y]);
@@ -510,6 +497,9 @@ var vdbBench = (function (vdbBench) {
                                     node._parent = node.parent;
                                     node.parent = null;
 
+                                    //
+                                    // The parent must now be the root of the diagram
+                                    //
                                     root = node;
 
                                 } else if (node._parent != null) {
@@ -519,10 +509,18 @@ var vdbBench = (function (vdbBench) {
                                     node.parent = node._parent;
                                     node._parent = null;
 
+                                    //
+                                    // The parent must now be the root of the diagram
+                                    //
                                     root = node.parent;
                                 }
 
                                 updateNodeStopPropogation(root);
+
+                                //
+                                // Centre on the original node
+                                //
+                                centerNode(node);
                             }
                             else {
                                 //
@@ -541,24 +539,41 @@ var vdbBench = (function (vdbBench) {
                                 // Have parentLink so find the parent,
                                 // add it to node.parent
                                 try {
-                                    RepoRestService.getTarget(node.parentLink, false).then(
+                                    RepoRestService.getTarget(node.parentLink).then(
                                         function (content) {
-                                            if (! _.isEmpty(content)) {
-
-                                                var parent = {};
-                                                RepoRestService.copy(content, parent);
-
-                                                var parentNode = initNode(parent);
-                                                if (parentNode) {
-                                                    node.parent = parentNode;
-                                                    parentNode.children = [];
-                                                    parentNode.children.push(node);
-
-                                                    root = parentNode;
-                                                    updateNodeStopPropogation(root);
-                                                }
-                                            } else {
+                                            if (_.isEmpty(content))
                                                 updateNodeStopPropogation(node);
+
+                                            //
+                                            // Expect a single parent yet some links, eg. search
+                                            // always return an array so test the content and
+                                            // find the parent appropriately.
+                                            //
+                                            var parent = {};
+                                            if (vdbBench.isArray(content)) {
+                                                var parents = [];
+                                                RepoRestService.copy(content, parents);
+                                                parent = parents[0]; 
+                                            } else {
+                                                RepoRestService.copy(content, parent);
+                                            }
+
+                                            var parentNode = initNode(parent);
+                                            if (parentNode) {
+                                                node.parent = parentNode;
+                                                parentNode.children = [];
+                                                parentNode.children.push(node);
+
+                                                //
+                                                // The parent must now be the root of the diagram
+                                                //
+                                                root = parentNode;
+                                                updateNodeStopPropogation(root);
+
+                                                //
+                                                // Centre on the original node
+                                                //
+                                                centerNode(node);
                                             }
                                         },
                                         function (response) {
@@ -599,60 +614,67 @@ var vdbBench = (function (vdbBench) {
                             else {
                                 //
                                 // Both children and _children are null
-                                // so check the childLinks to determine
+                                // so check the childrenLink to determine
                                 // whether this has any children
                                 //
 
-                                if (_.isEmpty(node.childLinks) || node[VDB_KEYS.HAS_CHILDREN] == false) {
+                                if (_.isEmpty(node.childrenLink) || node[VDB_KEYS.HAS_CHILDREN] == false) {
                                     updateNodeStopPropogation(node);
                                     return;
                                 }
 
-                                for (var i = 0; i < node.childLinks.length; ++i) {
-                                    var link = node.childLinks[i];
+                                // Have childrenLink so find the children,
+                                // add them to node.children
+                                try {
+                                    RepoRestService.getTarget(node.childrenLink).then(
+                                        function (content) {
+                                            if (! node.children)
+                                                node.children = [];
 
-                                    // Have childLinks so find the children,
-                                    // add them to node.children
-                                    try {
-                                        RepoRestService.getTarget(link, true).then(
-                                            function (content) {
-                                                if (! node.children)
-                                                    node.children = [];
+                                            if (! _.isEmpty(content)) {
 
-                                                if (! _.isEmpty(content)) {
-
-                                                    var children = [];
+                                                //
+                                                // We expect an array so even if the link returns
+                                                // a single object, add it to an array
+                                                //
+                                                var children = [];
+                                                if (vdbBench.isArray(content))
                                                     RepoRestService.copy(content, children);
-
-                                                    for (var i = 0; i < children.length; ++i) {
-                                                        var child = children[i];
-                                                        var childNode = initNode(child);
-                                                        if (! childNode)
-                                                            continue;
-
-                                                        childNode.parent = node;
-                                                        node.children.push(childNode);
-                                                    }
+                                                else {
+                                                    var child = {};
+                                                    RepoRestService.copy(content, child);
+                                                    children.push(child);
                                                 }
 
-                                                updateNodeStopPropogation(node);
-                                            },
-                                            function (response) {
-                                                // Nothing to do
-                                                var msg = "";
-                                                if (response.config)
-                                                    msg = "url : " + response.config.url + SYNTAX.NEWLINE;
+                                                for (var i = 0; i < children.length; ++i) {
+                                                    var child = children[i];
+                                                    var childNode = initNode(child);
+                                                    if (! childNode)
+                                                        continue;
 
-                                                msg = msg + "status : " + response.status + SYNTAX.NEWLINE;
-                                                msg = msg + "data : " + response.data + SYNTAX.NEWLINE;
-                                                msg = msg + "status message : " + response.statusText + SYNTAX.NEWLINE;
+                                                    childNode.parent = node;
+                                                    node.children.push(childNode);
+                                                }
+                                            }
 
-                                                console.error("An error occurred whilst trying to fetch children: " + msg);
-                                                updateNodeStopPropogation(node);
-                                            });
-                                    } catch (error) {
-                                        throw new vdbBench.RestServiceException("Failed to retrieve the content of the node from the host services.\n" + error.message);
-                                    }
+                                            updateNodeStopPropogation(node);
+                                        },
+                                        function (response) {
+                                            // Nothing to do
+                                            var msg = "";
+                                            if (response.config)
+                                                msg = "url : " + response.config.url + SYNTAX.NEWLINE;
+
+                                            msg = msg + "status : " + response.status + SYNTAX.NEWLINE;
+                                            msg = msg + "data : " + response.data + SYNTAX.NEWLINE;
+                                            msg = msg + "status message : " + response.statusText + SYNTAX.NEWLINE;
+
+                                            console.error("An error occurred whilst trying to fetch children: " + msg);
+                                            updateNodeStopPropogation(node);
+                                        }
+                                    );
+                                } catch (error) {
+                                    throw new vdbBench.RestServiceException("Failed to retrieve the content of the node from the host services.\n" + error.message);
                                 }
                             }
                         }
@@ -681,29 +703,17 @@ var vdbBench = (function (vdbBench) {
                         }
 
                         /*
-                         * If we have children then return the colour black else return white
-                         * Used for the fill style in the circles beneath the images
+                         * Does the node have a parent
                          */
-                        function parentStatusCallback(node) {
-                            if (node[VDB_KEYS.TYPE] == "Vdb")
-                                return HAS_NO_PARENT;
+                        function hasParent(node) {
+                            if (_.isEmpty(node.parentLink))
+                                return false;
 
-                            return HAS_PARENT;
-                        }
+                            var link = node.parentLink;
+                            if (link.endsWith('workspace/vdbs'))
+                                return false;
 
-                        /*
-                         * If we have children then return the colour black else return white
-                         * Used for the fill style in the circles beneath the images
-                         */
-                        function childStatusCallback(node) {
-                            if (_.isEmpty(node.childLinks))
-                                return HAS_NO_CHILDREN;
-                            
-                            if (node[VDB_KEYS.HAS_CHILDREN] == true) {
-                                return HAS_CHILDREN;
-                            }
-
-                            return HAS_NO_CHILDREN;
+                            return true;
                         }
 
                         /*

@@ -132,7 +132,7 @@ var vdbBench = (function(vdbBench) {
                  * Returns: promise object for a single or list of elements
                  *
                  */
-                service.getTarget = function(link, isList) {
+                service.getTarget = function(link) {
                     if (! link)
                         return null;
 
@@ -147,8 +147,6 @@ var vdbBench = (function(vdbBench) {
                                         selfLink: VDB_KEYS.LINKS + '[0].href'
                                     });
                             });
-                        if (isList)
-                            return restService.allUrl(link, link).customGETLIST("", {}, { 'Accept' : 'application/json' });
 
                         return restService.allUrl(link, link).customGET("", {}, { 'Accept' : 'application/json' });
 
@@ -159,9 +157,6 @@ var vdbBench = (function(vdbBench) {
                              * Uses the link from the parent object to fetch the content.
                              * By passing the Accept header, we ensure that only the json version can be returned.
                              */
-                            if (isList)
-                                return restService.all(link).customGETLIST("", {}, { 'Accept' : 'application/json' });
-
                             return restService.all(link).customGET("", {}, { 'Accept' : 'application/json' });
                         });
                     }
