@@ -23,7 +23,7 @@ var vdbBench = (function (vdbBench) {
             var PARENT_BUTTON_ID = "parentButtonId";
             var CHILD_BUTTON_ID = "childButtonId";
 
-            var NODE_ID_PREFIX = D3V.GROUP_ELEMENT + SYNTAX.HYPHEN + D3V.NODE;
+            var NODE_ID_PREFIX = D3V.GROUP_ELEMENT + SYNTAX.HYPHEN + D3V.NODE + SYNTAX.HYPHEN;
 
             return {
                 // used as element only
@@ -45,13 +45,10 @@ var vdbBench = (function (vdbBench) {
 
                     var margin = {
                         top: 20,
-                        right: 120,
+                        right: 20,
                         bottom: 20,
-                        left: 120
+                        left: 20
                     };
-                    var svgWidth = scope.width - margin.right - margin.left;
-                    var svgHeight = scope.height - margin.top - margin.bottom;
-
                     var tree = d3.layout.tree();
 
                     /*
@@ -59,8 +56,8 @@ var vdbBench = (function (vdbBench) {
                      * appending an 'svg' div and inside that a 'g' div
                      */
                     var svg = d3.select(element[0]).append(D3V.SVG_ELEMENT)
-                        .attr(D3V.CSS_WIDTH, svgWidth + margin.right + margin.left)
-                        .attr(D3V.CSS_HEIGHT, svgHeight + margin.top + margin.bottom);
+                        .attr(D3V.CSS_WIDTH, scope.width)
+                        .attr(D3V.CSS_HEIGHT, scope.height);
 
                     /*
                      * Create the root group element of the svg
@@ -74,6 +71,28 @@ var vdbBench = (function (vdbBench) {
                         if (!newSearchEntry || newSearchEntry == oldSearchEntry) {
                             return;
                         }
+
+                        /*
+                         * Resize canvas in accordance with size of parent container
+                         */
+                        scope.defaultWidth = scope.width;
+                        scope.width = element[0].clientWidth;
+                        if (scope.width == 0) {
+                            scope.width = element[0].parentElement.clientWidth;
+                            if (scope.width == 0)
+                                scope.width = scope.defaultWidth; // fallback to passed in width
+                        }
+
+                        scope.defaultHeight = scope.height;
+                        scope.height = element[0].clientHeight;
+                        if (scope.height == 0) {
+                            scope.height = element[0].parentElement.clientHeight;
+                            if (scope.height == 0)
+                                scope.height = scope.defaultHeight; // fallback to passed in height
+                        }
+
+                        svg.attr(D3V.CSS_WIDTH, scope.width)
+                             .attr(D3V.CSS_HEIGHT, scope.height);
 
                         /*
                          * clear the elements inside of the directive
@@ -129,7 +148,6 @@ var vdbBench = (function (vdbBench) {
 
                         // Will call update
                         expandCollapseChildCallback(root);
-                        centerNode(root);
 
                         /**
                          * Recurse the vdb object and copy the properties
@@ -169,6 +187,13 @@ var vdbBench = (function (vdbBench) {
                         }
 
                         /**
+                         * Derive the identity of the node
+                         */
+                        function id(node) {
+                            return NODE_ID_PREFIX + node.selfLink.replace(/:/g, '__').replace(/\//g, '--');
+                        }
+
+                        /**
                          * Updates all the new, updated and removed nodes
                          *
                          * The source is the node at the "top" of the section
@@ -197,10 +222,40 @@ var vdbBench = (function (vdbBench) {
                              */
                             var nodes = tree.nodes(root).reverse();
 
+                            var minX = 0;
+                            var maxX = 0;
+                            var minY = 0;
+                            var maxY = 0;
                             // Normalize for fixed-depth.
                             nodes.forEach(function (node) {
                                 node.y = node.depth * DEPTH_HEIGHT + TOP_MARGIN;
+                                node.x = node.x + (scope.width / 2);
+                                minX = Math.min(minX, node.x);
+                                minY = Math.min(minY, node.y);
+                                maxX = Math.max(maxX, node.x);
+                                maxY = Math.max(maxY, node.y);
                             });
+
+                            /*
+                             * Modify the dimensions of the svg canvas
+                             * in order to allow most of the nodes to be
+                             * displayable using the scrollbars
+                             */
+                            var g = 80;
+                            var w = Math.abs(minX) + Math.abs(maxX);
+                            var h = Math.abs(minY) + Math.abs(maxY);
+
+                            scope.preferredWidth = scope.width;
+                            scope.preferredHeight = scope.height;
+
+                            if ((w + g) > scope.preferredWidth)
+                                scope.preferredWidth = w + g;
+
+                            if ((h + g) > scope.preferredHeight)
+                                scope.preferredHeight = h + g;
+
+                            svg.attr(D3V.CSS_WIDTH, scope.preferredWidth)
+                                 .attr(D3V.CSS_HEIGHT, scope.preferredHeight);
 
                             /*
                              * Select all existing nodes
@@ -213,7 +268,7 @@ var vdbBench = (function (vdbBench) {
                              */
                             var updateNodeSelection = nodeSelection.data(nodes, function (node) {
                                 // self link will be unique while the id is not necessarily
-                                return node.selfLink;
+                                return id(node);
                             });
 
                             /*
@@ -237,7 +292,7 @@ var vdbBench = (function (vdbBench) {
                                     return D3V.SVG_TRANSLATE + SYNTAX.OPEN_BRACKET + source.x + SYNTAX.COMMA + source.y + SYNTAX.CLOSE_BRACKET;
                                 })
                                 .attr(D3V.ID, function (node) {
-                                    return NODE_ID_PREFIX + node.selfLink;
+                                    return id(node);
                                 });
 
                             /*
@@ -381,32 +436,9 @@ var vdbBench = (function (vdbBench) {
                         function updateNodeStopPropogation(node) {
                             update(node);
 
-                            if (node === root)
-                                centerNode(node);
-
                             // Stop selection firing
                             if (d3.event)
                                 d3.event.stopPropagation();
-                        }
-
-                        function centerNode(source) {
-                            if (source == null)
-                                return;
-
-                            var scale = zoomListener.scale();
-                            var x = (svgWidth / 3) * scale;
-                            var y = TOP_MARGIN;
-
-                            source.x = x;
-                            source.y = y;
-
-                            svgGroup.transition()
-                                .duration(TRANSITION_DURATION)
-                                .attr(D3V.SVG_TRANSFORM, D3V.SVG_TRANSLATE + SYNTAX.OPEN_BRACKET +
-                                    x + SYNTAX.COMMA + y + SYNTAX.CLOSE_BRACKET +
-                                    D3V.SVG_SCALE + SYNTAX.OPEN_BRACKET + scale + SYNTAX.CLOSE_BRACKET);
-                            zoomListener.scale(scale);
-                            zoomListener.translate([x, y]);
                         }
 
                         function selectionCallback(node) {
@@ -516,11 +548,6 @@ var vdbBench = (function (vdbBench) {
                                 }
 
                                 updateNodeStopPropogation(root);
-
-                                //
-                                // Centre on the original node
-                                //
-                                centerNode(node);
                             }
                             else {
                                 //
@@ -569,11 +596,6 @@ var vdbBench = (function (vdbBench) {
                                                 //
                                                 root = parentNode;
                                                 updateNodeStopPropogation(root);
-
-                                                //
-                                                // Centre on the original node
-                                                //
-                                                centerNode(node);
                                             }
                                         },
                                         function (response) {
@@ -734,7 +756,7 @@ var vdbBench = (function (vdbBench) {
                              */
                             var linkSelection = svgGroup.selectAll(D3V.SVG_PATH + SYNTAX.DOT + D3V.LINK)
                                 .data(links, function (link) {
-                                    return link.target.selfLink;
+                                    return id(link.target);
                                 });
 
                             /*

@@ -131,7 +131,7 @@
             <!-- Tab set for displaying the search results of the search made -->
             <!-- Only displayed if search button has been clicked -->
             <div class="vdb-search-results-pane" ng-show="searchOrbit.isVisible() == true">
-                <div class="col-sm-3 vdb-search-results-panel">
+                <div class="col-sm-4 vdb-search-results-panel">
                     <h4 class="vdb-search-results-title">Search Results</h4>
                     <input class="vdb-search-results-filter" type="text" ng-model="searchOrbit.searchFilter" placeholder="filter...">
                     <ul class="list-group pagination vdb-search-results-list">
@@ -146,12 +146,13 @@
                     </ul>
                     <dir-pagination-controls pagination-id="search-results-paginate" max-size="7" direction-links="true" boundary-links="true" ></dir-pagination-controls>
                 </div>
-                <div class="vdb-diagram col-sm-5">
-                    <search-visualization search-entry="searchOrbit.selectedResult()" selected-vdb-component="searchOrbit.selectedVdbComponent" height="2048" width="1024"></search-visualization>
+                <div class="vdb-search-results-diagram col-sm-5">
+                    <search-visualization search-entry="searchOrbit.selectedResult()" selected-vdb-component="searchOrbit.selectedVdbComponent"
+                                                    height="550" width="700"></search-visualization>
                 </div>
 
                 <!-- Vertical tabbed page for displaying selected object properties -->
-                <div class="vdb-diagram-nav-col col-sm-4">
+                <div class="vdb-diagram-nav-col col-sm-3">
                     <divider-widget>
                         <divider title="Properties">
                             <div class="list-group">
