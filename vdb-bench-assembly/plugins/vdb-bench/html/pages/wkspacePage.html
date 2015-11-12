@@ -147,13 +147,31 @@
                     <dir-pagination-controls pagination-id="search-results-paginate" max-size="7" direction-links="true" boundary-links="true" ></dir-pagination-controls>
                 </div>
                 <div class="vdb-search-results-diagram col-sm-5">
-                    <search-visualization search-entry="searchOrbit.selectedResult()" selected-vdb-component="searchOrbit.selectedVdbComponent"
-                                                    height="550" width="700"></search-visualization>
+                    <search-visualization search-entry="searchOrbit.selectedResult()"
+                                                    selected-vdb-component="searchOrbit.selectedVdbComponent"
+                                                    orientation="searchOrbit.visOrientation"
+                                                    height="550"
+                                                    width="700"></search-visualization>
                 </div>
 
                 <!-- Vertical tabbed page for displaying selected object properties -->
                 <div class="vdb-diagram-nav-col col-sm-3">
                     <divider-widget>
+                        <divider title="Options">
+                            <form action="" class="vdb-search-results-diagram-settings">
+                                <label>Orientation:</label>
+                                <br/>
+                                <label class="block">
+                                    <input type="radio" name="orientation" value="LR" ng-model="searchOrbit.visOrientation">
+                                    Left-to-Right
+                                </label>
+                                <br/>
+                                <label class="block">
+                                    <input type="radio" name="orientation" value="TB" ng-model="searchOrbit.visOrientation" checked="checked">
+                                    Top-to-Bottom
+                                </label>
+                            </form>
+                        </divider>
                         <divider title="Properties">
                             <div class="list-group">
                                 <div class="list-group-item" ng-repeat="component in searchOrbit.selectedVdbComponent">
