@@ -6,7 +6,7 @@
  */
 var vdbBench = (function(vdbBench) {
 
-    var BASE_URL = '/v1';
+    var BASE_URL = '/vdb-builder/v1';
 
     vdbBench._module.factory('RepoSelectionService',
              function($rootScope, StorageService) {
@@ -14,7 +14,7 @@ var vdbBench = (function(vdbBench) {
                 var defaultRepository = {
                     name : 'default',
                     host : 'localhost',
-                    port : 3000,
+                    port : 8080,
                     baseUrl : BASE_URL
                 };
 
