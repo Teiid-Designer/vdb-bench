@@ -1,12 +1,13 @@
 {
     "digest": {
-        "keng__id": "portfolio-vdb.xml",
-        "keng__dataPath": "/tko__komodo/tko__workspace/portfolio-vdb.xml",
+        "keng__id": "Portfolio",
+        "keng__baseUri": "http://localhost:9090/vdb-builder/v1/",
+        "keng__dataPath": "/tko:komodo/tko:workspace/Portfolio",
         "keng__kType": "Vdb",
         "keng__hasChildren": true,
-        "vdb__name": "portfolio-vdb.xml",
+        "vdb__name": "Portfolio",
         "vdb__description": "The Portfolio Dynamic VDB",
-        "vdb__originalFile": "/tko:komodo/tko:workspace/portfolio-vdb.xml",
+        "vdb__originalFile": "/tko:komodo/tko:workspace/Portfolio",
         "vdb__preview": false,
         "vdb__connectionType": "BY_VERSION",
         "vdb__version": 1,
@@ -19,27 +20,31 @@
         "keng___links": [
             {
                 "rel": "self",
-                "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/Portfolio"
             },
             {
                 "rel": "parent",
-                "href": "http://localhost:3000/v1/workspace/vdbs"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs"
+            },
+            {
+                "rel": "children",
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/search?parent\u003d/tko:komodo/tko:workspace/Portfolio"
             },
             {
                 "rel": "imports",
-                "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/VdbImports"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/Portfolio/VdbImports"
             },
             {
                 "rel": "models",
-                "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/Models"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/Portfolio/Models"
             },
             {
                 "rel": "translators",
-                "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/VdbTranslators"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/Portfolio/VdbTranslators"
             },
             {
                 "rel": "dataRoles",
-                "href": "http://localhost:3000/v1/workspace/vdbs/portfolio-vdb.xml/VdbDataRoles"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/Portfolio/VdbDataRoles"
             }
         ]
     },

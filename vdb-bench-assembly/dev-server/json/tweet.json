@@ -1,12 +1,13 @@
 {
     "digest": {
-        "keng__id": "tweet-example-vdb.xml",
-        "keng__dataPath": "/tko__komodo/tko__workspace/tweet-example-vdb.xml",
+        "keng__id": "tweet-example-vdb",
+        "keng__baseUri": "http://localhost:9090/vdb-builder/v1/",
+        "keng__dataPath": "/tko:komodo/tko:workspace/tweet-example-vdb",
         "keng__kType": "Vdb",
         "keng__hasChildren": true,
-        "vdb__name": "tweet-example-vdb.xml",
+        "vdb__name": "tweet-example-vdb",
         "vdb__description": "Shows how to call Web Services",
-        "vdb__originalFile": "/tko:komodo/tko:workspace/tweet-example-vdb.xml",
+        "vdb__originalFile": "/tko:komodo/tko:workspace/tweet-example-vdb",
         "vdb__preview": false,
         "vdb__connectionType": "BY_VERSION",
         "vdb__version": 1,
@@ -19,27 +20,31 @@
         "keng___links": [
             {
                 "rel": "self",
-                "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/tweet-example-vdb"
             },
             {
                 "rel": "parent",
-                "href": "http://localhost:9090/v1/workspace/vdbs"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs"
+            },
+            {
+                "rel": "children",
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/search?parent\u003d/tko:komodo/tko:workspace/tweet-example-vdb"
             },
             {
                 "rel": "imports",
-                "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml/VdbImports"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/tweet-example-vdb/VdbImports"
             },
             {
                 "rel": "models",
-                "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml/Models"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/tweet-example-vdb/Models"
             },
             {
                 "rel": "translators",
-                "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml/VdbTranslators"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/tweet-example-vdb/VdbTranslators"
             },
             {
                 "rel": "dataRoles",
-                "href": "http://localhost:9090/v1/workspace/vdbs/tweet-example-vdb.xml/VdbDataRoles"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/tweet-example-vdb/VdbDataRoles"
             }
         ]
     },

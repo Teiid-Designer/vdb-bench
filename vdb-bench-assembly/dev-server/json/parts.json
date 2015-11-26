@@ -1,38 +1,43 @@
 {
     "digest": {
-        "keng__id": "parts_dynamic-vdb.xml",
-        "keng__dataPath": "/tko__komodo/tko__workspace/parts_dynamic-vdb.xml",
+        "keng__id": "MyPartsVDB_Dynamic",
+        "keng__baseUri": "http://localhost:9090/vdb-builder/v1/",
+        "keng__dataPath": "/tko:komodo/tko:workspace/MyPartsVDB_Dynamic",
         "keng__kType": "Vdb",
         "keng__hasChildren": true,
-        "vdb__name": "parts_dynamic-vdb.xml",
-        "vdb__originalFile": "/tko:komodo/tko:workspace/parts_dynamic-vdb.xml",
+        "vdb__name": "MyPartsVDB_Dynamic",
+        "vdb__originalFile": "/tko:komodo/tko:workspace/MyPartsVDB_Dynamic",
         "vdb__preview": false,
         "vdb__connectionType": "BY_VERSION",
         "vdb__version": 1,
         "keng___links": [
             {
                 "rel": "self",
-                "href": "http://localhost:9090/v1/workspace/vdbs/parts_dynamic-vdb.xml"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/MyPartsVDB_Dynamic"
             },
             {
                 "rel": "parent",
-                "href": "http://localhost:9090/v1/workspace/vdbs"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs"
+            },
+            {
+                "rel": "children",
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/search?parent\u003d/tko:komodo/tko:workspace/MyPartsVDB_Dynamic"
             },
             {
                 "rel": "imports",
-                "href": "http://localhost:9090/v1/workspace/vdbs/parts_dynamic-vdb.xml/VdbImports"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/MyPartsVDB_Dynamic/VdbImports"
             },
             {
                 "rel": "models",
-                "href": "http://localhost:9090/v1/workspace/vdbs/parts_dynamic-vdb.xml/Models"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/MyPartsVDB_Dynamic/Models"
             },
             {
                 "rel": "translators",
-                "href": "http://localhost:9090/v1/workspace/vdbs/parts_dynamic-vdb.xml/VdbTranslators"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/MyPartsVDB_Dynamic/VdbTranslators"
             },
             {
                 "rel": "dataRoles",
-                "href": "http://localhost:9090/v1/workspace/vdbs/parts_dynamic-vdb.xml/VdbDataRoles"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/MyPartsVDB_Dynamic/VdbDataRoles"
             }
         ]
     },

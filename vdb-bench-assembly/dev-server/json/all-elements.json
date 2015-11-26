@@ -1,12 +1,13 @@
 {
     "digest": {
-        "keng__id": "teiid-vdb-all-elements.xml",
-        "keng__dataPath": "/tko__komodo/tko__workspace/teiid-vdb-all-elements.xml",
+        "keng__id": "teiid-vdb-all-elements",
+        "keng__baseUri": "http://localhost:9090/vdb-builder/v1/",
+        "keng__dataPath": "/tko:komodo/tko:workspace/teiid-vdb-all-elements",
         "keng__kType": "Vdb",
         "keng__hasChildren": true,
-        "vdb__name": "teiid-vdb-all-elements.xml",
+        "vdb__name": "teiid-vdb-all-elements",
         "vdb__description": "vdb description",
-        "vdb__originalFile": "/tko:komodo/tko:workspace/teiid-vdb-all-elements.xml",
+        "vdb__originalFile": "/tko:komodo/tko:workspace/teiid-vdb-all-elements",
         "vdb__preview": false,
         "vdb__connectionType": "BY_VERSION",
         "vdb__version": 1,
@@ -23,27 +24,31 @@
         "keng___links": [
             {
                 "rel": "self",
-                "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/teiid-vdb-all-elements"
             },
             {
                 "rel": "parent",
-                "href": "http://localhost:9090/v1/workspace/vdbs"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs"
+            },
+            {
+                "rel": "children",
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/search?parent\u003d/tko:komodo/tko:workspace/teiid-vdb-all-elements"
             },
             {
                 "rel": "imports",
-                "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbImports"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/teiid-vdb-all-elements/VdbImports"
             },
             {
                 "rel": "models",
-                "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/Models"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/teiid-vdb-all-elements/Models"
             },
             {
                 "rel": "translators",
-                "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbTranslators"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/teiid-vdb-all-elements/VdbTranslators"
             },
             {
                 "rel": "dataRoles",
-                "href": "http://localhost:9090/v1/workspace/vdbs/teiid-vdb-all-elements.xml/VdbDataRoles"
+                "href": "http://localhost:9090/vdb-builder/v1/workspace/vdbs/teiid-vdb-all-elements/VdbDataRoles"
             }
         ]
     },
