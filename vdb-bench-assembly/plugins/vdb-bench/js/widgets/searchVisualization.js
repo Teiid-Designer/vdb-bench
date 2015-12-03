@@ -264,8 +264,6 @@ var vdbBench = (function (vdbBench) {
                                         node.y = node.depth * DEPTH_HEIGHT + TOP_MARGIN;
                                         node.x = node.x + (isTopToBottom() ? (scope.width / 2) : ((scope.height / 2) - CHILDREN_ICON_Y));
 
-                                        console.log("Orientation: " + scope.orientation + "    node.x" + node.x);
-
                                         minX = Math.min(minX, node.x);
                                         minY = Math.min(minY, node.y);
                                         maxX = Math.max(maxX, node.x);
@@ -335,16 +333,6 @@ var vdbBench = (function (vdbBench) {
                                         });
 
                                     /*
-                                     * Add parent indicator circles above the image 
-                                     */
-                                    enterNodesGroup.append(D3V.SVG_CIRCLE)
-                                        .attr(D3V.ID, PARENT_BUTTON_ID)
-                                        .attr(D3V.HTML_RADIUS, 1e-6)
-                                        .attr(D3V.SVG_CIRCLE_Y, PARENT_ICON_Y)
-                                        .style(D3V.CSS_FILL, BLACK)
-                                        .on(D3V.HTML_CLICK, expandCollapseParentCallback);
-
-                                    /*
                                      * Append the id to each new node
                                      *
                                      * text-anchor="middle" will anchor the text using the centre
@@ -390,7 +378,21 @@ var vdbBench = (function (vdbBench) {
                                         .on(D3V.HTML_CLICK, selectionCallback);
 
                                     /*
-                                     * Add children indicator circles below the image 
+                                     * Add parent indicator circles above the image
+                                     * Added after the items with the selection callback to
+                                     * ensure its above in the 'z-order'.
+                                     */
+                                    enterNodesGroup.append(D3V.SVG_CIRCLE)
+                                        .attr(D3V.ID, PARENT_BUTTON_ID)
+                                        .attr(D3V.HTML_RADIUS, 1e-6)
+                                        .attr(D3V.SVG_CIRCLE_Y, PARENT_ICON_Y)
+                                        .style(D3V.CSS_FILL, BLACK)
+                                        .on(D3V.HTML_CLICK, expandCollapseParentCallback);
+
+                                    /*
+                                     * Add children indicator circles below the image
+                                     * Added after the items with the selection callback to
+                                     * ensure its above in the 'z-order'.
                                      */
                                     enterNodesGroup.append(D3V.SVG_CIRCLE)
                                         .attr(D3V.ID, CHILD_BUTTON_ID)

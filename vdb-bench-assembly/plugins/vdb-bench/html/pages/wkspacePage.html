@@ -31,8 +31,7 @@
                                 <input  class="col-sm-12" type="text" class="form-control" ng-model="searchOrbit.containsTerm"
                                             name="searchContainsElement" required title="Search for all objects containing the search term">
                                 <span class="vdb-search-span">
-                                    <button class="btn-clear vdb-search-btn-clear" ng-click="searchOrbit.clear()">Clear</button>
-                                    <button class="btn-search vdb-search-btn-search" ng-disabled="search.$invalid" ng-click="searchOrbit.submit()">
+                                    <button type="submit" class="btn-search vdb-search-btn-search" ng-click="searchOrbit.submit()">
                                         Search<span class="glyphicon glyphicon-search vdb-search-btn-icon" aria-hidden="true"></span>
                                     </button>
                                 </span>
@@ -56,26 +55,48 @@
                                     <input type="text" class="form-control" ng-model="searchOrbit.parentTerm" name="searchParentElement" id="parentterm"
                                            title="Search for all descendents of a particular object by specifying its data path">
                                 </span>
+                                <span>
+                                    <label for="nameterm">Name</label>
+                                    <input type="text" class="form-control" ng-model="searchOrbit.nameTerm" name="searchParentElement" id="nameterm"
+                                           title="Search for objects with a particular name (use '%' as a wildcard to broaden the search)">
+                                </span>
                             </div>
                         </form>
+                    </accordion-group>
+                    <!-- -->
+                    <!-- -->
+                    <!-- Search Reports -->
+                    <!-- -->
+                    <!-- -->
+                    <accordion-group heading="Reports"  ng-init="reportsIsOpen = true" is-open="reportsIsOpen">
+                        <input class="accordian-list-filter" type="text" ng-model="reportOrbit.searchFilter" placeholder="filter...">
+                        <div class="list-group accordian-list">
+                            <a class="list-group-item"
+                               pagination-id="reports-paginate"
+                                     dir-paginate="report in reportOrbit.reports|filter:reportOrbit.searchFilter|itemsPerPage:3"
+                                     ng-click="$parent.reportOrbit.selectReport(report)" ng-class="{active:$parent.reportOrbit.reportSelected()==report}">
+                                    {{report.name}}
+                                </a>
+                                <dir-pagination-controls pagination-id="reports-paginate" max-size="3" direction-links="true" boundary-links="true"></dir-pagination-controls>
+                            </div>
                     </accordion-group>
                     <!-- -->
                     <!-- -->
                     <!-- Vdbs -->
                     <!-- -->
                     <!-- -->
-                    <accordion-group heading="Vdbs" ng-init="vdbsIsOpen = true" is-open="vdbsIsOpen">
+                    <accordion-group heading="Vdbs">
                         <accordion-heading>
                             Vdbs
                             <!-- Necessary to make it into a dropdown as they do not refresh the page when clicked -->
                             <div class="pull-right" dropdown>
-                                <button type="button" class="glyphicon glyphicon-plus vdb-heading-btn" dropdown-toggle ng-click="onAddClicked($event)"></button>
-                                <button type="button" class="glyphicon glyphicon-minus vdb-heading-btn" dropdown-toggle ng-click="onRemoveClicked($event)"></button>
+                                <button type="button" class="glyphicon glyphicon-plus vdb-heading-btn" dropdown-toggle ng-click="vdbOrbit.onAddClicked($event)"></button>
+                                <button type="button" class="glyphicon glyphicon-minus vdb-heading-btn" dropdown-toggle ng-click="vdbOrbit.onRemoveClicked($event)"></button>
                             </div>
                         </accordion-heading>
                         <div id="list-vdb">
-                            <input class="vdbs-list-filter" type="text" ng-model="vdbOrbit.searchFilter" placeholder="filter...">
-                            <div class="list-group vdbs-list">
+                            <input class="accordian-list-filter" type="text" ng-model="vdbOrbit.searchFilter" placeholder="filter...">
+                            <div class="list-group accordian-list">
                                 <a class="list-group-item"
                                      pagination-id="vdb-paginate"
                                      dir-paginate="vdb in vdbOrbit.vdbs|filter:vdbOrbit.searchFilter|orderBy:'keng__id'|itemsPerPage:3"
@@ -84,6 +105,7 @@
                                 </a>
                                 <dir-pagination-controls pagination-id="vdb-paginate" max-size="3" direction-links="true" boundary-links="true"></dir-pagination-controls>
                             </div>
+                            Total Vdbs: {{vdbOrbit.vdbs.length}}
                         </div>
                     </accordion-group>
                 </accordion>
@@ -137,7 +159,7 @@
                     <ul class="list-group pagination vdb-search-results-list">
                         <a class="list-group-item vdb-search-results-entry" href="#"
                              pagination-id="search-results-paginate"
-                             dir-paginate="result in searchOrbit.results|filter:searchOrbit.searchFilter|orderBy:'keng__dataPath'|itemsPerPage:7"
+                             dir-paginate="result in searchOrbit.results|orderBy:'keng__dataPath'|filter:searchOrbit.searchFilter|itemsPerPage:7 : 'search-results-paginate' track by $index"
                              ng-click="searchOrbit.setSelectedResult(result)" ng-class="{active:searchOrbit.selectedResult()==result}">
                             <h4 class="list-group-item-heading vdb-search-results-id">{{result.keng__id}}</h4>
                             <h4 class="list-group-item-heading vdb-search-results-type">{{result.keng__kType}}</h4>
@@ -146,7 +168,7 @@
                     </ul>
                     <dir-pagination-controls pagination-id="search-results-paginate" max-size="7" direction-links="true" boundary-links="true" ></dir-pagination-controls>
                 </div>
-                <div class="vdb-search-results-diagram col-sm-5">
+                <div class="vdb-search-results-diagram col-sm-4">
                     <search-visualization search-entry="searchOrbit.selectedResult()"
                                                     selected-vdb-component="searchOrbit.selectedVdbComponent"
                                                     orientation="searchOrbit.visOrientation"
@@ -155,7 +177,7 @@
                 </div>
 
                 <!-- Vertical tabbed page for displaying selected object properties -->
-                <div class="vdb-diagram-nav-col col-sm-3">
+                <div class="vdb-diagram-nav-col col-sm-4">
                     <divider-widget>
                         <divider title="Options">
                             <form action="" class="vdb-search-results-diagram-settings">

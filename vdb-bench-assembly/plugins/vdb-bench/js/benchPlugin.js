@@ -48,6 +48,7 @@ var vdbBench = (function(vdbBench) {
                                                     SEARCH_TYPE : 'type',
                                                     SEARCH_PATH : 'path',
                                                     SEARCH_PARENT : 'parent',
+                                                    SEARCH_NAME : 'name',
                                                     DATA_KOMODO : 'tko:komodo',
                                                     DATA_WORKSPACE : 'tko:workspace'
                                                 }
