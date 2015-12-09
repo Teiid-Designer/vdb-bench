@@ -277,6 +277,10 @@ gulp.task('site', ['usemin'], function() {
     .pipe(gulp.dest('target/site'));
   gulp.src(['img/**'], { base: '.' })
     .pipe(gulp.dest('target/site'));
+
+  gulp.src(['plugins/**/img/**'], { base: '.' })
+    .pipe(gulp.dest('target/site/'));
+
   var dirs = fs.readdirSync('./libs');
   var patterns = [];
   dirs.forEach(function(dir) {
