@@ -220,6 +220,51 @@ var vdbBench = (function(vdbBench) {
                     });
                 }
 
+                /**
+                 * Service: Get the collection of saved searches
+                 */
+                service.getSearches = function() {
+                    return getRestService().then(function(restService) {
+                        return restService.all(REST_URI.WORKSPACE + REST_URI.SEARCH + REST_URI.SAVED_SEARCHES).getList();
+                    });
+                }
+
+                /**
+                 * Service: Save a search to the resposiory
+                 * formatted with the following object:
+                 *
+                 * {
+                 *    searchName: <search save name>,
+                 *    type: <type of objects to return>,
+                 *    parent: <the object who is the root of the search>,
+                 *    ancestor: <the ancestor of the object>,
+                 *    path: <the datapath of a specific object>,
+                 *    contains: <contains term>
+                 *    objectName: <objectName term>
+                 * }
+                 */
+                service.saveSearch = function(searchAttributes) {
+                    return getRestService().then(function(restService) {
+                        if (searchAttributes == null)
+                            return null;
+
+                        return restService.all(REST_URI.WORKSPACE + REST_URI.SEARCH + REST_URI.SAVED_SEARCHES).post(searchAttributes);
+                    });
+                }
+
+                /**
+                 * Service: delete a search from the resposiory
+                 */
+                service.deleteSavedSearch = function(searchName) {
+                    return getRestService().then(function(restService) {
+                        if (searchName == null)
+                            return null;
+
+                        return restService.one(REST_URI.WORKSPACE + REST_URI.SEARCH + REST_URI.SAVED_SEARCHES +
+                                                        SYNTAX.FORWARD_SLASH + searchName).remove();
+                    });
+                }
+
                 return service;
             } ]);
 

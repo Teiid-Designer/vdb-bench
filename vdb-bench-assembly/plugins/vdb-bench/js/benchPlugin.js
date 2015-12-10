@@ -44,11 +44,14 @@ var vdbBench = (function(vdbBench) {
                                                     SERVICE : '/service',
                                                     SCHEMA : '/schema',
                                                     SEARCH : '/search',
+                                                    SAVE_SEARCH : 'saveSearch',
+                                                    SAVED_SEARCHES : '/savedSearches',
                                                     SEARCH_CONTAINS : 'contains',
                                                     SEARCH_TYPE : 'type',
                                                     SEARCH_PATH : 'path',
                                                     SEARCH_PARENT : 'parent',
-                                                    SEARCH_NAME : 'name',
+                                                    SEARCH_OBJECT_NAME : 'objectName',
+                                                    SEARCH_SAVE_NAME : 'searchName',
                                                     DATA_KOMODO : 'tko:komodo',
                                                     DATA_WORKSPACE : 'tko:workspace'
                                                 }

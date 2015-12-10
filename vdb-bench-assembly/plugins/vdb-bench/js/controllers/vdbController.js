@@ -3,12 +3,13 @@ var vdbBench = (function (vdbBench) {
     vdbBench.VdbController = vdbBench._module.controller('VdbController',
                                                          ['$scope',
                                                           '$modal',
+                                                          '$window',
                                                           'RepoRestService',
                                                           'VdbSelectionService',
                                                           'SYNTAX',
                                                           'REST_URI',
                                                           'VDB_KEYS',
-            function ($scope, $modal, RepoRestService, VdbSelectionService, SYNTAX, REST_URI, VDB_KEYS) {
+            function ($scope, $modal, $window, RepoRestService, VdbSelectionService, SYNTAX, REST_URI, VDB_KEYS) {
 
                 var DIAGRAM_TAB_ID = "Diagram";
                 var PREVIEW_TAB_ID = "Preview";
@@ -43,15 +44,17 @@ var vdbBench = (function (vdbBench) {
                 $scope.vdbOrbit.selectedVdbComponent = [];
 
                 $scope.vdbOrbit.selectVdb = function(vdb) {
-                    //
-                    // Ensure that the search results pane is hidden
-                    //
-                    $scope.searchOrbit.setVisible(false);
+                    if (vdb) {
+                        //
+                        // Ensure that the search results pane is hidden
+                        //
+                        $scope.searchOrbit.setVisible(false);
 
-                    //
-                    // Ensure the reports are deselected
-                    //
-                    $scope.reportOrbit.selectReport(null);
+                        //
+                        // Ensure the reports are deselected
+                        //
+                        $scope.reportOrbit.selectReport(null);
+                    }
 
                     //
                     // Set the selected vdb
@@ -106,7 +109,7 @@ var vdbBench = (function (vdbBench) {
                     }, 2000);
                 };
 
-                                /**
+                /**
                  * Event handler for clicking the add button
                  */
                 $scope.vdbOrbit.onAddClicked = function (event) {
@@ -138,14 +141,15 @@ var vdbBench = (function (vdbBench) {
                         // Essential to stop the accordion closing
                         event.stopPropagation();
                     }
-                };
+                }
 
                 $scope.searchOrbit = {};
+                $scope.searchOrbit.searchName = '';
                 $scope.searchOrbit.containsTerm = '';
                 $scope.searchOrbit.typeTerm = '';
                 $scope.searchOrbit.pathTerm = '';
                 $scope.searchOrbit.parentTerm = '';
-                $scope.searchOrbit.nameTerm = '';
+                $scope.searchOrbit.objectNameTerm = '';
                 $scope.searchOrbit.visible = false;
                 $scope.searchOrbit.results = [];
 
@@ -161,11 +165,12 @@ var vdbBench = (function (vdbBench) {
                 }
 
                 $scope.searchOrbit.submit = function() {
-                    if (_.isEmpty($scope.searchOrbit.containsTerm) &&
+                    if (_.isEmpty($scope.searchOrbit.searchName) &&
+                        _.isEmpty($scope.searchOrbit.containsTerm) &&
                         _.isEmpty($scope.searchOrbit.typeTerm) &&
                         _.isEmpty($scope.searchOrbit.pathTerm) &&
                         _.isEmpty($scope.searchOrbit.parentTerm) &&
-                        _.isEmpty($scope.searchOrbit.nameTerm))
+                        _.isEmpty($scope.searchOrbit.objectNameTerm))
                         return;
 
                     //
@@ -180,6 +185,9 @@ var vdbBench = (function (vdbBench) {
                     $scope.searchOrbit.setVisible(true);
 
                     var term = {}
+                    if (! _.isEmpty($scope.searchOrbit.searchName))
+                        term[REST_URI.SEARCH_SAVE_NAME] = $scope.searchOrbit.searchName;
+
                     if (! _.isEmpty($scope.searchOrbit.containsTerm))
                         term[REST_URI.SEARCH_CONTAINS] = $scope.searchOrbit.containsTerm;
 
@@ -192,8 +200,8 @@ var vdbBench = (function (vdbBench) {
                     if (! _.isEmpty($scope.searchOrbit.parentTerm))
                         term[REST_URI.SEARCH_PARENT] = $scope.searchOrbit.parentTerm;
 
-                    if (! _.isEmpty($scope.searchOrbit.nameTerm))
-                        term[REST_URI.SEARCH_NAME] = $scope.searchOrbit.nameTerm;
+                    if (! _.isEmpty($scope.searchOrbit.objectNameTerm))
+                        term[REST_URI.SEARCH_OBJECT_NAME] = $scope.searchOrbit.objectNameTerm;
 
                     RepoRestService.search(term).then(
                         function (results) {
@@ -219,7 +227,7 @@ var vdbBench = (function (vdbBench) {
                             $scope.searchOrbit.results[0][VDB_KEYS.ID] = "Error occurred while searching the repository:\n" + msg;
                         }
                     );
-                };
+                }
 
                 $scope.searchOrbit.setSelectedResult = function(result) {
                     $scope.searchOrbit.resultSelected = result;
@@ -229,12 +237,131 @@ var vdbBench = (function (vdbBench) {
                     return $scope.searchOrbit.resultSelected;
                 }
 
+                /**
+                 * Event handler for clicking the save search button
+                 */
+                $scope.searchOrbit.onSaveClicked = function (event) {
+                    try {
+                        // If no terms entered then do nothing
+                        if (_.isEmpty($scope.searchOrbit.containsTerm) &&
+                            _.isEmpty($scope.searchOrbit.typeTerm) &&
+                            _.isEmpty($scope.searchOrbit.pathTerm) &&
+                            _.isEmpty($scope.searchOrbit.parentTerm) &&
+                            _.isEmpty($scope.searchOrbit.objectNameTerm))
+                            return;
+
+                        //
+                        // Display a dialog to ask for the name of the search
+                        //
+                        var modalTemplate = '<div class="modal-header">' +
+                                                         '<h3 class="modal-title">Enter an identifying name for the saved search</h3>' +
+                                                         '</div>' +
+                                                         '<div class="modal-body">' +
+                                                         '<input type="text" ng-model="searchName"/>' +
+                                                         '</div>' +
+                                                         '<div class="modal-footer">' +
+                                                         '<button class="btn btn-primary" ng-click="ok()">OK</button>' +
+                                                         '<button class="btn btn-warning" ng-click="cancel()">Cancel</button>' +
+                                                         '</div>';
+
+                        var modal = $modal.open( {
+                            animation: 'true',
+                            backdrop: 'false',
+                            template: modalTemplate,
+                            controller: ['$scope', '$modalInstance', function ($scope, $modalInstance) {
+                                $scope.ok = function() {
+                                    $modalInstance.close($scope.searchName || '');
+                                };
+                                $scope.cancel = function() {
+                                    $modalInstance.dismiss('cancel');
+                                }
+                            }]
+                        });
+
+                        //
+                        // If modal has a searchName then save it using the rest service
+                        //
+                        modal.result.then(
+                            function (searchName) {
+                                var searchAttributes = {
+                                    'searchName' : searchName,
+                                };
+
+                                // Adds those attributes that have values
+                                if (! _.isEmpty($scope.searchOrbit.containsTerm))
+                                    searchAttributes[REST_URI.SEARCH_CONTAINS] = $scope.searchOrbit.containsTerm;
+                                if (! _.isEmpty($scope.searchOrbit.typeTerm))
+                                    searchAttributes[REST_URI.SEARCH_TYPE] = $scope.searchOrbit.typeTerm;
+                                if (! _.isEmpty($scope.searchOrbit.pathTerm))
+                                    searchAttributes[REST_URI.SEARCH_PATH] = $scope.searchOrbit.pathTerm;
+                                if (! _.isEmpty($scope.searchOrbit.parentTerm))
+                                    searchAttributes[REST_URI.SEARCH_PARENT] = $scope.searchOrbit.parentTerm;
+                                if (! _.isEmpty($scope.searchOrbit.objectNameTerm))
+                                    searchAttributes[REST_URI.SEARCH_OBJECT_NAME] = $scope.searchOrbit.objectNameTerm;
+
+                                //
+                                // Call the rest service to post the new search
+                                //
+                                RepoRestService.saveSearch(searchAttributes).then(
+                                    function (results) {
+                                        alert("Save completed");
+                                        initReports();
+                                    },
+                                    function (response) {
+                                        var msg = "";
+                                        if (response.config)
+                                            msg = "url : " + response.config.url + SYNTAX.NEWLINE;
+
+                                        msg = msg + "status : " + response.status + SYNTAX.NEWLINE;
+                                        msg = msg + "data : " + response.data + SYNTAX.NEWLINE;
+                                        msg = msg + "status message : " + response.statusText + SYNTAX.NEWLINE;
+
+                                        alert("Error occurred while searching the repository:\n" + msg);
+                                    }
+                                ); 
+                            },
+                            function () {
+                                // nothing to do - cancel was clicked in the search name dialog
+                            }
+                        );
+                    } catch (error) {
+                        // nothing to do
+                    } finally {
+                        // Essential to stop the accordion closing
+                        event.stopPropagation();
+                    }
+                }
+
                 $scope.reportOrbit = {};
-                $scope.reportOrbit.reports = [
+                $scope.reportOrbit.defaultReports = [
                     { id: 'ALL_DATA_SOURCES', name: 'All data sources' },
                     { id: 'SOURCES_MODELS', name: 'Source models using a data source' },
                     { id: 'NAMED_COLUMNS', name: 'Find all columns of a certain name' }
                 ];
+
+                /**
+                 * Fetch the list of search reports from the selected repository
+                 */
+                function initReports() {
+                    $scope.reportOrbit.reports = []
+                    $scope.reportOrbit.reports = $scope.reportOrbit.reports.concat($scope.reportOrbit.defaultReports);
+
+                    try {
+                        RepoRestService.getSearches().then(
+                            function (newSearches) {
+                                RepoRestService.copy(newSearches, $scope.reportOrbit.reports);
+
+                                // Ensure the default reports are also available
+                                $scope.reportOrbit.reports = $scope.reportOrbit.reports.concat($scope.reportOrbit.defaultReports);
+                            },
+                            function (response) {
+                                // Some kind of error has occurred
+                                throw new vdbBench.RestServiceException("Failed to load searches from the host services.\n" + response.message);
+                            });
+                    } catch (error) {
+                        alert("An exception occurred:\n" + error.message);
+                    }
+                }
 
                 $scope.reportOrbit.selectReport = function(report) {
                     if (report) {
@@ -286,10 +413,11 @@ var vdbBench = (function (vdbBench) {
 
                             modal.result.then(
                                 function (name) {
+                                    $scope.searchOrbit.searchName = '';
                                     $scope.searchOrbit.containsTerm = '';
                                     $scope.searchOrbit.pathTerm = '';
                                     $scope.searchOrbit.parentTerm = '';
-                                    $scope.searchOrbit.nameTerm = name;
+                                    $scope.searchOrbit.objectNameTerm = name;
                                     $scope.searchOrbit.typeTerm = 'Column';
                                     $scope.searchOrbit.submit();
                                 },
@@ -301,15 +429,67 @@ var vdbBench = (function (vdbBench) {
                             break;
                         case 'ALL_DATA_SOURCES':
                         case 'SOURCES_MODELS':
-                        case 'REPORT_4':
-                        case 'REPORT_5':
+                            alert('To be implemented');
+                            break;
                         default:
-                            window.alert('To be implemented');
+                            //
+                            // Ask the rest service to submit the search
+                            //
+                            $scope.searchOrbit.searchName = report.name;
+                            $scope.searchOrbit.containsTerm = '';
+                            $scope.searchOrbit.pathTerm = '';
+                            $scope.searchOrbit.parentTerm = '';
+                            $scope.searchOrbit.objectNameTerm = '';
+                            $scope.searchOrbit.typeTerm = '';
+                            $scope.searchOrbit.submit();
+
+                            // Reset the search name since we cannot reset anywhere else
+                            $scope.searchOrbit.searchName = '';
                     }
                 }
 
                 $scope.reportOrbit.reportSelected = function() {
                     return $scope.reportOrbit.selectedReport;
+                }
+
+                /**
+                 * Event handler for clicking the delete search button
+                 */
+                $scope.reportOrbit.onDeleteClicked = function (event) {
+                    try {
+                        if (_.isEmpty($scope.reportOrbit.selectedReport))
+                            return;
+
+                        // Cannot delete default reports at the moment
+                        if (!_.isEmpty($scope.reportOrbit.selectedReport.report.id))
+                            return;
+
+                        //
+                        // Call the rest service to delete the existing search
+                        //
+                        RepoRestService.deleteSavedSearch($scope.reportOrbit.selectedReport.name).then(
+                            function (results) {
+                                $scope.reportOrbit.selectedReport = '';
+                                initReports();
+                            },
+                            function (response) {
+                                var msg = "";
+                                if (response.config)
+                                    msg = "url : " + response.config.url + SYNTAX.NEWLINE;
+
+                                msg = msg + "status : " + response.status + SYNTAX.NEWLINE;
+                                msg = msg + "data : " + response.data + SYNTAX.NEWLINE;
+                                msg = msg + "status message : " + response.statusText + SYNTAX.NEWLINE;
+
+                                alert("Error occurred while searching the repository:\n" + msg);
+                            }
+                        );
+                    } catch (error) {
+                        // nothing to do
+                    } finally {
+                        // Essential to stop the accordion closing
+                        event.stopPropagation();
+                    }
                 }
 
                 $scope.destroy = function (vdb) {
@@ -320,6 +500,9 @@ var vdbBench = (function (vdbBench) {
 
                 // Initialise vdb collection on loading
                 initVdbs();
+
+                // Initialise the reports collection on loading
+                initReports();
 
             }
         ]);

@@ -26,10 +26,17 @@
                     <!-- -->
                     <!-- -->
                     <accordion-group heading="Search" ng-init="searchIsOpen = true" is-open="searchIsOpen">
+                        <accordion-heading>
+                            Search
+                            <!-- Necessary to make it into a dropdown as they do not refresh the page when clicked -->
+                            <div class="pull-right" dropdown>
+                                <button type="button" class="glyphicon glyphicon-save vdb-heading-btn" dropdown-toggle ng-click="searchOrbit.onSaveClicked($event)"></button>
+                            </div>
+                        </accordion-heading>
                         <form name="search" role="form">
                             <div class="input-group input-group-search">
                                 <input  class="col-sm-12" type="text" class="form-control" ng-model="searchOrbit.containsTerm"
-                                            name="searchContainsElement" required title="Search for all objects containing the search term">
+                                            name="searchContainsElement" title="Search for all objects containing the search term">
                                 <span class="vdb-search-span">
                                     <button type="submit" class="btn-search vdb-search-btn-search" ng-click="searchOrbit.submit()">
                                         Search<span class="glyphicon glyphicon-search vdb-search-btn-icon" aria-hidden="true"></span>
@@ -57,7 +64,7 @@
                                 </span>
                                 <span>
                                     <label for="nameterm">Name</label>
-                                    <input type="text" class="form-control" ng-model="searchOrbit.nameTerm" name="searchParentElement" id="nameterm"
+                                    <input type="text" class="form-control" ng-model="searchOrbit.objectNameTerm" name="searchParentElement" id="nameterm"
                                            title="Search for objects with a particular name (use '%' as a wildcard to broaden the search)">
                                 </span>
                             </div>
@@ -68,7 +75,14 @@
                     <!-- Search Reports -->
                     <!-- -->
                     <!-- -->
-                    <accordion-group heading="Reports"  ng-init="reportsIsOpen = true" is-open="reportsIsOpen">
+                    <accordion-group ng-init="reportsIsOpen = true" is-open="reportsIsOpen">
+                        <accordion-heading>
+                            Search Reports
+                            <!-- Necessary to make it into a dropdown as they do not refresh the page when clicked -->
+                            <div class="pull-right" dropdown>
+                                <button type="button" class="glyphicon glyphicon-remove vdb-heading-btn" dropdown-toggle ng-click="reportOrbit.onDeleteClicked($event)"></button>
+                            </div>
+                        </accordion-heading>
                         <input class="accordian-list-filter" type="text" ng-model="reportOrbit.searchFilter" placeholder="filter...">
                         <div class="list-group accordian-list">
                             <a class="list-group-item"
