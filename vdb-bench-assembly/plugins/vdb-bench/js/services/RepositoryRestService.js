@@ -201,22 +201,26 @@ var vdbBench = (function(vdbBench) {
                 }
 
                 /**
-                 * Service: Search the resposiory with the given criteria
+                 * Service: Search the resposiory with the given searchAttributes
                  * formatted with the following object:
                  *
                  * {
-                 *    type: <type of objects to return,
-                 *    parent: <the object who is the root of the search
-                 *    path: <the datapath of a specific object,
-                 *    contains: <contains term>,
+                 *    searchName: <search save name>,
+                 *    type: <type of objects to return>,
+                 *    parent: <the object who is the root of the search>,
+                 *    ancestor: <the ancestor of the object>,
+                 *    path: <the datapath of a specific object>,
+                 *    contains: <contains term>
+                 *    objectName: <objectName term>
                  * }
                  */
-                service.search = function(criteria) {
+                service.search = function(searchAttributes) {
                     return getRestService().then(function(restService) {
-                        if (criteria == null)
+                        if (searchAttributes == null)
                             return null;
 
-                        return restService.one(REST_URI.WORKSPACE + REST_URI.SEARCH).customGET('', criteria);
+                        // Posts should always be made on collection (all) not elements (one)
+                        return restService.all(REST_URI.WORKSPACE + REST_URI.SEARCH).post(searchAttributes);
                     });
                 }
 

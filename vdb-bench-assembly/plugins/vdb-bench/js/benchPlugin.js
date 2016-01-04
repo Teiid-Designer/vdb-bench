@@ -24,6 +24,8 @@ var vdbBench = (function(vdbBench) {
                                                     FORWARD_SLASH : '/',
                                                     OPEN_BRACKET : '(',
                                                     CLOSE_BRACKET : ')',
+                                                    OPEN_BRACE : '{',
+                                                    CLOSE_BRACE : '}',
                                                     OPEN_SQUARE_BRACKET : '[',
                                                     CLOSE_SQUARE_BRACKET : ']',
                                                     COMMA : ',',
@@ -52,6 +54,7 @@ var vdbBench = (function(vdbBench) {
                                                     SEARCH_PARENT : 'parent',
                                                     SEARCH_OBJECT_NAME : 'objectName',
                                                     SEARCH_SAVE_NAME : 'searchName',
+                                                    SEARCH_PARAMETERS : 'parameters',
                                                     DATA_KOMODO : 'tko:komodo',
                                                     DATA_WORKSPACE : 'tko:workspace'
                                                 }

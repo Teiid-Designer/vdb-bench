@@ -144,12 +144,7 @@ var vdbBench = (function (vdbBench) {
                 }
 
                 $scope.searchOrbit = {};
-                $scope.searchOrbit.searchName = '';
-                $scope.searchOrbit.containsTerm = '';
-                $scope.searchOrbit.typeTerm = '';
-                $scope.searchOrbit.pathTerm = '';
-                $scope.searchOrbit.parentTerm = '';
-                $scope.searchOrbit.objectNameTerm = '';
+                $scope.searchOrbit.searchTerms = {};
                 $scope.searchOrbit.visible = false;
                 $scope.searchOrbit.results = [];
 
@@ -164,13 +159,116 @@ var vdbBench = (function (vdbBench) {
                     $scope.searchOrbit.visible = visible;
                 }
 
-                $scope.searchOrbit.submit = function() {
-                    if (_.isEmpty($scope.searchOrbit.searchName) &&
-                        _.isEmpty($scope.searchOrbit.containsTerm) &&
-                        _.isEmpty($scope.searchOrbit.typeTerm) &&
-                        _.isEmpty($scope.searchOrbit.pathTerm) &&
-                        _.isEmpty($scope.searchOrbit.parentTerm) &&
-                        _.isEmpty($scope.searchOrbit.objectNameTerm))
+                function doSubmit(searchTerms, searchSavedName, parameters) {
+                    var terms = angular.copy(searchTerms);
+                    if (! _.isEmpty(searchSavedName))
+                        terms[REST_URI.SEARCH_SAVE_NAME] = searchSavedName;
+
+                    if (! _.isEmpty(parameters))
+                        terms[REST_URI.SEARCH_PARAMETERS] = parameters;
+
+                    RepoRestService.search(terms).then(
+                        function (results) {
+                            if (_.isEmpty(results)) {
+                                $scope.searchOrbit.results = [];
+                                $scope.searchOrbit.results[0] = {};
+                                $scope.searchOrbit.results[0][VDB_KEYS.ID] = "No search results found";
+                            }
+                            else
+                                $scope.searchOrbit.results = results;
+
+                            // Reset the search term name to allow future calls to doSubmit
+                            delete $scope.searchOrbit.searchTerms[REST_URI.SEARCH_SAVE_NAME];
+                        },
+                        function (response) {
+                            var msg = "";
+                            if (response.config)
+                                msg = "url : " + response.config.url + SYNTAX.NEWLINE;
+
+                            msg = msg + "status : " + response.status + SYNTAX.NEWLINE;
+                            msg = msg + "data : " + response.data.Error + SYNTAX.NEWLINE;
+                            msg = msg + "status message : " + response.statusText + SYNTAX.NEWLINE;
+
+                            $scope.searchOrbit.results = [];
+                            $scope.searchOrbit.results[0] = {};
+                            $scope.searchOrbit.results[0][VDB_KEYS.ID] = "Error occurred while searching the repository:\n" + msg;
+                        }
+                    );
+                }
+
+                function findSearchTermParameters(searchTerms) {
+                    var termTypes = [REST_URI.SEARCH_CONTAINS,
+                                                REST_URI.SEARCH_TYPE,
+                                                REST_URI.SEARCH_PATH,
+                                                REST_URI.SEARCH_PARENT,
+                                                REST_URI.SEARCH_OBJECT_NAME];
+
+                    var params = [];
+                    for (var i = 0; i < termTypes.length; ++i) {
+                        var termType = termTypes[i];
+                        var term = searchTerms[termType];
+                        if (!_.isEmpty(term) && _.startsWith(term, SYNTAX.OPEN_BRACE) && _.endsWith(term, SYNTAX.CLOSE_BRACE)) {
+                            params.push(term.substring(1, term.length - 1));
+                        }
+                    }
+
+                    return params;
+                }
+
+                function requestParametersAndSearch(searchSaveName, parameters) {
+                    //
+                    // Require values for the parameters before sending the query
+                    //
+                    var modalTemplate = '<div class="modal-header">' +
+                                                     '<h3 class="modal-title">Provide values for the following search parameters</h3>' +
+                                                     '</div>' +
+                                                     '<div class="modal-body">';
+
+                    for (var i = 0; i < parameters.length; ++i) {
+                        var param = parameters[i];
+                        modalTemplate = modalTemplate + '<div class="form-group">';
+                        modalTemplate = modalTemplate + '<label for="' + param + '">' + param + '</label>';
+                        modalTemplate = modalTemplate + '<input type="text" class="form-control" id=' + param + ' ng-model="parameters.' + param + '"/>';
+                        modalTemplate = modalTemplate + "</div>";
+                    }
+
+                    modalTemplate = modalTemplate + '</div>' +
+                                                         '<div class="modal-footer">' +
+                                                         '<button class="btn btn-primary" ng-click="ok()">OK</button>' +
+                                                         '<button class="btn btn-warning" ng-click="cancel()">Cancel</button>' +
+                                                         '</div>';
+
+                    var modal = $modal.open( {
+                        animation: 'true',
+                        backdrop: 'false',
+                        template: modalTemplate,
+                        controller: ['$scope', '$modalInstance', function ($scope, $modalInstance) {
+                            $scope.parameters = {};
+
+                            $scope.ok = function() {
+                                $modalInstance.close($scope.parameters);
+                            };
+                            $scope.cancel = function() {
+                                $modalInstance.dismiss('cancel');
+                            }
+                        }]
+                    });
+
+                    //
+                    // If modal ok clicked then run the search
+                    //
+                    modal.result.then(
+                        function (parameterValues) {
+                            doSubmit($scope.searchOrbit.searchTerms, searchSaveName, parameterValues);
+                        },
+                        function () {
+                            // Cancel was called but need to reset the search name to allow future calls of submit()
+                        }
+                    );
+                }
+
+                $scope.searchOrbit.submit = function(searchSaveName) {
+                    if (_.isEmpty($scope.searchOrbit.searchTerms) && _.isEmpty(searchSaveName))
                         return;
 
                     //
@@ -184,50 +282,12 @@ var vdbBench = (function (vdbBench) {
                     //
                     $scope.searchOrbit.setVisible(true);
 
-                    var term = {}
-                    if (! _.isEmpty($scope.searchOrbit.searchName))
-                        term[REST_URI.SEARCH_SAVE_NAME] = $scope.searchOrbit.searchName;
-
-                    if (! _.isEmpty($scope.searchOrbit.containsTerm))
-                        term[REST_URI.SEARCH_CONTAINS] = $scope.searchOrbit.containsTerm;
-
-                    if (! _.isEmpty($scope.searchOrbit.typeTerm))
-                        term[REST_URI.SEARCH_TYPE] = $scope.searchOrbit.typeTerm;
-
-                    if (! _.isEmpty($scope.searchOrbit.pathTerm))
-                        term[REST_URI.SEARCH_PATH] = $scope.searchOrbit.pathTerm;
-
-                    if (! _.isEmpty($scope.searchOrbit.parentTerm))
-                        term[REST_URI.SEARCH_PARENT] = $scope.searchOrbit.parentTerm;
-
-                    if (! _.isEmpty($scope.searchOrbit.objectNameTerm))
-                        term[REST_URI.SEARCH_OBJECT_NAME] = $scope.searchOrbit.objectNameTerm;
-
-                    RepoRestService.search(term).then(
-                        function (results) {
-                            if (_.isEmpty(results)) {
-                                $scope.searchOrbit.results = [];
-                                $scope.searchOrbit.results[0] = {};
-                                $scope.searchOrbit.results[0][VDB_KEYS.ID] = "No search results found";
-                            }
-                            else
-                                $scope.searchOrbit.results = results;
-                        },
-                        function (response) {
-                            var msg = "";
-                            if (response.config)
-                                msg = "url : " + response.config.url + SYNTAX.NEWLINE;
-
-                            msg = msg + "status : " + response.status + SYNTAX.NEWLINE;
-                            msg = msg + "data : " + response.data + SYNTAX.NEWLINE;
-                            msg = msg + "status message : " + response.statusText + SYNTAX.NEWLINE;
-
-                            $scope.searchOrbit.results = [];
-                            $scope.searchOrbit.results[0] = {};
-                            $scope.searchOrbit.results[0][VDB_KEYS.ID] = "Error occurred while searching the repository:\n" + msg;
-                        }
-                    );
-                }
+                    var parameters = findSearchTermParameters($scope.searchOrbit.searchTerms);
+                    if (_.isEmpty(parameters))
+                        doSubmit($scope.searchOrbit.searchTerms, searchSaveName, parameters);
+                    else
+                        requestParametersAndSearch(searchSaveName, parameters);
+                };
 
                 $scope.searchOrbit.setSelectedResult = function(result) {
                     $scope.searchOrbit.resultSelected = result;
@@ -243,11 +303,7 @@ var vdbBench = (function (vdbBench) {
                 $scope.searchOrbit.onSaveClicked = function (event) {
                     try {
                         // If no terms entered then do nothing
-                        if (_.isEmpty($scope.searchOrbit.containsTerm) &&
-                            _.isEmpty($scope.searchOrbit.typeTerm) &&
-                            _.isEmpty($scope.searchOrbit.pathTerm) &&
-                            _.isEmpty($scope.searchOrbit.parentTerm) &&
-                            _.isEmpty($scope.searchOrbit.objectNameTerm))
+                        if (_.isEmpty($scope.searchOrbit.searchTerms))
                             return;
 
                         //
@@ -283,26 +339,13 @@ var vdbBench = (function (vdbBench) {
                         //
                         modal.result.then(
                             function (searchName) {
-                                var searchAttributes = {
-                                    'searchName' : searchName,
-                                };
-
-                                // Adds those attributes that have values
-                                if (! _.isEmpty($scope.searchOrbit.containsTerm))
-                                    searchAttributes[REST_URI.SEARCH_CONTAINS] = $scope.searchOrbit.containsTerm;
-                                if (! _.isEmpty($scope.searchOrbit.typeTerm))
-                                    searchAttributes[REST_URI.SEARCH_TYPE] = $scope.searchOrbit.typeTerm;
-                                if (! _.isEmpty($scope.searchOrbit.pathTerm))
-                                    searchAttributes[REST_URI.SEARCH_PATH] = $scope.searchOrbit.pathTerm;
-                                if (! _.isEmpty($scope.searchOrbit.parentTerm))
-                                    searchAttributes[REST_URI.SEARCH_PARENT] = $scope.searchOrbit.parentTerm;
-                                if (! _.isEmpty($scope.searchOrbit.objectNameTerm))
-                                    searchAttributes[REST_URI.SEARCH_OBJECT_NAME] = $scope.searchOrbit.objectNameTerm;
+                                var terms = angular.copy($scope.searchOrbit.searchTerms);
+                                terms[REST_URI.SEARCH_SAVE_NAME] = searchName;
 
                                 //
                                 // Call the rest service to post the new search
                                 //
-                                RepoRestService.saveSearch(searchAttributes).then(
+                                RepoRestService.saveSearch(terms).then(
                                     function (results) {
                                         alert("Save completed");
                                         initReports();
@@ -370,6 +413,11 @@ var vdbBench = (function (vdbBench) {
                         // vdb visualisation pane is hidden
                         //
                         $scope.vdbOrbit.selectVdb(null);
+
+                        //
+                        // Display the search results pane
+                        //
+                        $scope.searchOrbit.setVisible(true);
                     }
 
                     //
@@ -380,72 +428,11 @@ var vdbBench = (function (vdbBench) {
                     if (! report)
                         return;
 
-                    switch (report.id) {
-                        case 'NAMED_COLUMNS':
-
-                            var modalTemplate = '<div class="modal-header">' +
-                                                              '<h3 class="modal-title">{{header}}</h3>' +
-                                                              '</div>' +
-                                                              '<div class="modal-body">' +
-                                                              '<div ng-show="description" ng-bind-html="description"></div>' +
-                                                              '<input type="text" ng-model="columnName"/>' +
-                                                              '</div>' +
-                                                              '<div class="modal-footer">' +
-                                                              '<button class="btn btn-primary" ng-click="ok()">OK</button>' +
-                                                              '<button class="btn btn-warning" ng-click="cancel()">Cancel</button>' +
-                                                              '</div>';
-
-                            var modal = $modal.open( {
-                                animation: 'true',
-                                backdrop: 'false',
-                                template: modalTemplate,
-                                controller: ['$scope', '$modalInstance', function ($scope, $modalInstance) {
-                                    $scope.header = "Enter Column Name";
-                                    $scope.description = "<p>The value can be a full column name or a partial keyword using the wildcard '%'</p>";
-                                    $scope.ok = function() {
-                                        $modalInstance.close($scope.columnName || '');
-                                    };
-                                    $scope.cancel = function() {
-                                        $modalInstance.dismiss('cancel');
-                                    }
-                                }]
-                            });
-
-                            modal.result.then(
-                                function (name) {
-                                    $scope.searchOrbit.searchName = '';
-                                    $scope.searchOrbit.containsTerm = '';
-                                    $scope.searchOrbit.pathTerm = '';
-                                    $scope.searchOrbit.parentTerm = '';
-                                    $scope.searchOrbit.objectNameTerm = name;
-                                    $scope.searchOrbit.typeTerm = 'Column';
-                                    $scope.searchOrbit.submit();
-                                },
-                                function () {
-                                    // nothing to do
-                                }
-                            );
-
-                            break;
-                        case 'ALL_DATA_SOURCES':
-                        case 'SOURCES_MODELS':
-                            alert('To be implemented');
-                            break;
-                        default:
-                            //
-                            // Ask the rest service to submit the search
-                            //
-                            $scope.searchOrbit.searchName = report.name;
-                            $scope.searchOrbit.containsTerm = '';
-                            $scope.searchOrbit.pathTerm = '';
-                            $scope.searchOrbit.parentTerm = '';
-                            $scope.searchOrbit.objectNameTerm = '';
-                            $scope.searchOrbit.typeTerm = '';
-                            $scope.searchOrbit.submit();
-
-                            // Reset the search name since we cannot reset anywhere else
-                            $scope.searchOrbit.searchName = '';
-                    }
+                    $scope.searchOrbit.searchTerms = {};
+                    if (! _.isEmpty(report[REST_URI.SEARCH_PARAMETERS]))
+                        requestParametersAndSearch(report.name, report[REST_URI.SEARCH_PARAMETERS]);
+                    else
+                        doSubmit($scope.searchOrbit.searchTerms, report.name);
                 }
 
                 $scope.reportOrbit.reportSelected = function() {

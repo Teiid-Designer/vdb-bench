@@ -35,7 +35,7 @@
                         </accordion-heading>
                         <form name="search" role="form">
                             <div class="input-group input-group-search">
-                                <input  class="col-sm-12" type="text" class="form-control" ng-model="searchOrbit.containsTerm"
+                                <input  class="col-sm-12" type="text" class="form-control" ng-model="searchOrbit.searchTerms.contains"
                                             name="searchContainsElement" title="Search for all objects containing the search term">
                                 <span class="vdb-search-span">
                                     <button type="submit" class="btn-search vdb-search-btn-search" ng-click="searchOrbit.submit()">
@@ -49,22 +49,22 @@
                             <div id="search-filters" class="well" ng-show="searchOrbit.advancedToggle">
                                 <span>
                                     <label for="typeterm">Type</label>
-                                    <input type="text" class="form-control" ng-model="searchOrbit.typeTerm" name="searchTypeElement" id="typeterm"
+                                    <input type="text" class="form-control" ng-model="searchOrbit.searchTerms.type" name="searchTypeElement" id="typeterm"
                                            title="Filter results to the given type">
                                 </span>
                                 <span>
                                     <label for="pathterm">Path</label>
-                                    <input type="text" class="form-control" ng-model="searchOrbit.pathTerm" name="searchPathElement" id="pathterm"
+                                    <input type="text" class="form-control" ng-model="searchOrbit.searchTerms.path" name="searchPathElement" id="pathterm"
                                            title="Search for a particular object by specifying its data path">
                                 </span>
                                 <span>
                                     <label for="parentterm">Parent</label>
-                                    <input type="text" class="form-control" ng-model="searchOrbit.parentTerm" name="searchParentElement" id="parentterm"
+                                    <input type="text" class="form-control" ng-model="searchOrbit.searchTerms.parent" name="searchParentElement" id="parentterm"
                                            title="Search for all descendents of a particular object by specifying its data path">
                                 </span>
                                 <span>
                                     <label for="nameterm">Name</label>
-                                    <input type="text" class="form-control" ng-model="searchOrbit.objectNameTerm" name="searchParentElement" id="nameterm"
+                                    <input type="text" class="form-control" ng-model="searchOrbit.searchTerms.objectName" name="searchParentElement" id="nameterm"
                                            title="Search for objects with a particular name (use '%' as a wildcard to broaden the search)">
                                 </span>
                             </div>
@@ -126,7 +126,7 @@
 
             </div>
 
-            <!-- End of Repository Contents -->
+            <!-- End of Workspace Contents -->
         </div>
 
         <!-- Panel for displaying the properties of the selection -->
