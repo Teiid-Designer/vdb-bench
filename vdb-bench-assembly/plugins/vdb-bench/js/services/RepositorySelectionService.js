@@ -1,5 +1,5 @@
 /**
- * Repository Selection Service
+ * Workspace Selection Service
  *
  * Provides the collection of repositories {name, host, port, baseUrl} fetched
  * from local storage and the active (selected) repository.
@@ -11,7 +11,7 @@ var vdbBench = (function(vdbBench) {
     vdbBench._module.factory('RepoSelectionService',
              function($rootScope, StorageService) {
 
-                var defaultRepository = {
+                var defaultWorkspace = {
                     name : 'default',
                     host : 'localhost',
                     port : 8080,
@@ -25,10 +25,10 @@ var vdbBench = (function(vdbBench) {
                 /*
                  * private function for initialising the repositories from local storage
                  */
-                function initRepositories() {
+                function initWorkspaces() {
                     var storageRepos = StorageService.getObject('repositories');
                     if (_.isEmpty(storageRepos)) {
-                        storageRepos = [defaultRepository];
+                        storageRepos = [defaultWorkspace];
                         StorageService.setObject('repositories', storageRepos);
                     }
 
@@ -41,7 +41,7 @@ var vdbBench = (function(vdbBench) {
                  */
                 function repositories() {
                     if (_.isEmpty(repos))
-                        repos = initRepositories();
+                        repos = initWorkspaces();
 
                     return repos;
                 }
@@ -50,12 +50,12 @@ var vdbBench = (function(vdbBench) {
                  * private function to initialise the selected repository name
                  * from local storage
                  */
-                function initSelectedRepository() {
-                    var selectedName = StorageService.get('selectedRepositoryName');
+                function initSelectedWorkspace() {
+                    var selectedName = StorageService.get('selectedWorkspaceName');
 
                     if (selectedName == null) {
-                        selectedName = defaultRepository.name;
-                        StorageService.set('selectedRepositoryName', selectedName);
+                        selectedName = defaultWorkspace.name;
+                        StorageService.set('selectedWorkspaceName', selectedName);
                     }
 
                     var currRepos = repositories();
@@ -77,7 +77,7 @@ var vdbBench = (function(vdbBench) {
                  */
                 service.getSelected = function() {
                     if (_.isEmpty(selected))
-                        selected = initSelectedRepository();
+                        selected = initSelectedWorkspace();
 
                     return selected;
                 };
@@ -87,7 +87,7 @@ var vdbBench = (function(vdbBench) {
                  */
                 service.setSelected = function(selectedRepo) {
                     // Save the selected repository name
-                    StorageService.set('selectedRepositoryName', selectedRepo.name);
+                    StorageService.set('selectedWorkspaceName', selectedRepo.name);
 
                     // Set selected to the selected repository
                     selected = selectedRepo;
@@ -100,14 +100,14 @@ var vdbBench = (function(vdbBench) {
                 /*
                  * Service : get repositories
                  */
-                service.getRepositories = function() {
+                service.getWorkspaces = function() {
                     return repositories();
                 };
 
                 /*
                  * Service : is a repository selected
                  */
-                service.isRepositorySelected = function() {
+                service.isWorkspaceSelected = function() {
                     return ! _.isEmpty(selected);
                 },
 
@@ -124,7 +124,7 @@ var vdbBench = (function(vdbBench) {
                 /*
                  * Service : save the repositories to local storage
                  */
-                service.saveRepositories = function() {
+                service.saveWorkspaces = function() {
                     StorageService.setObject('repositories', repos);
 
                     //
@@ -133,13 +133,13 @@ var vdbBench = (function(vdbBench) {
                     // name is used to select the correct repository
                     //
                     var name = _.isEmpty(selected) ? '' : selected.name;
-                    StorageService.set('selectedRepositoryName', name);
+                    StorageService.set('selectedWorkspaceName', name);
                 };
 
                 /*
                  * Service : add a new repository to the collection
                  */
-                service.newRepository = function() {
+                service.newWorkspace = function() {
                     var baseName = "newhost";
                     var currRepos = repositories();
                     var newRepo = null;
@@ -174,7 +174,7 @@ var vdbBench = (function(vdbBench) {
                     service.setSelected(newRepo);
 
                     // Save the new collection to local storage
-                    service.saveRepositories();
+                    service.saveWorkspaces();
                 };
 
                 /*
@@ -193,14 +193,14 @@ var vdbBench = (function(vdbBench) {
                     service.setSelected(repos[0]);
 
                     // Save the new collection to local storage
-                    service.saveRepositories();
+                    service.saveWorkspaces();
                 };
 
                 /*
                  * Initialise the cached vars
                  */
-                repos = initRepositories();
-                selected = initSelectedRepository();
+                repos = initWorkspaces();
+                selected = initSelectedWorkspace();
 
                 return service;
             });

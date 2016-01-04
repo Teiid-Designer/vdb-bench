@@ -1,5 +1,5 @@
 /**
- * Repository Rest Service
+ * Workspace Rest Service
  *
  * Provides API for accessing the engine repository through its REST API.
  */

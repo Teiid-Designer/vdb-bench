@@ -48,7 +48,7 @@ var vdbBench = (function(vdbBench) {
                                                 }
                                             }
                                         },
-                                        'description' : 'Repository Properties',
+                                        'description' : 'Workspace Properties',
                                         'type' : 'java.lang.String'
                                     };
 
@@ -61,12 +61,12 @@ var vdbBench = (function(vdbBench) {
                                 // Watch the selectedRepo so that if its properties change
                                 // they need to be preserved by the repository service
                                 $scope.$watch('repo.selected', function(newValue, oldValue) {
-                                    RepoSelectionService.saveRepositories();
+                                    RepoSelectionService.saveWorkspaces();
                                 }, true);
 
                                 // Fetch the repositories from the service
                                 $scope.repositories = function() {
-                                    return RepoSelectionService.getRepositories();
+                                    return RepoSelectionService.getWorkspaces();
                                 };
 
                                 // On change of selection update the service
@@ -75,9 +75,9 @@ var vdbBench = (function(vdbBench) {
                                 };
 
                                 // Is a repository selected
-                                $scope.isRepositorySelected = function() {
+                                $scope.isWorkspaceSelected = function() {
                                     return RepoSelectionService
-                                            .isRepositorySelected();
+                                            .isWorkspaceSelected();
                                 }
 
                                 // Is localhost repository selected
@@ -127,7 +127,7 @@ var vdbBench = (function(vdbBench) {
 
                                 // Event handler for clicking the add button
                                 $scope.onAddClicked = function() {
-                                    RepoSelectionService.newRepository();
+                                    RepoSelectionService.newWorkspace();
                                 };
 
                                 // Event handler for clicking the remove button

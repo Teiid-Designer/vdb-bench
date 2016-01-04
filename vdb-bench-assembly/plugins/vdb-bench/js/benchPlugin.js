@@ -187,7 +187,7 @@ var vdbBench = (function(vdbBench) {
                                         builder.join(vdbBench.pagePath, 'wkspacePage.html')
                                 )
                                 .subPath(
-                                        'Manage Repositories',
+                                        'Manage Workspaces',
                                         'repos',
                                         builder
                                             .join(vdbBench.pagePath,
