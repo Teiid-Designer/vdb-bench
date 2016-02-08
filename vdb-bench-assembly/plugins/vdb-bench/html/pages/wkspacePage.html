@@ -138,7 +138,14 @@
                 <tabset>
                     <tab heading="Vdb Content" ng-click="onTabSelected('Diagram')">
                         <div class="vdb-diagram col-sm-7">
-                            <vdb-visualization vdb="vdbOrbit.vdbSelected()" selected-vdb-component="vdbOrbit.selectedVdbComponent" height="2048" width="1024"></vdb-visualization>
+                            <vdb-component-tree vdb-entry="vdbOrbit.vdbSelected()"
+                                                              display-parents="false"
+                                                              selected-vdb-component="vdbOrbit.selectedVdbComponent"
+                                                              height="2048"
+                                                              width="1024"
+                                                              margin-left="120"
+                                                              margin-right="120">
+                            </vdb-component-tree>
                         </div>
 
                         <!-- Vertical tabbed page for displaying selected object properties -->
@@ -183,11 +190,13 @@
                     <dir-pagination-controls pagination-id="search-results-paginate" max-size="7" direction-links="true" boundary-links="true" ></dir-pagination-controls>
                 </div>
                 <div class="vdb-search-results-diagram col-sm-4">
-                    <search-visualization search-entry="searchOrbit.selectedResult()"
-                                                    selected-vdb-component="searchOrbit.selectedVdbComponent"
-                                                    orientation="searchOrbit.visOrientation"
-                                                    height="550"
-                                                    width="700"></search-visualization>
+                    <vdb-component-tree vdb-entry="searchOrbit.selectedResult()"
+                                                      display-parents="true"
+                                                      selected-vdb-component="searchOrbit.selectedVdbComponent"
+                                                      orientation="searchOrbit.visOrientation"
+                                                      height="550"
+                                                      width="700">
+                    </vdb-component-tree>
                 </div>
 
                 <!-- Vertical tabbed page for displaying selected object properties -->
