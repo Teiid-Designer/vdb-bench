@@ -376,26 +376,17 @@ var vdbBench = (function (vdbBench) {
                 }
 
                 $scope.reportOrbit = {};
-                $scope.reportOrbit.defaultReports = [
-                    { id: 'ALL_DATA_SOURCES', name: 'All data sources' },
-                    { id: 'SOURCES_MODELS', name: 'Source models using a data source' },
-                    { id: 'NAMED_COLUMNS', name: 'Find all columns of a certain name' }
-                ];
 
                 /**
                  * Fetch the list of search reports from the selected repository
                  */
                 function initReports() {
-                    $scope.reportOrbit.reports = []
-                    $scope.reportOrbit.reports = $scope.reportOrbit.reports.concat($scope.reportOrbit.defaultReports);
+                    $scope.reportOrbit.reports = [];
 
                     try {
                         RepoRestService.getSearches().then(
                             function (newSearches) {
                                 RepoRestService.copy(newSearches, $scope.reportOrbit.reports);
-
-                                // Ensure the default reports are also available
-                                $scope.reportOrbit.reports = $scope.reportOrbit.reports.concat($scope.reportOrbit.defaultReports);
                             },
                             function (response) {
                                 // Some kind of error has occurred
