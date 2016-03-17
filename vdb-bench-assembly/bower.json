@@ -32,14 +32,14 @@
     "angularUtils-pagination": "angular-utils-pagination#~0.9.2"
   },
   "devDependencies": {
-    "bootstrap": "~3.3.1",
+    "bootstrap": "~3.3.5",
     "patternfly": "~1.1.2",
     "hawtio-core-dts": "~2.0.0"
   },
   "resolutions": {
     "lodash": "~3.2.0",
     "codemirror": "~4.11.0",
-    "angular": "1.4.7",
+    "angular": "1.4.10",
     "angular-bootstrap": "~0.13.0"
   }
 }
