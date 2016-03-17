@@ -1,5 +1,12 @@
 node_modules/
 libs/
+
+# Generated template cache script
+plugins/vdb-bench-templates.js
+
+# Generated css stylesheet
+css/styles.css
+
 dist/vdb-bench*.js
 dist/vdb-bench*.css
 spec/build

@@ -1,24 +1,21 @@
-<h1>Vdb Builder Workspace</h1>
-
 <div class="container-fluid">
-    <div class="row" ng-controller="VdbController">
+    <div class="row" ng-controller="ExplorerController as vm">
         <div class="col-sm-2">
 
             <!-- Workspace -->
 
             <div class="row">
-                <repo-widget></repo-widget>
+                <repository-control></repository-control>
             </div>
 
             <!-- End of Workspace -->
 
+            <br/>
+
             <!-- Workspace Contents -->
 
-            <div class="col-sm-12">
-                <h4>Workspace Contents</h4>
-            </div>
-
             <div id="panel-repo-content" class="col-sm-12">
+                <h5>Control Panel</h5>
                 <accordion close-others="false">
                     <!-- -->
                     <!-- -->
@@ -30,41 +27,41 @@
                             Search
                             <!-- Necessary to make it into a dropdown as they do not refresh the page when clicked -->
                             <div class="pull-right" dropdown>
-                                <button type="button" class="glyphicon glyphicon-file vdb-heading-btn" dropdown-toggle ng-click="searchOrbit.onSaveClicked($event)"></button>
+                                <button type="button" class="glyphicon glyphicon-file vdb-heading-btn" dropdown-toggle ng-click="vm.searchOrbit.onSaveClicked($event)"></button>
                             </div>
                         </accordion-heading>
                         <form name="search" role="form">
                             <div class="input-group input-group-search">
-                                <input  class="col-sm-12" type="text" class="form-control" ng-model="searchOrbit.searchTerms.contains"
+                                <input  class="col-sm-12" type="text" class="form-control" ng-model="vm.searchOrbit.searchTerms.contains"
                                             name="searchContainsElement" title="Search for all objects containing the search term">
                                 <span class="vdb-search-span">
-                                    <button type="submit" class="btn-search vdb-search-btn-search" ng-click="searchOrbit.submit()">
+                                    <button type="submit" class="btn-search vdb-search-btn-search" ng-click="vm.searchOrbit.submit()">
                                         Search<span class="glyphicon glyphicon-search vdb-search-btn-icon" aria-hidden="true"></span>
                                     </button>
                                 </span>
                             </div>
                             <div id="advanced-search">
-                                <h5><a ng-click="searchOrbit.advancedToggle = !searchOrbit.advancedToggle" href="#">Advanced</a></h5>
+                                <h5><a ng-click="vm.searchOrbit.advancedToggle = !vm.searchOrbit.advancedToggle" href="#">Advanced</a></h5>
                             </div>
-                            <div id="search-filters" class="well" ng-show="searchOrbit.advancedToggle">
+                            <div id="search-filters" class="well" ng-show="vm.searchOrbit.advancedToggle">
                                 <span>
                                     <label for="typeterm">Type</label>
-                                    <input type="text" class="form-control" ng-model="searchOrbit.searchTerms.type" name="searchTypeElement" id="typeterm"
+                                    <input type="text" class="form-control" ng-model="vm.searchOrbit.searchTerms.type" name="searchTypeElement" id="typeterm"
                                            title="Filter results to the given type">
                                 </span>
                                 <span>
                                     <label for="pathterm">Path</label>
-                                    <input type="text" class="form-control" ng-model="searchOrbit.searchTerms.path" name="searchPathElement" id="pathterm"
+                                    <input type="text" class="form-control" ng-model="vm.searchOrbit.searchTerms.path" name="searchPathElement" id="pathterm"
                                            title="Search for a particular object by specifying its data path">
                                 </span>
                                 <span>
                                     <label for="parentterm">Parent</label>
-                                    <input type="text" class="form-control" ng-model="searchOrbit.searchTerms.parent" name="searchParentElement" id="parentterm"
+                                    <input type="text" class="form-control" ng-model="vm.searchOrbit.searchTerms.parent" name="searchParentElement" id="parentterm"
                                            title="Search for all descendents of a particular object by specifying its data path">
                                 </span>
                                 <span>
                                     <label for="nameterm">Name</label>
-                                    <input type="text" class="form-control" ng-model="searchOrbit.searchTerms.objectName" name="searchParentElement" id="nameterm"
+                                    <input type="text" class="form-control" ng-model="vm.searchOrbit.searchTerms.objectName" name="searchParentElement" id="nameterm"
                                            title="Search for objects with a particular name (use '%' as a wildcard to broaden the search)">
                                 </span>
                             </div>
@@ -104,22 +101,22 @@
                             Vdbs
                             <!-- Necessary to make it into a dropdown as they do not refresh the page when clicked -->
                             <div class="pull-right" dropdown>
-                                <button type="button" class="glyphicon glyphicon-plus vdb-heading-btn" dropdown-toggle ng-click="vdbOrbit.onAddClicked($event)"></button>
-                                <button type="button" class="glyphicon glyphicon-minus vdb-heading-btn" dropdown-toggle ng-click="vdbOrbit.onRemoveClicked($event)"></button>
+                                <button type="button" class="glyphicon glyphicon-plus vdb-heading-btn" dropdown-toggle ng-click="vm.vdbOrbit.onAddClicked($event)"></button>
+                                <button type="button" class="glyphicon glyphicon-minus vdb-heading-btn" dropdown-toggle ng-click="vm.vdbOrbit.onRemoveClicked($event)"></button>
                             </div>
                         </accordion-heading>
                         <div id="list-vdb">
-                            <input class="accordian-list-filter" type="text" ng-model="vdbOrbit.searchFilter" placeholder="filter...">
+                            <input class="accordian-list-filter" type="text" ng-model="vm.vdbOrbit.searchFilter" placeholder="filter...">
                             <div class="list-group accordian-list">
                                 <a class="list-group-item"
                                      pagination-id="vdb-paginate"
-                                     dir-paginate="vdb in vdbOrbit.vdbs|filter:vdbOrbit.searchFilter|orderBy:'keng__id'|itemsPerPage:3"
-                                     ng-click="$parent.vdbOrbit.selectVdb(vdb)" ng-class="{active:$parent.vdbOrbit.vdbSelected()==vdb}">
+                                     dir-paginate="vdb in vm.vdbOrbit.vdbs|filter:vm.vdbOrbit.searchFilter|orderBy:'keng__id'|itemsPerPage:3"
+                                     ng-click="$parent.vm.vdbOrbit.selectVdb(vdb)" ng-class="{active:$parent.vm.vdbOrbit.vdbSelected()==vdb}">
                                     {{vdb.keng__id}}
                                 </a>
                                 <dir-pagination-controls pagination-id="vdb-paginate" max-size="3" direction-links="true" boundary-links="true"></dir-pagination-controls>
                             </div>
-                            Total Vdbs: {{vdbOrbit.vdbs.length}}
+                            Total Vdbs: {{vm.vdbOrbit.vdbs.length}}
                         </div>
                     </accordion-group>
                 </accordion>
@@ -134,13 +131,14 @@
 
             <!-- Tab set for displaying selected vdb contents -->
             <!-- Only displayed is a vdb is selected in the vdbSelectionService -->
-            <div ng-show="vdbOrbit.vdbSelected()">
+            <div ng-show="vm.vdbOrbit.vdbSelected()">
                 <tabset>
                     <tab heading="Vdb Content" ng-click="onTabSelected('Diagram')">
                         <div class="vdb-diagram col-sm-7">
-                            <vdb-component-tree vdb-entry="vdbOrbit.vdbSelected()"
+                            <vdb-component-tree vdb-entry="vm.vdbOrbit.vdbSelected()"
                                                               display-parents="false"
-                                                              selected-vdb-component="vdbOrbit.selectedVdbComponent"
+                                                              selected-vdb-component="vm.vdbOrbit.selectedVdbComponent"
+                                                              orientation="TB"
                                                               height="2048"
                                                               width="1024"
                                                               margin-left="120"
@@ -150,38 +148,38 @@
 
                         <!-- Vertical tabbed page for displaying selected object properties -->
                         <div class="vdb-diagram-nav-col col-sm-5">
-                            <divider-widget>
+                            <panel-drawer>
                                 <divider title="New">
                                     <p>I am on the NEW page</p>
                                 </divider>
                                 <divider title="Properties">
                                     <div class="list-group">
-                                        <div class="list-group-item" ng-repeat="component in vdbOrbit.selectedVdbComponent">
+                                        <div class="list-group-item" ng-repeat="component in vm.vdbOrbit.selectedVdbComponent">
                                             <attribute-widget selected="component"/>
                                         </div>
                                     </div>
                                 </divider>
-                            </divider-widget>
+                            </panel-drawer>
                         </div>
 
                     </tab>
-                    <tab heading="Vdb Preview" ng-click="vdbOrbit.onTabSelected('Preview')">
-                        <ui-codemirror ng-model="vdbOrbit.vdbSelected().previewContent" ui-refresh="vdbOrbit.previewRefresh" ui-codemirror-opts="vdbOrbit.xmlPreviewOptions"></ui-codemirror>
+                    <tab heading="Vdb Preview" ng-click="vm.vdbOrbit.onTabSelected('Preview')">
+                        <ui-codemirror ng-model="vm.vdbOrbit.vdbSelected().previewContent" ui-refresh="vm.vdbOrbit.previewRefresh" ui-codemirror-opts="vm.vdbOrbit.xmlPreviewOptions"></ui-codemirror>
                     </tab>
                 </tabset>
             </div>
 
             <!-- Tab set for displaying the search results of the search made -->
             <!-- Only displayed if search button has been clicked -->
-            <div class="vdb-search-results-pane" ng-show="searchOrbit.isVisible() == true">
+            <div class="vdb-search-results-pane" ng-show="vm.searchOrbit.isVisible()">
                 <div class="col-sm-4 vdb-search-results-panel">
                     <h4 class="vdb-search-results-title">Search Results</h4>
-                    <input class="vdb-search-results-filter" type="text" ng-model="searchOrbit.searchFilter" placeholder="filter...">
+                    <input class="vdb-search-results-filter" type="text" ng-model="vm.searchOrbit.searchFilter" placeholder="filter...">
                     <ul class="list-group pagination vdb-search-results-list">
                         <a class="list-group-item vdb-search-results-entry" href="#"
                              pagination-id="search-results-paginate"
-                             dir-paginate="result in searchOrbit.results|orderBy:'keng__dataPath'|filter:searchOrbit.searchFilter|itemsPerPage:7 : 'search-results-paginate' track by $index"
-                             ng-click="searchOrbit.setSelectedResult(result)" ng-class="{active:searchOrbit.selectedResult()==result}">
+                             dir-paginate="result in vm.searchOrbit.results|orderBy:'keng__dataPath'|filter:vm.searchOrbit.searchFilter|itemsPerPage:7 : 'search-results-paginate' track by $index"
+                             ng-click="vm.searchOrbit.setSelectedResult(result)" ng-class="{active:vm.searchOrbit.selectedResult()==result}">
                             <h4 class="list-group-item-heading vdb-search-results-id">{{result.keng__id}}</h4>
                             <h4 class="list-group-item-heading vdb-search-results-type">{{result.keng__kType}}</h4>
                             <p class="list-group-item-text vdb-search-results-data-path">{{result.keng__dataPath}}</p>
@@ -190,10 +188,10 @@
                     <dir-pagination-controls pagination-id="search-results-paginate" max-size="7" direction-links="true" boundary-links="true" ></dir-pagination-controls>
                 </div>
                 <div class="vdb-search-results-diagram col-sm-4">
-                    <vdb-component-tree vdb-entry="searchOrbit.selectedResult()"
+                    <vdb-component-tree vdb-entry="vm.searchOrbit.selectedResult()"
                                                       display-parents="true"
-                                                      selected-vdb-component="searchOrbit.selectedVdbComponent"
-                                                      orientation="searchOrbit.visOrientation"
+                                                      selected-vdb-component="vm.searchOrbit.selectedVdbComponent"
+                                                      orientation="vm.searchOrbit.visOrientation"
                                                       height="550"
                                                       width="700">
                     </vdb-component-tree>
@@ -201,30 +199,30 @@
 
                 <!-- Vertical tabbed page for displaying selected object properties -->
                 <div class="vdb-diagram-nav-col col-sm-4">
-                    <divider-widget>
+                    <panel-drawer>
                         <divider title="Options">
                             <form action="" class="vdb-search-results-diagram-settings">
                                 <label>Orientation:</label>
                                 <br/>
                                 <label class="block">
-                                    <input type="radio" name="orientation" value="LR" ng-model="searchOrbit.visOrientation">
+                                    <input type="radio" name="orientation" value="LR" ng-model="vm.searchOrbit.visOrientation">
                                     Left-to-Right
                                 </label>
                                 <br/>
                                 <label class="block">
-                                    <input type="radio" name="orientation" value="TB" ng-model="searchOrbit.visOrientation" checked="checked">
+                                    <input type="radio" name="orientation" value="TB" ng-model="vm.searchOrbit.visOrientation" checked="checked">
                                     Top-to-Bottom
                                 </label>
                             </form>
                         </divider>
                         <divider title="Properties">
                             <div class="list-group">
-                                <div class="list-group-item" ng-repeat="component in searchOrbit.selectedVdbComponent">
+                                <div class="list-group-item" ng-repeat="component in vm.searchOrbit.selectedVdbComponent">
                                     <attribute-widget selected="component"/>
                                 </div>
                             </div>
                         </divider>
-                    </divider-widget>
+                    </panel-drawer>
                 </div>
         </div>
     </div>

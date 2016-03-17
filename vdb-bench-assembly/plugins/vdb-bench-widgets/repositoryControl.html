@@ -1,27 +1,27 @@
 <div class="col-sm-12">
-    <h3>Workspace</h3>
+    <h5>Workspace</h5>
 </div>
 
-<div ng-controller="RepoController">
+<div>
 
     <div class="col-sm-12">
-        <select class="form-control" ng-model="repo.selected" ng-options="repo as repo.name for repo in repositories()"
-                     ng-change="changeSelection(repo.selected)">
+        <select class="form-control" ng-model="vm.repo.selected" ng-options="repo as repo.name for repo in vm.repositories()"
+                     ng-change="vm.changeSelection(vm.repo.selected)">
         </select>
     </div>
 
     <!-- Only shows buttons if the scope's edit field has been set -->
-    <div class="col-sm-12" ng-show="edit">
+    <div class="col-sm-12" ng-show="vm.edit">
         <div class="row" style="margin-top: 0.5em;">
             <div class="col-sm-6">
-                <button id="btn-add-repo" class="btn btn-xs btn-default" ng-click="onAddClicked()">Add</button>
+                <button id="btn-add-repo" class="btn btn-xs btn-default" ng-click="vm.onAddClicked()">Add</button>
             </div>
             <!--
                 Disables the remove button if the controller's selected field is undefined,
                 no selection yet made or locahost selected
             -->
             <div class="col-sm-6">
-                <button id="btn-remove-repo" class="btn btn-xs btn-default" ng-click="onRemoveClicked()" ng-disabled="!isWorkspaceSelected() || isDefaultSelected()">Remove</button>
+                <button id="btn-remove-repo" class="btn btn-xs btn-default" ng-click="vm.onRemoveClicked()" ng-disabled="!vm.isWorkspaceSelected() || vm.isDefaultSelected()">Remove</button>
             </div>
         </div>
     </div>

@@ -745,5 +745,5 @@ server.get({ path: baseUrl + '/schema' }, viewSchema);
  * Start server listening
  */
 server.listen(port, host, function () {
-    console.log('%s listening at %s ', server.name, server.url);
+    console.log('Rest service development server %s listening at %s ', server.name, server.url);
 });
