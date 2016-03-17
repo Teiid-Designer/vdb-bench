@@ -9,8 +9,6 @@ var gulp = require('gulp'),
     uri = require('URIjs'),
     s = require('underscore.string'),
     hawtio = require('hawtio-node-backend'),
-    tslint = require('gulp-tslint'),
-    tslintRules = require('./tslint.json'),
     childProc = require('child_process');
 
 var plugins = gulpLoadPlugins({});
@@ -18,67 +16,21 @@ var pkg = require('./package.json');
 
 var config = {
   main: '.',
-  ts: ['plugins/**/*.ts'],
   js: 'plugins/**/*.js',
-  testTs: ['test-plugins/**/*.ts'],
   less: ['./less/**/*.less', 'plugins/**/*.less'],
   templates: ['plugins/**/*.html'],
-  testTemplates: ['test-plugins/**/*.html'],
   templateModule: pkg.name + '-templates',
-  testTemplateModule: pkg.name + '-test-templates',
   pkgJs: pkg.name + '.js',
   testPkgJs: pkg.name + '-test.js',
   dist: './dist/',
   css: pkg.name + '.css',
-  tsProject: plugins.typescript.createProject({
-    target: 'ES5',
-    module: 'commonjs',
-    declarationFiles: true,
-    noExternalResolve: false,
-    removeComments: true
-  }),
-  testTsProject: plugins.typescript.createProject({
-    target: 'ES5',
-    module: 'commonjs',
-    declarationFiles: false,
-    noExternalResolve: false
-  }),
-  tsLintOptions: {
-    rulesDirectory: './tslint-rules/'
-  }
 };
-
-var normalSizeOptions = {
-    showFiles: true
-}, gZippedSizeOptions  = {
-    showFiles: true,
-    gzip: true
-};
-
 
 gulp.task('bower', function() {
   return gulp.src('index.html')
     .pipe(wiredep({}))
     .pipe(gulp.dest('.'));
 });
-
-/** Adjust the reference path of any typescript-built plugin this project depends on */
-gulp.task('path-adjust', function() {
-  return gulp.src('libs/**/includes.d.ts')
-    .pipe(map(function(buf, filename) {
-      var textContent = buf.toString();
-      var newTextContent = textContent.replace(/"\.\.\/libs/gm, '"../../../libs');
-      // console.log("Filename: ", filename, " old: ", textContent, " new:", newTextContent);
-      return newTextContent;
-    }))
-    .pipe(gulp.dest('libs'));
-});
-
-gulp.task('clean-defs', function() {
-  return gulp.src('defs.d.ts', { read: false })
-    .pipe(plugins.clean());
-});
-
 gulp.task('less', function () {
   return gulp.src(config.less)
     .pipe(plugins.less({
@@ -87,92 +39,11 @@ gulp.task('less', function () {
     .pipe(plugins.concat(config.css))
     .pipe(gulp.dest('./dist'));
 });
-
-gulp.task('tsc', ['clean-defs'], function() {
-  var cwd = process.cwd();
-  var tsResult = gulp.src(config.ts)
-    .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.typescript(config.tsProject))
-    .on('error', plugins.notify.onError({
-      message: '#{ error.message }',
-      title: 'Typescript compilation error'
-    }));
-
-    return eventStream.merge(
-      tsResult.js
-        .pipe(plugins.concat('compiled.js'))
-        .pipe(plugins.sourcemaps.write())
-        .pipe(gulp.dest('.')),
-      tsResult.dts
-        .pipe(gulp.dest('d.ts')))
-        .pipe(map(function(buf, filename) {
-          if (!s.endsWith(filename, 'd.ts')) {
-            return buf;
-          }
-          var relative = path.relative(cwd, filename);
-          fs.appendFileSync('defs.d.ts', '/// <reference path="' + relative + '"/>\n');
-          return buf;
-        }));
-});
-
-gulp.task('test-tsc', ['tsc'], function() {
-  var tsResult = gulp.src(config.testTs)
-    .pipe(plugins.typescript(config.testTsProject))
-    .on('error', plugins.notify.onError({
-      message: '#{ error.message }',
-      title: 'Typescript compilation error - test'
-    }));
-
-    return tsResult.js
-        .pipe(plugins.concat('test-compiled.js'))
         .pipe(gulp.dest('.'));
 });
 
-gulp.task('test-template', ['test-tsc'], function() {
-  return gulp.src(config.testTemplates)
-    .pipe(plugins.angularTemplatecache({
-      filename: 'test-templates.js',
-      root: 'test-plugins/',
-      standalone: true,
-      module: config.testTemplateModule,
-      templateFooter: '}]); hawtioPluginLoader.addModule("' + config.testTemplateModule + '");'
-    }))
-    .pipe(gulp.dest('.'));
 });
 
-gulp.task('test-concat', ['test-template'], function() {
-  return gulp.src(['test-compiled.js', 'test-templates.js'])
-    .pipe(plugins.concat(config.testPkgJs))
-    .pipe(gulp.dest(config.dist));
-});
-
-gulp.task('test-clean', ['test-concat'], function() {
-  return gulp.src(['test-templates.js', 'test-compiled.js'], { read: false })
-    .pipe(plugins.clean());
-});
-
-gulp.task('template', ['tsc'], function() {
-  return gulp.src(config.templates)
-    .pipe(plugins.angularTemplatecache({
-      filename: 'templates.js',
-      root: 'plugins/',
-      standalone: true,
-      module: config.templateModule,
-      templateFooter: '}]); hawtioPluginLoader.addModule("' + config.templateModule + '");'
-    }))
-    .pipe(gulp.dest('.'));
-});
-
-gulp.task('concat', ['template'], function() {
-  var gZipSize = size(gZippedSizeOptions);
-  var license = tslintRules.rules['license-header'][1];
-  return gulp.src([config.js, 'compiled.js', 'templates.js'])
-    .pipe(plugins.concat(config.pkgJs))
-    .pipe(plugins.header(license))
-    .pipe(size(normalSizeOptions))
-    .pipe(gZipSize)
-    .pipe(gulp.dest(config.dist));
-});
 
 gulp.task('clean', ['concat'], function() {
   return gulp.src(['templates.js', 'compiled.js'], { read: false })
