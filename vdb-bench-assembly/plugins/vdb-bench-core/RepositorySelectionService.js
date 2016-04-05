@@ -20,7 +20,7 @@
             name: 'default',
             host: 'localhost',
             port: 8080,
-            baseUrl: config.baseUrl
+            baseUrl: config.baseRestUrl
         };
 
         var repos;
