@@ -8,10 +8,10 @@
         .module(pluginName)
         .controller('ExplorerController', ExplorerController);
 
-    ExplorerController.$inject = ['$modal', '$window', 'RepoRestService', 'VdbSelectionService',
+    ExplorerController.$inject = ['$uibModal', '$window', 'RepoRestService', 'VdbSelectionService',
                                                 'SYNTAX', 'REST_URI', 'VDB_KEYS', '$scope'];
 
-    function ExplorerController($modal, $window, RepoRestService, VdbSelectionService,
+    function ExplorerController($uibModal, $window, RepoRestService, VdbSelectionService,
                                               SYNTAX, REST_URI, VDB_KEYS, $scope) {
         var vm = this;
 
@@ -263,18 +263,18 @@
                 '<button class="btn btn-warning" ng-click="cancel()">Cancel</button>' +
                 '</div>';
 
-            var modal = $modal.open({
+            var modal = $uibModal.open({
                 animation: 'true',
                 backdrop: 'false',
                 template: modalTemplate,
-                controller: ['vm', '$modalInstance', function (vm, $modalInstance) {
+                controller: ['vm', '$uibModalInstance', function (vm, $uibModalInstance) {
                     vm.parameters = {};
 
                     vm.ok = function () {
-                        $modalInstance.close(vm.parameters);
+                        $uibModalInstance.close(vm.parameters);
                     };
                     vm.cancel = function () {
-                        $modalInstance.dismiss('cancel');
+                        $uibModalInstance.dismiss('cancel');
                     };
                 }]
             });
@@ -354,16 +354,16 @@
                     '<button class="btn btn-warning" ng-click="cancel()">Cancel</button>' +
                     '</div>';
 
-                var modal = $modal.open({
+                var modal = $uibModal.open({
                     animation: 'true',
                     backdrop: 'false',
                     template: modalTemplate,
-                    controller: ['vm', '$modalInstance', function (vm, $modalInstance) {
+                    controller: ['vm', '$uibModalInstance', function (vm, $uibModalInstance) {
                         vm.ok = function () {
-                            $modalInstance.close(vm.searchName || '');
+                            $uibModalInstance.close(vm.searchName || '');
                         };
                         vm.cancel = function () {
-                            $modalInstance.dismiss('cancel');
+                            $uibModalInstance.dismiss('cancel');
                         };
                     }]
                 });

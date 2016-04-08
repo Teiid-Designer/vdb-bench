@@ -16,20 +16,20 @@
 
             <div id="panel-repo-content" class="col-sm-12">
                 <h5>Control Panel</h5>
-                <accordion close-others="false">
+                <uib-accordion close-others="false">
                     <!-- -->
                     <!-- -->
                     <!-- Search Group -->
                     <!-- -->
                     <!-- -->
-                    <accordion-group heading="Search" ng-init="searchIsOpen = true" is-open="searchIsOpen">
-                        <accordion-heading>
+                    <uib-accordion-group heading="Search" ng-init="searchIsOpen = true" is-open="searchIsOpen">
+                        <uib-accordion-heading>
                             Search
-                            <!-- Necessary to make it into a dropdown as they do not refresh the page when clicked -->
-                            <div class="pull-right" dropdown>
-                                <button type="button" class="glyphicon glyphicon-file vdb-heading-btn" dropdown-toggle ng-click="vm.searchOrbit.onSaveClicked($event)"></button>
+                            <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
+                            <div class="pull-right" uib-dropdown>
+                                <button type="button" class="glyphicon glyphicon-file vdb-heading-btn" uib-dropdown-toggle ng-click="vm.searchOrbit.onSaveClicked($event)"></button>
                             </div>
-                        </accordion-heading>
+                        </uib-accordion-heading>
                         <form name="search" role="form">
                             <div class="input-group input-group-search">
                                 <input  class="col-sm-12" type="text" class="form-control" ng-model="vm.searchOrbit.searchTerms.contains"
@@ -66,20 +66,20 @@
                                 </span>
                             </div>
                         </form>
-                    </accordion-group>
+                    </uib-accordion-group>
                     <!-- -->
                     <!-- -->
                     <!-- Search Reports -->
                     <!-- -->
                     <!-- -->
-                    <accordion-group ng-init="reportsIsOpen = true" is-open="reportsIsOpen">
-                        <accordion-heading>
+                    <uib-accordion-group ng-init="reportsIsOpen = true" is-open="reportsIsOpen">
+                        <uib-accordion-heading>
                             Search Reports
-                            <!-- Necessary to make it into a dropdown as they do not refresh the page when clicked -->
-                            <div class="pull-right" dropdown>
-                                <button type="button" class="glyphicon glyphicon-remove vdb-heading-btn" dropdown-toggle ng-click="reportOrbit.onDeleteClicked($event)"></button>
+                            <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
+                            <div class="pull-right" uib-dropdown>
+                                <button type="button" class="glyphicon glyphicon-remove vdb-heading-btn" uib-dropdown-toggle ng-click="reportOrbit.onDeleteClicked($event)"></button>
                             </div>
-                        </accordion-heading>
+                        </uib-accordion-heading>
                         <input class="accordian-list-filter" type="text" ng-model="reportOrbit.searchFilter" placeholder="filter...">
                         <div class="list-group accordian-list">
                             <a class="list-group-item"
@@ -90,21 +90,21 @@
                                 </a>
                                 <dir-pagination-controls pagination-id="reports-paginate" max-size="3" direction-links="true" boundary-links="true"></dir-pagination-controls>
                             </div>
-                    </accordion-group>
+                    </uib-accordion-group>
                     <!-- -->
                     <!-- -->
                     <!-- Vdbs -->
                     <!-- -->
                     <!-- -->
-                    <accordion-group heading="Vdbs">
-                        <accordion-heading>
+                    <uib-accordion-group heading="Vdbs">
+                        <uib-accordion-heading>
                             Vdbs
-                            <!-- Necessary to make it into a dropdown as they do not refresh the page when clicked -->
-                            <div class="pull-right" dropdown>
-                                <button type="button" class="glyphicon glyphicon-plus vdb-heading-btn" dropdown-toggle ng-click="vm.vdbOrbit.onAddClicked($event)"></button>
-                                <button type="button" class="glyphicon glyphicon-minus vdb-heading-btn" dropdown-toggle ng-click="vm.vdbOrbit.onRemoveClicked($event)"></button>
+                            <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
+                            <div class="pull-right" uib-dropdown>
+                                <button type="button" class="glyphicon glyphicon-plus vdb-heading-btn" uib-dropdown-toggle ng-click="vm.vdbOrbit.onAddClicked($event)"></button>
+                                <button type="button" class="glyphicon glyphicon-minus vdb-heading-btn" uib-dropdown-toggle ng-click="vm.vdbOrbit.onRemoveClicked($event)"></button>
                             </div>
-                        </accordion-heading>
+                        </uib-accordion-heading>
                         <div id="list-vdb">
                             <input class="accordian-list-filter" type="text" ng-model="vm.vdbOrbit.searchFilter" placeholder="filter...">
                             <div class="list-group accordian-list">
@@ -118,8 +118,8 @@
                             </div>
                             Total Vdbs: {{vm.vdbOrbit.vdbs.length}}
                         </div>
-                    </accordion-group>
-                </accordion>
+                    </uib-accordion-group>
+                </uib-accordion>
 
             </div>
 
@@ -132,8 +132,8 @@
             <!-- Tab set for displaying selected vdb contents -->
             <!-- Only displayed is a vdb is selected in the vdbSelectionService -->
             <div ng-show="vm.vdbOrbit.vdbSelected()">
-                <tabset>
-                    <tab heading="Vdb Content" ng-click="onTabSelected('Diagram')">
+                <uib-tabset>
+                    <uib-tab heading="Vdb Content" ng-click="onTabSelected('Diagram')">
                         <div class="vdb-diagram col-sm-7">
                             <vdb-component-tree vdb-entry="vm.vdbOrbit.vdbSelected()"
                                                               display-parents="false"
@@ -162,11 +162,11 @@
                             </panel-drawer>
                         </div>
 
-                    </tab>
-                    <tab heading="Vdb Preview" ng-click="vm.vdbOrbit.onTabSelected('Preview')">
+                    </uib-tab>
+                    <uib-tab heading="Vdb Preview" ng-click="vm.vdbOrbit.onTabSelected('Preview')">
                         <ui-codemirror ng-model="vm.vdbOrbit.vdbSelected().previewContent" ui-refresh="vm.vdbOrbit.previewRefresh" ui-codemirror-opts="vm.vdbOrbit.xmlPreviewOptions"></ui-codemirror>
-                    </tab>
-                </tabset>
+                    </uib-tab>
+                </uib-tabset>
             </div>
 
             <!-- Tab set for displaying the search results of the search made -->
