@@ -253,30 +253,33 @@
                 var param = parameters[i];
                 modalTemplate = modalTemplate + '<div class="form-group">';
                 modalTemplate = modalTemplate + '<label for="' + param + '">' + param + '</label>';
-                modalTemplate = modalTemplate + '<input type="text" class="form-control" id=' + param + ' ng-model="parameters.' + param + '"/>';
+                modalTemplate = modalTemplate + '<input type="text" class="form-control" id=' + param + ' ng-model="mvm.parameters.' + param + '"/>';
                 modalTemplate = modalTemplate + "</div>";
             }
 
             modalTemplate = modalTemplate + '</div>' +
                 '<div class="modal-footer">' +
-                '<button class="btn btn-primary" ng-click="ok()">OK</button>' +
-                '<button class="btn btn-warning" ng-click="cancel()">Cancel</button>' +
+                '<button class="btn btn-primary" ng-click="mvm.ok()">OK</button>' +
+                '<button class="btn btn-warning" ng-click="mvm.cancel()">Cancel</button>' +
                 '</div>';
 
             var modal = $uibModal.open({
                 animation: 'true',
                 backdrop: 'false',
                 template: modalTemplate,
-                controller: ['vm', '$uibModalInstance', function (vm, $uibModalInstance) {
-                    vm.parameters = {};
+                controller: ['$uibModalInstance', function ($uibModalInstance) {
+                    var mvm = this;
 
-                    vm.ok = function () {
-                        $uibModalInstance.close(vm.parameters);
+                    mvm.parameters = {};
+
+                    mvm.ok = function () {
+                        $uibModalInstance.close(mvm.parameters);
                     };
-                    vm.cancel = function () {
+                    mvm.cancel = function () {
                         $uibModalInstance.dismiss('cancel');
                     };
-                }]
+                }],
+                controllerAs: 'mvm'
             });
 
             //
