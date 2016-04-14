@@ -1,0 +1,39 @@
+<uib-progressbar class="progress-striped active" value="dynamic" type="info" ng-show="vm.loading"></uib-progressbar>
+
+<p ng-show="! vm.loading && vm.error">Status Error:
+    <br/>'{{vm.error}}'
+</p>
+
+<p ng-show="! vm.loading && ! vm.hasVdbs()">Teiid instance has no vdbs</p>
+
+<div class="teiid-dashboard-widgets-vdb-states-chart" id="pieChart"></div>
+
+<div ng-show="! vm.loading && ! vm.error && vm.hasVdbs()" class="teiid-dashboard-widgets-vdb-states-table">
+    <table class="table table-bordered table-striped table-condensed">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Deployed Name</th>
+                <th>Version</th>
+                <th>State</th>
+                <th>Errors</th>
+            </tr>
+        </thead>
+        <tbody ng-repeat="vdb in vm.vdbs|orderBy:name">
+            <tr ng-style="vm.stateStyle(vdb)">
+                <td>{{vdb.name}}</td>
+                <td>{{vdb.deployedName}}</td>
+                <td>{{vdb.version}}</td>
+                <td>{{vm.state(vdb)}}</td>
+                <td>
+                    <a class="teiid-dashboard-widgets-vdb-states-table-link"
+                            ng-click="vm.showErrors(vdb)"
+                            ng-show="vm.hasErrors(vdb)"
+                            ng-style="vm.stateStyle(vdb)">
+                            {{vdb.errors.length}}
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

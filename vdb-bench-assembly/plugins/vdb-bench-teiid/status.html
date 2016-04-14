@@ -1,1 +1,6 @@
-<h1 style="color: blue;">This is the page status content</h1>
+<div ng-controller="StatusController as vm">
+    <adf-dashboard name="teiid-status-dashboard"
+                            collapsible="true"
+                            structure="6-6"
+                            adf-model="vm.model" />
+</div>

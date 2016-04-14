@@ -278,6 +278,18 @@
             });
         };
 
+        service.getTeiidStatus = function() {
+            return getRestService().then(function (restService) {
+                return restService.one(REST_URI.TEIID + REST_URI.STATUS).get();
+            });
+        };
+
+        service.getTeiidVdbStatus = function() {
+            return getRestService().then(function (restService) {
+                return restService.one(REST_URI.TEIID + REST_URI.STATUS + REST_URI.VDBS).get();
+            });
+        };
+
         function RestServiceException(message) {
             this.message = message;
             this.toString = function () {

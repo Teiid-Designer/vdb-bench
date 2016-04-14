@@ -42,6 +42,7 @@
             SERVICE: '/service',
             SCHEMA: '/schema',
             SEARCH: '/search',
+            TEIID: '/teiid',
             SAVE_SEARCH: 'saveSearch',
             SAVED_SEARCHES: '/savedSearches',
             SEARCH_CONTAINS: 'contains',
@@ -52,7 +53,8 @@
             SEARCH_SAVE_NAME: 'searchName',
             SEARCH_PARAMETERS: 'parameters',
             DATA_KOMODO: 'tko:komodo',
-            DATA_WORKSPACE: 'tko:workspace'
+            DATA_WORKSPACE: 'tko:workspace',
+            STATUS: '/status',
         })
 
         .constant('VDB_KEYS', {

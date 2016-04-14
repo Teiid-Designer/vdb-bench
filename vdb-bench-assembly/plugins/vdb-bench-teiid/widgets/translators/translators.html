@@ -1,0 +1,22 @@
+<div class="teiid-dashboard-widgets-data-sources">
+    <uib-progressbar class="progress-striped active" value="dynamic" type="info" ng-show="vm.loading"></uib-progressbar>
+
+    <p ng-show="! vm.loading && vm.error">Status Error:
+        <br/>'{{vm.error}}'</p>
+
+    <div ng-show="! vm.loading && ! vm.error">
+        Number of translators: <span style="color: blue;">{{vm.total}}</span>
+
+        <div class="teiid-dashboard-widgets-translators-list-tr-names-container" ng-show="vm.total > 0">
+            <div class="teiid-dashboard-widgets-translators-list-tr-names">
+                <input class="accordian-list-filter" type="text" ng-model="vm.trFilter" placeholder="filter...">
+                <div class="list-group accordian-list teiid-dashboard-widgets-translators-list-group">
+                    <a class="list-group-item" pagination-id="tr-paginate" dir-paginate="tr in vm.names|filter:vm.trFilter|orderBy:'toString()'|itemsPerPage:3">
+                        {{tr}}
+                    </a>
+                    <dir-pagination-controls pagination-id="tr-paginate" max-size="3" direction-links="true" boundary-links="true"></dir-pagination-controls>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

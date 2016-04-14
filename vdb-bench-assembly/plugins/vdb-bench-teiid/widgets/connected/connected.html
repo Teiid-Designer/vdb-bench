@@ -1,0 +1,24 @@
+<div class="teiid-dashboard-widgets-connected">
+    <uib-progressbar class="progress-striped active" value="dynamic" type="info" ng-show="vm.loading"></uib-progressbar>
+
+    <p ng-show="! vm.loading && vm.error">Status Error:
+        <br/>'{{vm.error}}'</p>
+
+    <div ng-show="! vm.loading && ! vm.error">
+        <div class="teiid-dashboard-widgets-connected-left">Client Version:</div>
+        <div class="teiid-dashboard-widgets-connected-right">{{vm.clientVersion}}</div>
+
+        <div class="teiid-dashboard-widgets-connected-left">Connection Url:</div>
+        <div class="teiid-dashboard-widgets-connected-right">{{vm.url}}</div>
+
+        <div class="teiid-dashboard-widgets-connected-left">Client Available:</div>
+        <div class="teiid-dashboard-widgets-connected-right">
+            <div ng-class="vm.available.styleClass">{{vm.available.text}}</div>
+        </div>
+
+        <div class="teiid-dashboard-widgets-connected-left">Connected:</div>
+        <div class="teiid-dashboard-widgets-connected-right">
+            <div ng-class="vm.connected.styleClass">{{vm.connected.text}}</div>
+        </div>
+    </div>
+</div>

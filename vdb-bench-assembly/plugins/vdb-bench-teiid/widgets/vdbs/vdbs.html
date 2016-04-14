@@ -1,0 +1,22 @@
+<div class="teiid-dashboard-widgets-vdbs">
+    <uib-progressbar class="progress-striped active" value="dynamic" type="info" ng-show="vm.loading"></uib-progressbar>
+
+    <p ng-show="! vm.loading && vm.error">Status Error:
+        <br/>'{{vm.error}}'</p>
+
+    <div ng-show="! vm.loading && ! vm.error">
+        Number of vdbs: <span style="color: blue;">{{vm.total}}</span>
+
+        <div class="teiid-dashboard-widgets-vdbs-list-vdb-names-container" ng-show="vm.total > 0">
+            <div class="teiid-dashboard-widgets-vdbs-list-vdb-names">
+                <input class="accordian-list-filter" type="text" ng-model="vm.dataSrcFilter" placeholder="filter...">
+                <div class="list-group accordian-list teiid-dashboard-widgets-vdbs-list-group">
+                    <a class="list-group-item" pagination-id="vdb-paginate" dir-paginate="vdb in vm.names|filter:vm.dataSrcFilter|orderBy:'toString()'|itemsPerPage:3">
+                        {{vdb}}
+                    </a>
+                    <dir-pagination-controls pagination-id="vdb-paginate" max-size="3" direction-links="true" boundary-links="true"></dir-pagination-controls>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

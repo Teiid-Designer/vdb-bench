@@ -8,9 +8,9 @@
         .module(pluginName)
         .controller('TeiidController', TeiidController);
 
-    TeiidController.$inject = ['SYNTAX', 'CONFIG', '$scope'];
+    TeiidController.$inject = ['SYNTAX', 'CONFIG'];
 
-    function TeiidController(syntax, config, $scope) {
+    function TeiidController(syntax, config) {
         var vm = this;
 
         var STATUS_SECTION = 'status';
@@ -51,10 +51,6 @@
         vm.selectSection = function(sectionId) {
             vm.selectedSection = sections[sectionId];
         };
-
-        $scope.$watch('vm.selectedSection', function (newVal, oldVal) {
-                console.log("value of selected section: " + newVal);
-            });
 
         vm.selectSection(STATUS_SECTION);
     }

@@ -1,0 +1,11 @@
+<div class="modal-header">
+    <h3 class="modal-title">Validity Errors for vdb '{{mvm.name}}'</h3>
+</div>
+<div class="modal-body">
+    <div ng-repeat="error in mvm.errors track by $index">
+        <textarea readonly="true" class=teiid-dashboard-widgets-vdb-states-modal-error>{{error}}</textarea>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="mvm.ok()">OK</button>'
+</div>

@@ -5,8 +5,13 @@
         /*
          * Angular modules
          */
-        'ui.bootstrap',
-        'angularUtils.directives.dirPagination',
+        'adf',
+        'adf.structures.base',
+        'adf.widget.teiid-connected',
+        'adf.widget.teiid-data-sources',
+        'adf.widget.teiid-translators',
+        'adf.widget.teiid-vdbs',
+        'adf.widget.teiid-vdb-states',
 
         /*
          * Our reusable cross app code modules
