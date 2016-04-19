@@ -5,20 +5,36 @@
 /*
  * Classes for panelDrawer directive
  */
+.panel-divider-content-outer {
+}
+.panel-divider-content-inner {
+    clear: right;
+    margin: 0.5em;
+}
+.panel-divider-content-close {
+    font-size: 25pt;
+    padding-right: 0.2em !important;
+    padding-top: 0.1em !important;
+    color: rgba(177, 228, 221, 0.4);
+    text-shadow: -2px -2px 1px rgb(255, 255, 255), 2px 2px 1px rgb(0, 0, 0);
+}
 .nav-content-outer {
-    float: left;
     border-bottom: 1px solid #B1B1B1;
+    border-left: 1px solid #B1B1B1;
     border-right: 1px solid #B1B1B1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 200;
+    transform: translateX(35em); /* ensure the content is off canvas */
 }
 .nav-content-inner {
     width: 100%;
     height: 80vh;
     overflow: auto;
+    background-color: #f9fbfc; /* ensures the menu is opaque */
 }
 .collapsing-width {
-    position: relative;
-    overflow: hidden;
-    float: left;
     -webkit-transition: width 0.35s ease;
     -moz-transition: width 0.35s ease;
     -o-transition: width 0.35s ease;

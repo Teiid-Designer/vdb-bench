@@ -141,8 +141,8 @@
                     //
                     if (key == VDB_SCHEMA.DESCRIPTION_PROPERTY) {
                         var descTemplate = "<div class=\"form-group\">";
-                        descTemplate = descTemplate + "<label ng-hide=\"\" class=\"col-sm-2 control-label\">Description</label>";
-                        descTemplate = descTemplate + "<div class=\"col-sm-10\">";
+                        descTemplate = descTemplate + "<label ng-hide=\"\" class=\"col-sm-3 control-label\">Description</label>";
+                        descTemplate = descTemplate + "<div class=\"col-sm-9\">";
                         descTemplate = descTemplate + "<textarea class='property-editor-input input-xlarge' rows='2' ng-model=\"entity." + key + "\" readonly=\"readonly\"></textarea>";
                         descTemplate = descTemplate + "</div>";
                         configProperty.formTemplate = descTemplate;

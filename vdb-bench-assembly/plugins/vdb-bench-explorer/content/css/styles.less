@@ -1,6 +1,10 @@
 /*
  * === vdb-bench-explorer ===
  */
+.selected-container {
+    overflow: hidden; /* Stops scrollbars displaying for off-canvas navigation */
+}
+
 .vdb-heading-btn {
     background-color: transparent;
     border: none;
@@ -17,6 +21,18 @@
     border-bottom: 1px solid #F2F2F2;
     overflow: auto;
     padding-right: 0;
+}
+
+.vdb-diagram-no-properties {
+    font-weight: bold;
+    font-size: 20pt;
+}
+
+.vdb-diagram-no-properties p {
+    padding-top: 5em;
+    text-align: center;
+    color: rgba(177, 228, 221, 0.4);
+    text-shadow: -2px -2px 1px #ffffff, 2px 2px 1px #868686;
 }
 
 .CodeMirror {

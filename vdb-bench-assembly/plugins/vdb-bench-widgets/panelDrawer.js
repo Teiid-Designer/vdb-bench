@@ -7,9 +7,10 @@
     angular
         .module(pluginName)
         .directive('panelDrawer', PanelDrawer)
-        .directive('divider', divider);
+        .directive('divider', Divider);
 
     PanelDrawer.$inject = ['$animate', '$animateCss', '$timeout', 'CONFIG', 'SYNTAX'];
+    Divider.$inject = ['CONFIG', 'SYNTAX'];
 
     function PanelDrawer($animate, $animateCss, $timeout, config, syntax) {
         var directive = {
@@ -44,6 +45,14 @@
                 vm.dividerExpanded = !vm.dividerExpanded;
             };
 
+            vm.close = function() {
+                angular.forEach(dividers, function (divider) {
+                    divider.selected = false;
+                });
+                vm.selectedDivider = null;
+                vm.dividerExpanded = false;
+            };
+
             vm.isVisible = function (divider) {
                 if (!vm.dividerExpanded)
                     return true; // always display if widget is collapsed
@@ -52,7 +61,7 @@
                 return divider.selected;
             };
 
-            this.addDivider = function (divider) {
+            vm.addDivider = function (divider) {
                 divider.selected = false;
                 dividers.push(divider);
             };
@@ -90,50 +99,70 @@
             }
 
             function expand(tgtElement) {
-                tgtElement.removeClass('collapse').addClass('collapsing-width');
+                tgtElement.removeClass('collapse')
+                                .addClass('collapsing-width');
 
                 var animation = $animateCss(tgtElement, {
                     addClass: 'in',
                     to: {
-                        width: '90%'
+                        width: '35em',
+                        transform: 'translateX(0em)'
                     }
                 });
 
                 animation.start().done(function () {
-                    tgtElement.removeClass('collapsing-width');
-                    tgtElement.addClass('collapse in');
+                    tgtElement.removeClass('collapsing-width')
+                                    .addClass('collapse in');
                 });
             }
 
             function collapse(tgtElement) {
-                tgtElement.removeClass('collapse in').addClass('collapsing-width');
+                tgtElement.removeClass('collapse in')
+                                .addClass('collapsing-width');
 
                 var animation = $animateCss(tgtElement, {
                     to: {
-                        width: '0'
+                        width: '0',
+                        transform: 'translateX(35em)'
                     }
                 });
 
                 animation.start().done(function () {
-                    tgtElement.removeClass('collapsing-width');
-                    tgtElement.addClass('collapse');
+                    tgtElement.removeClass('collapsing-width')
+                                    .addClass('collapse');
                 });
             }
         }
     }
 
-    function divider() {
-        return {
+    function Divider(config, syntax) {
+        var directive = {
             require: '^panelDrawer',
             restrict: 'E',
             transclude: true,
             scope: {
                 title: '@'
             },
-            link: function (scope, element, attrs, dividerCtrl) {
-                dividerCtrl.addDivider(scope);
+            link: function (scope, element, attrs, panelDrawerCtrl) {
+                panelDrawerCtrl.addDivider(scope);
+                //
+                // Allow access to the panel drawer's close function
+                // from this child divider's scope
+                //
+                scope.divm.closeDivider = panelDrawerCtrl.close;
             },
-            template: '<div ng-show="selected" ng-transclude></div>'
+            templateUrl: config.pluginDir + syntax.FORWARD_SLASH +
+                pluginDirName + syntax.FORWARD_SLASH +
+                'divider.html',
+            controller: DividerController,
+            controllerAs: 'divm',
+            bindToController: true
         };
+
+        return directive;
+    }
+
+    function DividerController() {
+        var divm = this;
     }
 })();

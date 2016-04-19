@@ -78,6 +78,13 @@
             return VdbSelectionService.selected();
         };
 
+        /*
+         * is their a vdb component selection
+         */
+        vm.vdbOrbit.vdbComponentSelected = function() {
+            return ! _.isEmpty(vm.vdbOrbit.selectedVdbComponent);
+        };
+
         /**
          * Options for the codemirror editor used for previewing vdb xml
          */
