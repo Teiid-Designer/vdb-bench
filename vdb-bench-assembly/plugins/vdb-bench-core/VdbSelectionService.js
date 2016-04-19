@@ -53,7 +53,6 @@
                 return;
 
             indexInternal(selectedVdb, vdbIndex);
-            console.log(vdbIndex);
         }
 
         /*

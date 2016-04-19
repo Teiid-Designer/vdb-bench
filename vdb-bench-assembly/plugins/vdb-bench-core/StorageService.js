@@ -28,9 +28,13 @@
                 $window.localStorage[key] = JSON.stringify(value);
             },
 
-            getObject: function (key) {
-                var value = JSON.parse($window.localStorage[key] || '{}');
-                return value;
+            getObject: function (key, defaultValue) {
+                var value = $window.localStorage[key];
+                if (!value)
+                    return defaultValue;
+
+                var valueObj = JSON.parse(value);
+                return valueObj;
             }
         };
 

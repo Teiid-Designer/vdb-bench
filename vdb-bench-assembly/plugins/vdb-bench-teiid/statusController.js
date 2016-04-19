@@ -13,7 +13,8 @@
         function StatusController($scope, storageService) {
             var vm = this;
             var name = 'teiid-status-dashboard';
-            var model = storageService.getObject(name);
+            var model = storageService.getObject(name, null);
+//            var model;
             if (! model) {
                 model = {
                     title: "Status Dashboard",

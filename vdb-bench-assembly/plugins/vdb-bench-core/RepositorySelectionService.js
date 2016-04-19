@@ -31,7 +31,7 @@
          * private function for initialising the repositories from local storage
          */
         function initWorkspaces() {
-            var storageRepos = StorageService.getObject('repositories');
+            var storageRepos = StorageService.getObject('repositories', {});
             if (_.isEmpty(storageRepos)) {
                 storageRepos = [defaultWorkspace];
                 StorageService.setObject('repositories', storageRepos);
