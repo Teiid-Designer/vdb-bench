@@ -91,36 +91,14 @@
                                 <dir-pagination-controls pagination-id="reports-paginate" max-size="3" direction-links="true" boundary-links="true"></dir-pagination-controls>
                             </div>
                     </uib-accordion-group>
-                    <!-- -->
-                    <!-- -->
-                    <!-- Vdbs -->
-                    <!-- -->
-                    <!-- -->
-                    <uib-accordion-group heading="Vdbs">
-                        <uib-accordion-heading>
-                            Vdbs
-                            <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
-                            <div class="pull-right" uib-dropdown>
-                                <button type="button" class="glyphicon glyphicon-plus vdb-heading-btn" uib-dropdown-toggle ng-click="vm.vdbOrbit.onAddClicked($event)"></button>
-                                <button type="button" class="glyphicon glyphicon-minus vdb-heading-btn" uib-dropdown-toggle ng-click="vm.vdbOrbit.onRemoveClicked($event)"></button>
-                            </div>
-                        </uib-accordion-heading>
-                        <div id="list-vdb">
-                            <input class="accordian-list-filter" type="text" ng-model="vm.vdbOrbit.searchFilter" placeholder="filter...">
-                            <div class="list-group accordian-list">
-                                <a class="list-group-item"
-                                     pagination-id="vdb-paginate"
-                                     dir-paginate="vdb in vm.vdbOrbit.vdbs|filter:vm.vdbOrbit.searchFilter|orderBy:'keng__id'|itemsPerPage:3"
-                                     ng-click="$parent.vm.vdbOrbit.selectVdb(vdb)" ng-class="{active:$parent.vm.vdbOrbit.vdbSelected()==vdb}">
-                                    {{vdb.keng__id}}
-                                </a>
-                                <dir-pagination-controls pagination-id="vdb-paginate" max-size="3" direction-links="true" boundary-links="true"></dir-pagination-controls>
-                            </div>
-                            Total Vdbs: {{vm.vdbOrbit.vdbs.length}}
-                        </div>
-                    </uib-accordion-group>
                 </uib-accordion>
 
+                <!-- -->
+                <!-- -->
+                <!-- Vdbs -->
+                <!-- -->
+                <!-- -->
+                <vdb-list open="false" show-buttons="true"/>
             </div>
 
             <!-- End of Workspace Contents -->

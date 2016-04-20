@@ -80,9 +80,8 @@
             // Index the compoments of the vdb
             indexVdb();
 
-            // Useful for broadcasting the selected repository has been
-            // updated
-            $rootScope.$broadcast("selectedVdbChanged");
+            // Useful for broadcasting the selected vdb has been updated
+            $rootScope.$broadcast("selectedVdbChanged", selectedVdb);
         };
 
         /*

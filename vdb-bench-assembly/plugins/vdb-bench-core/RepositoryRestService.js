@@ -115,9 +115,14 @@
          * Service: return the list of existing vdbs
          * Returns: promise object for the vdb collection
          */
-        service.getVdbs = function () {
+        service.getVdbs = function (vdbType) {
+            var url = REST_URI.WORKSPACE + REST_URI.VDBS;
+
+            if (vdbType === 'teiid')
+                url = REST_URI.TEIID + REST_URI.VDBS;
+
             return getRestService().then(function (restService) {
-                return restService.all(REST_URI.WORKSPACE + REST_URI.VDBS).getList();
+                return restService.all(url).getList();
             });
         };
 

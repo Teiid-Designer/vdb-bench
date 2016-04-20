@@ -19,64 +19,9 @@
         var PREVIEW_TAB_ID = "Preview";
 
         vm.vdbOrbit = {};
-        vm.vdbOrbit.vdbs = [];
-
-        /**
-         * Fetch the list of vdbs from the selected repository
-         */
-        function initVdbs() {
-            try {
-                RepoRestService.getVdbs().then(
-                    function (newVdbs) {
-                        RepoRestService.copy(newVdbs, vm.vdbOrbit.vdbs);
-                    },
-                    function (response) {
-                        // Some kind of error has occurred
-                        vm.vdbOrbit.vdbs = [];
-                        throw RepoRestService.newRestException("Failed to load vdbs from the host services.\n" + response.message);
-                    });
-            } catch (error) {
-                vm.vdbOrbit.vdbs = [];
-                alert("An exception occurred:\n" + error.message);
-            }
-
-            // Removes any outdated vdb
-            VdbSelectionService.setSelected(null);
-        }
-
-        
         vm.vdbOrbit.previewRefresh = false;
         vm.vdbOrbit.visibleTabId = DIAGRAM_TAB_ID;
         vm.vdbOrbit.selectedVdbComponent = [];
-
-        /*
-         * Select the given vdb
-         */
-        vm.vdbOrbit.selectVdb = function (vdb) {
-            if (vdb) {
-                //
-                // Ensure that the search results pane is hidden
-                //
-                vm.searchOrbit.setVisible(false);
-
-                //
-                // Ensure the reports are deselected
-                //
-                vm.reportOrbit.selectReport(null);
-            }
-
-            //
-            // Set the selected vdb
-            //
-            VdbSelectionService.setSelected(vdb);
-        };
-
-        /*
-         * return selected vdb
-         */
-        vm.vdbOrbit.vdbSelected = function () {
-            return VdbSelectionService.selected();
-        };
 
         /*
          * is their a vdb component selection
@@ -93,6 +38,13 @@
             lineNumbers: true,
             readOnly: 'nocursor',
             mode: 'xml'
+        };
+
+        /*
+         * return selected vdb
+         */
+        vm.vdbOrbit.vdbSelected = function () {
+            return VdbSelectionService.selected();
         };
 
         /*
@@ -113,8 +65,19 @@
         /*
          * When the vdb selection changes
          */
-        $scope.$on('selectedVdbChanged', function () {
+        $scope.$on('selectedVdbChanged', function (event, newVdb) {
             tabUpdate();
+            if (newVdb) {
+                //
+                // Ensure that the search results pane is hidden
+                //
+                vm.searchOrbit.setVisible(false);
+
+                //
+                // Ensure the reports are deselected
+                //
+                vm.reportOrbit.selectReport(null);
+            }
         });
 
         /**
@@ -132,40 +95,6 @@
             setTimeout(function () {
                 vm.vdbOrbit.previewRefresh = !vm.vdbOrbit.previewRefresh;
             }, 2000);
-        };
-
-        /**
-         * Event handler for clicking the add button
-         */
-        vm.vdbOrbit.onAddClicked = function (event) {
-            try {
-                $window.alert("To be implemented");
-            } catch (error) {
-
-            } finally {
-                // Essential to stop the accordion closing
-                event.stopPropagation();
-            }
-        };
-
-        /**
-         * Event handler for clicking the remove button
-         */
-        vm.vdbOrbit.onRemoveClicked = function (event) {
-            var selected = VdbSelectionService.selected();
-            try {
-                RepoRestService.removeVdb(selected).then(
-                    function () {
-                        // Reinitialise the list of vdbs
-                        initVdbs();
-                    },
-                    function (response) {
-                        throw new vdbBench.RestServiceException("Failed to remove the vdb " + selected.id + "from the host services.\n" + response.message);
-                    });
-            } catch (error) {} finally {
-                // Essential to stop the accordion closing
-                event.stopPropagation();
-            }
         };
 
         vm.searchOrbit = {};
@@ -528,9 +457,6 @@
                 vm.vdbOrbit.vdbs = _.without(vm.vdbOrbit.vdbs, vdb);
             });
         };
-
-        // Initialise vdb collection on loading
-        initVdbs();
 
         // Initialise the reports collection on loading
         initReports();

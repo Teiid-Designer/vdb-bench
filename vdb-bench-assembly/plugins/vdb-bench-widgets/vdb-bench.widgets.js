@@ -11,6 +11,8 @@
          * its components are available.
          */
         'ngAnimate',
+        'ui.bootstrap',
+        'angularUtils.directives.dirPagination',
 
         /*
          * Everybody has access to these.
