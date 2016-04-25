@@ -107,48 +107,7 @@
         <!-- Panel for displaying the properties of the selection -->
         <div class="selected-container col-sm-10">
 
-            <!-- Tab set for displaying selected vdb contents -->
-            <!-- Only displayed is a vdb is selected in the vdbSelectionService -->
-            <div ng-show="vm.vdbOrbit.vdbSelected()">
-                <uib-tabset>
-                    <uib-tab heading="Vdb Content" ng-click="onTabSelected('Diagram')">
-                        <div class="vdb-diagram col-sm-11">
-                            <vdb-component-tree vdb-entry="vm.vdbOrbit.vdbSelected()"
-                                                              display-parents="false"
-                                                              selected-vdb-component="vm.vdbOrbit.selectedVdbComponent"
-                                                              orientation="TB"
-                                                              height="2048"
-                                                              width="1024"
-                                                              margin-left="120"
-                                                              margin-right="120">
-                            </vdb-component-tree>
-                        </div>
-
-                        <!-- Vertical tabbed page for displaying selected object properties -->
-                        <div class="vdb-diagram-nav-col col-sm-1">
-                            <panel-drawer>
-                                <divider title="New">
-                                    <p>I am on the NEW page</p>
-                                </divider>
-                                <divider title="Properties">
-                                    <div ng-show="vm.vdbOrbit.vdbComponentSelected()">
-                                        <div ng-repeat="component in vm.vdbOrbit.selectedVdbComponent">
-                                            <attribute-widget selected="component"/>
-                                        </div>
-                                    </div>
-                                    <div class="vdb-diagram-no-properties" ng-show="! vm.vdbOrbit.vdbComponentSelected()">
-                                        <p>Nothing Selected</p>
-                                    </div>
-                                </divider>
-                            </panel-drawer>
-                        </div>
-
-                    </uib-tab>
-                    <uib-tab heading="Vdb Preview" ng-click="vm.vdbOrbit.onTabSelected('Preview')">
-                        <ui-codemirror ng-model="vm.vdbOrbit.vdbSelected().previewContent" ui-refresh="vm.vdbOrbit.previewRefresh" ui-codemirror-opts="vm.vdbOrbit.xmlPreviewOptions"></ui-codemirror>
-                    </uib-tab>
-                </uib-tabset>
-            </div>
+            <vdb-visualize></vdb-visualize>
 
             <!-- Tab set for displaying the search results of the search made -->
             <!-- Only displayed if search button has been clicked -->

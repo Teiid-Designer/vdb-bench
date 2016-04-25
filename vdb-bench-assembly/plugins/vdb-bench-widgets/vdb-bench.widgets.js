@@ -13,6 +13,8 @@
         'ngAnimate',
         'ui.bootstrap',
         'angularUtils.directives.dirPagination',
+        'ui.codemirror',
+        'prettyXml',
 
         /*
          * Everybody has access to these.

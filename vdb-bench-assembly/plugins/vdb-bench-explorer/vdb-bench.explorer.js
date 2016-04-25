@@ -6,8 +6,6 @@
          * Angular modules
          */
         'ui.bootstrap',
-        'ui.codemirror',
-        'prettyXml',
         'angularUtils.directives.dirPagination',
 
         /*

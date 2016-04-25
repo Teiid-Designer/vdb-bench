@@ -1,0 +1,42 @@
+<div ng-show="vm.vdbSelected()">
+    <uib-tabset>
+        <uib-tab heading="Vdb Content" ng-click="vm.onTabSelected('Diagram')">
+            <div class="vdb-diagram col-sm-11">
+                <vdb-component-tree vdb-entry="vm.vdbSelected()"
+                                                    display-parents="false"
+                                                    selected-vdb-component="vm.selectedVdbComponent"
+                                                    orientation="TB"
+                                                    height="2048"
+                                                    width="1024"
+                                                    margin-left="120"
+                                                    margin-right="120">
+                </vdb-component-tree>
+            </div>
+
+            <!-- Vertical tabbed page for displaying selected object properties -->
+            <div class="vdb-diagram-nav-col col-sm-1">
+                <panel-drawer>
+                    <divider title="New">
+                        <p>I am on the NEW page</p>
+                    </divider>
+                    <divider title="Properties">
+                        <div ng-show="vm.vdbComponentSelected()">
+                            <div ng-repeat="component in vm.selectedVdbComponent">
+                                <attribute-widget selected="component" />
+                            </div>
+                        </div>
+                        <div class="vdb-diagram-no-properties" ng-show="! vm.vdbComponentSelected()">
+                            <p>Nothing Selected</p>
+                        </div>
+                    </divider>
+                </panel-drawer>
+            </div>
+
+        </uib-tab>
+        <uib-tab heading="Vdb Preview" ng-click="vm.onTabSelected('Preview')">
+            <ui-codemirror ng-model="vm.vdbSelected().previewContent"
+                                    ui-refresh="vm.previewRefresh"
+                                    ui-codemirror-opts="vm.xmlPreviewOptions"></ui-codemirror>
+        </uib-tab>
+    </uib-tabset>
+</div>

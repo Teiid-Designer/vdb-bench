@@ -40,6 +40,20 @@
         HostNotReachableException.prototype.constructor = HostNotReachableException;
 
         /**
+         * returns true if the given vdb is a deployed teiid vdb
+         *  false otherwise.
+         */
+        function isTeiidVdb(vdb) {
+            if (! vdb)
+                return false;
+
+            if (!vdb.keng__dataPath)
+                return false;
+
+            return vdb.keng__dataPath.indexOf('tko:teiidCache') > -1;
+        }
+
+        /**
          * Get the rest service based on the selected repo's baseUrl value.
          * Used in most cases when the URI has segments to be appended
          * to this baseUrl.
@@ -187,7 +201,11 @@
             if (!vdbId)
                 return null;
 
-            var link = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbId;
+            var vdbType = REST_URI.WORKSPACE;
+            if (isTeiidVdb(vdb))
+                vdbType = REST_URI.TEIID;
+
+            var link = vdbType + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbId;
             return getRestService().then(function (restService) {
                 /*
                  * Uses the content link from the vdb and fetch the xml version of the content.
