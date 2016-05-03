@@ -4,17 +4,21 @@
             Vdbs
             <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
             <div class="pull-right" uib-dropdown ng-show="vm.hasButtons()">
-                <button type="button" class="glyphicon glyphicon-plus vdb-heading-btn" uib-dropdown-toggle ng-click="vm.vdbOrbit.onAddClicked($event)"></button>
-                <button type="button" class="glyphicon glyphicon-minus vdb-heading-btn" uib-dropdown-toggle ng-click="vm.vdbOrbit.onRemoveClicked($event)"></button>
+                <button type="button" class="glyphicon glyphicon-plus vdb-heading-btn" uib-dropdown-toggle ng-click="vm.onAddClicked($event)"></button>
+                <button type="button" class="glyphicon glyphicon-minus vdb-heading-btn" uib-dropdown-toggle ng-click="vm.onRemoveClicked($event)"></button>
             </div>
         </uib-accordion-heading>
-        <div id="list-vdb">
+        <div ng-show="vm.init">
+            <uib-progressbar class="progress-striped active" value="dynamic" type="info"></uib-progressbar>
+        </div>
+
+        <div id="list-vdb" ng-show="! vm.init">
             <input class="accordian-list-filter" type="text" ng-model="vm.searchFilter" placeholder="filter...">
             <div class="list-group accordian-list">
-                <a class="list-group-item" pagination-id="vdb-paginate" dir-paginate="vdb in vm.vdbs|filter:vm.searchFilter|orderBy:'keng__id'|itemsPerPage:3" ng-click="$parent.vm.selectVdb(vdb)" ng-class="{active:$parent.vm.vdbSelected()==vdb}">
+                <a class="list-group-item" pagination-id="vdb-paginate" dir-paginate="vdb in vm.vdbs|filter:vm.searchFilter|orderBy:'keng__id'|itemsPerPage:5" ng-click="$parent.vm.selectVdb(vdb)" ng-class="{active:$parent.vm.vdbSelected()==vdb}">
                                     {{vdb.keng__id}}
                 </a>
-                <dir-pagination-controls pagination-id="vdb-paginate" max-size="3" direction-links="true" boundary-links="true"></dir-pagination-controls>
+                <dir-pagination-controls pagination-id="vdb-paginate" max-size="5" direction-links="true" boundary-links="true"></dir-pagination-controls>
             </div>
         </div>
     </uib-accordion-group>

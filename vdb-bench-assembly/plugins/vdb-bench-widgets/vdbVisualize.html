@@ -21,9 +21,11 @@
                     </divider>
                     <divider title="Properties">
                         <div ng-show="vm.vdbComponentSelected()">
-                            <div ng-repeat="component in vm.selectedVdbComponent">
-                                <attribute-widget selected="component" />
-                            </div>
+                            <uib-tabset>
+                                <uib-tab ng-repeat="component in vm.selectedVdbComponent" heading="{{component.keng__id}}">
+                                    <attribute-widget selected="component" />
+                                </uib-tab>
+                            </uib-tabset>
                         </div>
                         <div class="vdb-diagram-no-properties" ng-show="! vm.vdbComponentSelected()">
                             <p>Nothing Selected</p>

@@ -1,4 +1,4 @@
-(function (vdbBench) {
+(function () {
 
     var pluginName = 'vdb-bench.widgets';
     var pluginDirName = 'vdb-bench-widgets';
@@ -15,41 +15,44 @@
             controllerAs: 'vm',
             bindToController: {
                 component: '=selected'
-            }, 
-            template: "<div hawtio-form-2=\"vm.widgetConfiguration\" entity=\"component\"></div>"
+            },
+            template: "<div hawtio-form-2=\"vm.widgetConfiguration\" entity=\"vm.component\"></div>"
         };
 
         return directive;
     }
 
-    AttributeController.$inject = ['SYNTAX', 'VDB_SCHEMA', 'VDB_KEYS', 'HAWTIO_FORM',
+    AttributeController.$inject = ['$scope', 'SYNTAX', 'VDB_SCHEMA', 'VDB_KEYS', 'HAWTIO_FORM',
                                             'RepoRestService', 'SchemaRegistry'];
 
-    function AttributeController(SYNTAX, VDB_SCHEMA, VDB_KEYS, HAWTIO_FORM, RepoRestService, SchemaRegistry) {
+    function AttributeController($scope, SYNTAX, VDB_SCHEMA, VDB_KEYS, HAWTIO_FORM, RepoRestService, SchemaRegistry) {
         var vm = this;
 
-        if (!vm.component || !vm.component[VDB_KEYS.TYPE]) {
-            vm.schema = null;
-            return;
-        }
+        $scope.$watch('vm.component', function (current, original) {
+            if (! vm.component || !vm.component[VDB_KEYS.TYPE]) {
+                vm.schema = null;
+                return;
+            }
 
-        try {
+            try {
+                //
+                // Fetch the schema for this type of component from the server
+                //
+                RepoRestService.getSchemaByKType(vm.component[VDB_KEYS.TYPE]).then(
+                    function (content) {
+                        var widgetConfig = buildAttributeWidgets(content, vm.component);
+                        vm.widgetConfiguration = widgetConfig;
+                    },
+                    function (response) {
+                        var widgetConfig = buildAttributeWidgets();
+                        vm.widgetConfiguration = widgetConfig;
+                    });
+            } catch (error) {
+                console.error("Error occurred: ", error.message);
+            }
+        });
 
-            //
-            // Fetch the schema for this type of component from the server
-            //
-            RepoRestService.getSchemaByKType(vm.component[VDB_KEYS.TYPE]).then(
-                function (content) {
-                    buildAttributeWidgets(content);
-                },
-                function (response) {
-                    buildAttributeWidgets();
-                });
-        } catch (error) {
-            console.error("Error occurred: ", error.message);
-        }
-
-        function buildAttributeWidgets(schema) {
+        function buildAttributeWidgets(schema, component) {
             //
             // Get the description of the object from the schema
             //
@@ -65,13 +68,23 @@
                 "hideLegend": false,
                 "description": description,
                 "type": "java.lang.String",
-                "properties": {} // to be filled in below
+                "properties": {}, // to be filled in below
+
+                // ensure that the config is unique so that different
+                // entities with the same config properly update the
+                // contents of the form. This is due to hawtioForm2
+                // directive does not listen for changes to entity but
+                // only changes to config.
+                "timestamp": Date.now()
             };
 
             var configProperties = widgetConfig[HAWTIO_FORM.PROPERTIES];
 
-            var componentType = vm.component[VDB_KEYS.TYPE];
-            if (componentType == "Model") {
+            var componentType;
+            if (angular.isDefined(component))
+                componentType = component[VDB_KEYS.TYPE];
+
+            if (componentType === "Model") {
                 //
                 // Model type requires a general tab and a ddl tab
                 //
@@ -179,10 +192,7 @@
                 }
             }
 
-            //
-            // Finally update the current widget configuration for the selected object
-            //
-            vm.widgetConfiguration = angular.fromJson(widgetConfig);
+            return angular.fromJson(widgetConfig);
         }
 
         function createIdWidget(configProperties) {

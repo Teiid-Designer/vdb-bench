@@ -1,1 +1,45 @@
-<h1 style="color: blue;">This is the page data-sources content</h1>
+<div id="teiid-datasources-container" class="container-fluid" ng-controller="DataSourcesController as vm">
+    <div class="row">
+        <div id="teiid-datasources-accordion" class="col-sm-3">
+            <uib-accordion>
+                <uib-accordion-group heading="DataSources" is-open="true">
+                    <uib-accordion-heading>
+                        Data Sources
+                    </uib-accordion-heading>
+                    <div ng-show="vm.init">
+                        <uib-progressbar class="progress-striped active" value="dynamic" type="info"></uib-progressbar>
+                    </div>
+
+                    <div id="list-datasource" ng-show="! vm.init">
+                        <input class="accordian-list-filter" type="text" ng-model="vm.searchFilter" placeholder="filter...">
+                        <div class="list-group accordian-list">
+                            <a class="list-group-item" pagination-id="datasource-paginate"
+                                                                    dir-paginate="datasource in vm.datasources|filter:vm.searchFilter|orderBy:'keng__id'|itemsPerPage:5"
+                                                                    ng-click="$parent.vm.selectDataSource(datasource)"
+                                                                    ng-class="{active:$parent.vm.datasourceSelected()==datasource}">
+                                    {{datasource.keng__id}}
+                            </a>
+                            <dir-pagination-controls pagination-id="datasource-paginate"
+                                                                max-size="5"
+                                                                direction-links="true"
+                                                                boundary-links="true"></dir-pagination-controls>
+                        </div>
+                    </div>
+                </uib-accordion-group>
+            </uib-accordion>
+        </div>
+
+        <div class="col-sm-9">
+            <h2 id="teiid-datasources-heading">Data Source Properties</h2>
+            <div ng-show="! vm.hasSelectedDataSource()">
+                Nothing Selected
+            </div>
+            <div ng-show="vm.hasSelectedDataSource()">
+                <attribute-widget selected="vm.datasource" />
+            </div>
+        </div>
+
+    </div>
+    <!-- row -->
+</div>
+<!-- container-fluid -->

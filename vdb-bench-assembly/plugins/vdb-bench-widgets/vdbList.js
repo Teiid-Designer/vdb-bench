@@ -9,7 +9,7 @@
         .directive('vdbList', VdbList);
 
     VdbList.$inject = ['CONFIG', 'SYNTAX'];
-    VdbListController.$inject = ['VdbSelectionService', 'RepoRestService'];
+    VdbListController.$inject = ['VdbSelectionService', 'RepoRestService', 'REST_URI'];
 
     function VdbList(config, syntax) {
         var directive = {
@@ -30,10 +30,11 @@
         return directive;
     }
 
-    function VdbListController(VdbSelectionService, RepoRestService) {
+    function VdbListController(VdbSelectionService, RepoRestService, REST_URI) {
         var vm = this;
 
         vm.vdbs = [];
+        vm.init = false;
 
         vm.accOpen = vm.open;
         if (angular.isUndefined(vm.accOpen))
@@ -43,22 +44,27 @@
          * Fetch the list of vdbs from the selected repository
          */
         function initVdbs() {
+            vm.init = true;
+
             try {
                 var type = vm.vdbType;
                 if (angular.isUndefined(vm.vdbType))
-                    type = 'workspace';
+                    type = REST_URI.WKSP_SERVICE;
 
                 RepoRestService.getVdbs(type).then(
                     function (newVdbs) {
                         RepoRestService.copy(newVdbs, vm.vdbs);
+                        vm.init = false;
                     },
                     function (response) {
                         // Some kind of error has occurred
                         vm.vdbs = [];
+                        vm.init = false;
                         throw RepoRestService.newRestException("Failed to load vdbs from the host services.\n" + response.message);
                     });
             } catch (error) {
                 vm.vdbs = [];
+                vm.init = false;
                 alert("An exception occurred:\n" + error.message);
             }
 

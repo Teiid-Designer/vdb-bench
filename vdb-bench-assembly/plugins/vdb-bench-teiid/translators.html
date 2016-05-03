@@ -1,1 +1,45 @@
-<h1 style="color: blue;">This is the page translators content</h1>
+<div id="teiid-translators-container" class="container-fluid" ng-controller="TranslatorsController as vm">
+    <div class="row">
+        <div id="teiid-translators-accordion" class="col-sm-3">
+            <uib-accordion>
+                <uib-accordion-group heading="Translators" is-open="true">
+                    <uib-accordion-heading>
+                        Translators
+                    </uib-accordion-heading>
+                    <div ng-show="vm.init">
+                        <uib-progressbar class="progress-striped active" value="dynamic" type="info"></uib-progressbar>
+                    </div>
+
+                    <div id="list-translator" ng-show="! vm.init">
+                        <input class="accordian-list-filter" type="text" ng-model="vm.searchFilter" placeholder="filter...">
+                        <div class="list-group accordian-list">
+                            <a class="list-group-item" pagination-id="translator-paginate"
+                                                                    dir-paginate="translator in vm.translators|filter:vm.searchFilter|orderBy:'keng__id'|itemsPerPage:5"
+                                                                    ng-click="$parent.vm.selectTranslator(translator)"
+                                                                    ng-class="{active:$parent.vm.translatorSelected()==translator}">
+                                    {{translator.keng__id}}
+                            </a>
+                            <dir-pagination-controls pagination-id="translator-paginate"
+                                                                max-size="5"
+                                                                direction-links="true"
+                                                                boundary-links="true"></dir-pagination-controls>
+                        </div>
+                    </div>
+                </uib-accordion-group>
+            </uib-accordion>
+        </div>
+
+        <div class="col-sm-9">
+            <h2 id="teiid-translators-heading">Translator Properties</h2>
+            <div ng-show="! vm.hasSelectedTranslator()">
+                Nothing Selected
+            </div>
+            <div ng-show="vm.hasSelectedTranslator()">
+                <attribute-widget selected="vm.translator" />
+            </div>
+        </div>
+
+    </div>
+    <!-- row -->
+</div>
+<!-- container-fluid -->

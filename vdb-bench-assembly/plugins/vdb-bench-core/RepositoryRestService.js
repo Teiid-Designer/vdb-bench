@@ -129,10 +129,10 @@
          * Service: return the list of existing vdbs
          * Returns: promise object for the vdb collection
          */
-        service.getVdbs = function (vdbType) {
+        service.getVdbs = function (serviceType) {
             var url = REST_URI.WORKSPACE + REST_URI.VDBS;
 
-            if (vdbType === 'teiid')
+            if (serviceType === REST_URI.TEIID_SERVICE)
                 url = REST_URI.TEIID + REST_URI.VDBS;
 
             return getRestService().then(function (restService) {
@@ -146,6 +146,37 @@
          */
         service.removeVdb = function (vdb) {
             return vdb.remove();
+        };
+
+        /**
+         * Service: return the list of translators.
+                         If serviceType is wksp then 'vdbName' is required.
+         * Returns: promise object for the translator collection
+         */
+        service.getTranslators = function (serviceType, vdbName) {
+            var url = REST_URI.WORKSPACE + REST_URI.VDBS + vdbName + REST_URI.TRANSLATORS;
+
+            if (serviceType === REST_URI.TEIID_SERVICE)
+                url = REST_URI.TEIID + REST_URI.TRANSLATORS;
+
+            return getRestService().then(function (restService) {
+                return restService.all(url).getList();
+            });
+        };
+
+        /**
+         * Service: return the list of data sources.
+         * Returns: promise object for the data source collection
+         */
+        service.getDataSources = function (serviceType) {
+            var url = REST_URI.WORKSPACE + REST_URI.DATA_SOURCES;
+
+            if (serviceType === REST_URI.TEIID_SERVICE)
+                url = REST_URI.TEIID + REST_URI.DATA_SOURCES;
+
+            return getRestService().then(function (restService) {
+                return restService.all(url).getList();
+            });
         };
 
         /**

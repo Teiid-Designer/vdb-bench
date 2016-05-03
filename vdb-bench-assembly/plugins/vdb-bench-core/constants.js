@@ -43,6 +43,8 @@
             SCHEMA: '/schema',
             SEARCH: '/search',
             TEIID: '/teiid',
+            TRANSLATORS: '/VdbTranslators',
+            DATA_SOURCES: '/DataSources',
             SAVE_SEARCH: 'saveSearch',
             SAVED_SEARCHES: '/savedSearches',
             SEARCH_CONTAINS: 'contains',
@@ -55,6 +57,13 @@
             DATA_KOMODO: 'tko:komodo',
             DATA_WORKSPACE: 'tko:workspace',
             STATUS: '/status',
+            //
+            // Types used for whether a teiid vdb
+            // is being requested or a workspace
+            // vdb. Likewise, for translators
+            //
+            TEIID_SERVICE: 'teiid',
+            WKSP_SERVICE: 'workspace'
         })
 
         .constant('VDB_KEYS', {

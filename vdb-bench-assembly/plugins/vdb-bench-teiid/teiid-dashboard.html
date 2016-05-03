@@ -5,20 +5,24 @@
 
         <div class="list-group" id="teiid-nav-bar">
             <button type="button" class="teiid-nav-bar-button"
-                    ng-click="vm.selectSection('status')" ng-class="{active:vm.selectedSection.id == 'status'}">
+                    ng-click="vm.selectSection('status')" ng-class="{active:vm.selectedSection.id == 'status'}"
+                    uib-tooltip="Teiid Status">
                 <img src="plugins/vdb-bench-teiid/content/img/status.png" id="status" />
             </button>
             <button type="button" class="teiid-nav-bar-button"
-                    ng-click="vm.selectSection('vdbs')" ng-class="{active:vm.selectedSection.id == 'vdbs'}">
+                    ng-click="vm.selectSection('vdbs')" ng-class="{active:vm.selectedSection.id == 'vdbs'}"
+                    uib-tooltip="VDBs">
                 <img src="plugins/vdb-bench-teiid/content/img/vdb.png" id="vdb" />
             </button>
             <button type="button" class="teiid-nav-bar-button"
-                    ng-click="vm.selectSection('translators')" ng-class="{active:vm.selectedSection.id == 'translators'}">
+                    ng-click="vm.selectSection('translators')" ng-class="{active:vm.selectedSection.id == 'translators'}"
+                    uib-tooltip="Translators">
                 <img src="plugins/vdb-bench-teiid/content/img/translator.png" id="translator" />
             </button>
             <button type="button" class="teiid-nav-bar-button"
-                    ng-click="vm.selectSection('data-sources')" ng-class="{active:vm.selectedSection.id == 'data-sources'}">
-                <img src="plugins/vdb-bench-teiid/content/img/data-source.png" id="data-source" />
+                    ng-click="vm.selectSection('data-sources')" ng-class="{active:vm.selectedSection.id == 'data-sources'}"
+                    uib-tooltip="Data Sources">
+                <img src="plugins/vdb-bench-teiid/content/img/data-source.png" id="data-source"/>
             </button>
         </div>
     </div>
