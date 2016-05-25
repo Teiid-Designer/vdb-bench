@@ -115,6 +115,7 @@
                 <div class="col-sm-4 vdb-search-results-panel">
                     <h4 class="vdb-search-results-title">Search Results</h4>
                     <input class="vdb-search-results-filter" type="text" ng-model="vm.searchOrbit.searchFilter" placeholder="filter...">
+                    <dir-pagination-controls pagination-id="search-results-paginate" max-size="7" direction-links="true" boundary-links="true" ></dir-pagination-controls>
                     <ul class="list-group pagination vdb-search-results-list">
                         <a class="list-group-item vdb-search-results-entry" href="#"
                              pagination-id="search-results-paginate"
@@ -125,7 +126,6 @@
                             <p class="list-group-item-text vdb-search-results-data-path">{{result.keng__dataPath}}</p>
                         </a>
                     </ul>
-                    <dir-pagination-controls pagination-id="search-results-paginate" max-size="7" direction-links="true" boundary-links="true" ></dir-pagination-controls>
                 </div>
                 <div class="vdb-search-results-diagram col-sm-4">
                     <vdb-component-tree vdb-entry="vm.searchOrbit.selectedResult()"

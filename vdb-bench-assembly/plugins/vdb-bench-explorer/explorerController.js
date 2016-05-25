@@ -124,34 +124,26 @@
                 var param = parameters[i];
                 modalTemplate = modalTemplate + '<div class="form-group">';
                 modalTemplate = modalTemplate + '<label for="' + param + '">' + param + '</label>';
-                modalTemplate = modalTemplate + '<input type="text" class="form-control" id=' + param + ' ng-model="mvm.parameters.' + param + '"/>';
+                modalTemplate = modalTemplate + '<input type="text" class="form-control" id=' + param + ' ng-model="vm.searchOrbit.parameters.' + param + '"/>';
                 modalTemplate = modalTemplate + "</div>";
             }
 
             modalTemplate = modalTemplate + '</div>' +
                 '<div class="modal-footer">' +
-                '<button class="btn btn-primary" ng-click="mvm.ok()">OK</button>' +
-                '<button class="btn btn-warning" ng-click="mvm.cancel()">Cancel</button>' +
+                '<button class="btn btn-primary" ng-click="vm.ok()">OK</button>' +
+                '<button class="btn btn-warning" ng-click="$dismiss()">Cancel</button>' +
                 '</div>';
 
             var modal = $uibModal.open({
+                scope: $scope,
                 animation: 'true',
                 backdrop: 'false',
-                template: modalTemplate,
-                controller: ['$uibModalInstance', function ($uibModalInstance) {
-                    var mvm = this;
-
-                    mvm.parameters = {};
-
-                    mvm.ok = function () {
-                        $uibModalInstance.close(mvm.parameters);
-                    };
-                    mvm.cancel = function () {
-                        $uibModalInstance.dismiss('cancel');
-                    };
-                }],
-                controllerAs: 'mvm'
+                template: modalTemplate
             });
+
+            vm.ok = function () {
+                modal.close(vm.searchOrbit.parameters || '');
+            };
 
             //
             // If modal ok clicked then run the search
@@ -177,7 +169,7 @@
             // Ensure there is no vdb selected so that the
             // vdb visualisation pane is hidden
             //
-            vm.vdbOrbit.selectVdb(null);
+            VdbSelectionService.setSelected(null);
 
             //
             // Display the search results pane
@@ -221,26 +213,23 @@
                     '<h3 class="modal-title">Enter an identifying name for the saved search</h3>' +
                     '</div>' +
                     '<div class="modal-body">' +
-                    '<input type="text" ng-model="searchName"/>' +
+                    '<input type="text" ng-model="vm.searchName"/>' +
                     '</div>' +
                     '<div class="modal-footer">' +
-                    '<button class="btn btn-primary" ng-click="ok()">OK</button>' +
-                    '<button class="btn btn-warning" ng-click="cancel()">Cancel</button>' +
+                    '<button class="btn btn-primary" ng-click="vm.ok()">OK</button>' +
+                    '<button class="btn btn-warning" ng-click="$dismiss()">Cancel</button>' +
                     '</div>';
 
                 var modal = $uibModal.open({
+                    scope: $scope,
                     animation: 'true',
                     backdrop: 'false',
-                    template: modalTemplate,
-                    controller: ['vm', '$uibModalInstance', function (vm, $uibModalInstance) {
-                        vm.ok = function () {
-                            $uibModalInstance.close(vm.searchName || '');
-                        };
-                        vm.cancel = function () {
-                            $uibModalInstance.dismiss('cancel');
-                        };
-                    }]
+                    template: modalTemplate
                 });
+
+                vm.ok = function () {
+                    modal.close(vm.searchName || '');
+                };
 
                 //
                 // If modal has a searchName then save it using the rest service
@@ -314,7 +303,7 @@
                 // Ensure there is no vdb selected so that the
                 // vdb visualisation pane is hidden
                 //
-                vm.vdbOrbit.selectVdb(null);
+                VdbSelectionService.setSelected(null);
 
                 //
                 // Display the search results pane
@@ -389,7 +378,7 @@
          */
         vm.destroy = function (vdb) {
             vdb.remove().then(function () {
-                vm.vdbOrbit.vdbs = _.without(vm.vdbOrbit.vdbs, vdb);
+                VdbSelectionService.setSelected(null);
             });
         };
 
