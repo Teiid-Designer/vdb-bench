@@ -57,6 +57,8 @@
             DATA_KOMODO: 'tko:komodo',
             DATA_WORKSPACE: 'tko:workspace',
             STATUS: '/status',
+            IMPORT_EXPORT: '/importexport',
+            EXPORT: '/export',
             //
             // Types used for whether a teiid vdb
             // is being requested or a workspace
@@ -69,6 +71,7 @@
         .constant('VDB_KEYS', {
             VDBS: 'vdbs',
             ID: 'keng__id',
+            DATA_PATH: 'keng__dataPath',
             DESCRIPTION: 'keng__description',
             TYPE: 'keng__kType',
             LINKS: {

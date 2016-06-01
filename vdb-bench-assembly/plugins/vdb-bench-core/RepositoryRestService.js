@@ -149,6 +149,38 @@
         };
 
         /**
+         * Service: Export the given artifact
+         * Returns: promise object for the exported item
+         */
+        service.export = function(artifact, storageType) {
+            if (!artifact || !storageType)
+                return null;
+
+            var url = REST_URI.IMPORT_EXPORT + REST_URI.EXPORT;
+
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "dataPath": artifact[VDB_KEYS.DATA_PATH],
+                    "storageType": storageType
+                };
+
+                // Posts should always be made on collection (all) not elements (one)
+                return restService.all(url).post(payload);
+            });
+        };
+
+        /**
+         * Service: Download the given artifact. Uses the file storage connector.
+         * Returns: promise object for the downloaded item
+         */
+        service.download = function(artifact) {
+            if (!artifact)
+                return null;
+
+            return service.export(artifact, 'file');
+        };
+
+        /**
          * Service: return the list of translators.
                          If serviceType is wksp then 'vdbName' is required.
          * Returns: promise object for the translator collection
