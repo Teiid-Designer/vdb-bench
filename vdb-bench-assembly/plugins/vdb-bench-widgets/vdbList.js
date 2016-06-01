@@ -9,7 +9,7 @@
         .directive('vdbList', VdbList);
 
     VdbList.$inject = ['CONFIG', 'SYNTAX'];
-    VdbListController.$inject = ['VdbSelectionService', 'RepoRestService', 'REST_URI'];
+    VdbListController.$inject = ['VdbSelectionService', 'RepoRestService', 'REST_URI', 'SYNTAX', 'VDB_KEYS', 'FileSaver', 'Blob'];
 
     function VdbList(config, syntax) {
         var directive = {
@@ -30,7 +30,7 @@
         return directive;
     }
 
-    function VdbListController(VdbSelectionService, RepoRestService, REST_URI) {
+    function VdbListController(VdbSelectionService, RepoRestService, REST_URI, SYNTAX, VDB_KEYS, FileSaver, Blob) {
         var vm = this;
 
         vm.vdbs = [];
@@ -122,7 +122,44 @@
                         initVdbs();
                     },
                     function (response) {
-                        throw new vdbBench.RestServiceException("Failed to remove the vdb " + selected.id + "from the host services.\n" + response.message);
+                        throw new RepoRestService.newRestException("Failed to remove the vdb " + selected[VDB_KEYS.ID] + "from the host services.\n" + response.message);
+                    });
+            } catch (error) {} finally {
+                // Essential to stop the accordion closing
+                event.stopPropagation();
+            }
+        };
+
+        /**
+         * Event handler for exporting the vdb
+         */
+        vm.onExportClicked = function(event) {
+            var selected = VdbSelectionService.selected();
+            try {
+                RepoRestService.download(selected).then(
+                    function (exportStatus) {
+                        if (! exportStatus.Downloadable)
+                            return;
+
+                        if (! exportStatus.Content)
+                            return;
+
+                        var enc = exportStatus.Content;
+                        var content = atob(enc);
+                        var data = new Blob([content], { type: 'text/plain;charset=utf-8' });
+
+                        var name = exportStatus.Name;
+                        if (_.isEmpty(name))
+                            name = 'export';
+
+                        var type = exportStatus.Type;
+                        if (_.isEmpty(type))
+                            type = 'txt';
+
+                        FileSaver.saveAs(data, exportStatus.Name + SYNTAX.DOT + exportStatus.Type);
+                    },
+                    function (response) {
+                        throw new RepoRestService.newRestException("Failed to export the artifact " + selected[VDB_KEYS.ID] + " from the host services.\n" + response.data.error);
                     });
             } catch (error) {} finally {
                 // Essential to stop the accordion closing

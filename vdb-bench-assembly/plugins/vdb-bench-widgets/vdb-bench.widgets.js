@@ -15,6 +15,7 @@
         'angularUtils.directives.dirPagination',
         'ui.codemirror',
         'prettyXml',
+        'ngFileSaver',
 
         /*
          * Everybody has access to these.
