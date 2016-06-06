@@ -149,19 +149,58 @@
         };
 
         /**
+         * Service: Import the given file
+         * Returns: promise object for the imported item
+         */
+        service.import = function(storageType, parameters, documentType, data) {
+            if (!storageType || !documentType)
+                return null;
+
+            parameters = parameters || {};
+
+            var url = REST_URI.IMPORT_EXPORT + REST_URI.IMPORT;
+
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "storageType": storageType,
+                    "documentType": documentType,
+                    "parameters" : parameters,
+                    "content" : btoa(data)
+                };
+
+                // Posts should always be made on collection (all) not elements (one)
+                return restService.all(url).post(payload);
+            });
+        };
+
+        /**
+         * Service: Upload the given file data. Uses the file storage connector.
+         * Returns: promise object for the uploaded item
+         */
+        service.upload = function(documentType, data) {
+            if (!documentType)
+                return null;
+
+            return service.import('file', {}, documentType, data);
+        };
+
+        /**
          * Service: Export the given artifact
          * Returns: promise object for the exported item
          */
-        service.export = function(artifact, storageType) {
+        service.export = function(storageType, parameters, artifact) {
             if (!artifact || !storageType)
                 return null;
+
+            parameters = parameters || {};
 
             var url = REST_URI.IMPORT_EXPORT + REST_URI.EXPORT;
 
             return getRestService().then(function (restService) {
                 var payload = {
-                    "dataPath": artifact[VDB_KEYS.DATA_PATH],
-                    "storageType": storageType
+                    "storageType": storageType,
+                    "parameters" : parameters,
+                    "dataPath": artifact[VDB_KEYS.DATA_PATH]
                 };
 
                 // Posts should always be made on collection (all) not elements (one)
@@ -177,7 +216,7 @@
             if (!artifact)
                 return null;
 
-            return service.export(artifact, 'file');
+            return service.export('file', {}, artifact);
         };
 
         /**
