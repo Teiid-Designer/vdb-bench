@@ -1,0 +1,18 @@
+<div>
+    <!-- Show progress bar on loading -->
+    <div ng-show="vm.inProgress">
+        <uib-progressbar class="progress-striped active" value="dynamic" type="info"></uib-progressbar>
+    </div>
+
+    <!-- Import control -->
+    <div ng-show="! vm.inProgress">
+        Select the File to Import
+        <div>
+            <label class="btn btn-primary">
+                Browse&hellip;
+                <input ng-model="fileToImport" type="file" style="display: none;" onchange="angular.element(this).scope().vm.importFile(this)">
+            </label>
+            <button class="btn" ng-click="vm.cancel()">Cancel</button>
+        </div>
+    </div>
+</div>

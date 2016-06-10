@@ -140,12 +140,6 @@
          */
         vm.onImportClicked = function(event) {
             try {
-                // Check for the various File API support.
-                if (! $window.File || ! $window.FileReader || ! $window.FileList || ! $window.Blob) {
-                    alert('The File APIs are not fully supported in this browser. Cannot proceed with import.');
-                    return;
-                }
-
                 vm.showImport = true;
             } finally {
                 // Essential to stop the accordion closing
@@ -153,97 +147,24 @@
             }
         };
 
-        /**
-         * Function for conducting a file import called from on-change event
-         * in browse button. The calling html input element is passed in.
+        /*
+         * Callback called if the import has been cancelled
          */
-        vm.importFile = function(fileInputElement) {
-            //
-            // Called through $apply to ensure it does not freeze the UI
-            //
-            $scope.$apply(function(scope) {
-                var myFile = fileInputElement.files[0];
-                var fName = myFile.name;
-
-                //
-                // Valid formats currently implemented
-                //
-                var validFormats = ['ZIP', 'XML', 'DDL'];
-                var documentType = myFile.name.substring(myFile.name.lastIndexOf(SYNTAX.DOT) + 1).toUpperCase();
-
-                if (validFormats.indexOf(documentType) === -1) {
-                    alert(fName + "'s file type (" + documentType + ") is not valid hence the file cannot be imported.");
-                    return;
-                }
-
-                //
-                // Uses HTML5 FileReader for actually reading the file's contents
-                //
-                var reader = new FileReader();
-
-                //
-                // onLoad callback called when the file has been read
-                // event.target is in fact the reader itself and 'result' is
-                // populated on completion of the read.
-                //
-                reader.onload = function(event) {
-                    var data = event.target.result;
-
-                    // Hide the import dialog
-                    vm.showImport = false;
-
-                    // Show the progress bar
-                    vm.init = true;
-
-                    //
-                    // Attempt to upload the file to the workspace
-                    //
-                    RepoRestService.upload(documentType, data).then(
-                        function (importStatus) {
-                            // Reinitialise the list of vdbs
-                            initVdbs();
-                        },
-                        function (response) {
-                            alert("Failed to import the file to the host.\n" + response.data.error);
-
-                            // Reinitialise the list of vdbs
-                            initVdbs();
-                        });
-                };
-
-                //
-                // Error in case the reader failed
-                //
-                reader.onerror = function(event) {
-                    event = event || $window.event; // get window.event if e argument missing (in IE)
-
-                    var reason = '';
-                    switch(event.target.error.code) {
-                        case event.target.error.NOT_FOUND_ERR:
-                            reason = "cannot be found";
-                            break;
-                        case event.target.error.NOT_READABLE_ERR:
-                            reason = "is not readable";
-                            break;
-                        case event.target.error.ABORT_ERR:
-                            reason = "Read operation was aborted";
-                            break;
-                        case event.target.error.SECURITY_ERR:
-                            reason = "File is in a locked state";
-                            break;
-                        default:
-                            reason = "Read error";
-                    }
-                    alert('The file "' + myFile.name + '" ' + reason);
-                };
-
-                //
-                // Read as a binary string to allow for zip files
-                //
-                reader.readAsBinaryString(myFile);
-            });
+        vm.onImportCancel = function() {
+            vm.showImport = false;
         };
 
+        /*
+         * Callback called after the file has been imported
+         */
+        vm.onImportDone = function(result) {
+            // Hide the import dialog
+            vm.showImport = false;
+
+            // Reinitialise the list of vdbs
+            initVdbs();
+        };
+        
         /**
          * Event handler for exporting the vdb
          */

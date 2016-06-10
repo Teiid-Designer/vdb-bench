@@ -18,14 +18,7 @@
 
         <!-- Show the import dialog when importing -->
         <div ng-show="! vm.init && vm.showImport">
-            Select the File to Import
-            <label class="btn btn-primary">
-                Browse&hellip;
-                <input ng-model="fileToImport"
-                            type="file"
-                            style="display: none;"
-                            onchange="angular.element(this).scope().vm.importFile(this)">
-            </label>
+            <file-import-control on-import-complete="vm.onImportDone(result)" on-cancel="vm.onImportCancel()"></file-import-control>
         </div>
 
         <!-- Show the vdb list at all other times -->
