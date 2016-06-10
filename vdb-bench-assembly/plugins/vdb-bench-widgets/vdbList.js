@@ -9,7 +9,9 @@
         .directive('vdbList', VdbList);
 
     VdbList.$inject = ['CONFIG', 'SYNTAX'];
-    VdbListController.$inject = ['VdbSelectionService', 'RepoRestService', 'REST_URI', 'SYNTAX', 'VDB_KEYS', 'FileSaver', 'Blob'];
+    VdbListController.$inject = ['VdbSelectionService', 'RepoRestService',
+                                                'REST_URI', 'SYNTAX', 'VDB_KEYS',
+                                                'FileSaver', 'Blob', '$window', '$scope'];
 
     function VdbList(config, syntax) {
         var directive = {
@@ -30,11 +32,14 @@
         return directive;
     }
 
-    function VdbListController(VdbSelectionService, RepoRestService, REST_URI, SYNTAX, VDB_KEYS, FileSaver, Blob) {
+    function VdbListController(VdbSelectionService, RepoRestService,
+                                            REST_URI, SYNTAX, VDB_KEYS,
+                                            FileSaver, Blob, $window, $scope) {
         var vm = this;
 
         vm.vdbs = [];
         vm.init = false;
+        vm.showImport = false;
 
         vm.accOpen = vm.open;
         if (angular.isUndefined(vm.accOpen))
@@ -131,6 +136,36 @@
         };
 
         /**
+         * Event handler for importing a vdb
+         */
+        vm.onImportClicked = function(event) {
+            try {
+                vm.showImport = true;
+            } finally {
+                // Essential to stop the accordion closing
+                event.stopPropagation();
+            }
+        };
+
+        /*
+         * Callback called if the import has been cancelled
+         */
+        vm.onImportCancel = function() {
+            vm.showImport = false;
+        };
+
+        /*
+         * Callback called after the file has been imported
+         */
+        vm.onImportDone = function(result) {
+            // Hide the import dialog
+            vm.showImport = false;
+
+            // Reinitialise the list of vdbs
+            initVdbs();
+        };
+        
+        /**
          * Event handler for exporting the vdb
          */
         vm.onExportClicked = function(event) {
@@ -138,25 +173,25 @@
             try {
                 RepoRestService.download(selected).then(
                     function (exportStatus) {
-                        if (! exportStatus.Downloadable)
+                        if (! exportStatus.downloadable)
                             return;
 
-                        if (! exportStatus.Content)
+                        if (! exportStatus.content)
                             return;
 
-                        var enc = exportStatus.Content;
+                        var enc = exportStatus.content;
                         var content = atob(enc);
                         var data = new Blob([content], { type: 'text/plain;charset=utf-8' });
 
-                        var name = exportStatus.Name;
+                        var name = exportStatus.name;
                         if (_.isEmpty(name))
                             name = 'export';
 
-                        var type = exportStatus.Type;
+                        var type = exportStatus.type;
                         if (_.isEmpty(type))
                             type = 'txt';
 
-                        FileSaver.saveAs(data, exportStatus.Name + SYNTAX.DOT + exportStatus.Type);
+                        FileSaver.saveAs(data, name + SYNTAX.DOT + type);
                     },
                     function (response) {
                         throw new RepoRestService.newRestException("Failed to export the artifact " + selected[VDB_KEYS.ID] + " from the host services.\n" + response.data.error);

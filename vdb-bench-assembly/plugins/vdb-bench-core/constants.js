@@ -59,6 +59,7 @@
             STATUS: '/status',
             IMPORT_EXPORT: '/importexport',
             EXPORT: '/export',
+            IMPORT: '/import',
             //
             // Types used for whether a teiid vdb
             // is being requested or a workspace

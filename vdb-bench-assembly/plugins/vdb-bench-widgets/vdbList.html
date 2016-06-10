@@ -6,14 +6,23 @@
             <div class="pull-right" uib-dropdown ng-show="vm.hasButtons()">
                 <button type="button" class="glyphicon glyphicon-plus vdb-heading-btn" uib-dropdown-toggle ng-click="vm.onAddClicked($event)"></button>
                 <button type="button" class="glyphicon glyphicon-minus vdb-heading-btn" uib-dropdown-toggle ng-click="vm.onRemoveClicked($event)"></button>
+                <button type="button" class="glyphicon glyphicon-import vdb-heading-btn" uib-dropdown-toggle ng-click="vm.onImportClicked($event)"></button>
                 <button type="button" class="glyphicon glyphicon-export vdb-heading-btn" uib-dropdown-toggle ng-click="vm.onExportClicked($event)"></button>
             </div>
         </uib-accordion-heading>
-        <div ng-show="vm.init">
+
+        <!-- Show progress bar on loading -->
+        <div ng-show="vm.init && ! vm.showImport">
             <uib-progressbar class="progress-striped active" value="dynamic" type="info"></uib-progressbar>
         </div>
 
-        <div id="list-vdb" ng-show="! vm.init">
+        <!-- Show the import dialog when importing -->
+        <div ng-show="! vm.init && vm.showImport">
+            <file-import-control on-import-complete="vm.onImportDone(result)" on-cancel="vm.onImportCancel()"></file-import-control>
+        </div>
+
+        <!-- Show the vdb list at all other times -->
+        <div id="list-vdb" ng-show="! vm.init && ! vm.showImport">
             <input class="accordian-list-filter" type="text" ng-model="vm.searchFilter" placeholder="filter...">
             <div class="list-group accordian-list">
                 <a class="list-group-item" pagination-id="vdb-paginate" dir-paginate="vdb in vm.vdbs|filter:vm.searchFilter|orderBy:'keng__id'|itemsPerPage:5" ng-click="$parent.vm.selectVdb(vdb)" ng-class="{active:$parent.vm.vdbSelected()==vdb}">
