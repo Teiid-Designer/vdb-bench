@@ -9,6 +9,7 @@
         'ui.codemirror',
         'prettyXml',
         'angularUtils.directives.dirPagination',
+        'patternfly.views',
 
         /*
          * Our reusable cross app code modules

@@ -251,6 +251,98 @@
         };
 
         /**
+         * Service: return the list of data services.
+         * Returns: promise object for the data service collection
+         */
+        service.getDataServices = function ( ) {
+            var url = REST_URI.WORKSPACE + REST_URI.DATA_SERVICES;
+
+            return getRestService().then(function (restService) {
+                return restService.all(url).getList();
+            });
+        };
+
+        /**
+         * Service: create a new dataservice in the repository
+         */
+        service.createDataService = function (dataserviceName, dataserviceDescription) {
+            if (!dataserviceName) {
+                throw RestServiceException("Data service name is not defined");
+            }
+
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "keng__id": dataserviceName,
+                    "keng__dataPath": "/tko:komodo/tko:workspace/"+dataserviceName,
+                    "keng__kType": "Dataservice",
+                    "vdb__name": dataserviceName,
+                    "vdb__description": dataserviceDescription
+                };
+
+                var uri = REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + dataserviceName;
+                return restService.all(uri).post(payload);
+            });
+        };
+        
+        /**
+         * Service: clone a dataservice in the repository
+         */
+        service.cloneDataService = function (dataserviceName, newDataserviceName) {
+            if (!dataserviceName || !newDataserviceName) {
+                throw RestServiceException("Data service name or service name for clone are not defined");
+            }
+
+            return getRestService().then(function (restService) {
+                return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES_CLONE + SYNTAX.FORWARD_SLASH + dataserviceName).post(newDataserviceName);
+            });
+        };
+
+        /**
+         * Service: update an existing dataservice in the repository
+         */
+        service.updateDataService = function (dataserviceName, dataserviceDescription) {
+            if (!dataserviceName || !dataserviceDescription) {
+                throw RestServiceException("Data service name or description for update are not defined");
+            }
+            
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "keng__id": dataserviceName,
+                    "keng__dataPath": "/tko:komodo/tko:workspace/"+dataserviceName,
+                    "keng__kType": "Dataservice",
+                    "vdb__name": dataserviceName,
+                    "vdb__description": dataserviceDescription
+                };
+
+                return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + dataserviceName).customPUT(payload);
+            });
+        };
+
+        /**
+         * Service: delete a data service from the resposiory
+         */
+        service.deleteDataService = function (dataserviceName) {
+            return getRestService().then(function (restService) {
+                if (!dataserviceName)
+                    return null;
+
+                return restService.one(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + dataserviceName).remove();
+            });
+        };
+
+        /**
+         * Service: Get a data service from the repository
+         */
+        service.getDataService = function (dataserviceName) {
+            return getRestService().then(function (restService) {
+                if (!dataserviceName)
+                    return null;
+
+                return restService.one(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + dataserviceName).get();
+            });
+        };
+
+        /**
          * Service: Fetch the elements pointed at by the link (in json)
          * Returns: promise object for a single or list of elements
          *

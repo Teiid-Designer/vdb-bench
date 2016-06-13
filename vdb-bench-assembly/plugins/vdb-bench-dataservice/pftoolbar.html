@@ -1,0 +1,54 @@
+    <div ng-controller="PfViewController as vm" class="row example-container">
+      <div class="col-md-12">
+        <div pf-toolbar id="exampleToolbar" config="vm.toolbarConfig"></div>
+      </div>
+      <hr class="col-md-12">
+      <div class="col-md-12">
+        <label class="events-label">Valid Items: </label>
+      </div>
+      <div class="col-md-12 list-view-container" ng-if="vm.viewType == 'listView'">
+        <div pf-list-view config="vm.listConfig" items="vm.items">
+          <div class="list-view-pf-description">
+            <div class="list-group-item-heading">
+              {{vm.item.name}}
+            </div>
+            <div class="list-group-item-text">
+              {{vm.item.address}}
+            </div>
+          </div>
+          <div class="list-view-pf-additional-info">
+            <div class="list-view-pf-additional-info-item">
+              {{vm.item.age}}
+            </div>
+            <div class="list-view-pf-additional-info-item">
+              {{vm.item.birthMonth}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 card-view-container" ng-if="vm.viewType == 'cardView'">
+        <div pf-card-view config="vm.listConfig" items="vm.items">
+          <div class="col-md-12">
+            <span>{{vm.item.name}}</span>
+          </div>
+          <div class="col-md-12">
+            <span>{{vm.item.address}}</span>
+          </div>
+          <div class="col-md-12">
+            <span>{{vm.item.birthMonth}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <label class="events-label">Current Filters: </label>
+      </div>
+      <div class="col-md-12">
+        <textarea rows="5" class="col-md-12">{{vm.filtersText}}</textarea>
+      </div>
+      <div class="col-md-12">
+        <label class="actions-label">Actions: </label>
+      </div>
+      <div class="col-md-12">
+        <textarea rows="3" class="col-md-12">{{vm.actionsText}}</textarea>
+      </div>
+    </div>
