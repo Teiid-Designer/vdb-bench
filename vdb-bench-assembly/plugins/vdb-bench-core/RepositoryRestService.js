@@ -13,9 +13,9 @@
 
     RepoRestService.$inject = ['SYNTAX', 'REST_URI', 'VDB_SCHEMA',
                                              'VDB_KEYS', 'RepoSelectionService', 'Restangular',
-                                             '$http', '$q'];
+                                             '$http', '$q', '$base64'];
 
-    function RepoRestService(SYNTAX, REST_URI, VDB_SCHEMA, VDB_KEYS, RepoSelectionService, Restangular, $http, $q) {
+    function RepoRestService(SYNTAX, REST_URI, VDB_SCHEMA, VDB_KEYS, RepoSelectionService, Restangular, $http, $q, $base64) {
 
         /*
          * Service instance to be returned
@@ -165,7 +165,7 @@
                     "storageType": storageType,
                     "documentType": documentType,
                     "parameters" : parameters,
-                    "content" : btoa(data)
+                    "content" : $base64.encode(data)
                 };
 
                 // Posts should always be made on collection (all) not elements (one)

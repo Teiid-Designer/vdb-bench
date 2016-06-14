@@ -5,7 +5,8 @@
         /*
          * Angular modules
          */
-        'restangular'
+        'restangular',
+        'base64'
 
         /*
          * Our reusable cross app code modules

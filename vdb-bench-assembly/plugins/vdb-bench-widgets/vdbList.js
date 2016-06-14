@@ -11,7 +11,7 @@
     VdbList.$inject = ['CONFIG', 'SYNTAX'];
     VdbListController.$inject = ['VdbSelectionService', 'RepoRestService',
                                                 'REST_URI', 'SYNTAX', 'VDB_KEYS',
-                                                'FileSaver', 'Blob', '$window', '$scope'];
+                                                'DownloadService', '$scope'];
 
     function VdbList(config, syntax) {
         var directive = {
@@ -34,7 +34,7 @@
 
     function VdbListController(VdbSelectionService, RepoRestService,
                                             REST_URI, SYNTAX, VDB_KEYS,
-                                            FileSaver, Blob, $window, $scope) {
+                                            DownloadService, $scope) {
         var vm = this;
 
         vm.vdbs = [];
@@ -171,31 +171,7 @@
         vm.onExportClicked = function(event) {
             var selected = VdbSelectionService.selected();
             try {
-                RepoRestService.download(selected).then(
-                    function (exportStatus) {
-                        if (! exportStatus.downloadable)
-                            return;
-
-                        if (! exportStatus.content)
-                            return;
-
-                        var enc = exportStatus.content;
-                        var content = atob(enc);
-                        var data = new Blob([content], { type: 'text/plain;charset=utf-8' });
-
-                        var name = exportStatus.name;
-                        if (_.isEmpty(name))
-                            name = 'export';
-
-                        var type = exportStatus.type;
-                        if (_.isEmpty(type))
-                            type = 'txt';
-
-                        FileSaver.saveAs(data, name + SYNTAX.DOT + type);
-                    },
-                    function (response) {
-                        throw new RepoRestService.newRestException("Failed to export the artifact " + selected[VDB_KEYS.ID] + " from the host services.\n" + response.data.error);
-                    });
+                DownloadService.download(selected);
             } catch (error) {} finally {
                 // Essential to stop the accordion closing
                 event.stopPropagation();
