@@ -9,7 +9,7 @@
         .directive('fileImportControl', FileImportControl);
 
     FileImportControl.$inject = ['CONFIG', 'SYNTAX'];
-    FileImportController.$inject = ['$scope', 'SYNTAX', 'RepoRestService', 'FileSaver', 'Blob', '$window'];
+    FileImportController.$inject = ['$scope', 'SYNTAX', 'RepoRestService', '$window'];
 
     function FileImportControl(config, syntax) {
         var directive = {
@@ -30,7 +30,7 @@
         return directive;
     }
 
-    function FileImportController($scope, SYNTAX, RepoRestService, FileSaver, Blob, $window) {
+    function FileImportController($scope, SYNTAX, RepoRestService, $window) {
         var vm = this;
 
         vm.showProgress = function(display) {
