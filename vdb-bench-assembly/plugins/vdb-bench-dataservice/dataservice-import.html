@@ -1,0 +1,23 @@
+<div class="container-fluid" ng-controller="DataserviceController as vm">
+    <!-- <ol class="breadcrumb">
+        <li><a href="../dashboard.html"><i class="pficon pficon-zone" aria-hidden="true"></i> Data Services</a></li>
+        <li>New Service</li>
+    </ol> -->
+    <div class="row">
+        <div class="col-sm-8 col-md-9">                
+            <div class="row">
+                <div class="col-sm-9">
+                    <h1><i class="fa fa-cubes" aria-hidden="true"></i>Import DataService</h1>
+                    <h3>&nbsp;&nbsp;Choose the DataService zip file to import from your file system</h3>
+                    <!-- Show the import dialog when importing -->
+                    <div ng-init="vm.onImportDataServiceClicked()" ng-show="!vm.init && vm.showImport">
+                        <file-import-control on-import-complete="vm.onImportDone(result); vmmain.selectPage('dataservice-summary',null)" on-cancel="vm.onImportCancel(); vmmain.selectPage('dataservice-summary',null)"></file-import-control>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+ 
+        

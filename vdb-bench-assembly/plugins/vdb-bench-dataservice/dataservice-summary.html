@@ -1,0 +1,77 @@
+<div class="container-fluid" ng-controller="DataserviceController as vm">
+
+    <div id="dataservice-summary-updating" ng-show="vm.loading==true" class="col-md-10 row">
+        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+        <span class="sr-only">Loading...</span>
+    </div>
+    
+    <div id="dataservice-summary-noservices" ng-show="vm.loading==false && vm.dataservices.length==0" class="col-md-10 row" style="border-style:solid;border-width:2px;padding-bottom:10px;border-color:#999999;background-color:#EEEEEE">
+	   <div class="row">
+           <div class="col-md-2"></div>
+	       <div class="col-md-8">
+	           <img src="plugins/vdb-bench-dataservice/content/img/EmptyLibraryImage.png" style="width:809px;height:302px;">
+	       </div>
+           <div class="col-md-2"></div>
+	   </div>
+	   <div class="row">
+	       <div class="col-md-4"></div>
+	       <div class="col-md-3">
+                <button class="btn btn-primary" ng-click="vmmain.selectPage('dataservice-new',null)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-summary'}">Create Data Service</button>
+                <button class="btn btn-primary" ng-click="vmmain.selectPage('dataservice-import',null)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-summary'}">Import Data Service</button>
+	       </div>
+	       <div class="col-md-5"></div>
+	   </div>
+    </div>
+    
+    <div id="dataservice-summary-table-row" class="col-md-10 row" ng-show="vm.loading==false && vm.dataservices.length>0">
+       <h1><i class="fa fa-cubes" aria-hidden="true"></i> Data Services - {{vm.dataservices.length}}</h1>
+       <div id="datservice-action-row" class="pull-right">
+            <a href ng-click="vmmain.selectPage('dataservice-new',null)"><span class="fa fa-plus"></span> New DataService</a>&nbsp;&nbsp;
+            <a href ng-click="vmmain.selectPage('dataservice-import',null)"><span class="pficon pficon-import"></span> Import DataService</a>
+            <a href ng-click="vmmain.selectPage('pftoolbar',null)"><span class="pficon pficon-import"></span> Patternfly toolbar test</a>
+       </div>
+        
+       <table id="dataservices-summary-table" class="table">
+            <thead>
+                <tr>
+                    <th style="text-align: center">Status</th>
+                    <th>DataService</th>
+                    <th>Datasources</th>
+                    <th>Last Update</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tr ng-repeat="ds in vm.dataservices">
+                <td align="middle">
+                    <i class="pficon pficon-ok" aria-hidden="true"></i>
+                </td>
+                
+                <td>
+                    <strong>
+                        <a href ng-click="vmmain.selectPage('dataservice-edit',ds)"><i class="pficon pficon-storage-domain" aria-hidden="true"></i> {{ds.keng__id}}
+                        </a>
+                    </strong>
+                    <br>{{ds.vdb__description}}
+                </td>
+                
+                <td><i class="pficon pficon-route" aria-hidden="true"></i>
+                    <strong><a href ng-click="vmmain.selectPage('dataservice-edit',ds)">dsList</a></strong>
+                </td>
+                
+                <td>dsLastUpdate</td>
+                
+                <td>
+                    <a href ng-click="vmmain.selectPage('dataservice-test',ds)"><i class="fa fa-play fa-fw" style="color:green" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Test"></i></a>
+                    
+                    <a href ng-click="vmmain.selectPage('dataservice-edit',ds)"><i class="fa fa-edit fa-fw" style="color:black" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Edit"></i></a>
+                    
+                    <a href ng-click="vmmain.selectPage('dataservice-clone',ds)"><i class="fa fa-copy fa-fw" style="color:black" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Clone"></i></a>
+                    
+                    <a href ng-click="vm.onExportDataServiceClicked(ds)"><i class="pficon pficon-export" style="color:black" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Export"></i></a>
+                    
+                    <a href ng-click="vm.onDeleteDataServiceClicked(ds.keng__id)"><i class="fa fa-remove fa-fw" style="color:red" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Delete"></i></a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

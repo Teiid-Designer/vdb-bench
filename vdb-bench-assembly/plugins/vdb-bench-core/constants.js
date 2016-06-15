@@ -44,6 +44,8 @@
             SEARCH: '/search',
             TEIID: '/teiid',
             TRANSLATORS: '/VdbTranslators',
+            DATA_SERVICES_CLONE: '/dataservices/clone',
+            DATA_SERVICES: '/dataservices',
             DATA_SOURCES: '/DataSources',
             SAVE_SEARCH: 'saveSearch',
             SAVED_SEARCHES: '/savedSearches',
@@ -67,6 +69,30 @@
             //
             TEIID_SERVICE: 'teiid',
             WKSP_SERVICE: 'workspace'
+        })
+
+        .constant('DATASERVICE_KEYS', {
+            DATA_SERVICES: 'dataservices',
+            ID: 'keng__id',
+            DATA_PATH: 'keng__dataPath',
+            DESCRIPTION: 'keng__description',
+            TYPE: 'keng__kType',
+            LINKS: {
+                ID: 'keng___links',
+                NAME: 'rel',
+                HREF: 'href',
+                SELF: 'self',
+                PARENT: 'parent',
+                CHILDREN: 'children',
+                IMPORTS: 'imports',
+                MODELS: 'models',
+                TRANSLATORS: 'translators',
+                DATA_ROLES: 'dataRoles',
+                SOURCES: 'sources'
+            },
+            PROPERTIES: 'keng__properties',
+            DDL: 'keng__ddl',
+            HAS_CHILDREN: 'keng__hasChildren'
         })
 
         .constant('VDB_KEYS', {

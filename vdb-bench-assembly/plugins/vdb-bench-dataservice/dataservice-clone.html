@@ -1,0 +1,26 @@
+<div class="container-fluid" ng-controller="DataserviceController as vm">
+    <!-- <ol class="breadcrumb">
+        <li><a href="../dashboard.html"><i class="pficon pficon-zone" aria-hidden="true"></i> Data Services</a></li>
+        <li>New Service</li>
+    </ol> -->
+    <div class="row">
+        <div class="col-sm-8 col-md-9">                
+            <div class="row">
+                <div class="col-sm-9">
+                    <h1><i class="fa fa-cubes" aria-hidden="true"></i>Clone DataService '{{vmmain.selectedDataservice().keng__id}}'</h1>
+                    <h3>&nbsp;&nbsp;Enter a name for the new dataservice</h3>
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="textInput">Name</label>
+                            <div class="col-md-6">
+                              <input type="text" ng-model="nameVar" class="form-control">
+                            </div>
+                        </div>
+                    </form>
+                    <button class="btn btn-primary" ng-click="vm.onCloneDataServiceClicked(vmmain.selectedDataservice().keng__id, nameVar); vmmain.selectPage('dataservice-summary',null)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-clone'}"> Create</button>
+                    <button class="btn btn-default" ng-click="vmmain.selectPage('dataservice-summary',null)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-clone'}"> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

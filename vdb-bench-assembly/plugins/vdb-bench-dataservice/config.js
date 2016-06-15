@@ -3,7 +3,7 @@
 
     var pluginDirName = 'vdb-bench-dataservice';
     var pluginName = 'vdb-bench.dataservice';
-    var templateName = 'dataservice.html';
+    var templateName = 'dataservice-main.html';
 
     var _module = angular
         .module(pluginName)
@@ -39,7 +39,7 @@
                     )
                    .title(
                         function () {
-                            return 'DataService';
+                            return 'DataServices';
                         }
                     )
                    .build());
