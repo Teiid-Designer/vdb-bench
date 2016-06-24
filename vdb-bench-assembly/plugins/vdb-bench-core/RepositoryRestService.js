@@ -275,8 +275,7 @@
                     "keng__id": dataserviceName,
                     "keng__dataPath": "/tko:komodo/tko:workspace/"+dataserviceName,
                     "keng__kType": "Dataservice",
-                    "vdb__name": dataserviceName,
-                    "vdb__description": dataserviceDescription
+                    "tko__description": dataserviceDescription
                 };
 
                 var uri = REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + dataserviceName;
@@ -310,8 +309,7 @@
                     "keng__id": dataserviceName,
                     "keng__dataPath": "/tko:komodo/tko:workspace/"+dataserviceName,
                     "keng__kType": "Dataservice",
-                    "vdb__name": dataserviceName,
-                    "vdb__description": dataserviceDescription
+                    "tko__description": dataserviceDescription
                 };
 
                 return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + dataserviceName).customPUT(payload);
@@ -322,11 +320,31 @@
          * Service: delete a data service from the resposiory
          */
         service.deleteDataService = function (dataserviceName) {
+            if (!dataserviceName) {
+                throw RestServiceException("Data service name for delete is not defined");
+            }
+
             return getRestService().then(function (restService) {
-                if (!dataserviceName)
-                    return null;
 
                 return restService.one(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + dataserviceName).remove();
+            });
+        };
+
+        /**
+         * Service: deploy a data service from the resposiory
+         */
+        service.deployDataService = function (dataserviceName) {
+            if (!dataserviceName) {
+                throw RestServiceException("Data service name for deploy is not defined");
+            }
+
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "path": "/tko:komodo/tko:workspace/"+dataserviceName
+                };
+
+                var uri = REST_URI.TEIID + REST_URI.DATA_SERVICE;
+                return restService.all(uri).post(payload);
             });
         };
 

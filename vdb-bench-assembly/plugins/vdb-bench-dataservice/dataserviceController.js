@@ -18,6 +18,8 @@
         vm.init = false;
         vm.dataservice = null;
         vm.showImport = false;
+        vm.deploymentResult = null;
+        vm.deploymentInProgress = true;
 
         /**
          * Fetch the list of dataservices from the selected repository
@@ -112,6 +114,28 @@
                         throw RepoRestService.newRestException("Failed to remove the dataservice. \n" + response.message);
                     });
             } catch (error) {} finally {
+            }
+        };
+
+        /**
+         * Event handler for clicking the deploy button
+         */
+        vm.onDeployDataServiceClicked = function ( dataserviceName ) {
+            vm.deploymentInProgress = true;
+            try {
+                RepoRestService.deployDataService( dataserviceName ).then(
+                    function ( result ) {
+                        vm.deploymentInProgress = false;
+                        vm.deploymentResult = result;
+                    },
+                    function (response) {
+                        vm.deploymentInProgress = false;
+                        vm.deploymentResult = null;
+                        throw RepoRestService.newRestException("Failed to deploy the dataservice. \n" + response.message);
+                    });
+            } catch (error) {} finally {
+                    vm.deploymentInProgress = false;
+                    vm.deploymentResult = null;
             }
         };
 

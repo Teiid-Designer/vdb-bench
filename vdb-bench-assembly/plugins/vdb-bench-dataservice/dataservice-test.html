@@ -3,15 +3,24 @@
         <li><a href="../dashboard.html"><i class="pficon pficon-zone" aria-hidden="true"></i> Data Services</a></li>
         <li>New Service</li>
     </ol> -->
-    <div class="row">
+    
+    <!-- Show spinner while deploying -->
+    <div ng-show="vm.deploymentInProgress==true" class="col-md-10 row">
+        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+        <span class="sr-only">Loading...</span>
+    </div>
+
+    <div ng-show="vm.deploymentInProgress==false" class="row">
         <div class="col-sm-8 col-md-9">                
             <div class="row">
                 <div class="col-sm-9">
                     <h1><i class="fa fa-cubes" aria-hidden="true"></i>Test DataService</h1>
                     <h3>&nbsp;&nbsp;Test the DataService (not yet implemented)</h3>
+                    <h4>Deployment Result : '{{vm.deploymentResult}}'</h4>
                     <button class="btn btn-default" ng-click="vmmain.selectPage('dataservice-summary',null)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-test'}"> Cancel</button>
                 </div>
             </div>
         </div>
     </div>
+
 </div>

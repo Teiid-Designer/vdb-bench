@@ -45,5 +45,5 @@
                    .build());
     }
 
-    hawtioPluginLoader.addModule(pluginName);
+    //hawtioPluginLoader.addModule(pluginName);
 })();

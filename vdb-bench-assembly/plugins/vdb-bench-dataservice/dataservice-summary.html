@@ -51,7 +51,7 @@
                         <a href ng-click="vmmain.selectPage('dataservice-edit',ds)"><i class="pficon pficon-storage-domain" aria-hidden="true"></i> {{ds.keng__id}}
                         </a>
                     </strong>
-                    <br>{{ds.vdb__description}}
+                    <br>{{ds.tko__description}}
                 </td>
                 
                 <td><i class="pficon pficon-route" aria-hidden="true"></i>
@@ -61,7 +61,7 @@
                 <td>dsLastUpdate</td>
                 
                 <td>
-                    <a href ng-click="vmmain.selectPage('dataservice-test',ds)"><i class="fa fa-play fa-fw" style="color:green" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Test"></i></a>
+                    <a href ng-click="vm.onDeployDataServiceClicked(ds.keng__id); vmmain.selectPage('dataservice-test',ds)"><i class="fa fa-play fa-fw" style="color:green" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Test"></i></a>
                     
                     <a href ng-click="vmmain.selectPage('dataservice-edit',ds)"><i class="fa fa-edit fa-fw" style="color:black" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Edit"></i></a>
                     
