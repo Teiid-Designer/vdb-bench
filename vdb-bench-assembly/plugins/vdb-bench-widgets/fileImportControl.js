@@ -72,10 +72,15 @@
                 // Valid formats currently implemented
                 //
                 var validFormats = ['zip', '-vdb.xml', 'tds', 'ddl'];
-                var documentType = myFile.name.substring(myFile.name.lastIndexOf(SYNTAX.DOT) + 1).toLowerCase();
+                var documentType = null;
+                validFormats.forEach( function(format) {
+                    if (fName.endsWith(format)) {
+                        documentType = format;
+                    }
+                });
 
-                if (validFormats.indexOf(documentType) === -1) {
-                    alert(fName + "'s file type (" + documentType + ") is not valid hence the file cannot be imported.");
+                if (documentType === null) {
+                    alert(fName + "'s file type is not valid hence the file cannot be imported.");
                     return;
                 }
 
