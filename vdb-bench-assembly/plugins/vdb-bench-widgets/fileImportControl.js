@@ -71,8 +71,8 @@
                 //
                 // Valid formats currently implemented
                 //
-                var validFormats = ['ZIP', 'XML', 'DDL'];
-                var documentType = myFile.name.substring(myFile.name.lastIndexOf(SYNTAX.DOT) + 1).toUpperCase();
+                var validFormats = ['zip', '-vdb.xml', 'tds', 'ddl'];
+                var documentType = myFile.name.substring(myFile.name.lastIndexOf(SYNTAX.DOT) + 1).toLowerCase();
 
                 if (validFormats.indexOf(documentType) === -1) {
                     alert(fName + "'s file type (" + documentType + ") is not valid hence the file cannot be imported.");

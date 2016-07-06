@@ -45,6 +45,7 @@
             TEIID: '/teiid',
             TRANSLATORS: '/VdbTranslators',
             DATA_SERVICES_CLONE: '/dataservices/clone',
+            DATA_SERVICE: '/dataservice',
             DATA_SERVICES: '/dataservices',
             DATA_SOURCES: '/DataSources',
             SAVE_SEARCH: 'saveSearch',
