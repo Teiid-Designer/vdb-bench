@@ -124,8 +124,6 @@
         };
 
         vm.query = function() {
-           console.log("Querying! : " + vm.target + vm.queryText);
-
             vm.showProgress(true);
             vm.errorMsg = null;
 

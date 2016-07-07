@@ -8,13 +8,11 @@
         .module(pluginName)
         .controller('DataServicePageController', DataServicePageController);
 
-    DataServicePageController.$inject = ['SYNTAX', 'CONFIG'];
+    DataServicePageController.$inject = ['SYNTAX', 'CONFIG', 'RepoRestService', 'DSSelectionService'];
 
-    function DataServicePageController(syntax, config) {
+    function DataServicePageController(syntax, config, RepoRestService, DSSelectionService) {
         var vm = this;
 
-        vm.dataservice = null;
-        
         var DATASERVICE_SUMMARY_PAGE = 'dataservice-summary';
         var NEW_DATASERVICE_PAGE = 'dataservice-new';
         var IMPORT_DATASERVICE_PAGE = 'dataservice-import';
@@ -76,18 +74,17 @@
 
         vm.selectPage = function(pageId, dataservice) {
             vm.selectedPage = pages[pageId];
-            vm.dataservice = dataservice;
+            DSSelectionService.selectDataService(dataservice);
         };
 
         /*
-         * Service : get selected vdb
+         * Service : get selected data service
          */
         vm.selectedDataservice = function () {
-            return vm.dataservice;
+            return DSSelectionService.selectedDataService();
         };
         
         vm.selectPage(DATASERVICE_SUMMARY_PAGE, null);
-
     }
 
 })();
