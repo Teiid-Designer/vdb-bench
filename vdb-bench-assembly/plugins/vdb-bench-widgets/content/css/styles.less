@@ -104,10 +104,6 @@
     text-shadow: -2px -2px 1px #ffffff, 2px 2px 1px #868686;
 }
 
-.CodeMirror {
-    height: 80vh; // denotes 80% of the view height
-}
-
 /*
  * Classes for D3 display
  */
@@ -148,3 +144,31 @@ svg {
     box-sizing: border-box;
 }
 
+/*
+ * sql control
+ */
+.sql-control-controls {
+    margin-top: 0.5em;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+.sql-control-controls-limit {
+    float: left;
+}
+.sql-control-controls-limit input[type=number] {
+    width: 5em;
+}
+.sql-control-controls-offset {
+    float: left;
+    margin-left: 1em;
+}
+.sql-control-controls-offset input[type=number] {
+    width: 5em;
+}
+.sql-control-controls-query {
+    float: right;
+}
+.sql-control-query-grid {
+    width: 100%;
+    height: 60vh;
+}

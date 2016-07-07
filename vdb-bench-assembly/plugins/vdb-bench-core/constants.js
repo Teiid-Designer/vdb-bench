@@ -63,6 +63,7 @@
             IMPORT_EXPORT: '/importexport',
             EXPORT: '/export',
             IMPORT: '/import',
+            QUERY: '/query',
             //
             // Types used for whether a teiid vdb
             // is being requested or a workspace

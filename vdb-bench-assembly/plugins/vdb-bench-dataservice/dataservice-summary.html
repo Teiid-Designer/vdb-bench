@@ -1,11 +1,11 @@
-<div class="container-fluid" ng-controller="DataserviceController as vm">
+<div class="container-fluid" ng-controller="DSSummaryController as vm">
 
-    <div id="dataservice-summary-updating" ng-show="vm.loading==true" class="col-md-10 row">
+    <div id="dataservice-summary-updating" ng-show="vm.dsLoading==true" class="col-md-10 row">
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
         <span class="sr-only">Loading...</span>
     </div>
     
-    <div id="dataservice-summary-noservices" ng-show="vm.loading==false && vm.dataservices.length==0" class="col-md-10 row" style="border-style:solid;border-width:2px;padding-bottom:10px;border-color:#999999;background-color:#EEEEEE">
+    <div id="dataservice-summary-noservices" ng-show="vm.dsLoading==false && vm.getDataServices().length==0" class="col-md-10 row" style="border-style:solid;border-width:2px;padding-bottom:10px;border-color:#999999;background-color:#EEEEEE">
 	   <div class="row">
            <div class="col-md-2"></div>
 	       <div class="col-md-8">
@@ -22,9 +22,9 @@
 	       <div class="col-md-5"></div>
 	   </div>
     </div>
-    
-    <div id="dataservice-summary-table-row" class="col-md-10 row" ng-show="vm.loading==false && vm.dataservices.length>0">
-       <h1><i class="fa fa-cubes" aria-hidden="true"></i> Data Services - {{vm.dataservices.length}}</h1>
+
+    <div id="dataservice-summary-table-row" class="col-md-10 row" ng-show="vm.dsLoading==false && vm.getDataServices().length>0">
+       <h1><i class="fa fa-cubes" aria-hidden="true"></i> Data Services - {{vm.getDataServices().length}}</h1>
        <div id="datservice-action-row" class="pull-right">
             <a href ng-click="vmmain.selectPage('dataservice-new',null)"><span class="fa fa-plus"></span> New DataService</a>&nbsp;&nbsp;
             <a href ng-click="vmmain.selectPage('dataservice-import',null)"><span class="pficon pficon-import"></span> Import DataService</a>
@@ -41,7 +41,7 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tr ng-repeat="ds in vm.dataservices">
+            <tr ng-repeat="ds in vm.getDataServices()">
                 <td align="middle">
                     <i class="pficon pficon-ok" aria-hidden="true"></i>
                 </td>

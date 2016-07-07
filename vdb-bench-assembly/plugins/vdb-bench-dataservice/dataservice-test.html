@@ -1,26 +1,32 @@
-<div class="container-fluid" ng-controller="DataserviceController as vm">
-    <!-- <ol class="breadcrumb">
-        <li><a href="../dashboard.html"><i class="pficon pficon-zone" aria-hidden="true"></i> Data Services</a></li>
-        <li>New Service</li>
-    </ol> -->
-    
+<div class="container-fluid" ng-controller="DSTestController as vm">
+
     <!-- Show spinner while deploying -->
-    <div ng-show="vm.deploymentInProgress==true" class="col-md-10 row">
+    <div ng-show="vm.dsDeployInProgress==true" class="col-md-10 row">
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
         <span class="sr-only">Loading...</span>
     </div>
 
-    <div ng-show="vm.deploymentInProgress==false" class="row">
-        <div class="col-sm-8 col-md-9">                
-            <div class="row">
-                <div class="col-sm-9">
-                    <h1><i class="fa fa-cubes" aria-hidden="true"></i>Test DataService</h1>
-                    <h3>&nbsp;&nbsp;Test the DataService (not yet implemented)</h3>
-                    <h4>Deployment Result : '{{vm.deploymentResult}}'</h4>
-                    <button class="btn btn-default" ng-click="vmmain.selectPage('dataservice-summary',null)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-test'}"> Cancel</button>
-                </div>
+    <div ng-show="vm.dsDeployInProgress==false" class="row">
+        <div class="col-sm-12">
+            <div id="ds-test-header">
+                <button class="btn btn-default"
+                            ng-click="vmmain.selectPage('dataservice-summary',null)"
+                            ng-class="{active:vmmain.selectedPage.id == 'dataservice-test'}"> Cancel</button>
+
+                <h1><i class="fa fa-cubes" aria-hidden="true"></i>Test DataService '{{vmmain.selectedDataservice().keng__id}}'</h1>
+            </div>
+            <div id="ds-test-description">
+                <h3>&nbsp;&nbsp;Enter an SQL query to test the DataService</h3>
+            </div>
+    </div>
+
+    <div ng-show="vm.dsDeployInProgress==false" class="row">
+        <div class="col-sm-12">
+            <div id="ds-test-sql-edit-box">
+                <sql-control editor-height="20em"
+                                    target="{{vmmain.selectedDataservice().keng__dataPath}}">
+                </sql-control>
             </div>
         </div>
     </div>
-
 </div>

@@ -16,6 +16,7 @@
         'ui.codemirror',
         'prettyXml',
         'ngFileSaver',
+        'ui.grid',
 
         /*
          * Everybody has access to these.

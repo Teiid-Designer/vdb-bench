@@ -1,0 +1,36 @@
+<div class="row">
+    <div class="col-sm-5">
+        <div ui-codemirror="{ onLoad : vm.editorLoaded }"
+                ng-model="vm.queryText"
+                ui-codemirror-opts="vm.sqlEditorOptions">
+        </div>
+
+        <div class="sql-control-controls">
+            <div class="sql-control-controls-limit">
+                Record Limit
+                <input type="number" min="-1" max="1000" step="1" ng-model="vm.limit"
+                       uib-tooltip="Limits the number of records returned from the query (-1 for no limit)"/>
+            </div>
+            <div class="sql-control-controls-offset">
+                Starting Record Index
+                <input type="number" min="0" max="1000" step="1" ng-model="vm.offset"
+                       uib-tooltip="Sets the index of the first record returned (0 for no offset)"/>
+            </div>
+            <div class="sql-control-controls-query">
+                <button class="btn btn-default" ng-click="vm.query()">
+                    Query
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-sm-7" ng-show="vm.errorMsg">
+        Encountered query error:
+        <br/>'{{vm.errorMsg}}'
+    </div>
+
+    <div class="col-sm-7" ng-show="! vm.errorMsg">
+        <div ui-grid="vm.gridOptions" class="sql-control-query-grid"></div>
+    </div>
+</div>

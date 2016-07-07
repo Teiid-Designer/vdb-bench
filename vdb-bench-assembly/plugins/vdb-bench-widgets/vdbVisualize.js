@@ -49,6 +49,10 @@
             mode: 'xml'
         };
 
+        vm.vdbPreviewEditorLoaded = function(_editor) {
+            _editor.setSize(null, "80vh");
+        };
+
         /*
          * return selected vdb
          */

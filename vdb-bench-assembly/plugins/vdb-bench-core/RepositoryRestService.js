@@ -501,7 +501,7 @@
         };
 
         /**
-         * Service: delete a search from the resposiory
+         * Service: delete a search from the reposiory
          */
         service.deleteSavedSearch = function (searchName) {
             return getRestService().then(function (restService) {
@@ -513,15 +513,37 @@
             });
         };
 
+        /**
+         * Service: get the status of the teiid instance
+         */
         service.getTeiidStatus = function() {
             return getRestService().then(function (restService) {
                 return restService.one(REST_URI.TEIID + REST_URI.STATUS).get();
             });
         };
 
+        /**
+         * Service: get the status of the vdbs on the teiid instance
+         */
         service.getTeiidVdbStatus = function() {
             return getRestService().then(function (restService) {
                 return restService.one(REST_URI.TEIID + REST_URI.STATUS + REST_URI.VDBS).get();
+            });
+        };
+
+        /**
+         * Service: query a target deployed on the teiid instance
+         */
+        service.query = function(query, target, limit, offset) {
+            var queryAttributes = {
+                query: query,
+                target: target,
+                limit: limit,
+                offset: offset
+            };
+
+            return getRestService().then(function (restService) {
+                return restService.all(REST_URI.TEIID + REST_URI.QUERY).post(queryAttributes);
             });
         };
 
