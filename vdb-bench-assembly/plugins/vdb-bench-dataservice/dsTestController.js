@@ -13,8 +13,8 @@
     function DSTestController($scope, DSSelectionService) {
         var vm = this;
 
-        vm.dsDeployInProgress = false;
-
+        vm.dsDeployInProgress = true;
+        
         /*
          * When a data service is currently being deployed
          */
