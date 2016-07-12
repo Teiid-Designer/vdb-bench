@@ -8,7 +8,7 @@
 
     <div ng-show="vm.dsDeployInProgress==false" class="row">
         <div class="col-sm-12">
-            <div id="ds-test-header">
+            <div id="ds-test-header" ng-show="vm.dsDeployInProgress==false">
                 <button class="btn btn-default"
                             ng-click="vmmain.selectPage('dataservice-summary',null)"
                             ng-class="{active:vmmain.selectedPage.id == 'dataservice-test'}"> Cancel</button>
