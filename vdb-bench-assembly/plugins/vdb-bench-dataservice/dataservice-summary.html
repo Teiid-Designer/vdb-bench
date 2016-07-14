@@ -9,17 +9,17 @@
 	   <div class="row">
            <div class="col-md-2"></div>
 	       <div class="col-md-8">
-	           <img src="plugins/vdb-bench-dataservice/content/img/EmptyLibraryImage.png" style="width:809px;height:302px;">
+	           <img src="plugins/vdb-bench-dataservice/content/img/EmptyLibraryImage.png" style="max-height:100%;max-width:100%;">
 	       </div>
            <div class="col-md-2"></div>
 	   </div>
 	   <div class="row">
 	       <div class="col-md-4"></div>
-	       <div class="col-md-3">
+	       <div class="col-md-6">
                 <button class="btn btn-primary" ng-click="vmmain.selectPage('dataservice-new',null)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-summary'}">Create Data Service</button>
                 <button class="btn btn-primary" ng-click="vmmain.selectPage('dataservice-import',null)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-summary'}">Import Data Service</button>
 	       </div>
-	       <div class="col-md-5"></div>
+	       <div class="col-md-2"></div>
 	   </div>
     </div>
 
@@ -61,13 +61,13 @@
                 <td>dsLastUpdate</td>
                 
                 <td>
-                    <a href ng-click="vm.onDeployDataServiceClicked(ds.keng__id); vmmain.selectPage('dataservice-test',ds)"><i class="fa fa-play fa-fw" style="color:green" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Test"></i></a>
+                    <a href ng-click="vm.onDeployDataServiceClicked(ds.keng__id); vmmain.selectPage('dataservice-test',ds)"><i class="fa fa-play fa-fw" style="color:green; margin-right:5px;" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Test"></i></a>
                     
-                    <a href ng-click="vmmain.selectPage('dataservice-edit',ds)"><i class="fa fa-edit fa-fw" style="color:black" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Edit"></i></a>
+                    <a href ng-click="vmmain.selectPage('dataservice-edit',ds)"><i class="fa fa-edit fa-fw" style="color:black; margin-right:5px;" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Edit"></i></a>
                     
-                    <a href ng-click="vmmain.selectPage('dataservice-clone',ds)"><i class="fa fa-copy fa-fw" style="color:black" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Clone"></i></a>
+                    <a href ng-click="vmmain.selectPage('dataservice-clone',ds)"><i class="fa fa-copy fa-fw" style="color:black; margin-right:5px;" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Clone"></i></a>
                     
-                    <a href ng-click="vm.onExportDataServiceClicked(ds)"><i class="pficon pficon-export" style="color:black" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Export"></i></a>
+                    <a href ng-click="vm.onExportDataServiceClicked(ds)"><i class="pficon pficon-export" style="color:black; margin-right:5px;" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Export"></i></a>
                     
                     <a href ng-click="vm.onDeleteDataServiceClicked(ds.keng__id)"><i class="fa fa-remove fa-fw" style="color:red" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Delete"></i></a>
                 </td>

@@ -13,7 +13,9 @@
     function DSSummaryController($scope, RepoRestService, REST_URI, SYNTAX, DSSelectionService, DownloadService) {
         var vm = this;
 
-        vm.dsLoading = false;
+        vm.dsLoading = DSSelectionService.isLoading();
+        vm.deploymentSuccess = false;
+        vm.deploymentMessage = null;
 
         /*
          * When the data services have been loaded
@@ -50,17 +52,24 @@
          * Event handler for clicking the deploy button
          */
         vm.onDeployDataServiceClicked = function ( dataserviceName ) {
-            DSSelectionService.setDeploying(true);
+            DSSelectionService.setDeploying(true, dataserviceName, false, null);
             try {
                 RepoRestService.deployDataService( dataserviceName ).then(
                     function ( result ) {
-                        DSSelectionService.setDeploying(false);
+                        vm.deploymentSuccess = result.Information.deploymentSuccess == "true";
+                        if(vm.deploymentSuccess === true) {
+                            DSSelectionService.setDeploying(false, dataserviceName, true, null);
+                        } else {
+                            DSSelectionService.setDeploying(false, dataserviceName, false, result.Information.ErrorMessage1);
+                        }
                     },
                     function (response) {
-                        DSSelectionService.setDeploying(false);
+                        DSSelectionService.setDeploying(false, dataserviceName, false, response.message);
                         throw RepoRestService.newRestException("Failed to deploy the dataservice. \n" + response.message);
                     });
             } catch (error) {} finally {
+                vm.deploymentSuccess = false;
+                vm.deploymentMessage = null;
                 DSSelectionService.setDeploying(false);
             }
         };

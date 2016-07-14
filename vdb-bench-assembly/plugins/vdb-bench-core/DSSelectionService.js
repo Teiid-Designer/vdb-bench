@@ -11,15 +11,18 @@
         .module('vdb-bench.core')
         .factory('DSSelectionService', DSSelectionService);
 
-    DSSelectionService.$inject = ['RepoRestService', 'DownloadService', '$rootScope'];
+    DSSelectionService.$inject = ['SYNTAX', 'RepoRestService', 'DownloadService', '$rootScope'];
 
-    function DSSelectionService(RepoRestService, DownloadService, $rootScope) {
+    function DSSelectionService(SYNTAX, RepoRestService, DownloadService, $rootScope) {
 
         var ds = {};
         ds.loading = false;
         ds.dataservices = [];
         ds.dataservice = null;
         ds.deploymentInProgress = false;
+        ds.deploymentServiceName = null;
+        ds.deploymentSuccess = false;
+        ds.deploymentMessage = null;
 
         /*
          * Service instance to be returned
@@ -37,7 +40,7 @@
          * Fetch the data services for the repository
          */
         function initDataServices() {
-            setLoading(false);
+            setLoading(true);
 
             try {
                 RepoRestService.getDataServices( ).then(
@@ -74,12 +77,36 @@
         service.isDeploying = function() {
             return ds.deploymentInProgress;
         };
+        
+        /*
+         * Returns deployment service name
+         */
+        service.deploymentServiceName = function() {
+            return ds.deploymentServiceName;
+        };
+        
+        /*
+         * Returns service deployment success state
+         */
+        service.deploymentSuccess = function() {
+            return ds.deploymentSuccess;
+        };
+        
+        /*
+         * Returns service deployment message
+         */
+        service.deploymentMessage = function() {
+            return ds.deploymentMessage;
+        };
 
         /*
          * Set the deployment flag
          */
-        service.setDeploying = function(deploying) {
+        service.setDeploying = function(deploying, serviceName, deploymentSuccess, message) {
             ds.deploymentInProgress = deploying;
+            ds.deploymentServiceName = serviceName;
+            ds.deploymentSuccess = deploymentSuccess;
+            ds.deploymentMessage = message;
 
             $rootScope.$broadcast("deployDataServiceChanged", ds.deploymentInProgress);
         };
@@ -127,6 +154,58 @@
             return true;
         };
 
+        /*
+         * return selected dataservice
+         */
+        service.selectedDataServiceVdbName = function() {
+            if ( !angular.isDefined(ds.dataservice) || _.isEmpty(ds.dataservice) || ds.dataservice === null )
+                return SYNTAX.UNKNOWN;
+
+            if ( !angular.isDefined(ds.dataservice.serviceVdbName) || _.isEmpty(ds.dataservice.serviceVdbName) || ds.dataservice.serviceVdbName === null )
+                return SYNTAX.UNKNOWN;
+            
+            return ds.dataservice.serviceVdbName;
+        };
+
+        /*
+         * return selected dataservice
+         */
+        service.selectedDataServiceVdbVersion = function() {
+            if ( !angular.isDefined(ds.dataservice) || _.isEmpty(ds.dataservice) || ds.dataservice === null )
+                return 1;
+
+            if ( !angular.isDefined(ds.dataservice.serviceVdbVersion) || _.isEmpty(ds.dataservice.serviceVdbVersion) || ds.dataservice.serviceVdbVersion === null )
+                return 1;
+            
+            return ds.dataservice.serviceVdbVersion;
+        };
+        
+        /*
+         * return selected dataservice
+         */
+        service.selectedDataServiceViewModel = function() {
+            if ( !angular.isDefined(ds.dataservice) || _.isEmpty(ds.dataservice) || ds.dataservice === null )
+                return SYNTAX.UNKNOWN;
+
+            if ( !angular.isDefined(ds.dataservice.serviceViewModel) || _.isEmpty(ds.dataservice.serviceViewModel) || ds.dataservice.serviceViewModel === null )
+                return SYNTAX.UNKNOWN;
+            
+            return ds.dataservice.serviceViewModel;
+        };
+        
+        /*
+         * return selected dataservice
+         */
+        service.selectedDataServiceView = function() {
+            if ( !angular.isDefined(ds.dataservice) || _.isEmpty(ds.dataservice) || ds.dataservice === null )
+                return SYNTAX.UNKNOWN;
+
+            if ( !angular.isDefined(ds.dataservice.serviceView) || _.isEmpty(ds.dataservice.serviceView) || ds.dataservice.serviceView === null )
+                return SYNTAX.UNKNOWN;
+            
+            return ds.dataservice.serviceView;
+        };
+        
         /*
          * Refresh the collection of data services
          */
