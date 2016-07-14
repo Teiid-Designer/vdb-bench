@@ -1,0 +1,89 @@
+<div ng-controller="TeiidPrefsController as vm">
+
+    <div id="teiid-pref-progress-bar" ng-show="vm.loading">
+        <uib-progressbar class="progress-striped active" value="dynamic" type="info"></uib-progressbar>
+    </div>
+
+    <p ng-show="! vm.loading && vm.error">Status Error:
+        <br/>'{{vm.error}}'
+    </p>
+
+    <div ng-show="! vm.loading">
+        <form class="form-horizontal" ng-submit="vm.submitCredentials()">
+
+            <div id="teiid-pref-administration" class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Administration
+                    </h3>
+                </div>
+
+                <div class="panel-body">
+                    <div class="control-group row">
+                        <label class="control-label col-sm-2" for="adminUser">User Name</label>
+                        <div class="controls col-sm-9">
+                            <input type="text" id="teiid-pref-adminUser" class="form-control" ng-model="vm.teiid.adminUser" required>
+                        </div>
+                    </div>
+
+                    <div class="control-group row">
+                        <label class="control-label col-sm-2" for="adminPasswd">Password</label>
+                        <div class="controls col-sm-9">
+                            <input type="password" id="teiid-pref-adminPasswd" class="form-control" ng-model="vm.teiid.adminPasswd" required>
+                        </div>
+                    </div>
+
+                    <div class="teiid-pref-test-button row">
+                        <div class=col-sm-2></div>
+                        <button class="btn btn-default col-sm-2" ng-click="vm.ping('admin')">Test Admin Connection</button>
+                        <span ng-class="vm.pingAdminResultStyleClass" class="teiid-pref-pingResult col-sm-7">{{vm.adminPingResult}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="teiid-pref-jdbc" class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        JDBC
+                    </h3>
+                </div>
+
+                <div class="panel-body">
+                    <div class="control-group row">
+                        <label class="control-label col-sm-2" for="jdbcUser">User Name</label>
+                        <div class="controls col-sm-9">
+                            <input type="text" id="teiid-pref-jdbcUser" class="form-control" ng-model="vm.teiid.jdbcUser" required>
+                        </div>
+                    </div>
+
+                    <div class="control-group row">
+                        <label class="control-label col-sm-2" for="jdbcPasswd">Password</label>
+                        <div class="controls col-sm-9">
+                            <input type="password" id="teiid-pref-jdbcPasswd" class="form-control" ng-model="vm.teiid.jdbcPasswd" required>
+                        </div>
+                    </div>
+
+                    <div class="control-group row">
+                        <label class="control-label col-sm-2" for="jdbcSecure">Is Secure?</label>
+                        <div class="controls col-sm-9">
+                            <input type="checkbox" id="teiid-pref-jdbcSecure" class="form-control" ng-model="vm.teiid.jdbcSecure">
+                        </div>
+                    </div>
+
+                    <div class="teiid-pref-test-button row">
+                        <div class=col-sm-2></div>
+                        <button class="btn btn-default col-sm-2" ng-click="vm.ping('jdbc')">Test Jdbc Connection</button>
+                        <span ng-class="vm.pingJdbcResultStyleClass" class="teiid-pref-pingResult col-sm-7">{{vm.jdbcPingResult}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class=col-sm-2></div>
+                <div class="col-sm-10">
+                    <input class="teiid-pref-submit-btn" type="submit" value="Update">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

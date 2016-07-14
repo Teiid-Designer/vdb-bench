@@ -64,6 +64,9 @@
             EXPORT: '/export',
             IMPORT: '/import',
             QUERY: '/query',
+            CREDENTIALS: '/credentials',
+            PING: '/ping',
+
             //
             // Types used for whether a teiid vdb
             // is being requested or a workspace

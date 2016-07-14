@@ -532,6 +532,24 @@
         };
 
         /**
+         * Service: set the credentials of the default teiid instance
+         * body : {
+         *              adminUser: 'admin',
+         *              adminPasswd: 'admin',
+         *              jdbcUser: 'user',
+         *              jdbcPasswd: 'user'
+         *           }
+         */
+        service.setTeiidCredentials = function(teiidCredentials) {
+            if (!teiidCredentials)
+                return null;
+
+            return getRestService().then(function (restService) {
+                return restService.all(REST_URI.TEIID + REST_URI.CREDENTIALS).post(teiidCredentials);
+            });
+        };
+
+        /**
          * Service: query a target deployed on the teiid instance
          */
         service.query = function(query, target, limit, offset) {
@@ -544,6 +562,20 @@
 
             return getRestService().then(function (restService) {
                 return restService.all(REST_URI.TEIID + REST_URI.QUERY).post(queryAttributes);
+            });
+        };
+
+        /**
+         * Service: ping the teiid instance, either admin or jdbc
+         */
+        service.ping = function(pingType) {
+            if (!pingType)
+                return null;
+
+            return getRestService().then(function (restService) {
+                return restService.one(REST_URI.TEIID + REST_URI.PING).customGET('', {
+                    pingType: pingType
+                });
             });
         };
 
