@@ -32,7 +32,8 @@
             STAR: '*',
             NEWLINE: '\n',
             HASH: '#',
-            HTML: 'html'
+            HTML: 'html',
+            UNKNOWN: 'unknown'
         })
 
         .constant('REST_URI', {

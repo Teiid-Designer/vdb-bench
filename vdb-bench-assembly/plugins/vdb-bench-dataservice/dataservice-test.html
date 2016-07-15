@@ -1,30 +1,51 @@
 <div class="container-fluid" ng-controller="DSTestController as vm">
 
     <!-- Show spinner while deploying -->
-    <div ng-show="vm.dsDeployInProgress==true" class="col-md-10 row">
+    <div ng-show="vm.dsDeploymentInProgress==true" class="col-md-10 row">
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
         <span class="sr-only">Loading...</span>
     </div>
 
-    <div ng-show="vm.dsDeployInProgress==false" class="row">
+    <div ng-show="vm.dsDeploymentInProgress==false" class="row">
         <div class="col-sm-12">
-            <div id="ds-test-header" ng-show="vm.dsDeployInProgress==false">
+            <div id="ds-test-header">
                 <button class="btn btn-default"
                             ng-click="vmmain.selectPage('dataservice-summary',null)"
                             ng-class="{active:vmmain.selectedPage.id == 'dataservice-test'}"> Cancel</button>
 
                 <h1><i class="fa fa-cubes" aria-hidden="true"></i>Test DataService '{{vmmain.selectedDataservice().keng__id}}'</h1>
             </div>
-            <div id="ds-test-description">
-                <h3>&nbsp;&nbsp;Enter an SQL query to test the DataService</h3>
-            </div>
+        </div>
     </div>
 
-    <div ng-show="vm.dsDeployInProgress==false" class="row">
+    <div ng-show="vm.dsDeploymentInProgress==false && vm.dsDeploymentSuccess==false" class="row">
         <div class="col-sm-12">
+            <h3>The DataService could not be deployed:</h3>
+            <h4>&nbsp;&nbsp;'{{vm.dsDeploymentMessage}}'</h4>
+        </div>
+    </div>
+
+    <div ng-show="vm.dsDeploymentInProgress==false  && vm.dsDeploymentSuccess==true" class="row">
+        <div class="col-sm-12">
+            <h3>OData Endpoint: </h3>
+            <div id="odata-link" ng-show="vm.selectedDataserviceODataLinkValid()">
+                <a href="{{vm.selectedDataserviceODataLink()}}" target="_blank">{{vm.selectedDataserviceODataLink()}}</a>
+            </div>
+            <div id="odata-link" ng-show="!vm.selectedDataserviceODataLinkValid()">
+                <strong>The endpoint is not available</strong>
+            </div>
+        </div>
+    </div>
+
+    <div ng-show="vm.dsDeploymentInProgress==false && vm.dsDeploymentSuccess==true" class="row">
+        <div class="col-sm-12">
+            <div id="ds-test-description">
+                <h3>Enter an SQL query to test the DataService</h3>
+            </div>
             <div id="ds-test-sql-edit-box">
                 <sql-control editor-height="20em"
-                                    target="{{vmmain.selectedDataservice().keng__dataPath}}">
+                                    target="{{vmmain.selectedDataservice().keng__dataPath}}"
+                                    query-text="{{vm.selectedDataserviceQueryText()}}">
                 </sql-control>
             </div>
         </div>

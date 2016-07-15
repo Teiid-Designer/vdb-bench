@@ -18,7 +18,8 @@
             scope: {},
             bindToController: {
                 editorHeight : '@',
-                target : '@'
+                target : '@',
+                queryText : '@'
             },
             controller: SQLController,
             controllerAs: 'vm',
@@ -41,7 +42,6 @@
 
         vm.limit = -1;
         vm.offset = 0;
-        vm.queryText = 'SELECT * from example;';
 
         /**
          * Options for the codemirror editor used for previewing vdb xml
