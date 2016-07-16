@@ -37,7 +37,7 @@ var config = {
     html: ['plugins/**/*.html'],
     css: 'styles.css',
     templateModule: pkg.name + '-templates',
-    libFiles: 'libs/**/*.{png,gif,jpg,svg,woff,eot,ttf,otf,css}',
+    libFiles: 'libs/**/*.{png,gif,jpg,svg,woff,woff2,eot,ttf,otf,css}',
     releaseDest: 'target/site'
 };
 
