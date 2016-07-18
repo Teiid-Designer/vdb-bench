@@ -21,7 +21,7 @@
                     structure: "6-6",
                     rows: [{
                         columns: [{
-                            styleClass: "col-md-4",
+                            styleClass: "col-md-5",
                             widgets: [{
                                 fullScreen: false,
                                 modalSize: 'lg',

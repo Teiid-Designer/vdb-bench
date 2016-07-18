@@ -60,7 +60,7 @@
         };
 
         /*
-         * the selected data service OData Link
+         * the selected data service query text
          */
         vm.selectedDataserviceQueryText = function () {
             var modelName = DSSelectionService.selectedDataServiceViewModel();

@@ -24,6 +24,11 @@
                     uib-tooltip="Data Sources">
                 <img src="plugins/vdb-bench-teiid/content/img/data-source.png" id="data-source"/>
             </button>
+            <button type="button" class="teiid-nav-bar-button"
+                    ng-click="vm.selectSection('query')" ng-class="{active:vm.selectedSection.id == 'query'}"
+                    uib-tooltip="Query">
+                <img src="plugins/vdb-bench-teiid/content/img/query.png" id="query"/>
+            </button>
         </div>
     </div>
 

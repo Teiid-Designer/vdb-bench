@@ -17,6 +17,7 @@
         var VDBS_SECTION = 'vdbs';
         var TRANSLATORS_SECTION = 'translators';
         var DATA_SOURCES_SECTION = 'data-sources';
+        var QUERY_SECTION = 'query';
         var sections = {
             'status': {
                 id: 'status',
@@ -45,6 +46,13 @@
                 template: config.pluginDir + syntax.FORWARD_SLASH +
                                     pluginDirName + syntax.FORWARD_SLASH +
                                     'data-sources.html'
+            },
+            'query': {
+                id: 'query',
+                title: 'Query Scratchpad',
+                template: config.pluginDir + syntax.FORWARD_SLASH +
+                                    pluginDirName + syntax.FORWARD_SLASH +
+                                    'query.html'
             }
         };
 

@@ -17,12 +17,22 @@
 }
 .teiid-dashboard-widgets-connected-left {
     float: left;
-    width: 50%;
+    width: 25%;
     margin-bottom: 0.25em;
+
+    /* Stop div bleeding text */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .teiid-dashboard-widgets-connected-right {
     float: right;
-    width: 50%;
+    width: 75%;
     text-align: right;
     margin-bottom: 0.25em;
+
+    /* Stop div bleeding text */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
