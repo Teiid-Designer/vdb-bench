@@ -8,9 +8,9 @@
         .module(pluginName)
         .controller('PfViewController', PfViewController);
 
-    PfViewController.$inject = ['RepoRestService', 'REST_URI'];
+    PfViewController.$inject = ['RepoRestService', 'REST_URI', 'pfViewUtils'];
 
-    function PfViewController(RepoRestService, REST_URI) {
+    function PfViewController(RepoRestService, REST_URI, pfViewUtils) {
         var vm = this;
         vm.filtersText = '';
      

@@ -10,6 +10,7 @@
         'prettyXml',
         'angularUtils.directives.dirPagination',
         'patternfly.views',
+        'patternfly.toolbars',
 
         /*
          * Our reusable cross app code modules
