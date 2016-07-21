@@ -1,5 +1,10 @@
-<div class="container-fluid" ng-controller="DSSummaryController as vm">
+<div class="container-fluid" ng-controller="DatasourceSummaryController as vm">
 
+    <ol class="breadcrumb">
+        <li><a ng-click="vmmain.selectPage('dataservice-summary')"><i class="fa fa-cubes fa-fw" aria-hidden="true"></i> DataServices</a></li>
+        <li>Manage Datasources</li>
+    </ol>
+    
     <div id="dataservice-summary-noservices" ng-show="vm.dsLoading==false && vm.getAllDataServices().length==0" class="col-md-10 row" style="border-style:solid;border-width:2px;padding-bottom:10px;border-color:#999999;background-color:#EEEEEE">
 	   <div class="row">
            <div class="col-md-2"></div>
@@ -19,11 +24,11 @@
     </div>
 
     <div id="dataservice-summary-table-row" class="col-md-10 row" ng-show="vm.getAllDataServices().length>0">
-        <h1><i class="fa fa-cubes" aria-hidden="true"></i> Data Services </h1>
+        <h1><i class="fa fa-database" aria-hidden="true"></i> DataSources </h1>
 	    <div class="row">
 	       <div class="col-md-10"></div>
 	       <div class="col-md-2">
-                <button class="btn btn-primary" ng-click="vmmain.selectPage('datasource-summary')" ng-class="{active:vmmain.selectedPage.id == 'dataservice-summary'}">Manage Datasources</button>
+                <button class="btn btn-primary" ng-click="vmmain.selectPage('connection-summary')" ng-class="{active:vmmain.selectedPage.id == 'dataservice-summary'}">Manage Connections</button>
 	       </div>
 	    </div>
         <div class="row">
