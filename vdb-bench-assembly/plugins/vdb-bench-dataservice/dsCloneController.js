@@ -8,9 +8,9 @@
         .module(pluginName)
         .controller('DSCloneController', DSCloneController);
 
-    DSCloneController.$inject = ['RepoRestService', 'DSSelectionService'];
+    DSCloneController.$inject = ['$rootScope', 'RepoRestService', 'DSSelectionService'];
 
-    function DSCloneController(RepoRestService, DSSelectionService) {
+    function DSCloneController($rootScope, RepoRestService, DSSelectionService) {
         var vm = this;
 
         /**
@@ -22,7 +22,9 @@
                     function () {
                         // Reinitialise the list of data services
                         DSSelectionService.refresh();
-                    },
+                         // Broadcast the pageChange
+                        $rootScope.$broadcast("dataServicePageChanged", 'dataservice-summary');
+                   },
                     function (response) {
                         throw RepoRestService.newRestException("Failed to clone the dataservice. \n" + response.message);
                     });

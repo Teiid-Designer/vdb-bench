@@ -1,9 +1,14 @@
 <div class="container-fluid" ng-controller="DSCloneController as vm">
+    <ol class="breadcrumb">
+        <li><a ng-click="vmmain.selectPage('dataservice-summary')"><i class="fa fa-cubes fa-fw" aria-hidden="true"></i> DataServices</a></li>
+        <li>Copy DataService</li>
+    </ol>
+    
     <div class="row">
         <div class="col-sm-8 col-md-9">                
             <div class="row">
                 <div class="col-sm-9">
-                    <h1><i class="fa fa-cubes" aria-hidden="true"></i>Clone DataService '{{vmmain.selectedDataservice().keng__id}}'</h1>
+                    <h1><i class="fa fa-cubes" aria-hidden="true"></i>Copy DataService '{{vmmain.selectedDataservice().keng__id}}'</h1>
                     <h3>&nbsp;&nbsp;Enter a name for the new dataservice</h3>
                     <form class="form-horizontal">
                         <div class="form-group">
@@ -13,8 +18,8 @@
                             </div>
                         </div>
                     </form>
-                    <button class="btn btn-primary" ng-click="vm.onCloneDataServiceClicked(vmmain.selectedDataservice().keng__id, nameVar); vmmain.selectPage('dataservice-summary',null)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-clone'}"> Create</button>
-                    <button class="btn btn-default" ng-click="vmmain.selectPage('dataservice-summary',null)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-clone'}"> Cancel</button>
+                    <button class="btn btn-primary" ng-click="vm.onCloneDataServiceClicked(vmmain.selectedDataservice().keng__id, nameVar)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-clone'}"> Create</button>
+                    <button class="btn btn-default" ng-click="vmmain.selectPage('dataservice-summary')" ng-class="{active:vmmain.selectedPage.id == 'dataservice-clone'}"> Cancel</button>
                 </div>
             </div>
         </div>

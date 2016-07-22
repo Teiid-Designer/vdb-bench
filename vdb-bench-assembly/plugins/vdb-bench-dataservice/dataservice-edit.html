@@ -1,4 +1,9 @@
 <div class="container-fluid" ng-controller="DSEditController as vm">
+    <ol class="breadcrumb">
+        <li><a ng-click="vmmain.selectPage('dataservice-summary')"><i class="fa fa-cubes fa-fw" aria-hidden="true"></i> DataServices</a></li>
+        <li>Edit DataService</li>
+    </ol>
+    
     <div class="row">
         <div class="col-sm-8 col-md-9">                
             <div class="row">
@@ -19,8 +24,8 @@
                             </div>
                         </div>
                     </form>
-                    <button class="btn btn-primary" ng-click="vm.onUpdateDataServiceClicked(nameVar, descriptionVar); vmmain.selectPage('dataservice-summary',null)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-edit'}"> Save</button>
-                    <button class="btn btn-default" ng-click="vmmain.selectPage('dataservice-summary',null)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-edit'}"> Cancel</button>
+                    <button class="btn btn-primary" ng-click="vm.onUpdateDataServiceClicked(nameVar, descriptionVar)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-edit'}"> Save</button>
+                    <button class="btn btn-default" ng-click="vmmain.selectPage('dataservice-summary')" ng-class="{active:vmmain.selectedPage.id == 'dataservice-edit'}"> Cancel</button>
                 </div>
             </div>
         </div>

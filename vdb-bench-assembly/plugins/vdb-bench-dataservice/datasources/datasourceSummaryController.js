@@ -6,11 +6,11 @@
 
     angular
         .module(pluginName)
-        .controller('DSSummaryController', DSSummaryController);
+        .controller('DatasourceSummaryController', DatasourceSummaryController);
 
-    DSSummaryController.$inject = ['$scope', '$rootScope', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSSelectionService', 'DownloadService', 'pfViewUtils'];
+    DatasourceSummaryController.$inject = ['$scope', '$rootScope', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSSelectionService', 'DownloadService', 'pfViewUtils'];
 
-    function DSSummaryController($scope, $rootScope, RepoRestService, REST_URI, SYNTAX, DSSelectionService, DownloadService, pfViewUtils) {
+    function DatasourceSummaryController($scope, $rootScope, RepoRestService, REST_URI, SYNTAX, DSSelectionService, DownloadService, pfViewUtils) {
         var vm = this;
 
         vm.dsLoading = DSSelectionService.isLoading();

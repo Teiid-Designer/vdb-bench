@@ -8,9 +8,9 @@
         .module(pluginName)
         .controller('DSImportController', DSImportController);
 
-    DSImportController.$inject = ['DSSelectionService'];
+    DSImportController.$inject = ['$rootScope', 'DSSelectionService'];
 
-    function DSImportController(DSSelectionService) {
+    function DSImportController($rootScope, DSSelectionService) {
         var vm = this;
 
         /**
@@ -28,6 +28,8 @@
          */
         vm.onImportCancel = function() {
             vm.showImport = false;
+            // Broadcast the pageChange
+            $rootScope.$broadcast("dataServicePageChanged", 'dataservice-summary');
         };
 
         /*
@@ -39,6 +41,8 @@
 
             // Reinitialise the list of dataservices
             DSSelectionService.refresh();
+            // Broadcast the pageChange
+            $rootScope.$broadcast("dataServicePageChanged", 'dataservice-summary');
         };
     }
 

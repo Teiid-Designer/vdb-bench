@@ -8,9 +8,9 @@
         .module(pluginName)
         .controller('DSNewController', DSNewController);
 
-    DSNewController.$inject = ['RepoRestService', 'DSSelectionService'];
+    DSNewController.$inject = ['$rootScope', 'RepoRestService', 'DSSelectionService'];
 
-    function DSNewController(RepoRestService, DSSelectionService) {
+    function DSNewController($rootScope, RepoRestService, DSSelectionService) {
         var vm = this;
 
         // Event handler for clicking the create button
@@ -20,6 +20,8 @@
                     function () {
                         // Reinitialise the list of data services
                         DSSelectionService.refresh();
+                        // Broadcast the pageChange
+                        $rootScope.$broadcast("dataServicePageChanged", 'dataservice-summary');
                     },
                     function (response) {
                         throw RepoRestService.newRestException("Failed to create the dataservice. \n" + response.message);

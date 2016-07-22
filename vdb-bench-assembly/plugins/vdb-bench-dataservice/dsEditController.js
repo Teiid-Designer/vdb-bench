@@ -8,9 +8,9 @@
         .module(pluginName)
         .controller('DSEditController', DSEditController);
 
-    DSEditController.$inject = ['RepoRestService', 'DSSelectionService'];
+    DSEditController.$inject = ['$rootScope', 'RepoRestService', 'DSSelectionService'];
 
-    function DSEditController(RepoRestService, DSSelectionService) {
+    function DSEditController($rootScope, RepoRestService, DSSelectionService) {
         var vm = this;
 
         // Event handler for clicking the update button
@@ -20,6 +20,8 @@
                     function () {
                         // Reinitialise the list of data services
                         DSSelectionService.refresh();
+                        // Broadcast the pageChange
+                        $rootScope.$broadcast("dataServicePageChanged", 'dataservice-summary');
                     },
                     function (response) {
                         throw RepoRestService.newRestException("Failed to update the dataservice. \n" + response.message);
