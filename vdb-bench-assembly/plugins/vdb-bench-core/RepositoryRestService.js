@@ -11,11 +11,11 @@
         .module('vdb-bench.core')
         .factory('RepoRestService', RepoRestService);
 
-    RepoRestService.$inject = ['SYNTAX', 'REST_URI', 'VDB_SCHEMA',
+    RepoRestService.$inject = ['CONFIG', 'SYNTAX', 'REST_URI', 'VDB_SCHEMA',
                                              'VDB_KEYS', 'RepoSelectionService', 'Restangular',
                                              '$http', '$q', '$base64'];
 
-    function RepoRestService(SYNTAX, REST_URI, VDB_SCHEMA, VDB_KEYS, RepoSelectionService, Restangular, $http, $q, $base64) {
+    function RepoRestService(CONFIG, SYNTAX, REST_URI, VDB_SCHEMA, VDB_KEYS, RepoSelectionService, Restangular, $http, $q, $base64) {
 
         /*
          * Service instance to be returned
@@ -26,7 +26,9 @@
         service.cachedServices = {};
 
         function url(repo) {
-            return "http://" + repo.host + ":" + repo.port + repo.baseUrl;
+            return CONFIG.restScheme +
+                        SYNTAX.COLON + SYNTAX.FORWARD_SLASH + SYNTAX.FORWARD_SLASH +
+                        repo.host + SYNTAX.COLON + repo.port + repo.baseUrl;
         }
 
         function HostNotReachableException(host, reason) {
@@ -71,7 +73,7 @@
                 return $q.when(restService);
             }
 
-            var testUrl = baseUrl + REST_URI.WORKSPACE + REST_URI.VDBS;
+            var testUrl = baseUrl + REST_URI.SERVICE + REST_URI.ABOUT;
             return $http.get(testUrl).
             then(function (response) {
                 restService = Restangular.withConfig(function (RestangularConfigurer) {

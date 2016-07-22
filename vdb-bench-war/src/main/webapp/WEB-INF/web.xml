@@ -7,6 +7,18 @@
   <description>vdb bench</description>
   <display-name>vdb-bench</display-name>
 
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>vdb-bench</web-resource-name>
+      <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+
+    <user-data-constraint>
+      <description>Require SSL</description>
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
+
   <env-entry>
     <description>Enable/disable hawtio's authentication filter, value is really a boolean</description>
     <env-entry-name>hawtio/authenticationEnabled</env-entry-name>

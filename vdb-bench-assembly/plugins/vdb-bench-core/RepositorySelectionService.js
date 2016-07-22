@@ -19,7 +19,7 @@
         var defaultWorkspace = {
             name: 'default',
             host: 'localhost',
-            port: 8080,
+            port: config.restPort,
             baseUrl: config.baseRestUrl
         };
 

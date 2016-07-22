@@ -8,6 +8,8 @@
         .constant('CONFIG', {
             appTitle: 'Vdb-Bench',
             version: '0.0.1',
+            restScheme: 'https', // The protocol used to serve the REST API
+            restPort: 8443, // The port used to serve the REST API
             baseRestUrl: '/vdb-builder/v1',
             baseUrl: '/vdb-bench',
             pluginDir: 'plugins',
@@ -41,6 +43,7 @@
             WORKSPACE: '/workspace',
             VDBS: '/vdbs',
             SERVICE: '/service',
+            ABOUT: '/about',
             SCHEMA: '/schema',
             SEARCH: '/search',
             TEIID: '/teiid',
