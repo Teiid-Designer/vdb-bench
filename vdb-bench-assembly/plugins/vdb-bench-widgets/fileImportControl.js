@@ -54,7 +54,14 @@
          * Function for conducting a file import called from on-change event
          * in browse button. The calling html input element is passed in.
          */
-        vm.importFile = function (fileInputElement) {
+        vm.importFile = function (event) {
+            var files = event.target.files;
+            if (angular.isUndefined(files))
+                return;
+
+            if (files.length === 0)
+                return;
+
             //
             // Called through $apply to ensure it does not freeze the UI
             //
@@ -65,7 +72,7 @@
                     return;
                 }
 
-                var myFile = fileInputElement.files[0];
+                var myFile = files[0];
                 var fName = myFile.name;
 
                 //

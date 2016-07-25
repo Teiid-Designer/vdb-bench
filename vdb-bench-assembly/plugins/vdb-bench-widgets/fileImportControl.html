@@ -10,7 +10,7 @@
         <div>
             <label class="btn btn-primary">
                 Browse&hellip;
-                <input ng-model="fileToImport" type="file" style="display: none;" onchange="angular.element(this).scope().vm.importFile(this)">
+                <input ng-model="fileToImport" type="file" style="display: none;" file-input-handler="vm.importFile">
             </label>
             <button class="btn" ng-click="vm.cancel()">Cancel</button>
         </div>
