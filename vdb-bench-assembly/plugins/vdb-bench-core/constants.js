@@ -65,6 +65,7 @@
             DATA_WORKSPACE: 'tko:workspace',
             STATUS: '/status',
             IMPORT_EXPORT: '/importexport',
+            AVAILABLE_STORAGE_TYPES: '/availableStorageTypes',
             EXPORT: '/export',
             IMPORT: '/import',
             QUERY: '/query',

@@ -151,6 +151,18 @@
         };
 
         /**
+         * Service: Get available storage types
+         * Returns: promise object for the available storage types
+         */
+        service.availableStorageTypes = function() {
+            var url = REST_URI.IMPORT_EXPORT + REST_URI.AVAILABLE_STORAGE_TYPES;
+
+            return getRestService().then(function (restService) {
+                return restService.all(url).getList();
+            });
+        };
+
+        /**
          * Service: Import the given file
          * Returns: promise object for the imported item
          */

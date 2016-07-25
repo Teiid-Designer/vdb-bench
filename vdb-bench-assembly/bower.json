@@ -38,7 +38,8 @@
     "angular-file-saver": "^1.1.1",
     "angular-base64": "^2.0.5",
     "angular-ui-grid": "^3.2.1",
-    "angular-patternfly": "^3.6.0"
+    "angular-patternfly": "^3.6.0",
+    "angular-wizard": "^0.6.1"
   },
   "devDependencies": {
     "bootstrap": "~3.3.5",

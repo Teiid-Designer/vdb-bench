@@ -208,18 +208,9 @@
                 vm.deploymentMessage = null;
                 DSSelectionService.setDeploying(false);
             }
+
             // Broadcast the pageChange
             $rootScope.$broadcast("dataServicePageChanged", 'dataservice-test');
-        };
-
-        /**
-         * Handle export dataservice click
-         */
-        var exportDataServiceClicked = function( ) {
-            try {
-                DownloadService.download(DSSelectionService.selectedDataService());
-            } catch (error) {} finally {
-            }
         };
         
         /**
@@ -253,7 +244,15 @@
             // Broadcast the pageChange
             $rootScope.$broadcast("dataServicePageChanged", 'dataservice-import');
         };
-        
+
+        /**
+         * Handle export dataservice click
+         */
+        var exportDataServiceClicked = function( ) {
+            // Broadcast the pageChange
+            $rootScope.$broadcast("dataServicePageChanged", 'dataservice-export');
+        };
+
         /** 
          * Handle listView and cardView selection
          */
@@ -369,7 +368,6 @@
 
         vm.refresh();
         setActionsDisabled(true);
-
     }
 
 })();
