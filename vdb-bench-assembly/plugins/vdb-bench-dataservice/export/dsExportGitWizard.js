@@ -159,6 +159,11 @@
          * ready for transport
          */
         $scope.$watch('vm.httpClearPassword', function(value) {
+            if (angular.isUndefined(value) || value.length === 0) {
+                delete vm.parameters['repo-password-property'];
+                return;
+            }
+
             vm.parameters['repo-password-property'] = $base64.encode(value);
         });
 
