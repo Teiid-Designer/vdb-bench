@@ -154,6 +154,14 @@
             readerExtractContent(event, 'repo-private-key-property');
         };
 
+        /**
+         * When the http password is set then encode the value
+         * ready for transport
+         */
+        $scope.$watch('vm.httpClearPassword', function(value) {
+            vm.parameters['repo-password-property'] = $base64.encode(value);
+        });
+
         vm.showProgress = function(display) {
             vm.inProgress = display;
         };
