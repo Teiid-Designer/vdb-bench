@@ -1,19 +1,48 @@
-<div class="container-fluid" ng-controller="DSImportController as vm">
+<div class="container-fluid" ng-controller="DSImportExportController as vm">
     <ol class="breadcrumb">
         <li><a ng-click="vmmain.selectPage('dataservice-summary')"><i class="fa fa-cubes fa-fw" aria-hidden="true"></i> DataServices</a></li>
         <li>Import DataService</li>
     </ol>
-    
+
     <div class="row">
-        <div class="col-sm-8 col-md-9">                
+        <div class="col-sm-8 col-md-9">
             <div class="row">
-                <div class="col-sm-9">
+                <div class="col-sm-12">
                     <h1><i class="fa fa-cubes" aria-hidden="true"></i>Import DataService</h1>
-                    <h3>&nbsp;&nbsp;Choose the DataService zip file to import from your file system</h3>
-                    <!-- Show the import dialog when importing -->
-                    <div ng-init="vm.onImportDataServiceClicked()" ng-show="!vm.init && vm.showImport">
-                        <file-import-control on-import-complete="vm.onImportDone(result)" on-cancel="vm.onImportCancel()"></file-import-control>
-                    </div>
+
+                    <!--
+                        -- Template is found in the angular template cache.
+                        -- The html file is cached with the full path name hence the same path
+                        -- needs to be included here.
+                        -->
+                    <wizard on-finish="vmmain.selectPage('dataservice-summary',null)" template="plugins/vdb-bench-dataservice/import/import-wizard.html">
+
+                        <!--
+                            -- Import Type Step
+                            -->
+                        <wz-step wz-title="Import Source">
+                            <h1>Select the source of the dataservice</h1>
+
+                            <form class="ds-import-export-storage-types-form">
+                                <div ng-repeat="storageType in vm.storageTypes">
+                                    <label>
+                                        <input type="radio"
+                                                    ng-model="vm.storageType"
+                                                    ng-value="storageType"
+                                                    ng-init="$index==0?(vm.storageType=storageType):''"> <!-- set the default value to be first in list -->
+                                        {{storageType.name}} - {{storageType.description}}
+                                    </label>
+                                    <br/>
+                                </div>
+                            </form>
+
+                            <input type="submit" wz-next value="Next" />
+                            <input type="submit" wz-finish value="Finish" />
+                        </wz-step>
+
+                        <ds-import-file-wizard wizard-active="vm.fileWizard"></ds-import-file-wizard>
+                        <ds-import-git-wizard wizard-active="vm.gitWizard"></ds-import-git-wizard>
+                    </wizard>
                 </div>
             </div>
         </div>

@@ -9,28 +9,28 @@
 
     angular
         .module(pluginName)
-        .controller('DSExportController', DSExportController);
+        .controller('DSImportExportController', DSImportExportController);
 
-    DSExportController.$inject = ['CONFIG', 'SYNTAX', 'RepoRestService', '$scope'];
+    DSImportExportController.$inject = ['CONFIG', 'SYNTAX', 'RepoRestService', '$scope'];
 
-    function DSExportController(config, syntax, RepoRestService, $scope) {
+    function DSImportExportController(config, syntax, RepoRestService, $scope) {
         var vm = this;
 
         vm.storageTypes = {};
-        vm.exportType = {};
+        vm.storageType = {};
         vm.fileWizard = false;
         vm.gitWizard = false;
 
-        vm.exportTypeSet = function() {
-            if (angular.isUndefined(vm.exportType))
-                vm.exportType = {};
+        vm.storageTypeSet = function() {
+            if (angular.isUndefined(vm.storageType))
+                vm.storageType = {};
 
-            vm.fileWizard = vm.exportType.name === 'file' ? true : false;
-            vm.gitWizard = vm.exportType.name === 'git' ? true : false;
+            vm.fileWizard = vm.storageType.name === 'file' ? true : false;
+            vm.gitWizard = vm.storageType.name === 'git' ? true : false;
         };
 
-        $scope.$watch('vm.exportType', function(value) {
-            vm.exportTypeSet();
+        $scope.$watch('vm.storageType', function(value) {
+            vm.storageTypeSet();
         });
 
         function init() {

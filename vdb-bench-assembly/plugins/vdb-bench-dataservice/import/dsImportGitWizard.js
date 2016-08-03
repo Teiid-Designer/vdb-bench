@@ -3,34 +3,34 @@
 
     var pluginDirName = 'vdb-bench-dataservice';
     var pluginName = 'vdb-bench.dataservice';
-    var exportDir = 'export';
+    var importDir = 'import';
 
     angular
         .module(pluginName)
-        .directive('dsExportGitWizard', DSExportGitWizard);
+        .directive('dsImportGitWizard', DSImportGitWizard);
 
-    DSExportGitWizard.$inject = ['CONFIG', 'SYNTAX'];
-    DSExportGitWizardController.$inject = ['$window', '$scope', '$base64', 'SYNTAX', 'DSSelectionService', 'RepoRestService'];
+    DSImportGitWizard.$inject = ['CONFIG', 'SYNTAX'];
+    DSImportGitWizardController.$inject = ['$window', '$scope', '$base64', 'SYNTAX', 'DSSelectionService', 'RepoRestService'];
 
-    function DSExportGitWizard(config, syntax) {
+    function DSImportGitWizard(config, syntax) {
         var directive = {
             restrict: 'E',
             scope: {},
             bindToController: {
                 'wizardActive': '='
             },
-            controller: DSExportGitWizardController,
+            controller: DSImportGitWizardController,
             controllerAs: 'vm',
             templateUrl: config.pluginDir + syntax.FORWARD_SLASH +
                 pluginDirName + syntax.FORWARD_SLASH +
-                exportDir + syntax.FORWARD_SLASH +
-                'git-export-wizard.html'
+                importDir + syntax.FORWARD_SLASH +
+                'git-import-wizard.html'
         };
 
         return directive;
     }
 
-    function DSExportGitWizardController($window, $scope, $base64, syntax, DSSelectionService, RepoRestService) {
+    function DSImportGitWizardController($window, $scope, $base64, syntax, DSSelectionService, RepoRestService) {
         var vm = this;
 
         /**
@@ -52,9 +52,9 @@
         function setResponse(response) {
             vm.response = response;
             if (response === 'OK')
-                vm.responseStyleClass = "ds-export-git-page-response-ok";
+                vm.responseStyleClass = "ds-import-git-page-response-ok";
             else
-                vm.responseStyleClass = "ds-export-git-page-response-bad";
+                vm.responseStyleClass = "ds-import-git-page-response-bad";
         }
 
         /**
@@ -87,8 +87,15 @@
                 return false;
             }
 
-            if (_.isEmpty(vm.repo.parameters['file-path-property'])) {
+            var filePath = vm.repo.parameters['file-path-property'];
+            if (_.isEmpty(filePath)) {
                 alert("The relative file path property is required");
+                return false;
+            }
+
+            vm.documentType = RepoRestService.documentType(filePath);
+            if (vm.documentType === null) {
+                alert(filePath + "'s file type is not valid hence the file cannot be imported.");
                 return false;
             }
 
@@ -100,9 +107,9 @@
         };
 
         /**
-         * Event handler for exporting the dataservice to git repository
+         * Event handler for importing the dataservice to git repository
          */
-        vm.onExportDataServiceClicked = function() {
+        vm.onImportDataServiceClicked = function() {
             var dataservice = DSSelectionService.selectedDataService();
 
             //
@@ -111,17 +118,23 @@
             vm.showProgress(true);
 
             try {
-                RepoRestService.export('git', vm.repo.parameters, dataservice).then(
-                    function (exportStatus) {
+                RepoRestService.import('git', vm.repo.parameters, vm.documentType).then(
+                    function (importStatus) {
                         vm.showProgress(false);
                         setError(null);
-                        setResponse(exportStatus.success ? 'OK': 'Failed');
+                        setResponse(importStatus.success ? 'OK': 'Failed');
+
+                        // Reinitialise the list of dataservices
+                        DSSelectionService.refresh();
                     },
                     function (response) {
                         // Some kind of error has occurred
                         vm.showProgress(false);
                         setError(RepoRestService.reponseMessage(response));
                         setResponse('Failed');
+
+                        // Reinitialise the list of dataservices
+                        DSSelectionService.refresh();
                     });
             } catch (error) {
                 vm.showProgress(false);

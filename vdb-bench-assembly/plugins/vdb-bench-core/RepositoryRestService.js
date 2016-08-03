@@ -94,6 +94,20 @@
         }
 
         /**
+         * Service: Try and find the reponse's message and return it
+         */
+        service.reponseMessage = function(response) {
+            if (response.message)
+                return response.message;
+            else if (response.data && response.data.error)
+                return response.data.error;
+            else if (response.status && response.statusText)
+                return response.status + SYNTAX.COLON + response.statusText;
+
+            return "Unknown Error";
+        };
+
+        /**
          * Service: return the link HREF value for the given
          * link type from the given rest object
          */
@@ -163,6 +177,25 @@
         };
 
         /**
+         * Service: Determine the document type from the given file name
+         * Returns: the document type for the file or null if not recognised
+         */
+        service.documentType = function(fileName) {
+            //
+            // Valid formats currently implemented
+            //
+            var validFormats = ['zip', '-vdb.xml', 'tds', 'ddl'];
+            var documentType = null;
+            validFormats.forEach( function(format) {
+                if (fileName.endsWith(format)) {
+                    documentType = format;
+                }
+            });
+
+            return documentType;
+        };
+
+        /**
          * Service: Import the given file
          * Returns: promise object for the imported item
          */
@@ -178,9 +211,16 @@
                 var payload = {
                     "storageType": storageType,
                     "documentType": documentType,
-                    "parameters" : parameters,
-                    "content" : $base64.encode(data)
+                    "parameters" : parameters
                 };
+
+                //
+                // content is optional and only if data parameter has been defined
+                //
+                if (angular.isDefined(data)) {
+                    data = $base64.encode(data);
+                    payload.content = data;
+                }
 
                 // Posts should always be made on collection (all) not elements (one)
                 return restService.all(url).post(payload);

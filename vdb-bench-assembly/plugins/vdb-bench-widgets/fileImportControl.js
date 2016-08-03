@@ -18,6 +18,7 @@
             scope: {},
             bindToController: {
                 'onImportComplete': '&',
+                'showCancel': '=',
                 'onCancel': '&'
             },
             controller: FileImportController,
@@ -33,11 +34,37 @@
     function FileImportController($scope, SYNTAX, RepoRestService, $window) {
         var vm = this;
 
+        function setError(message) {
+            if (message) {
+                message = message.replace(/<br\/>/g, SYNTAX.NEWLINE);
+            }
+
+            vm.error = message;
+        }
+
+        function setResponse(response) {
+            if (response) {
+                vm.response = "OK";
+                vm.responseStyleClass = "import-control-response-ok";
+            }
+            else {
+                vm.response = "Failed";
+                vm.responseStyleClass = "import-control-response-bad";
+            }
+        }
+
         vm.showProgress = function(display) {
             vm.inProgress = display;
         };
 
         vm.showProgress(false);
+
+        vm.displayCancel = function() {
+            if (angular.isUndefined(vm.showCancel))
+                return true;
+
+            return vm.showCancel;
+        };
 
         /**
          * Function for calling the appropriate callback if the cancel button
@@ -68,26 +95,15 @@
             $scope.$apply(function (scope) {
                 // Check for the various File API support.
                 if (! $window.File || ! $window.FileReader || ! $window.FileList || ! $window.Blob) {
-                    alert('The File APIs are not fully supported in this browser. Cannot proceed with import.');
+                    setError('The File APIs are not fully supported in this browser. Cannot proceed with import.');
                     return;
                 }
 
                 var myFile = files[0];
                 var fName = myFile.name;
-
-                //
-                // Valid formats currently implemented
-                //
-                var validFormats = ['zip', '-vdb.xml', 'tds', 'ddl'];
-                var documentType = null;
-                validFormats.forEach( function(format) {
-                    if (fName.endsWith(format)) {
-                        documentType = format;
-                    }
-                });
-
+                var documentType = RepoRestService.documentType(fName);
                 if (documentType === null) {
-                    alert(fName + "'s file type is not valid hence the file cannot be imported.");
+                    setError(fName + "'s file type is not valid hence the file cannot be imported.");
                     return;
                 }
 
@@ -115,11 +131,14 @@
                     RepoRestService.upload(documentType, data).then(
                         function (importStatus) {
                             vm.showProgress(false);
+                            setError(null);
+                            setResponse(importStatus.success ? true: false);
                             vm.onImportComplete({result: importStatus});
                         },
                         function (response) {
-                            alert("Failed to import the file to the host.\n" + response.data.error);
                             vm.showProgress(false);
+                            setError(RepoRestService.reponseMessage(response));
+                            setResponse(false);
                             vm.onImportComplete({result: response});
                         });
                 };
@@ -147,14 +166,22 @@
                         default:
                             reason = "Read error";
                     }
-                    alert('The file "' + myFile.name + '" ' + reason);
+                    setError('The file "' + myFile.name + '" ' + reason);
+                    setResponse(false);
                     vm.inProgress = false;
                 };
 
                 //
                 // Read as a binary string to allow for zip files
                 //
-                reader.readAsBinaryString(myFile);
+                try {
+                    reader.readAsBinaryString(myFile);
+                } catch (exception) {
+                    setError('Failed to read ' + SYNTAX.SPEECH_MARKS + myFile.name +
+                                    SYNTAX.SPEECH_MARKS + SYNTAX.COLON + SYNTAX.SPACE + exception.message);
+                    setResponse(false);
+                    vm.inProgress = false;
+                }
             });
         };
     }
