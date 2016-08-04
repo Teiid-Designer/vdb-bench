@@ -8,40 +8,40 @@
         .module(pluginName)
         .controller('ConnectionSummaryController', ConnectionSummaryController);
 
-    ConnectionSummaryController.$inject = ['$scope', '$rootScope', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSSelectionService', 'DownloadService', 'pfViewUtils'];
+    ConnectionSummaryController.$inject = ['$scope', '$rootScope', 'RepoRestService', 'REST_URI', 'SYNTAX', 'ConnectionSelectionService', 'DownloadService', 'pfViewUtils'];
 
-    function ConnectionSummaryController($scope, $rootScope, RepoRestService, REST_URI, SYNTAX, DSSelectionService, DownloadService, pfViewUtils) {
+    function ConnectionSummaryController($scope, $rootScope, RepoRestService, REST_URI, SYNTAX, ConnectionSelectionService, DownloadService, pfViewUtils) {
         var vm = this;
 
-        vm.dsLoading = DSSelectionService.isLoading();
+        vm.connLoading = ConnectionSelectionService.isLoading();
         vm.deploymentSuccess = false;
         vm.deploymentMessage = null;
-        vm.allItems = DSSelectionService.getDataServices();
+        vm.allItems = ConnectionSelectionService.getConnections();
         vm.items = vm.allItems;
 
         /*
-         * When the data services have been loaded
+         * When the connections have been loaded
          */
-        $scope.$on('loadingDataServicesChanged', function (event, loading) {
-            vm.dsLoading = loading;
-            if(vm.dsLoading === false) {
-                vm.allItems = DSSelectionService.getDataServices();
+        $scope.$on('loadingConnectionsChanged', function (event, loading) {
+            vm.connLoading = loading;
+            if(vm.connLoading === false) {
+                vm.allItems = ConnectionSelectionService.getConnections();
                 vm.items = vm.allItems;
                 vm.filterConfig.resultsCount = vm.items.length;
            }
         });
 
         /**
-         * Access to the collection of filtered data services
+         * Access to the collection of filtered connections
          */
-        vm.getDataServices = function() {
+        vm.getConnections = function() {
             return vm.items;
         };
 
         /**
-         * Access to the collection of filtered data services
+         * Access to the collection of filtered connections
          */
-        vm.getAllDataServices = function() {
+        vm.getAllConnections = function() {
             return vm.allItems;
         };
 
@@ -52,11 +52,7 @@
               if(item.keng__id !== null) {
                   match = item.keng__id.match(filter.value) !== null;
               }
-          } else if (filter.id === 'description') {
-              if(item.tko__description !== null) {
-                  match = item.tko__description.match(filter.value) !== null;
-              }
-          }
+          } 
           return match;
         };
      
@@ -97,12 +93,6 @@
               title:  'Name',
               placeholder: 'Filter by Name...',
               filterType: 'text'
-            },
-            {
-              id: 'description',
-              title:  'Description',
-              placeholder: 'Filter by Description...',
-              filterType: 'text'
             }
           ],
           resultsCount: vm.items.length,
@@ -125,14 +115,6 @@
           var compValue = 0;
           if (vm.sortConfig.currentField.id === 'name') {
             compValue = item1.keng__id.localeCompare(item2.keng__id);
-          } else if (vm.sortConfig.currentField.id === 'description') {
-              if(!item1.tko__description) {
-                  compValue = -1;
-              } else if(!item2.tko__description) {
-                  compValue = 1;
-              } else {
-                  compValue = item1.tko__description.localeCompare(item2.tko__description);
-              }
           }
      
           if (!vm.sortConfig.isAscending) {
@@ -152,29 +134,24 @@
               id: 'name',
               title:  'Name',
               sortType: 'alpha'
-            },
-            {
-              id: 'description',
-              title:  'Description',
-              sortType: 'alpha'
             }
           ],
           onSortChange: sortChange
         };
      
         /**
-         * Handle delete dataservice click
+         * Handle delete connection click
          */
-        var deleteDataServiceClicked = function ( ) {
-            var selDSName = DSSelectionService.selectedDataService().keng__id;
+        var deleteConnectionClicked = function ( ) {
+            var selConnName = ConnectionSelectionService.selectedConnection().keng__id;
             try {
-                RepoRestService.deleteDataService( selDSName ).then(
+                RepoRestService.deleteDataSource( selConnName ).then(
                     function () {
-                        // Refresh the list of data services
-                        DSSelectionService.refresh();
+                        // Refresh the list of connections
+                        ConnectionSelectionService.refresh();
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to remove the dataservice. \n" + response.message);
+                        throw RepoRestService.newRestException("Failed to remove the connection. \n" + response.message);
                     });
             } catch (error) {} finally {
             }
@@ -184,81 +161,82 @@
         };
 
         /**
-         * Handle deploy dataservice click
+         * Handle deploy connection click
          */
-        var deployDataServiceClicked = function ( ) {
-            var selDSName = DSSelectionService.selectedDataService().keng__id;
-            DSSelectionService.setDeploying(true, selDSName, false, null);
+        var deployConnectionClicked = function ( ) {
+            var selConnName = ConnectionSelectionService.selectedConnection().keng__id;
+            ConnectionSelectionService.setDeploying(true, selConnName, false, null);
             try {
-                RepoRestService.deployDataService( selDSName ).then(
+                RepoRestService.deployDataSource( selConnName ).then(
                     function ( result ) {
                         vm.deploymentSuccess = result.Information.deploymentSuccess == "true";
                         if(vm.deploymentSuccess === true) {
-                            DSSelectionService.setDeploying(false, selDSName, true, null);
+                            ConnectionSelectionService.setDeploying(false, selConnName, true, null);
+                            alert("Connection Deployment Successful!");
                         } else {
-                            DSSelectionService.setDeploying(false, selDSName, false, result.Information.ErrorMessage1);
+                            ConnectionSelectionService.setDeploying(false, selConnName, false, result.Information.ErrorMessage1);
+                            alert("Connection Deployment Failed!");
                         }
                    },
                     function (response) {
-                        DSSelectionService.setDeploying(false, selDSName, false, response.message);
-                        throw RepoRestService.newRestException("Failed to deploy the dataservice. \n" + response.message);
+                        ConnectionSelectionService.setDeploying(false, selConnName, false, response.message);
+                        throw RepoRestService.newRestException("Failed to deploy the connection. \n" + response.message);
                     });
             } catch (error) {} finally {
                 vm.deploymentSuccess = false;
                 vm.deploymentMessage = null;
-                DSSelectionService.setDeploying(false);
+                alert("Connection Deployment Failed!");
+                ConnectionSelectionService.setDeploying(false);
             }
-            // Broadcast the pageChange
-            $rootScope.$broadcast("dataServicePageChanged", 'dataservice-test');
         };
 
         /**
-         * Handle export dataservice click
+         * Handle export connection click
          */
-        var exportDataServiceClicked = function( ) {
+        var exportConnectionClicked = function( ) {
             try {
-                DownloadService.download(DSSelectionService.selectedDataService());
+                DownloadService.download(ConnectionSelectionService.selectedConnection());
             } catch (error) {} finally {
             }
         };
         
         /**
-         * Handle edit dataservice click
+         * Handle edit connection click
          */
-        var editDataServiceClicked = function( ) {
+        var editConnectionClicked = function( ) {
             // Broadcast the pageChange
-            $rootScope.$broadcast("dataServicePageChanged", 'dataservice-edit');
+            $rootScope.$broadcast("dataServicePageChanged", 'connection-edit');
         };
 
         /**
-         * Handle clone dataservice click
+         * Handle clone connection click
          */
-        var cloneDataServiceClicked = function( ) {
+        var cloneConnectionClicked = function( ) {
             // Broadcast the pageChange
-            $rootScope.$broadcast("dataServicePageChanged", 'dataservice-clone');
+            $rootScope.$broadcast("dataServicePageChanged", 'connection-clone');
         };
 
         /**
-         * Handle new dataservice click
+         * Handle new connection click
          */
-        var newDataServiceClicked = function( ) {
+        var newConnectionClicked = function( ) {
             // Broadcast the pageChange
-            $rootScope.$broadcast("dataServicePageChanged", 'dataservice-new');
+            $rootScope.$broadcast("dataServicePageChanged", 'connection-new');
         };
         
         /**
-         * Handle import dataservice click
+         * Handle import connection click
          */
-        var importDataServiceClicked = function( ) {
+        var importConnectionClicked = function( ) {
             // Broadcast the pageChange
-            $rootScope.$broadcast("dataServicePageChanged", 'dataservice-import');
+            $rootScope.$broadcast("dataServicePageChanged", 'connection-import');
         };
         
         /** 
          * Handle listView and cardView selection
          */
         var handleSelect = function (item, e) {
-            DSSelectionService.selectDataService(item);
+            ConnectionSelectionService.selectConnection(item);
             
             // Actions disabled unless one is selected
             var itemsSelected = vm.listConfig.selectedItems;
@@ -270,10 +248,10 @@
         };  
         
         /** 
-         * Sets disabled state of all dataservice actions
+         * Sets disabled state of all connection actions
          */
         var setActionsDisabled = function (enabled) {
-            vm.actionsConfig.primaryActions.forEach(function (theAction) {
+            vm.actionsConfig.moreActions.forEach(function (theAction) {
                 if(theAction.name!=='New' && theAction.name!='Import') {
                     theAction.isDisabled = enabled;
                 }
@@ -281,59 +259,59 @@
         };   
         
         /**
-         * Dataservice Actions
+         * Connection Actions
          */
        vm.actionsConfig = {
           primaryActions: [
             {
-              name: 'Copy',
-              title: 'Copy the Dataservice',
-              actionFn: cloneDataServiceClicked,
+              name: 'Edit',
+              title: 'Edit the Connection',
+              actionFn: editConnectionClicked,
               isDisabled: true
             },
             {
-              name: 'Edit',
-              title: 'Edit the Dataservice',
-              actionFn: editDataServiceClicked,
+              name: 'Test',
+              title: 'Test the Connection',
+              actionFn: deployConnectionClicked,
               isDisabled: true
             },
             {
               name: 'Delete',
-              title: 'Delete the Dataservice',
-              actionFn: deleteDataServiceClicked,
+              title: 'Delete the Connection',
+              actionFn: deleteConnectionClicked,
               isDisabled: true
-            },
-            {
-              isSeparator: true
-            },  
-            {
-              name: 'Test',
-              title: 'Test the Dataservice',
-              actionFn: deployDataServiceClicked,
-              isDisabled: true
-            },
+            }
+          ],
+          moreActions: [
             {
               name: 'Export',
-              title: 'Export the Dataservice',
-              actionFn: exportDataServiceClicked,
+              title: 'Export the Connection',
+              actionFn: exportConnectionClicked,
+              isDisabled: true
+            },
+            {
+              name: 'Copy',
+              title: 'Copy the Connection',
+              actionFn: cloneConnectionClicked,
               isDisabled: true
             },
             {
               isSeparator: true
-            },  
+            },
             {
               name: 'New',
-              title: 'Create a Dataservice',
-              actionFn: newDataServiceClicked,
+              title: 'Create a Connection',
+              actionFn: newConnectionClicked,
               isDisabled: false
             },
             {
               name: 'Import',
-              title: 'Import a Dataservice',
-              actionFn: importDataServiceClicked,
-              isDisabled: false
+              title: 'Import a Connection',
+              actionFn: importConnectionClicked,
+              isDefined: false
             }
-          ]
+          ],
+          actionsInclude: true
         };
      
         /**
@@ -359,10 +337,10 @@
         };
         
         /**
-         * Access to the collection of data services
+         * Access to the collection of connections
          */
         vm.refresh = function() {
-            vm.allItems = DSSelectionService.getDataServices();
+            vm.allItems = ConnectionSelectionService.getConnections();
             vm.items = vm.allItems;
             vm.filterConfig.resultsCount = vm.items.length;
         };
