@@ -24,7 +24,7 @@
             templateUrl: config.pluginDir + syntax.FORWARD_SLASH +
                 pluginDirName + syntax.FORWARD_SLASH +
                 exportDir + syntax.FORWARD_SLASH +
-                'file-wizard.html'
+                'file-export-wizard.html'
         };
 
         return directive;

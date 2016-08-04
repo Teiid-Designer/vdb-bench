@@ -1,4 +1,4 @@
-<div class="container-fluid" ng-controller="DSExportController as vm">
+<div class="container-fluid" ng-controller="DSImportExportController as vm">
     <ol class="breadcrumb">
         <li><a ng-click="vmmain.selectPage('dataservice-summary')"><i class="fa fa-cubes fa-fw" aria-hidden="true"></i> DataServices</a></li>
         <li>Export DataService</li>
@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-sm-8 col-md-9">
             <div class="row">
-                <div class="col-sm-9">
+                <div class="col-sm-12">
                     <h1><i class="fa fa-cubes" aria-hidden="true"></i>Export DataService</h1>
 
                     <!--
@@ -23,13 +23,13 @@
                         <wz-step wz-title="Export Type">
                             <h1>Select how the dataservice should be exported</h1>
 
-                            <form name="exportTypeForm" class="ds-export-storage-types-form">
+                            <form class="ds-import-export-storage-types-form">
                                 <div ng-repeat="storageType in vm.storageTypes">
                                     <label>
                                         <input type="radio"
-                                                    ng-model="vm.exportType"
+                                                    ng-model="vm.storageType"
                                                     ng-value="storageType"
-                                                    ng-init="$index==0?(vm.exportType=storageType):''"> <!-- set the default value to be first in list -->
+                                                    ng-init="$index==0?(vm.storageType=storageType):''"> <!-- set the default value to be first in list -->
                                         {{storageType.name}} - {{storageType.description}}
                                     </label>
                                     <br/>

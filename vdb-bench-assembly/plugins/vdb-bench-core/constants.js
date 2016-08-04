@@ -34,6 +34,7 @@
             STAR: '*',
             NEWLINE: '\n',
             HASH: '#',
+            SPEECH_MARKS: '"',
             HTML: 'html',
             UNKNOWN: 'unknown'
         })
