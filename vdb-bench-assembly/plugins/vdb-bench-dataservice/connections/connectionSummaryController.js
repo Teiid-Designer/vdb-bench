@@ -251,6 +251,11 @@
          * Sets disabled state of all connection actions
          */
         var setActionsDisabled = function (enabled) {
+            vm.actionsConfig.primaryActions.forEach(function (theAction) {
+                if(theAction.name!=='New' && theAction.name!='Import') {
+                    theAction.isDisabled = enabled;
+                }
+            });
             vm.actionsConfig.moreActions.forEach(function (theAction) {
                 if(theAction.name!=='New' && theAction.name!='Import') {
                     theAction.isDisabled = enabled;
@@ -308,7 +313,7 @@
               name: 'Import',
               title: 'Import a Connection',
               actionFn: importConnectionClicked,
-              isDefined: false
+              isDisabled: false
             }
           ],
           actionsInclude: true

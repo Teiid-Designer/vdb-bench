@@ -272,6 +272,11 @@
          * Sets disabled state of all dataservice actions
          */
         var setActionsDisabled = function (enabled) {
+            vm.actionsConfig.primaryActions.forEach(function (theAction) {
+                if(theAction.name!=='New' && theAction.name!='Import') {
+                    theAction.isDisabled = enabled;
+                }
+            });
             vm.actionsConfig.moreActions.forEach(function (theAction) {
                 if(theAction.name!=='New' && theAction.name!='Import') {
                     theAction.isDisabled = enabled;
@@ -329,7 +334,7 @@
               name: 'Import',
               title: 'Import a Dataservice',
               actionFn: importDataServiceClicked,
-              isDefined: false
+              isDisabled: false
             }
           ],
           actionsInclude: true
