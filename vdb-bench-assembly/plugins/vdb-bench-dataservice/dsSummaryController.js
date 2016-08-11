@@ -277,6 +277,11 @@
                     theAction.isDisabled = enabled;
                 }
             });
+            vm.actionsConfig.moreActions.forEach(function (theAction) {
+                if(theAction.name!=='New' && theAction.name!='Import') {
+                    theAction.isDisabled = enabled;
+                }
+            });
         };   
         
         /**
@@ -285,26 +290,11 @@
        vm.actionsConfig = {
           primaryActions: [
             {
-              name: 'Copy',
-              title: 'Copy the Dataservice',
-              actionFn: cloneDataServiceClicked,
-              isDisabled: true
-            },
-            {
               name: 'Edit',
               title: 'Edit the Dataservice',
               actionFn: editDataServiceClicked,
               isDisabled: true
             },
-            {
-              name: 'Delete',
-              title: 'Delete the Dataservice',
-              actionFn: deleteDataServiceClicked,
-              isDisabled: true
-            },
-            {
-              isSeparator: true
-            },  
             {
               name: 'Test',
               title: 'Test the Dataservice',
@@ -312,14 +302,28 @@
               isDisabled: true
             },
             {
+              name: 'Delete',
+              title: 'Delete the Dataservice',
+              actionFn: deleteDataServiceClicked,
+              isDisabled: true
+            }
+          ],
+          moreActions: [
+            {
               name: 'Export',
               title: 'Export the Dataservice',
               actionFn: exportDataServiceClicked,
               isDisabled: true
             },
             {
+              name: 'Copy',
+              title: 'Copy the Dataservice',
+              actionFn: cloneDataServiceClicked,
+              isDisabled: true
+            },
+            {
               isSeparator: true
-            },  
+            },
             {
               name: 'New',
               title: 'Create a Dataservice',
@@ -332,7 +336,8 @@
               actionFn: importDataServiceClicked,
               isDisabled: false
             }
-          ]
+          ],
+          actionsInclude: true
         };
      
         /**

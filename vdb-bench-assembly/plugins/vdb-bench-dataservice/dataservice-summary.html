@@ -19,13 +19,17 @@
     </div>
 
     <div id="dataservice-summary-table-row" class="col-md-10 row" ng-show="vm.getAllDataServices().length>0">
-        <h1><i class="fa fa-cubes" aria-hidden="true"></i> Data Services </h1>
 	    <div class="row">
 	       <div class="col-md-10"></div>
 	       <div class="col-md-2">
-                <button class="btn btn-primary" ng-click="vmmain.selectPage('datasource-summary')" ng-class="{active:vmmain.selectedPage.id == 'dataservice-summary'}">Manage Datasources</button>
+                <button class="btn btn-primary" ng-click="vmmain.selectPage('connection-summary')" ng-class="{active:vmmain.selectedPage.id == 'dataservice-summary'}">Manage Connections</button>
 	       </div>
 	    </div>
+        <h1><i class="fa fa-cubes" aria-hidden="true"></i> Data Services </h1>
+        <div id="datservice-action-row" class="pull-right">
+            <a href ng-click="vmmain.selectPage('dataservice-new',null)"><span class="fa fa-plus"></span> New DataService</a>&nbsp;&nbsp;
+            <a href ng-click="vmmain.selectPage('dataservice-import',null)"><span class="pficon pficon-import"></span> Import DataService</a>
+        </div>
         <div class="row">
            <div class="col-md-12">
              <div pf-toolbar id="dataserviceToolbar" config="vm.toolbarConfig"></div>

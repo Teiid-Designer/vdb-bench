@@ -2,52 +2,34 @@
 
     <ol class="breadcrumb">
         <li><a ng-click="vmmain.selectPage('dataservice-summary')"><i class="fa fa-cubes fa-fw" aria-hidden="true"></i> DataServices</a></li>
-        <li><a ng-click="vmmain.selectPage('datasource-summary')"><i class="fa fa-database fa-fw" aria-hidden="true"></i> Manage DataSources</a></li>
-        <li>Manage Connections</li>
+        <li><i class="fa fa-plug fa-fw" aria-hidden="true"></i> Connections</li>        
     </ol>
     
-    <div id="dataservice-summary-noservices" ng-show="vm.dsLoading==false && vm.getAllDataServices().length==0" class="col-md-10 row" style="border-style:solid;border-width:2px;padding-bottom:10px;border-color:#999999;background-color:#EEEEEE">
-	   <div class="row">
-           <div class="col-md-2"></div>
-	       <div class="col-md-8">
-	           <img src="plugins/vdb-bench-dataservice/content/img/EmptyLibraryImage.png" style="max-height:100%;max-width:100%;">
-	       </div>
-           <div class="col-md-2"></div>
-	   </div>
-	   <div class="row">
-	       <div class="col-md-4"></div>
-	       <div class="col-md-6">
-                <button class="btn btn-primary" ng-click="vmmain.selectPage('dataservice-new')" ng-class="{active:vmmain.selectedPage.id == 'dataservice-summary'}">Create Data Service</button>
-                <button class="btn btn-primary" ng-click="vmmain.selectPage('dataservice-import')" ng-class="{active:vmmain.selectedPage.id == 'dataservice-summary'}">Import Data Service</button>
-	       </div>
-	       <div class="col-md-2"></div>
-	   </div>
-    </div>
-
-    <div id="dataservice-summary-table-row" class="col-md-10 row" ng-show="vm.getAllDataServices().length>0">
+    <div id="connection-summary-table-row" class="col-md-10 row">
         <h1><i class="fa fa-plug" aria-hidden="true"></i> Connections </h1>
+        <div id="connection-action-row" class="pull-right">
+            <a href ng-click="vmmain.selectPage('connection-new',null)"><span class="fa fa-plus"></span> New Connection</a>&nbsp;&nbsp;
+            <a href ng-click="vmmain.selectPage('connection-import',null)"><span class="pficon pficon-import"></span> Import Connection</a>
+        </div>
         <div class="row">
            <div class="col-md-12">
-             <div pf-toolbar id="dataserviceToolbar" config="vm.toolbarConfig"></div>
+             <div pf-toolbar id="connectionToolbar" config="vm.toolbarConfig"></div>
            </div>
         </div>
     </div>
     
-    <div id="dataservice-summary-updating" ng-show="vm.dsLoading==true" class="col-md-10 row">
+    <div id="connection-summary-updating" ng-show="vm.connLoading==true" class="col-md-10 row">
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
         <span class="sr-only">Loading...</span>
     </div>
         
-    <div id="dataservice-summary-table-row" class="col-md-10 row" ng-show="vm.dsLoading==false && vm.getAllDataServices().length>0">
+    <div id="connection-summary-table-row" class="col-md-10 row" ng-show="vm.connLoading==false">
        <div class="row">
          <div class="col-md-12 list-view-container" ng-if="vm.viewType == 'listView'">
-           <div pf-list-view config="vm.listConfig" items="vm.getDataServices()">
+           <div pf-list-view config="vm.listConfig" items="vm.getConnections()">
              <div class="list-view-pf-description">
                <div class="list-group-item-heading">
                  {{item.keng__id}}
-               </div>
-               <div class="list-group-item-text">
-                 {{item.tko__description}}
                </div>
              </div>
              <!--
@@ -63,12 +45,9 @@
            </div>
          </div>
          <div class="col-md-12 card-view-container" ng-if="vm.viewType == 'cardView'">
-           <div pf-card-view config="vm.listConfig" items="vm.getDataServices()">
+           <div pf-card-view config="vm.listConfig" items="vm.getConnections()">
              <div class="col-md-12">
                <span>{{item.keng__id}}</span>
-             </div>
-             <div class="col-md-12">
-               <span>{{item.tko__description}}</span>
              </div>
            </div>
          </div>

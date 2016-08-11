@@ -8,9 +8,9 @@
         .module(pluginName)
         .controller('DataServicePageController', DataServicePageController);
 
-    DataServicePageController.$inject = ['$scope', 'SYNTAX', 'CONFIG', 'RepoRestService', 'DSSelectionService'];
+    DataServicePageController.$inject = ['$scope', 'SYNTAX', 'CONFIG', 'RepoRestService', 'DSSelectionService', 'ConnectionSelectionService'];
 
-    function DataServicePageController($scope, syntax, config, RepoRestService, DSSelectionService) {
+    function DataServicePageController($scope, syntax, config, RepoRestService, DSSelectionService, ConnectionSelectionService) {
         var vm = this;
 
         /*
@@ -27,6 +27,10 @@
         var CLONE_DATASERVICE_PAGE = 'dataservice-clone';
         var TEST_DATASERVICE_PAGE = 'dataservice-test';
         var CONNECTION_SUMMARY_PAGE = 'connection-summary';
+        var NEW_CONNECTION_PAGE = 'connection-new';
+        var IMPORT_CONNECTION_PAGE = 'connection-import';
+        var EDIT_CONNECTION_PAGE = 'connection-edit';
+        var CLONE_CONNECTION_PAGE = 'connection-clone';
         var DATASOURCE_SUMMARY_PAGE = 'datasource-summary';
         var EXPORT_DATASERVICE_PAGE = 'dataservice-export';
 
@@ -87,6 +91,34 @@
                             pluginDirName + syntax.FORWARD_SLASH +
                             'connections' + syntax.FORWARD_SLASH + CONNECTION_SUMMARY_PAGE + syntax.DOT + syntax.HTML
         };
+        pages[NEW_CONNECTION_PAGE] = {
+            id: NEW_CONNECTION_PAGE,
+            title: 'New Connection',
+            template: config.pluginDir + syntax.FORWARD_SLASH +
+                    pluginDirName + syntax.FORWARD_SLASH +
+                    'connections' + syntax.FORWARD_SLASH + NEW_CONNECTION_PAGE + syntax.DOT + syntax.HTML
+        };
+        pages[IMPORT_CONNECTION_PAGE] = {
+            id: IMPORT_CONNECTION_PAGE,
+            title: 'Import Connection',
+            template: config.pluginDir + syntax.FORWARD_SLASH +
+                            pluginDirName + syntax.FORWARD_SLASH +
+                            'connections' + syntax.FORWARD_SLASH + IMPORT_CONNECTION_PAGE + syntax.DOT + syntax.HTML
+        };
+        pages[EDIT_CONNECTION_PAGE] = {
+            id: EDIT_CONNECTION_PAGE,
+            title: 'Edit Connection',
+            template: config.pluginDir + syntax.FORWARD_SLASH +
+                            pluginDirName + syntax.FORWARD_SLASH +
+                            'connections' + syntax.FORWARD_SLASH + EDIT_CONNECTION_PAGE + syntax.DOT + syntax.HTML
+        };
+        pages[CLONE_CONNECTION_PAGE] = {
+            id: CLONE_CONNECTION_PAGE,
+            title: 'Clone Connection',
+            template: config.pluginDir + syntax.FORWARD_SLASH +
+                            pluginDirName + syntax.FORWARD_SLASH +
+                            'connections' + syntax.FORWARD_SLASH + CLONE_CONNECTION_PAGE + syntax.DOT + syntax.HTML
+        };
         pages[DATASOURCE_SUMMARY_PAGE] = {
             id: DATASOURCE_SUMMARY_PAGE,
             title: 'Datasource Summary',
@@ -104,6 +136,13 @@
          */
         vm.selectedDataservice = function () {
             return DSSelectionService.selectedDataService();
+        };
+        
+        /*
+         * Service : get selected connection
+         */
+        vm.selectedConnection = function () {
+            return ConnectionSelectionService.selectedConnection();
         };
         
         vm.selectPage(DATASERVICE_SUMMARY_PAGE);

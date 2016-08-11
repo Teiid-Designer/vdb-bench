@@ -290,21 +290,6 @@
         };
 
         /**
-         * Service: return the list of data sources.
-         * Returns: promise object for the data source collection
-         */
-        service.getDataSources = function (serviceType) {
-            var url = REST_URI.WORKSPACE + REST_URI.DATA_SOURCES;
-
-            if (serviceType === REST_URI.TEIID_SERVICE)
-                url = REST_URI.TEIID + REST_URI.DATA_SOURCES;
-
-            return getRestService().then(function (restService) {
-                return restService.all(url).getList();
-            });
-        };
-
-        /**
          * Service: return the list of data services.
          * Returns: promise object for the data service collection
          */
@@ -313,6 +298,18 @@
 
             return getRestService().then(function (restService) {
                 return restService.all(url).getList();
+            });
+        };
+
+        /**
+         * Service: Get a data service from the repository
+         */
+        service.getDataService = function (dataserviceName) {
+            return getRestService().then(function (restService) {
+                if (!dataserviceName)
+                    return null;
+
+                return restService.one(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + dataserviceName).get();
             });
         };
 
@@ -403,14 +400,114 @@
         };
 
         /**
-         * Service: Get a data service from the repository
+         * Service: return the list of data sources.
+         * Returns: promise object for the data source collection
          */
-        service.getDataService = function (dataserviceName) {
+        service.getDataSources = function (serviceType) {
+            var url = REST_URI.WORKSPACE + REST_URI.DATA_SOURCES;
+
+            if (serviceType === REST_URI.TEIID_SERVICE)
+                url = REST_URI.TEIID + REST_URI.DATA_SOURCES;
+
             return getRestService().then(function (restService) {
-                if (!dataserviceName)
+                return restService.all(url).getList();
+            });
+        };
+
+        /**
+         * Service: Get a datasource from the repository
+         */
+        service.getDataSource = function (datasourceName) {
+            return getRestService().then(function (restService) {
+                if (!datasourceName)
                     return null;
 
-                return restService.one(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + dataserviceName).get();
+                return restService.one(REST_URI.WORKSPACE + REST_URI.DATA_SOURCES + SYNTAX.FORWARD_SLASH + datasourceName).get();
+            });
+        };
+        
+       /**
+         * Service: create a new datasource in the repository
+         */
+        service.createDataSource = function (datasourceName) {
+            if (!datasourceName) {
+                throw RestServiceException("Data source name is not defined");
+            }
+
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "keng__id": datasourceName,
+                    "keng__dataPath": "/tko:komodo/tko:workspace/"+datasourceName,
+                    "keng__kType": "Datasource"
+                };
+
+                var uri = REST_URI.WORKSPACE + REST_URI.DATA_SOURCES + SYNTAX.FORWARD_SLASH + datasourceName;
+                return restService.all(uri).post(payload);
+            });
+        };
+        
+        /**
+         * Service: clone a datasource in the repository
+         */
+        service.cloneDataSource = function (datasourceName, newDatasourceName) {
+            if (!datasourceName || !newDatasourceName) {
+                throw RestServiceException("Data source name or source name for clone are not defined");
+            }
+
+            return getRestService().then(function (restService) {
+                return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SOURCES_CLONE + SYNTAX.FORWARD_SLASH + datasourceName).post(newDatasourceName);
+            });
+        };
+
+        /**
+         * Service: update an existing datasource in the repository
+         */
+        service.updateDataSource = function (datasourceName, datasourceDescription) {
+            if (!datasourceName || !datasourceDescription) {
+                throw RestServiceException("Data source name or description for update are not defined");
+            }
+            
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "keng__id": datasourceName,
+                    "keng__dataPath": "/tko:komodo/tko:workspace/"+datasourceName,
+                    "keng__kType": "Datasource",
+                    "tko__description": datasourceDescription
+                };
+
+                return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SOURCES + SYNTAX.FORWARD_SLASH + datasourceName).customPUT(payload);
+            });
+        };
+
+        /**
+         * Service: delete a datasource from the resposiory
+         */
+        service.deleteDataSource = function (datasourceName) {
+            if (!datasourceName) {
+                throw RestServiceException("Data source name for delete is not defined");
+            }
+
+            return getRestService().then(function (restService) {
+
+                return restService.one(REST_URI.WORKSPACE + REST_URI.DATA_SOURCES + SYNTAX.FORWARD_SLASH + datasourceName).remove();
+            });
+        };
+
+        /**
+         * Service: deploy a datasource from the resposiory
+         */
+        service.deployDataSource = function (datasourceName) {
+            if (!datasourceName) {
+                throw RestServiceException("Data source name for deploy is not defined");
+            }
+
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "path": "/tko:komodo/tko:workspace/"+datasourceName
+                };
+
+                var uri = REST_URI.TEIID + REST_URI.DATA_SOURCE;
+                return restService.all(uri).post(payload);
             });
         };
 
