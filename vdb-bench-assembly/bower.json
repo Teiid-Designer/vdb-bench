@@ -39,7 +39,8 @@
     "angular-base64": "^2.0.5",
     "angular-ui-grid": "^3.2.1",
     "angular-patternfly": "^3.6.0",
-    "angular-wizard": "^0.6.1"
+    "angular-wizard": "^0.6.1",
+    "hawtio-extension-service": "^2.0.3"
   },
   "devDependencies": {
     "bootstrap": "~3.3.5",

@@ -2,6 +2,9 @@ node_modules/
 libs/
 
 # Generated template cache script
+app/vdb-bench-app-templates.js
+
+# Generated template cache script
 plugins/vdb-bench-templates.js
 
 # Generated css stylesheet

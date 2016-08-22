@@ -36,7 +36,7 @@
     <!-- endinject -->
     <!-- endbuild -->
 
-    <!-- build:js libs/libs-optimized.js -->
+    <!-- build:libsJs libs/libs-optimized.js -->
     <!-- inject-vendor:js -->
     <script src="libs/jquery/dist/jquery.js"></script>
     <script src="libs/angular/angular.js"></script>
@@ -111,7 +111,7 @@
     <!-- endinject -->
     <!-- endbuild -->
 
-    <!-- build:js1 plugins/plugins-optimized.js -->
+    <!-- build:pluginsJs plugins/plugins-optimized.js -->
     <!-- vdb-bench-templates -->
     <script src="plugins/vdb-bench-templates.js"></script>
     <!-- endinject -->
@@ -199,20 +199,30 @@
     <script src="plugins/vdb-bench-dataservice/import/dsImportFileWizard.js"></script>
     <script src="plugins/vdb-bench-dataservice/import/dsImportGitWizard.js"></script>
     <!-- endinject -->
+    <!-- endbuild -->
 
+    <!-- build:appJs app/app-optimized.js -->
+    <!-- vdb-bench-app-templates -->
+    <script src="app/vdb-bench-app-templates.js"></script>
+    <!-- endinject -->
+
+    <!-- vdb-bench-app -->
+    <script src="app/vdb-bench-app.js"></script>
+    <!-- endinject -->
     <!-- endbuild -->
 
 </head>
 
-<body>
-    <nav class="navbar navbar-default navbar-fixed-top navbar-pf" role="navigation">
+<body ng-controller="App.AppController as vm">
+    <div ng-show="vm.isAuthenticated()">
+        <nav class="navbar navbar-default navbar-fixed-top navbar-pf ng-cloak" role="navigation">
         <div class="navbar-header" hawtio-extension name="hawtio-header">
             <a class="navbar-brand"><img src="img/hawtio_logo.svg"></a>
         </div>
-        <ul class="nav navbar-nav navbar-utility">
+        <ul class="nav navbar-nav navbar-utility ng-cloak">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <span class="pficon pficon-user"></span> User <b class="caret"></b>
+                    <span class="pficon pficon-user"></span> {{vm.getUsername()}}<b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu" hawtio-extension name="hawtio-user">
                     <!--
@@ -227,6 +237,7 @@
         <ul class="nav navbar-nav navbar-primary" hawtio-main-nav></ul>
         <ul class="nav navbar-nav navbar-persistent" hawtio-sub-tabs></ul>
     </nav>
+    </div>
 
     <div id="main" class="container-fluid ng-cloak" ng-controller="HawtioNav.ViewController">
         <div ng-include src="viewPartial"></div>

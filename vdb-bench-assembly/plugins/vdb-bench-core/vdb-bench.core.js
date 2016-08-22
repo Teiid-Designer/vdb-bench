@@ -6,7 +6,8 @@
          * Angular modules
          */
         'restangular',
-        'base64'
+        'base64',
+        'hawtio-extension-service'
 
         /*
          * Our reusable cross app code modules

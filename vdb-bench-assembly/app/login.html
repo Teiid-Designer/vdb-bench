@@ -1,0 +1,25 @@
+<div id="vdb-login" ng-controller="App.LoginController as vm">
+
+    <form id="vdb-login-form" name="login" ng-submit="vm.doLogin()">
+
+        <label class="vdb-login-form-label" for="username">Username:</label>
+        <input class="vdb-login-form-user" id="username" type="text" required ng-model="vm.entity.username" autofill autofocus>
+
+        <label class="vdb-login-form-label" for="username">Password:</label>
+        <input class="vdb-login-form-pswd" id="password" type="password" required ng-model="vm.entity.password" autofill>
+
+        <div id="vdb-login-form-lower">
+
+            <input class="vdb-login-form-input-checkbox" id="rememberMe" type="checkbox" ng-model="vm.rememberMe">
+            <label class="vdb-login-form-label vdb-login-form-check-label" for="checkbox">Keep me logged in</label>
+
+            <input class="vdb-login-form-input-submit" type="submit" value="Login">
+        </div>
+
+    </form>
+
+    <div id="vdb-login-error">
+        <p>{{vm.loginError}}</p>
+    </div>
+
+</div>

@@ -16,7 +16,7 @@
     // run phase. The exception is constants which being constant are available in both.
     //
     configure.$inject = ['$routeProvider', '$locationProvider', 'CONFIG', 'SYNTAX'];
-    run.$inject = ['HawtioNav', 'preferencesRegistry', '$templateCache', 'SYNTAX'];
+    run.$inject = ['HawtioNav', 'preferencesRegistry', '$templateCache', 'SYNTAX', 'AuthService'];
 
     function configure($routeProvider, $locationProvider, config, syntax) {
         $locationProvider.html5Mode(true);
@@ -29,7 +29,12 @@
             });
     }
 
-    function run(nav, preferencesRegistry, $templateCache, syntax) {
+    function run(nav, preferencesRegistry, $templateCache, syntax, AuthService) {
+        //
+        // Check with the login service that we can display this plugin
+        //
+        AuthService.redirect();
+
         var builder = nav.builder();
         nav.add(builder.id(pluginName)
                    .href(

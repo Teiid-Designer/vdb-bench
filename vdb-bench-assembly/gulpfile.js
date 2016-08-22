@@ -32,11 +32,23 @@ var pkg = require('./package.json');
 // Configure some regularly used config variables
 var config = {
     main: '.',
-    js: 'plugins/**/*.js',
-    less: ['plugins/**/content/**/*.less'],
-    html: ['plugins/**/*.html'],
+    app: {
+        name: 'app',
+        root: 'app/',
+        js: 'app/**/*.js',
+        less: 'app/**/content/**/*.less',
+        html: ['app/**/*.html'],
+        templateModule: pkg.name + '-app-templates',
+    },
+    plugins: {
+        name: 'plugins',
+        root: 'plugins/',
+        js: 'plugins/**/*.js',
+        less: 'plugins/**/content/**/*.less',
+        html: ['plugins/**/*.html'],
+        templateModule: pkg.name + '-templates',
+    },
     css: 'styles.css',
-    templateModule: pkg.name + '-templates',
     libFiles: 'libs/**/*.{png,gif,jpg,svg,woff,woff2,eot,ttf,otf,css}',
     releaseDest: 'target/site'
 };
@@ -62,7 +74,7 @@ gulp.task('bower', function () {
  * Task for checking js syntax in source file
  */
 gulp.task('jshint', function () {
-    return gulp.src(config.js)
+    return gulp.src([config.app.js, config.plugins.js])
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish'));
 });
@@ -72,7 +84,7 @@ gulp.task('jshint', function () {
  * then into a single .css file at css/styles.css
  */
 gulp.task('less', function () {
-    gulp.src(config.less)
+    gulp.src([config.app.less, config.plugins.less])
         .pipe(plugins.less({
             paths: [path.join(__dirname, 'less', 'includes')]
         }))
@@ -91,16 +103,28 @@ gulp.task('less', function () {
  * necessary since the hawtio-template-cache
  * requires these files to be in the cache.
  */
-gulp.task('template', function () {
-    return gulp.src(config.html)
+gulp.task('plugin-templates', function () {
+    return gulp.src(config.plugins.html)
         .pipe(plugins.angularTemplatecache({
             filename: config.templateModule + '.js',
-            root: 'plugins/',
+            root: config.plugins.root,
             standalone: true,
-            module: config.templateModule,
-            templateFooter: '}]); hawtioPluginLoader.addModule("' + config.templateModule + '");'
+            module: config.plugins.templateModule,
+            templateFooter: '}]); hawtioPluginLoader.addModule("' + config.plugins.templateModule + '");'
         }))
-        .pipe(gulp.dest('plugins'));
+        .pipe(gulp.dest(config.plugins.name));
+});
+
+gulp.task('app-templates', function () {
+    return gulp.src(config.app.html)
+        .pipe(plugins.angularTemplatecache({
+            filename: config.app.templateModule + '.js',
+            root: config.app.root,
+            standalone: true,
+            module: config.app.templateModule,
+            templateFooter: '}]); hawtioPluginLoader.addModule("' + config.app.templateModule + '");'
+        }))
+        .pipe(gulp.dest(config.app.name));
 });
 
 /*
@@ -108,9 +132,14 @@ gulp.task('template', function () {
  * and call other tasks if they do change.
  */
 gulp.task('watch', ['build'], function () {
-    plugins.watch(['libs/**/*.{js,css}', 'index.html', config.less, config.html, config.js, '!plugins/' + config.templateModule + '.js'], function () {
-        gulp.start('reload', ['jshint', 'less', 'template']);
-    });
+    plugins.watch(['libs/**/*.{js, css}', 'index.html',
+                            config.app.root + '**/*.{js, less, html}',
+                            config.plugins.root + '**/*.{js, less, html}',
+                            '!' + config.plugins.root + config.plugins.templateModule + '.js',
+                            '!' + config.app.root + config.app.templateModule + '.js'
+                         ], function () {
+                            gulp.start('reload', ['jshint', 'less', 'plugin-templates', 'app-templates']);
+                         });
 });
 
 /*
@@ -156,7 +185,10 @@ gulp.task('reload', function () {
  */
 gulp.task('site-files', function () {
     // Copy images and lib artifacts to site
-    return gulp.src(['favicon.ico', 'img/**', 'plugins/*/content/img/**', config.libFiles], {
+    return gulp.src(['favicon.ico', 'img/**',
+                            config.app.root + '**/content/img/**',
+                            config.plugins.root + '**/content/img/**',
+                            config.libFiles], {
             base: '.'
         })
         .pipe(plugins.debug({
@@ -183,8 +215,9 @@ gulp.task('usemin', ['site-files'], function () {
     return gulp.src('index.html')
         .pipe(plugins.usemin({
             css: [plugins.cleanCss(), 'concat'],
-            js: [plugins.uglify(), plugins.rev()],
-            js1: [plugins.ngAnnotate(), plugins.uglify(), plugins.rev()]
+            libsJs: [plugins.uglify(), plugins.rev()],
+            pluginsJs: [plugins.ngAnnotate(), plugins.uglify(), plugins.rev()],
+            appJs: [plugins.ngAnnotate(), plugins.uglify(), plugins.rev()]
         }))
         .pipe(plugins.debug({
             title: 'usemin'
@@ -240,7 +273,7 @@ gulp.task('mvn', ['build', 'site']);
 /*
  * Task to build the project
  */
-gulp.task('build', ['bower', 'jshint', 'less', 'template']);
+gulp.task('build', ['bower', 'jshint', 'less', 'app-templates', 'plugin-templates']);
 
 /*
  * Task to build, launch the Rest test server and

@@ -13,9 +13,10 @@
 
     RepoRestService.$inject = ['CONFIG', 'SYNTAX', 'REST_URI', 'VDB_SCHEMA',
                                              'VDB_KEYS', 'RepoSelectionService', 'Restangular',
-                                             '$http', '$q', '$base64'];
+                                             '$http', '$q', '$base64', 'AuthService'];
 
-    function RepoRestService(CONFIG, SYNTAX, REST_URI, VDB_SCHEMA, VDB_KEYS, RepoSelectionService, Restangular, $http, $q, $base64) {
+    function RepoRestService(CONFIG, SYNTAX, REST_URI, VDB_SCHEMA, VDB_KEYS, RepoSelectionService,
+                                            Restangular, $http, $q, $base64, AuthService) {
 
         /*
          * Service instance to be returned
@@ -55,6 +56,20 @@
             return vdb.keng__dataPath.indexOf('tko:teiidCache') > -1;
         }
 
+        function basicAuthHeader(username, password) {
+            var authInfo = username + SYNTAX.COLON + password;
+            authInfo = $base64.encode(authInfo);
+            return "Basic " + authInfo;
+        }
+
+        function authHeader(username, password) {
+            return {'Authorization': basicAuthHeader(username, password)};
+        }
+
+        function httpHeaders(username, password) {
+            return { headers: authHeader(username, password) };
+        }
+
         /**
          * Get the rest service based on the selected repo's baseUrl value.
          * Used in most cases when the URI has segments to be appended
@@ -65,7 +80,10 @@
             var repo = RepoSelectionService.getSelected();
             var baseUrl = url(repo);
             var restService = service.cachedServices[baseUrl];
+            var user = AuthService.credentials();
+
             if (!_.isEmpty(restService)) {
+                restService.setDefaultHeaders(authHeader(user.username, user.password));
                 //
                 // Want to be consistent in the function's return type
                 // Promise will resolve immediately upon return.
@@ -74,14 +92,15 @@
             }
 
             var testUrl = baseUrl + REST_URI.SERVICE + REST_URI.ABOUT;
-            return $http.get(testUrl).
-            then(function (response) {
-                restService = Restangular.withConfig(function (RestangularConfigurer) {
-                    RestangularConfigurer.setBaseUrl(baseUrl);
-                    RestangularConfigurer.setRestangularFields({
-                        selfLink: VDB_KEYS.LINKS + '[0].href'
+            return $http.get(testUrl, httpHeaders(user.username, user.password))
+                .then(function (response) {
+                    restService = Restangular.withConfig(function (RestangularConfigurer) {
+                        RestangularConfigurer.setBaseUrl(baseUrl);
+                        RestangularConfigurer.setRestangularFields({
+                            selfLink: VDB_KEYS.LINKS + '[0].href'
+                        });
+                        RestangularConfigurer.setDefaultHeaders(authHeader(user.username, user.password));
                     });
-                });
 
                 service.cachedServices[baseUrl] = restService;
                 return restService;
@@ -92,6 +111,22 @@
                 throw new HostNotReachableException(baseUrl, 'Status code: ' + response.status);
             });
         }
+
+        /**
+         * Service: Simple connection test.
+         */
+        service.testConnection = function(username, password) {
+            var repo = RepoSelectionService.getSelected();
+            var baseUrl = url(repo);
+            var testUrl = baseUrl + REST_URI.SERVICE + REST_URI.ABOUT;
+
+            return $http.get(testUrl, httpHeaders(username, password))
+                            .then(function (response) {
+                                return 0;
+                            }, function (response) {
+                                return 1;
+                            });
+        };
 
         /**
          * Service: Try and find the reponse's message and return it
