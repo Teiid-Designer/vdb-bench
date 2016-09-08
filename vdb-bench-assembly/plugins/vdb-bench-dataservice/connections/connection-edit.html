@@ -10,17 +10,7 @@
             <div class="row">
                 <div class="col-sm-9">
                     <h1><i class="fa fa-plug" aria-hidden="true"></i>Edit Connection '{{vmmain.selectedConnection().keng__id}}'</h1>
-                    <h3>&nbsp;&nbsp;Edit the Connection</h3>
-                    <form class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-2 control-label" for="textInput">Name</label>
-                            <div class="col-md-6">
-                              <input type="text" ng-model="nameVar" ng-init="nameVar=vmmain.selectedConnection().keng__id" class="form-control">
-                            </div>
-                        </div>
-                    </form>
-                    <button class="btn btn-primary" ng-click="vm.onUpdateConnectionClicked(nameVar)" ng-class="{active:vmmain.selectedPage.id == 'connection-edit'}"> Save</button>
-                    <button class="btn btn-default" ng-click="vmmain.selectPage('connection-summary')" ng-class="{active:vmmain.selectedPage.id == 'connection-edit'}"> Cancel</button>
+                    <attribute-widget selected="vmmain.selectedConnection()" read-only="false"></attribute-widget>
                 </div>
             </div>
         </div>

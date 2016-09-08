@@ -8,9 +8,9 @@
         .module(pluginName)
         .controller('DSSummaryController', DSSummaryController);
 
-    DSSummaryController.$inject = ['$scope', '$rootScope', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSSelectionService', 'DownloadService', 'pfViewUtils'];
+    DSSummaryController.$inject = ['$scope', '$rootScope', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSSelectionService', 'SvcSourceSelectionService', 'DownloadService', 'pfViewUtils'];
 
-    function DSSummaryController($scope, $rootScope, RepoRestService, REST_URI, SYNTAX, DSSelectionService, DownloadService, pfViewUtils) {
+    function DSSummaryController($scope, $rootScope, RepoRestService, REST_URI, SYNTAX, DSSelectionService, SvcSourceSelectionService, DownloadService, pfViewUtils) {
         var vm = this;
 
         vm.dsLoading = DSSelectionService.isLoading();
@@ -43,6 +43,13 @@
          */
         vm.getAllDataServices = function() {
             return vm.allItems;
+        };
+
+        /**
+         * Manage DataSources button click
+         */
+        vm.manageDataSources = function() {
+            SvcSourceSelectionService.refresh('datasource-summary');
         };
 
         var matchesFilter = function (item, filter) {
@@ -217,8 +224,8 @@
          * Handle edit dataservice click
          */
         var editDataServiceClicked = function( ) {
-            // Broadcast the pageChange
-            $rootScope.$broadcast("dataServicePageChanged", 'dataservice-edit');
+            // Start refresh of Service Sources, changing to edit page
+            SvcSourceSelectionService.refresh('dataservice-edit');
         };
 
         /**

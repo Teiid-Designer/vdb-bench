@@ -69,6 +69,10 @@
         function httpHeaders(username, password) {
             return { headers: authHeader(username, password) };
         }
+        
+        function getUserWorkspacePath() {
+            return "/tko:komodo/tko:workspace/" + AuthService.credentials().username;
+        }
 
         /**
          * Get the rest service based on the selected repo's baseUrl value.
@@ -192,11 +196,170 @@
         };
 
         /**
-         * Service: Remove the given vdb
-         * Returns: promise object for the removal
+         * Service: return the list of models in the specified repository VDB
+         * Returns: promise object for the VDB Model collection
          */
-        service.removeVdb = function (vdb) {
-            return vdb.remove();
+        service.getVdbModels = function (vdbName) {
+            var url = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + REST_URI.MODELS;
+
+            return getRestService().then(function (restService) {
+                return restService.all(url).getList();
+            });
+        };
+
+        /**
+         * Service: return the list of VdbModelSources in the specified repository VDB Model
+         * Returns: promise object for the VdbModelSource collection
+         */
+        service.getVdbModelSources = function (vdbName, modelName) {
+            var url = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName + REST_URI.MODEL_SOURCES;
+
+            return getRestService().then(function (restService) {
+                return restService.all(url).getList();
+            });
+        };
+
+        /**
+         * Service: sync workspace VDBs from server
+         * Returns: promise object for the vdb collection
+         */
+        /**
+         * Service: create a new VDB in the repository
+         */
+        service.copyServerVdbsToWorkspace = function ( ) {
+            return getRestService().then(function (restService) {
+                var uri = REST_URI.TEIID + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + REST_URI.COPY_TO_REPO;
+                return restService.all(uri).post();
+            });
+        };
+
+        /**
+         * Service: create a new VDB in the repository
+         */
+        service.createVdb = function (vdbName, vdbDescription) {
+            if (!vdbName) {
+                throw RestServiceException("VDB name is not defined");
+            }
+
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "keng__id": vdbName,
+                    "keng__dataPath": getUserWorkspacePath()+"/"+vdbName,
+                    "keng__kType": "Vdb",
+                    "vdb__name": vdbName,
+                    "vdb__description": vdbDescription
+                };
+
+                var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName;
+                return restService.all(uri).post(payload);
+            });
+        };
+
+        /**
+         * Service: create a new VDB in the repository
+         */
+        service.createVdbModel = function (vdbName, modelName) {
+            if (!vdbName || !modelName) {
+                throw RestServiceException("VDB name or model name is not defined");
+            }
+
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "keng__id": modelName,
+                    "keng__dataPath": getUserWorkspacePath()+"/"+vdbName+"/"+modelName,
+                    "keng__kType": "Model",
+                    "mmcore__modelType": "PHYSICAL"
+                };
+
+                var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + SYNTAX.FORWARD_SLASH + REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName;
+                return restService.all(uri).post(payload);
+            });
+        };
+
+        /**
+         * Service: create a new VDB in the repository
+         */
+        service.createVdbModelSource = function (vdbName, modelName, sourceName, transName, jndiName) {
+            if (!vdbName || !modelName || !sourceName) {
+                throw RestServiceException("VDB name, modelName or sourceName is not defined");
+            }
+            if (!transName || !jndiName) {
+                throw RestServiceException("Translator name or JNDI name is not defined");
+            }
+
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "keng__id": sourceName,
+                    "keng__dataPath": getUserWorkspacePath()+"/"+vdbName+"/"+modelName+"/vdb:sources/"+sourceName,
+                    "keng__kType": "VdbModelSource",
+                    "vdb__sourceJndiName": jndiName,
+                    "vdb__sourceTranslator": transName
+                };
+
+                var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + 
+                          REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName + 
+                          REST_URI.MODEL_SOURCES + SYNTAX.FORWARD_SLASH + sourceName;
+                return restService.all(uri).post(payload);
+            });
+        };
+        
+        /**
+         * Service: delete a vdb from the resposiory
+         */
+        service.deleteVdb = function (vdbName) {
+            if (!vdbName) {
+                throw RestServiceException("Vdb name for delete is not defined");
+            }
+
+            return getRestService().then(function (restService) {
+
+                return restService.one(REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName).remove();
+            });
+        };
+
+        /**
+         * Service: delete a vdb from the resposiory
+         */
+        service.deleteTeiidVdb = function (vdbName) {
+            if (!vdbName) {
+                throw RestServiceException("Vdb name for delete is not defined");
+            }
+
+            return getRestService().then(function (restService) {
+
+                return restService.one(REST_URI.TEIID + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName).remove();
+            });
+        };
+
+        /**
+         * Service: clone a Vdb in the repository
+         */
+        service.cloneVdb = function (vdbName, newVdbName) {
+            if (!vdbName || !newVdbName) {
+                throw RestServiceException("Vdb name or name for the copy are not defined");
+            }
+
+            return getRestService().then(function (restService) {
+                return restService.all(REST_URI.WORKSPACE + REST_URI.VDBS_CLONE + SYNTAX.FORWARD_SLASH + vdbName).post(newVdbName);
+            });
+        };
+
+        /**
+         * Service: deploy a vdb from the resposiory
+         */
+        service.deployVdb = function (vdbName) {
+            if (!vdbName) {
+                throw RestServiceException("VDB name for deploy is not defined");
+            }
+            
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "path": getUserWorkspacePath()+"/"+vdbName
+                };
+
+                var uri = REST_URI.TEIID + REST_URI.VDB;
+                return restService.all(uri).post(payload);
+            });
         };
 
         /**
@@ -219,7 +382,7 @@
             //
             // Valid formats currently implemented
             //
-            var validFormats = ['zip', '-vdb.xml', 'tds', 'ddl'];
+            var validFormats = ['zip', '-vdb.xml', 'tds', 'ddl', 'jar'];
             var documentType = null;
             validFormats.forEach( function(format) {
                 if (fileName.endsWith(format)) {
@@ -266,11 +429,11 @@
          * Service: Upload the given file data. Uses the file storage connector.
          * Returns: promise object for the uploaded item
          */
-        service.upload = function(documentType, data) {
+        service.upload = function(documentType, parameters, data) {
             if (!documentType)
                 return null;
 
-            return service.import('file', {}, documentType, data);
+            return service.import('file', parameters, documentType, data);
         };
 
         /**
@@ -359,7 +522,7 @@
             return getRestService().then(function (restService) {
                 var payload = {
                     "keng__id": dataserviceName,
-                    "keng__dataPath": "/tko:komodo/tko:workspace/"+dataserviceName,
+                    "keng__dataPath": getUserWorkspacePath()+"/"+dataserviceName,
                     "keng__kType": "Dataservice",
                     "tko__description": dataserviceDescription
                 };
@@ -393,7 +556,7 @@
             return getRestService().then(function (restService) {
                 var payload = {
                     "keng__id": dataserviceName,
-                    "keng__dataPath": "/tko:komodo/tko:workspace/"+dataserviceName,
+                    "keng__dataPath": getUserWorkspacePath()+"/"+dataserviceName,
                     "keng__kType": "Dataservice",
                     "tko__description": dataserviceDescription
                 };
@@ -424,9 +587,11 @@
                 throw RestServiceException("Data service name for deploy is not defined");
             }
 
+            var dataservicePath = getUserWorkspacePath() + "/" +dataserviceName;
+            
             return getRestService().then(function (restService) {
                 var payload = {
-                    "path": "/tko:komodo/tko:workspace/"+dataserviceName
+                    "path" : dataservicePath
                 };
 
                 var uri = REST_URI.TEIID + REST_URI.DATA_SERVICE;
@@ -439,6 +604,10 @@
          * Returns: promise object for the data source collection
          */
         service.getDataSources = function (serviceType) {
+            if (!serviceType) {
+                throw RestServiceException("DataSource serviceType not specified");
+            }
+
             var url = REST_URI.WORKSPACE + REST_URI.DATA_SOURCES;
 
             if (serviceType === REST_URI.TEIID_SERVICE)
@@ -461,19 +630,35 @@
             });
         };
         
+        /**
+         * Service: Get schema for a deployed teiid VDB model
+         */
+        service.getTeiidVdbModelSchema = function (vdbName, modelName) {
+            if(!vdbName || !modelName) {
+                throw RestServiceException("VdbName or ModelName not specified");
+            }
+            return getRestService().then(function (restService) {
+                var url = REST_URI.TEIID + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName + REST_URI.SCHEMA;
+
+                return restService.one(url).get();
+            });
+        };
+        
        /**
          * Service: create a new datasource in the repository
          */
-        service.createDataSource = function (datasourceName) {
-            if (!datasourceName) {
-                throw RestServiceException("Data source name is not defined");
+        service.createDataSource = function (datasourceName, jndiName, driverName) {
+            if (!datasourceName || !driverName || !jndiName) {
+                throw RestServiceException("Data source name, jndiName or driverName is not defined");
             }
 
             return getRestService().then(function (restService) {
                 var payload = {
                     "keng__id": datasourceName,
-                    "keng__dataPath": "/tko:komodo/tko:workspace/"+datasourceName,
-                    "keng__kType": "Datasource"
+                    "keng__dataPath": getUserWorkspacePath()+"/"+datasourceName,
+                    "keng__kType": "Datasource",
+                    "driverName": driverName,
+                    "jndiName": jndiName
                 };
 
                 var uri = REST_URI.WORKSPACE + REST_URI.DATA_SOURCES + SYNTAX.FORWARD_SLASH + datasourceName;
@@ -490,27 +675,21 @@
             }
 
             return getRestService().then(function (restService) {
+                var link = REST_URI.WORKSPACE + REST_URI.DATA_SOURCES_CLONE + SYNTAX.FORWARD_SLASH + datasourceName;
                 return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SOURCES_CLONE + SYNTAX.FORWARD_SLASH + datasourceName).post(newDatasourceName);
             });
         };
 
-        /**
+       /**
          * Service: update an existing datasource in the repository
          */
-        service.updateDataSource = function (datasourceName, datasourceDescription) {
-            if (!datasourceName || !datasourceDescription) {
-                throw RestServiceException("Data source name or description for update are not defined");
+        service.updateDataSource = function (datasourceName, jsonPayload) {
+            if (!datasourceName || !jsonPayload) {
+                throw RestServiceException("One of the inputs for update are not defined");
             }
             
             return getRestService().then(function (restService) {
-                var payload = {
-                    "keng__id": datasourceName,
-                    "keng__dataPath": "/tko:komodo/tko:workspace/"+datasourceName,
-                    "keng__kType": "Datasource",
-                    "tko__description": datasourceDescription
-                };
-
-                return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SOURCES + SYNTAX.FORWARD_SLASH + datasourceName).customPUT(payload);
+                return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SOURCES + SYNTAX.FORWARD_SLASH + datasourceName).customPUT(jsonPayload);
             });
         };
 
@@ -538,10 +717,47 @@
 
             return getRestService().then(function (restService) {
                 var payload = {
-                    "path": "/tko:komodo/tko:workspace/"+datasourceName
+                    "path": getUserWorkspacePath()+"/"+datasourceName
                 };
 
                 var uri = REST_URI.TEIID + REST_URI.DATA_SOURCE;
+                return restService.all(uri).post(payload);
+            });
+        };
+
+        /**
+         * Service: return the list of drivers.
+         * Returns: promise object for the driver collection
+         */
+        service.getDrivers = function (serviceType) {
+            if (!serviceType) {
+                throw RestServiceException("Driver serviceType not specified");
+            }
+
+            var url = REST_URI.WORKSPACE + REST_URI.DRIVERS;
+
+            if (serviceType === REST_URI.TEIID_SERVICE)
+                url = REST_URI.TEIID + REST_URI.DRIVERS;
+
+            return getRestService().then(function (restService) {
+                return restService.all(url).getList();
+            });
+        };
+
+        /**
+         * Service: deploy a driver from the resposiory
+         */
+        service.deployDriver = function (driverName) {
+            if (!driverName) {
+                throw RestServiceException("Driver name for deploy is not defined");
+            }
+
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "path": getUserWorkspacePath()+"/"+driverName
+                };
+
+                var uri = REST_URI.TEIID + REST_URI.DRIVER;
                 return restService.all(uri).post(payload);
             });
         };

@@ -124,11 +124,14 @@
                 //
                 reader.onload = function (event) {
                     var data = event.target.result;
-
+                    var parameters = {};
+                    if(documentType === 'jar') {
+                        parameters = {'driverName':fName};
+                    }
                     //
                     // Attempt to upload the file to the workspace
                     //
-                    RepoRestService.upload(documentType, data).then(
+                    RepoRestService.upload(documentType, parameters, data).then(
                         function (importStatus) {
                             vm.showProgress(false);
                             setError(null);

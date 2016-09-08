@@ -7,7 +7,7 @@
     
     <div id="connection-summary-table-row" class="col-md-10 row">
         <h1><i class="fa fa-plug" aria-hidden="true"></i> Connections </h1>
-        <div id="connection-action-row" class="pull-right">
+        <div id="connection-action-row">
             <a href ng-click="vmmain.selectPage('connection-new',null)"><span class="fa fa-plus"></span> New Connection</a>&nbsp;&nbsp;
             <a href ng-click="vmmain.selectPage('connection-import',null)"><span class="pficon pficon-import"></span> Import Connection</a>
         </div>
@@ -31,14 +31,23 @@
                <div class="list-group-item-heading">
                  {{item.keng__id}}
                </div>
+               <div class="list-group-item-text">
+                   <table>
+                       <tr>
+                         <td width="15%"><span class="label label-info">New</span></td>
+                         <td width="10%">{{item.tko__driverName}}</td>
+                         <td width="10%">{{item.tko__jndiName}}</td>
+                       </tr>
+                   </table>
+               </div>
              </div>
              <!--
              <div class="list-view-pf-additional-info">
                <div class="list-view-pf-additional-info-item">
-                 temp
+                 {{item.tko__driverName}}
                </div>
                <div class="list-view-pf-additional-info-item">
-                 temp2
+                 {{item.tko__jndiName}}
                </div>
              </div>
              -->

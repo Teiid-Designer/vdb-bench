@@ -44,7 +44,7 @@
         vm.getAllConnections = function() {
             return vm.allItems;
         };
-
+        
         var matchesFilter = function (item, filter) {
           var match = true;
      
@@ -175,7 +175,7 @@
                             alert("Connection Deployment Successful!");
                         } else {
                             ConnectionSelectionService.setDeploying(false, selConnName, false, result.Information.ErrorMessage1);
-                            alert("Connection Deployment Failed!");
+                            alert("Connection Deployment Failed! \n"+result.Information.ErrorMessage1);
                         }
                    },
                     function (response) {
@@ -185,7 +185,6 @@
             } catch (error) {} finally {
                 vm.deploymentSuccess = false;
                 vm.deploymentMessage = null;
-                alert("Connection Deployment Failed!");
                 ConnectionSelectionService.setDeploying(false);
             }
         };

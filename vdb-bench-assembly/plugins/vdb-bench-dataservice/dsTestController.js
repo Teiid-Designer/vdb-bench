@@ -56,7 +56,7 @@
             if( vdbName === SYNTAX.UNKNOWN || vdbVersion === SYNTAX.UNKNOWN || modelName === SYNTAX.UNKNOWN || serviceView === SYNTAX.UNKNOWN )
                 return "Not Available";
             
-            return "http://" + hostName + ":" + portValue + "/odata4/"+ vdbName + "." + vdbVersion + "/" + modelName + "/" + serviceView + "?$format=JSON";
+            return "https://" + hostName + ":" + portValue + "/odata4/"+ vdbName + "." + vdbVersion + "/" + modelName + "/" + serviceView + "?$format=JSON";
         };
 
         /*

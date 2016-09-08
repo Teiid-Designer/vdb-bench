@@ -11,9 +11,9 @@
         .module('vdb-bench.core')
         .factory('ConnectionSelectionService', ConnectionSelectionService);
 
-    ConnectionSelectionService.$inject = ['SYNTAX', 'RepoRestService', 'DownloadService', '$rootScope'];
+    ConnectionSelectionService.$inject = ['SYNTAX', 'REST_URI', 'RepoRestService', 'DownloadService', '$rootScope'];
 
-    function ConnectionSelectionService(SYNTAX, RepoRestService, DownloadService, $rootScope) {
+    function ConnectionSelectionService(SYNTAX, REST_URI, RepoRestService, DownloadService, $rootScope) {
 
         var conn = {};
         conn.loading = false;
@@ -37,13 +37,13 @@
         }
 
         /**
-         * Fetch the connections for the repository
+         * Fetch the connections from CachedTeiid
          */
         function initConnections() {
             setLoading(true);
 
             try {
-                RepoRestService.getDataSources( ).then(
+                RepoRestService.getDataSources(REST_URI.TEIID_SERVICE).then(
                     function (newDataSources) {
                         RepoRestService.copy(newDataSources, conn.connections);
                         setLoading(false);
@@ -60,10 +60,10 @@
                 alert("An exception occurred:\n" + error.message);
             }
 
-            // Removes any outdated selections
+            // Removes any outdated selection
             service.selectConnection(null);
         }
-
+        
         /*
          * Are the connections currently loading
          */
@@ -116,6 +116,13 @@
          */
         service.getConnections = function() {
             return conn.connections;
+        };
+
+        /*
+         * Get the connection statue
+         */
+        service.getConnectionState = function(connection) {
+            return "New";
         };
 
         /*

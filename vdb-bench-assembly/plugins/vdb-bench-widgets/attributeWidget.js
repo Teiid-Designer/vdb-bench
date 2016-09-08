@@ -14,9 +14,10 @@
             controller: AttributeController,
             controllerAs: 'vm',
             bindToController: {
-                component: '=selected'
+                component: '=selected',
+                readOnly : '@'
             },
-            template: "<div hawtio-form-2=\"vm.widgetConfiguration\" entity=\"vm.component\"></div>"
+            template: "<div hawtio-form-2=\"vm.widgetConfiguration\" entity=\"vm.component\"></div><div class=\"row\"><div class=\"col-sm-9\"><button class=\"btn btn-primary\" ng-click=\"vm.onSaveClicked()\" ng-show=\"vm.readOnly=='false'\"> Save</button></div></div>"
         };
 
         return directive;
@@ -34,24 +35,34 @@
                 return;
             }
 
-            try {
-                //
-                // Fetch the schema for this type of component from the server
-                //
-                RepoRestService.getSchemaByKType(vm.component[VDB_KEYS.TYPE]).then(
-                    function (content) {
-                        var widgetConfig = buildAttributeWidgets(content, vm.component);
-                        vm.widgetConfiguration = widgetConfig;
-                    },
-                    function (response) {
-                        var widgetConfig = buildAttributeWidgets();
-                        vm.widgetConfiguration = widgetConfig;
-                    });
-            } catch (error) {
-                console.error("Error occurred: ", error.message);
+            if(angular.equals(current,original)) {
+                try {
+                    //
+                    // Fetch the schema for this type of component from the server
+                    //
+                     RepoRestService.getSchemaByKType(vm.component[VDB_KEYS.TYPE]).then(
+                        function (content) {
+                            var widgetConfig = buildAttributeWidgets(content, vm.component);
+                            vm.widgetConfiguration = widgetConfig;
+                        },
+                        function (response) {
+                            var widgetConfig = buildAttributeWidgets();
+                            vm.widgetConfiguration = widgetConfig;
+                        });
+                } catch (error) {
+                    console.error("Error occurred: ", error.message);
+                }
             }
-        });
+            
+            // Objects same
+            if(angular.equals(current,original)) {
+                return;
+            } else {
+                // Enable a save button.
+            }
 
+        }, true);
+        
         function buildAttributeWidgets(schema, component) {
             //
             // Get the description of the object from the schema
@@ -107,9 +118,11 @@
                 ddlConfigProperty.formTemplate = ddlTemplate;
 
                 //  Set all properties read-only for now
-                ddlConfigProperty[HAWTIO_FORM.INPUT_ATTR] = {
-                    'readOnly': 'true'
-                };
+                if(vm.readOnly == "true") {
+                    ddlConfigProperty[HAWTIO_FORM.INPUT_ATTR] = {
+                        'readOnly': 'true'
+                    };
+                }
                 configProperties[VDB_KEYS.DDL] = ddlConfigProperty;
             } else {
                 //
@@ -179,11 +192,13 @@
                     // Configure the attributes of the input element, eg. add a css class and
                     // make it required if the schema wants it to be
                     //
-                    configProperty[HAWTIO_FORM.INPUT_ATTR] = {
-                        "class": "property-editor-input",
-                        //  Set all properties read-only for now
-                        'readOnly': 'true'
-                    };
+                    if(vm.readOnly == "true") {
+                        configProperty[HAWTIO_FORM.INPUT_ATTR] = {
+                            "class": "property-editor-input",
+                            //  Set all properties read-only for now
+                            'readOnly': 'true'
+                        };
+                    }
                     var required = schemaProperty[VDB_SCHEMA.REQUIRED];
                     if (required == "true")
                         configProperty[HAWTIO_FORM.INPUT_ATTR].required = required;
@@ -195,6 +210,29 @@
             return angular.fromJson(widgetConfig);
         }
 
+        // Event handler for clicking the save button
+        vm.onSaveClicked = function () {
+            var componentType;
+            if (angular.isDefined(vm.component))
+                componentType = vm.component[VDB_KEYS.TYPE];
+
+            // Calls the Rest Update for the appropriate component type
+            if(componentType === "Datasource") {
+                var jsonPayload = angular.toJson(vm.component);
+                var connName = vm.component.keng__id;
+                try {
+                    RepoRestService.updateDataSource( connName, jsonPayload ).then(
+                        function () {
+                            alert("Connection saved");
+                        },
+                        function (response) {
+                            throw RepoRestService.newRestException("Failed to update the connection. \n" + response.message);
+                        });
+                } catch (error) {} finally {
+                }
+            }
+        };
+        
         function createIdWidget(configProperties) {
             var configProperty = {};
             //
@@ -218,7 +256,7 @@
             // This determines how the columns of the table are rendered
             //
             var tableSchema = {
-                description: 'Teiid Metadata Properties',
+                description: 'Properties',
                 javaType: 'org.teiid.vdb.bench.PropertyObject',
                 properties: {
                     "name": {
@@ -226,7 +264,7 @@
                         "label": "Name",
                         "input-attributes": {
                             "required": "true",
-                            //  Set all properties read-only for now
+                            //  Dont allow changing property name
                             'readOnly': 'true'
                         }
                     },
@@ -234,14 +272,17 @@
                         "type": "string",
                         "label": "Value",
                         "input-attributes": {
-                            "required": "true",
-                            //  Set all properties read-only for now
-                            'readOnly': 'true'
+                            "required": "true"
                         }
                     }
                 }
             };
 
+            // Adds readonly attribute if readOnly
+            if(vm.readOnly == "true") {
+                tableSchema.properties.value['input-attributes'].readOnly = "true";
+            }
+            
             //
             // Find suggested values for the property names, if any
             // and add them as type ahead values
@@ -272,7 +313,7 @@
             // representing the object type just built
             //
             configProperty.type = 'array';
-            configProperty.label = 'Teiid Metadata Properties';
+            configProperty.label = 'Properties';
             configProperty.items = {
                 type: tableSchemaName
             };

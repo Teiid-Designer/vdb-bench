@@ -14,9 +14,9 @@
         var vm = this;
 
         // Event handler for clicking the update button
-        vm.onUpdateConnectionClicked = function ( connectionName ) {
+        vm.onUpdateConnectionClicked = function ( jsonPayload ) {
             try {
-                RepoRestService.updateDataSource( connectionName ).then(
+                RepoRestService.updateDataSource( jsonPayload ).then(
                     function () {
                         // Reinitialise the list of connections
                         ConnectionSelectionService.refresh();
