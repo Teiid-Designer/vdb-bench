@@ -96,8 +96,10 @@
 
                         var contentType = fileType === "zip" ? 'application/zip' : 'text/plain;charset=utf-8';                        
                         var dataBlob = b64toBlob(enc, contentType);
+                        
+                        var fileExt = ( fileType == "-vdb.xml" ) ? fileType : SYNTAX.DOT + fileType;
 
-                        FileSaver.saveAs(dataBlob, name + SYNTAX.DOT + fileType);
+                        FileSaver.saveAs(dataBlob, name + fileExt);
                     },
                     function (response) {
                         throw new RepoRestService.newRestException("Failed to export the artifact ");

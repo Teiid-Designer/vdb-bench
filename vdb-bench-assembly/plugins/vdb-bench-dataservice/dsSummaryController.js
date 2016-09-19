@@ -8,9 +8,9 @@
         .module(pluginName)
         .controller('DSSummaryController', DSSummaryController);
 
-    DSSummaryController.$inject = ['$scope', '$rootScope', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSSelectionService', 'DownloadService', 'pfViewUtils'];
+    DSSummaryController.$inject = ['$scope', '$rootScope', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSSelectionService', 'SvcSourceSelectionService', 'DownloadService', 'pfViewUtils'];
 
-    function DSSummaryController($scope, $rootScope, RepoRestService, REST_URI, SYNTAX, DSSelectionService, DownloadService, pfViewUtils) {
+    function DSSummaryController($scope, $rootScope, RepoRestService, REST_URI, SYNTAX, DSSelectionService, SvcSourceSelectionService, DownloadService, pfViewUtils) {
         var vm = this;
 
         vm.dsLoading = DSSelectionService.isLoading();
@@ -43,6 +43,13 @@
          */
         vm.getAllDataServices = function() {
             return vm.allItems;
+        };
+
+        /**
+         * Manage DataSources button click
+         */
+        vm.manageDataSources = function() {
+            SvcSourceSelectionService.refresh('datasource-summary');
         };
 
         var matchesFilter = function (item, filter) {
@@ -217,8 +224,8 @@
          * Handle edit dataservice click
          */
         var editDataServiceClicked = function( ) {
-            // Broadcast the pageChange
-            $rootScope.$broadcast("dataServicePageChanged", 'dataservice-edit');
+            // Start refresh of Service Sources, changing to edit page
+            SvcSourceSelectionService.refresh('dataservice-edit');
         };
 
         /**
@@ -277,6 +284,11 @@
                     theAction.isDisabled = enabled;
                 }
             });
+            vm.actionsConfig.moreActions.forEach(function (theAction) {
+                if(theAction.name!=='New' && theAction.name!='Import') {
+                    theAction.isDisabled = enabled;
+                }
+            });
         };   
         
         /**
@@ -285,26 +297,11 @@
        vm.actionsConfig = {
           primaryActions: [
             {
-              name: 'Copy',
-              title: 'Copy the Dataservice',
-              actionFn: cloneDataServiceClicked,
-              isDisabled: true
-            },
-            {
               name: 'Edit',
               title: 'Edit the Dataservice',
               actionFn: editDataServiceClicked,
               isDisabled: true
             },
-            {
-              name: 'Delete',
-              title: 'Delete the Dataservice',
-              actionFn: deleteDataServiceClicked,
-              isDisabled: true
-            },
-            {
-              isSeparator: true
-            },  
             {
               name: 'Test',
               title: 'Test the Dataservice',
@@ -312,14 +309,28 @@
               isDisabled: true
             },
             {
+              name: 'Delete',
+              title: 'Delete the Dataservice',
+              actionFn: deleteDataServiceClicked,
+              isDisabled: true
+            }
+          ],
+          moreActions: [
+            {
               name: 'Export',
               title: 'Export the Dataservice',
               actionFn: exportDataServiceClicked,
               isDisabled: true
             },
             {
+              name: 'Copy',
+              title: 'Copy the Dataservice',
+              actionFn: cloneDataServiceClicked,
+              isDisabled: true
+            },
+            {
               isSeparator: true
-            },  
+            },
             {
               name: 'New',
               title: 'Create a Dataservice',
@@ -332,7 +343,8 @@
               actionFn: importDataServiceClicked,
               isDisabled: false
             }
-          ]
+          ],
+          actionsInclude: true
         };
      
         /**

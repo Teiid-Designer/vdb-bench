@@ -1,0 +1,76 @@
+<div class="container-fluid" ng-controller="SvcSourceNewController as vm">
+    <ol class="breadcrumb">
+        <li><a ng-click="vmmain.selectPage('dataservice-summary')"><i class="fa fa-cubes fa-fw" aria-hidden="true"></i> DataServices</a></li>
+        <li><a ng-click="vmmain.selectPage('datasource-summary')"><i class="fa fa-database fa-fw" aria-hidden="true"></i> Service Sources</a></li>
+        <li>New Service Source</li>
+    </ol>
+    
+    <div id="svcsource-new-updating" ng-show="vm.connsLoading==true || vm.transLoading==true" class="col-md-10 row">
+        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+        <span class="sr-only">Loading...</span>
+    </div>
+    
+    <div id="svcsource-new-controls" ng-show="vm.connsLoading==false && vm.transLoading==false" class="col-md-10 row">
+      <div class="row">
+        <div class="col-md-11">
+            <h1><i class="fa fa-database" aria-hidden="true"></i>New Service Source</h1>
+            <h3>&nbsp;&nbsp;Create a new Service Source</h3>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="textInput">Name</label>
+                    <div class="col-md-6">
+                        <input type="text" ng-model="nameVar" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="textInput">Description</label>
+                    <div class="col-md-6">
+                        <input type="text" ng-model="descriptionVar" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="conns">Connection</label>
+                    <div class="col-md-6">
+                        <select id="conns" ng-model="connVar" ng-options="connection as connection.keng__id for connection in vm.getConnections()">
+                            <option value="">-- choose connection --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="translators">Translator</label>
+                    <div class="col-md-6">
+                        <select id="translators" ng-model="translatorVar" ng-options="translator as translator.keng__id for translator in vm.getTranslators()">
+                            <option value="">-- choose translator --</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <button class="btn btn-primary" ng-click="vm.onCreateSvcSourceClicked(nameVar,descriptionVar,connVar.keng__id,connVar.dv__jndiName,translatorVar.keng__id)" ng-class="{active:vmmain.selectedPage.id == 'svcsource-new'}"> Create</button>
+            <button class="btn btn-default" ng-click="vmmain.selectPage('datasource-summary')" ng-class="{active:vmmain.selectedPage.id == 'svcsource-new'}"> Cancel</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Modal displayed when vdb create starts -->
+    <div id="createVDBModal" class="modal fade in" aria-hidden="false" ng-show="vm.createAndDeployInProgress==true">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Source Create In Progress</h4>
+          </div>
+          <div class="modal-body">
+            <span><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>Creating the Source</span>
+          </div>
+        </div>
+
+      </div>
+    </div>  
+
+    <!--
+    <progressModalWidget show="vm.createAndDeployInProgress==true" width='750px' height='60%'>
+      <p>Modal Content Goes here<p>
+    </progressModalWidget>
+    -->
+    
+</div>

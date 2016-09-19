@@ -2,82 +2,74 @@
 
     <ol class="breadcrumb">
         <li><a ng-click="vmmain.selectPage('dataservice-summary')"><i class="fa fa-cubes fa-fw" aria-hidden="true"></i> DataServices</a></li>
-        <li>Manage Datasources</li>
+        <li>Manage ServiceSources</li>
     </ol>
     
-    <div id="dataservice-summary-noservices" ng-show="vm.dsLoading==false && vm.getAllDataServices().length==0" class="col-md-10 row" style="border-style:solid;border-width:2px;padding-bottom:10px;border-color:#999999;background-color:#EEEEEE">
-	   <div class="row">
-           <div class="col-md-2"></div>
-	       <div class="col-md-8">
-	           <img src="plugins/vdb-bench-dataservice/content/img/EmptyLibraryImage.png" style="max-height:100%;max-width:100%;">
-	       </div>
-           <div class="col-md-2"></div>
-	   </div>
-	   <div class="row">
-	       <div class="col-md-4"></div>
-	       <div class="col-md-6">
-                <button class="btn btn-primary" ng-click="vmmain.selectPage('dataservice-new')" ng-class="{active:vmmain.selectedPage.id == 'dataservice-summary'}">Create Data Service</button>
-                <button class="btn btn-primary" ng-click="vmmain.selectPage('dataservice-import')" ng-class="{active:vmmain.selectedPage.id == 'dataservice-summary'}">Import Data Service</button>
-	       </div>
-	       <div class="col-md-2"></div>
-	   </div>
-    </div>
-
-    <div id="dataservice-summary-table-row" class="col-md-10 row" ng-show="vm.getAllDataServices().length>0">
-        <h1><i class="fa fa-database" aria-hidden="true"></i> DataSources </h1>
-	    <div class="row">
-	       <div class="col-md-10"></div>
-	       <div class="col-md-2">
-                <button class="btn btn-primary" ng-click="vmmain.selectPage('connection-summary')" ng-class="{active:vmmain.selectedPage.id == 'dataservice-summary'}">Manage Connections</button>
-	       </div>
-	    </div>
+    <div id="svcsource-summary-table-row" class="col-md-10 row">
+        <h1><i class="fa fa-database" aria-hidden="true"></i> Service Sources </h1>
+        <div id="svcsource-action-row">
+            <a href ng-click="vmmain.selectPage('svcsource-new',null)"><span class="fa fa-plus"></span> New ServiceSource</a>&nbsp;&nbsp;
+            <a href ng-click="vmmain.selectPage('svcsource-import',null)"><span class="pficon pficon-import"></span> Import ServiceSource</a>
+        </div>
         <div class="row">
            <div class="col-md-12">
-             <div pf-toolbar id="dataserviceToolbar" config="vm.toolbarConfig"></div>
+             <div pf-toolbar id="svcsourceToolbar" config="vm.toolbarConfig"></div>
            </div>
         </div>
     </div>
     
-    <div id="dataservice-summary-updating" ng-show="vm.dsLoading==true" class="col-md-10 row">
+    <div id="svcsource-summary-updating" ng-show="vm.srcLoading==true" class="col-md-10 row">
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
         <span class="sr-only">Loading...</span>
     </div>
         
-    <div id="dataservice-summary-table-row" class="col-md-10 row" ng-show="vm.dsLoading==false && vm.getAllDataServices().length>0">
-       <div class="row">
-         <div class="col-md-12 list-view-container" ng-if="vm.viewType == 'listView'">
-           <div pf-list-view config="vm.listConfig" items="vm.getDataServices()">
-             <div class="list-view-pf-description">
-               <div class="list-group-item-heading">
-                 {{item.keng__id}}
-               </div>
-               <div class="list-group-item-text">
-                 {{item.tko__description}}
-               </div>
-             </div>
-             <!--
-             <div class="list-view-pf-additional-info">
-               <div class="list-view-pf-additional-info-item">
-                 temp
-               </div>
-               <div class="list-view-pf-additional-info-item">
-                 temp2
-               </div>
-             </div>
-             -->
+    <div id="svcsource-summary-table-row" class="col-md-7 list-view-container" ng-if="vm.viewType == 'listView'" ng-show="vm.srcLoading==false">
+       <div pf-list-view config="vm.listConfig" items="vm.getServiceSources()">
+         <div class="list-view-pf-description">
+           <div class="list-group-item-heading">
+             {{item.keng__id}}
+           </div>
+           <div class="list-group-item-text">
+               <span ng-class="{ 'label label-success': prop.value=='Active' , 'label label-warning': prop.value=='Modified' , 'label label-info': prop.value=='New' }" ng-repeat="prop in item.keng__properties" ng-show="prop.name=='status'">{{prop.value}}</span>
            </div>
          </div>
-         <div class="col-md-12 card-view-container" ng-if="vm.viewType == 'cardView'">
-           <div pf-card-view config="vm.listConfig" items="vm.getDataServices()">
-             <div class="col-md-12">
-               <span>{{item.keng__id}}</span>
-             </div>
-             <div class="col-md-12">
-               <span>{{item.tko__description}}</span>
-             </div>
+         <div class="list-view-pf-additional-info">
+           <div class="list-view-pf-additional-info-item">
+             {{item.vdb__description}}
            </div>
          </div>
        </div>
-        
-    </div>
+     </div>
+     <div class="col-md-5" ng-show="vm.srcLoading==false && vm.getServiceSources().length>0">
+         <h4>Source Schema</h4>
+         <textarea rows="10" cols="40" wrap="soft">{{vm.selectedSourceDDL}}</textarea>
+     </div>
+     <div class="col-md-10 card-view-container" ng-if="vm.viewType == 'cardView'" ng-show="vm.srcLoading==false">
+       <div pf-card-view config="vm.listConfig" items="vm.getServiceSources()">
+         <div class="col-md-12">
+           <span>{{item.keng__id}}</span>
+         </div>
+         <div class="col-md-12">
+           <span>{{item.vdb__description}}</span>
+         </div>
+       </div>
+     </div>
+    
+     <!-- Modal displayed when vdb create starts -->
+     <div id="deleteVDBModal" class="modal fade in" aria-hidden="false" ng-show="vm.deleteVdbInProgress==true">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Source Delete In Progress</h4>
+          </div>
+          <div class="modal-body">
+            <span><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>Deleting the Source</span>
+          </div>
+        </div>
+
+      </div>
+     </div>    
+
 </div>
