@@ -106,7 +106,7 @@ gulp.task('less', function () {
 gulp.task('plugin-templates', function () {
     return gulp.src(config.plugins.html)
         .pipe(plugins.angularTemplatecache({
-            filename: config.templateModule + '.js',
+            filename: config.plugins.templateModule + '.js',
             root: config.plugins.root,
             standalone: true,
             module: config.plugins.templateModule,
