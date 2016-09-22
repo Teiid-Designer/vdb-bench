@@ -93,8 +93,9 @@
                 RepoRestService.getVdbs(REST_URI.WKSP_SERVICE).then(
                     // Get workspace VDBs
                     function (wkspVdbs) {
-                        // Workspace should contain copies of server VDBs
-                        RepoRestService.copy(wkspVdbs, svcSrc.serviceSources);
+                        // only include 'serviceSource' vdbs
+                        var filteredWkspVdbs = getSourceVdbs(wkspVdbs);
+                        RepoRestService.copy(filteredWkspVdbs, svcSrc.serviceSources);
                         
                         // Set VDB status to distinguish server VDBs
                         var sourcesLength = svcSrc.serviceSources.length;
@@ -133,7 +134,9 @@
             try {
                 RepoRestService.getVdbs(REST_URI.TEIID_SERVICE).then(
                     function (serverVdbs) {
-                        RepoRestService.copy(serverVdbs, svcSrc.teiidVdbs);
+                        // only include 'serviceSource' vdbs
+                        var filteredServerVdbs = getSourceVdbs(serverVdbs);
+                        RepoRestService.copy(filteredServerVdbs, svcSrc.teiidVdbs);
                         
                         // Save names of server VDB
                         var teiidVdbsLength = svcSrc.teiidVdbs.length;
@@ -155,6 +158,29 @@
             }
         }
 
+        /**
+         * Return only vdbs that have source property
+         */
+        function getSourceVdbs(allVdbs) {
+            var sourceVdbs = [];
+            if( typeof allVdbs != "undefined" ) {
+                for(var i=0; i<allVdbs.length; i++) {
+                    if((typeof allVdbs[i].keng__properties === "undefined") || allVdbs[i].keng__properties.length===0) {
+                        continue;
+                    } else {
+                        for(var key in allVdbs[i].keng__properties) {
+                            var test = allVdbs[i].keng__properties[key].name;
+                            var value = allVdbs[i].keng__properties[key].value;
+                            if(test=='serviceSource' && value=='true') {
+                                sourceVdbs.push(allVdbs[i]);
+                            }
+                        }
+                    }
+                }
+            }
+            return sourceVdbs;
+        }
+        
         /**
          * Set the VDB Status property
          */

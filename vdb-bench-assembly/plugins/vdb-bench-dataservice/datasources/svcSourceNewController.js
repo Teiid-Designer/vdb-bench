@@ -64,7 +64,7 @@
             
             // Creates the VDB.  On success, the VDB Model is added to the VDB
             try {
-                RepoRestService.createVdb( svcSourceName, svcSourceDescription ).then(
+                RepoRestService.createVdb( svcSourceName, svcSourceDescription, true ).then(
                     function (theVdb) {
                         if(theVdb.keng__id === svcSourceName) {
                             createVdbModel( svcSourceName, connectionName, translatorName, jndiName );

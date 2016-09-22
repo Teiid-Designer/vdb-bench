@@ -236,7 +236,7 @@
         /**
          * Service: create a new VDB in the repository
          */
-        service.createVdb = function (vdbName, vdbDescription) {
+        service.createVdb = function (vdbName, vdbDescription, isSource) {
             if (!vdbName) {
                 throw RestServiceException("VDB name is not defined");
             }
@@ -249,6 +249,12 @@
                     "vdb__name": vdbName,
                     "vdb__description": vdbDescription
                 };
+                
+                // Property added to distinguish service sources
+                if (isSource)  {
+                    payload.keng__properties = [{ "name": "serviceSource",
+                                                  "value": "true"}];
+                }
 
                 var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName;
                 return restService.all(uri).post(payload);

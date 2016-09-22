@@ -85,10 +85,10 @@
                 RepoRestService.download(dwnldableObj).then(
                     function (exportStatus) {
                         if (! exportStatus.downloadable)
-                            return;
+                            throw new RepoRestService.newRestException("Artifact is not downloadable ");
 
                         if (! exportStatus.content)
-                            return;
+                            throw new RepoRestService.newRestException("Artifact content is empty ");
 
                         var name = exportStatus.name || dwnldableObj.keng__id;
                         var fileType = exportStatus.type || 'data';
