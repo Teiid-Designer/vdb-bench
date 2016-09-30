@@ -13,10 +13,10 @@
 
     RepoRestService.$inject = ['CONFIG', 'SYNTAX', 'REST_URI', 'VDB_SCHEMA',
                                              'VDB_KEYS', 'RepoSelectionService', 'Restangular',
-                                             '$http', '$q', '$base64', 'AuthService'];
+                                             '$http', '$q', '$base64', 'CredentialService'];
 
     function RepoRestService(CONFIG, SYNTAX, REST_URI, VDB_SCHEMA, VDB_KEYS, RepoSelectionService,
-                                            Restangular, $http, $q, $base64, AuthService) {
+                                            Restangular, $http, $q, $base64, CredentialService) {
 
         /*
          * Service instance to be returned
@@ -71,7 +71,7 @@
         }
         
         function getUserWorkspacePath() {
-            return "/tko:komodo/tko:workspace/" + AuthService.credentials().username;
+            return "/tko:komodo/tko:workspace/" + CredentialService.credentials().username;
         }
 
         /**
@@ -84,7 +84,7 @@
             var repo = RepoSelectionService.getSelected();
             var baseUrl = url(repo);
             var restService = service.cachedServices[baseUrl];
-            var user = AuthService.credentials();
+            var user = CredentialService.credentials();
 
             if (!_.isEmpty(restService)) {
                 restService.setDefaultHeaders(authHeader(user.username, user.password));
