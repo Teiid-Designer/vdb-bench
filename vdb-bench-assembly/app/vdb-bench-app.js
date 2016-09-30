@@ -49,6 +49,11 @@ var App;
             return user;
         };
 
+        service.reset = function() {
+            user.username = null;
+            user.password = null;
+        };
+
         service.setCredentials = function(username, password, remember) {
             user.username = username;
             user.password = password;
@@ -102,8 +107,6 @@ var App;
                         $rootScope.reloaded = true;
                     }
                 }
-
-                CredentialService.setLoggingOut(false);
             }
             else {
                 if ($location.url().startsWith('/login')) {
@@ -117,7 +120,7 @@ var App;
         };
 
         service.redirect = function() {
-            if (CredentialService.isRemembered()) {
+            if (CredentialService.isRemembered() && ! CredentialService.loggingOut()) {
                 var credentials = CredentialService.credentials();
                 service.login(credentials.username, credentials.password, true, redirectCallback, redirectCallback);
             } else {
@@ -126,6 +129,8 @@ var App;
         };
 
         service.login = function(username, password, remember, onSuccess, onFailure) {
+            CredentialService.setLoggingOut(false);
+
             RepoRestService.testConnection(username, password)
                                     .then(
                                         function(response) {
@@ -144,10 +149,10 @@ var App;
         };
 
         service.logout = function() {
-            CredentialService.setCredentials(null, null, CredentialService.isRemembered());
+            CredentialService.reset();
             authenticated = false;
-            service.redirect();
             CredentialService.setLoggingOut(true);
+            service.redirect();
         };
 
         listener = $rootScope.$on('$routeChangeStart', function (event, args) {
