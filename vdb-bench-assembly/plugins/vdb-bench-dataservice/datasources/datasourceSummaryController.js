@@ -22,6 +22,20 @@
         vm.items = vm.allItems;
         vm.selectedSourceDDL = "";
         vm.deleteVdbInProgress = false;
+        vm.displayDdl = false; // Do not display by default
+
+        /**
+         * Options for the codemirror editor used for previewing ddl
+         */
+        vm.ddlEditorOptions = {
+            lineWrapping: true,
+            lineNumbers: true,
+            mode: 'text/x-sql'
+        };
+
+        vm.ddlEditorLoaded = function(_editor) {
+            // Nothing to do at the moment
+        };
 
         /*
          * When the data services have been loaded
@@ -193,7 +207,7 @@
         };
      
         vm.viewsConfig = {
-          views: [pfViewUtils.getListView(), pfViewUtils.getCardView()],
+          views: [pfViewUtils.getListView()], // Only using list view for the moment
           onViewSelect: viewSelected
         };
         vm.viewsConfig.currentView = vm.viewsConfig.views[0].id;
@@ -339,7 +353,14 @@
             // Broadcast the pageChange
             $rootScope.$broadcast("dataServicePageChanged", 'svcsource-import');
         };
-        
+
+        /**
+         * Toggle the displaying of the DDL window
+         */
+        var showHideDDLClicked = function() {
+            vm.displayDdl = ! vm.displayDdl;
+        };
+
         /** 
          * Handle listView and cardView selection
          */
@@ -365,7 +386,7 @@
                 }
             });
             vm.actionsConfig.moreActions.forEach(function (theAction) {
-                if(theAction.name!=='New' && theAction.name!='Import') {
+                if(theAction.name!=='New' && theAction.name!=='Import' && theAction.name!=='Display DDL') {
                     theAction.isDisabled = enabled;
                 }
             });
@@ -415,6 +436,15 @@
               name: 'Import',
               title: 'Import a ServiceSource',
               actionFn: importSvcSourceClicked,
+              isDisabled: false
+            },
+            {
+              isSeparator: true
+            },
+            {
+              name: 'Display DDL',
+              title: 'Show / Hide the DDL window',
+              actionFn: showHideDDLClicked,
               isDisabled: false
             }
           ],

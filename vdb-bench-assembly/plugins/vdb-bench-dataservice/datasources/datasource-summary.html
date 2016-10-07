@@ -8,52 +8,47 @@
     <div id="svcsource-summary-table" class="col-md-10 row">
         <div pf-toolbar id="svcsourceToolbar" config="vm.toolbarConfig"></div>
 
-        <div class="row svcsource-summary-results">
-            <div class="col-md-12 list-view-container" ng-if="vm.viewType == 'listView'" ng-show="vm.srcLoading==false">
-                <div pf-list-view config="vm.listConfig" items="vm.getServiceSources()" menu-actions="vm.menuActions">
-                    <div class="list-view-pf-left">
-                        <span class="fa fa-database list-view-pf-icon-sm"></span>
-                    </div>
-                    <div class="list-view-pf-body">
-                        <div class="list-view-pf-description display-block">
-                            <div class="list-group-item-heading no-float">
-                                <a href="api-details.html">{{item.keng__id}}</a>
+        <div class="svcsource-summary-results-container">
+            <div class="svcsource-summary-results">
+                <div class="col-md-12 list-view-container" ng-if="vm.viewType == 'listView'" ng-show="vm.srcLoading==false">
+                    <div pf-list-view config="vm.listConfig" items="vm.getServiceSources()" menu-actions="vm.menuActions">
+                        <div class="list-view-pf-left">
+                            <span class="fa fa-database list-view-pf-icon-sm"></span>
+                        </div>
+                        <div class="list-view-pf-body">
+                            <div class="list-view-pf-description display-block">
+                                <div class="list-group-item-heading no-float">
+                                    {{item.keng__id}}
+                                </div>
+                                <div class="list-group-item-text no-float">
+                                    {{item.tko__description}}
+                                </div>
                             </div>
-                            <div class="list-group-item-text no-float">
-                                {{item.tko__description}}
+                            <div class="list-view-pf-additional-info">
+                                <div class="list-view-pf-additional-info-item"
+                                        uib-tooltip="The status of the service-source. If 'Active' then its deployed and available while 'New' means it remains in the workspace">
+                                    <span ng-class="{ 'label label-success': prop.value=='Active' , 'label label-warning': prop.value=='Modified' , 'label label-info': prop.value=='New' }"
+                                              ng-repeat="prop in item.keng__properties" ng-show="prop.name=='status'">
+                                        {{prop.value}}
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                        <div class="list-view-pf-additional-info">
-                            <div class="list-view-pf-additional-info-item" uib-tooltip="The name of the service vdb of this dataservice">
-                                <span class="pficon pficon-service"></span>
-                                <strong><i>{{item.serviceVdbName}}</i></strong>
-                            </div>
-                        </div>
                     </div>
-                        
-<!--
-                    <div class="list-view-pf-description">
-                        <div class="list-group-item-heading">
-                            {{item.keng__id}}
-                        </div>
-                        <div class="list-group-item-text">
-                            <span ng-class="{ 'label label-success': prop.value=='Active' , 'label label-warning': prop.value=='Modified' , 'label label-info': prop.value=='New' }" ng-repeat="prop in item.keng__properties" ng-show="prop.name=='status'">{{prop.value}}</span>
-                        </div>
-                    </div>
-                    <div class="list-view-pf-additional-info">
-                        <div class="list-view-pf-additional-info-item">
-                            {{item.vdb__description}}
-                        </div>
-                    </div>
--->
+                </div>
+            </div>
+
+            <div class="svcsource-summary-results-ddl" ng-show="vm.srcLoading==false && vm.getServiceSources().length>0 && vm.displayDdl==true">
+                <div class="svcsource-summary-results-ddl-titlebar">
+                    <h5 class="svcsource-summary-results-ddl-titlebar-title">Source Schema</h5>
+                    <h5 class="svcsource-summary-results-ddl-titlebar-close" ng-click="vm.displayDdl = false">X</h5>
+                </div>
+                <div ui-codemirror="{ onLoad : vm.ddlEditorLoaded }" ng-model="vm.selectedSourceDDL" ui-codemirror-opts="vm.ddlEditorOptions">
                 </div>
             </div>
         </div>
-     <div class="col-md-5" ng-show="vm.srcLoading==false && vm.getServiceSources().length>0">
-         <h4>Source Schema</h4>
-         <textarea rows="10" cols="40" wrap="soft">{{vm.selectedSourceDDL}}</textarea>
-     </div>
-     <div class="col-md-10 card-view-container" ng-if="vm.viewType == 'cardView'" ng-show="vm.srcLoading==false">
+<!--
+        <div class="col-md-10 card-view-container" ng-if="vm.viewType == 'cardView'" ng-show="vm.srcLoading==false">
        <div pf-card-view config="vm.listConfig" items="vm.getServiceSources()">
          <div class="col-md-12">
            <span>{{item.keng__id}}</span>
@@ -63,22 +58,23 @@
          </div>
        </div>
      </div>
+-->
     
-     <!-- Modal displayed when vdb create starts -->
-     <div id="deleteVDBModal" class="modal fade in" aria-hidden="false" ng-show="vm.deleteVdbInProgress==true">
-      <div class="modal-dialog">
+        <!-- Modal displayed when vdb create starts -->
+        <div id="deleteVDBModal" class="modal fade in" aria-hidden="false" ng-show="vm.deleteVdbInProgress==true">
+            <div class="modal-dialog">
 
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Source Delete In Progress</h4>
-          </div>
-          <div class="modal-body">
-            <span><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>Deleting the Source</span>
-          </div>
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Source Delete In Progress</h4>
+                    </div>
+                    <div class="modal-body">
+                        <span><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>Deleting the Source</span>
+                    </div>
+                </div>
+            </div>
         </div>
-
-      </div>
-     </div>    
+    </div>
 
 </div>
