@@ -1,45 +1,54 @@
-<div class="container-fluid" ng-controller="DatasourceSummaryController as vm">
-
-    <ol class="breadcrumb">
-        <li><a ng-click="vmmain.selectPage('dataservice-summary')"><i class="fa fa-cubes fa-fw" aria-hidden="true"></i> DataServices</a></li>
-        <li>Manage ServiceSources</li>
-    </ol>
-    
-    <div id="svcsource-summary-table-row" class="col-md-10 row">
-        <h1><i class="fa fa-database" aria-hidden="true"></i> Service Sources </h1>
-        <div id="svcsource-action-row">
-            <a href ng-click="vmmain.selectPage('svcsource-new',null)"><span class="fa fa-plus"></span> New ServiceSource</a>&nbsp;&nbsp;
-            <a href ng-click="vmmain.selectPage('svcsource-import',null)"><span class="pficon pficon-import"></span> Import ServiceSource</a>
-        </div>
-        <div class="row">
-           <div class="col-md-12">
-             <div pf-toolbar id="svcsourceToolbar" config="vm.toolbarConfig"></div>
-           </div>
-        </div>
-    </div>
+<div id="svcsource-summary-container" class="container-fluid" ng-controller="DatasourceSummaryController as vm">
     
     <div id="svcsource-summary-updating" ng-show="vm.srcLoading==true" class="col-md-10 row">
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
         <span class="sr-only">Loading...</span>
     </div>
-        
-    <div id="svcsource-summary-table-row" class="col-md-7 list-view-container source-listview" ng-if="vm.viewType == 'listView'" ng-show="vm.srcLoading==false">
-       <div pf-list-view config="vm.listConfig" items="vm.getServiceSources()">
-         <div class="list-view-pf-description">
-           <div class="list-group-item-heading">
-             {{item.keng__id}}
-           </div>
-           <div class="list-group-item-text">
-               <span ng-class="{ 'label label-success': prop.value=='Active' , 'label label-warning': prop.value=='Modified' , 'label label-info': prop.value=='New' }" ng-repeat="prop in item.keng__properties" ng-show="prop.name=='status'">{{prop.value}}</span>
-           </div>
-         </div>
-         <div class="list-view-pf-additional-info">
-           <div class="list-view-pf-additional-info-item">
-             {{item.vdb__description}}
-           </div>
-         </div>
-       </div>
-     </div>
+
+    <div id="svcsource-summary-table" class="col-md-10 row">
+        <div pf-toolbar id="svcsourceToolbar" config="vm.toolbarConfig"></div>
+
+        <div class="row svcsource-summary-results">
+            <div class="col-md-12 list-view-container" ng-if="vm.viewType == 'listView'" ng-show="vm.srcLoading==false">
+                <div pf-list-view config="vm.listConfig" items="vm.getServiceSources()" menu-actions="vm.menuActions">
+                    <div class="list-view-pf-left">
+                        <span class="fa fa-database list-view-pf-icon-sm"></span>
+                    </div>
+                    <div class="list-view-pf-body">
+                        <div class="list-view-pf-description display-block">
+                            <div class="list-group-item-heading no-float">
+                                <a href="api-details.html">{{item.keng__id}}</a>
+                            </div>
+                            <div class="list-group-item-text no-float">
+                                {{item.tko__description}}
+                            </div>
+                        </div>
+                        <div class="list-view-pf-additional-info">
+                            <div class="list-view-pf-additional-info-item" uib-tooltip="The name of the service vdb of this dataservice">
+                                <span class="pficon pficon-service"></span>
+                                <strong><i>{{item.serviceVdbName}}</i></strong>
+                            </div>
+                        </div>
+                    </div>
+                        
+<!--
+                    <div class="list-view-pf-description">
+                        <div class="list-group-item-heading">
+                            {{item.keng__id}}
+                        </div>
+                        <div class="list-group-item-text">
+                            <span ng-class="{ 'label label-success': prop.value=='Active' , 'label label-warning': prop.value=='Modified' , 'label label-info': prop.value=='New' }" ng-repeat="prop in item.keng__properties" ng-show="prop.name=='status'">{{prop.value}}</span>
+                        </div>
+                    </div>
+                    <div class="list-view-pf-additional-info">
+                        <div class="list-view-pf-additional-info-item">
+                            {{item.vdb__description}}
+                        </div>
+                    </div>
+-->
+                </div>
+            </div>
+        </div>
      <div class="col-md-5" ng-show="vm.srcLoading==false && vm.getServiceSources().length>0">
          <h4>Source Schema</h4>
          <textarea rows="10" cols="40" wrap="soft">{{vm.selectedSourceDDL}}</textarea>

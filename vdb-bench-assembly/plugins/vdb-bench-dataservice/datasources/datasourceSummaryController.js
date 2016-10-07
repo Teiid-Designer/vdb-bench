@@ -35,6 +35,7 @@
                 vm.deleteVdbInProgress = false;
            }
         });
+
         /*
          * When the selected service source changed
          */
@@ -65,7 +66,7 @@
                         deleteServerVdb(vdbName);
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to remove the ServiceSource. \n" + response.message);
+                        throw RepoRestService.newRestException("Failed to remove the ServiceSource. \n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
             }
@@ -86,7 +87,7 @@
                         vm.selectedSourceDDL = "";
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to remove the ServiceSource. \n" + response.message);
+                        throw RepoRestService.newRestException("Failed to remove the ServiceSource. \n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
             }
@@ -102,7 +103,7 @@
                         vm.selectedSourceDDL = result.Information.schema;
                    },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to get the DDL. \n" + response.message);
+                        throw RepoRestService.newRestException("Failed to get the DDL. \n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
             }
@@ -246,11 +247,21 @@
          */
         var deleteSvcSourceClicked = function ( ) {
             var selVdbName = SvcSourceSelectionService.selectedServiceSource().keng__id;
-            
+
             // Deletes the workspace and server vdb (if exists).  Also does a refresh when complete
             deleteVdb(selVdbName);
         };
 
+        /**
+         * Handle delete ServiceSource menu select
+         */
+        var deleteSvcSourceMenuAction = function(action, item) {
+            // Need to select the item first
+            SvcSourceSelectionService.selectServiceSource(item, true);
+
+            deleteSvcSourceClicked();
+        };
+ 
         /**
          * Handle export ServiceSource click
          */
@@ -260,7 +271,17 @@
             } catch (error) {} finally {
             }
         };
-        
+
+        /**
+         * Handle export ServiceSource menu select
+         */
+        var exportSvcSourceMenuAction = function(action, item) {
+            // Need to select the item first
+            SvcSourceSelectionService.selectServiceSource(item);
+
+            exportSvcSourceClicked();
+        };
+
         /**
          * Handle edit ServiceSource click
          */
@@ -273,11 +294,31 @@
         };
 
         /**
+         * Handle edit ServiceSource menu select
+         */
+        var editSvcSourceMenuAction = function(action, item) {
+            // Need to select the item first
+            SvcSourceSelectionService.selectServiceSource(item);
+
+            editSvcSourceClicked();
+        };
+
+        /**
          * Handle clone ServiceSource click
          */
         var cloneSvcSourceClicked = function( ) {
             // Broadcast the pageChange
             $rootScope.$broadcast("dataServicePageChanged", 'svcsource-clone');
+        };
+
+        /**
+         * Handle clone ServiceSource menu select
+         */
+        var cloneSvcSourceMenuAction = function(action, item) {
+            // Need to select the item first
+            SvcSourceSelectionService.selectServiceSource(item);
+
+            cloneSvcSourceClicked();
         };
 
         /**
@@ -379,7 +420,30 @@
           ],
           actionsInclude: true
         };
-        
+
+        vm.menuActions = [
+            {
+                name: 'Edit',
+                title: 'Edit the Service-source',
+                actionFn: editSvcSourceMenuAction
+            },
+            {
+                name: 'Delete',
+                title: 'Delete the Service-source',
+                actionFn: deleteSvcSourceMenuAction
+            },
+            {
+                name: 'Export',
+                title: 'Export the Service-source',
+                actionFn: exportSvcSourceMenuAction
+            },
+            {
+                name: 'Copy',
+                title: 'Copy the Service-source',
+                actionFn: cloneSvcSourceMenuAction
+            }
+          ];
+
         /**
          * Toolbar Configuration
          */

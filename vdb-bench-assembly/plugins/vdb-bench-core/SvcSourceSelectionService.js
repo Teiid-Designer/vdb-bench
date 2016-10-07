@@ -276,11 +276,18 @@
         /*
          * Select the given serviceSource
          */
-        service.selectServiceSource = function(serviceSource) {
+        service.selectServiceSource = function(serviceSource, noUpdateModel) {
             //
             // Set the selected serviceSource
             //
             svcSrc.serviceSource = serviceSource;
+
+            //
+            // When deleting we don't want to asynchronously fetch the model
+            // or translator since they will have been deleted
+            //
+            if (angular.isDefined(noUpdateModel) && noUpdateModel)
+                return;
 
             // Update the selected source modelName and TranslatorName - only if its in local workspace
             if(svcSrc.serviceSource!==null && svcSrc.serviceSource.keng__dataPath!==null && svcSrc.serviceSource.keng__dataPath.indexOf("tko:workspace") >= 0) {
@@ -296,13 +303,14 @@
                                     $rootScope.$broadcast("selectedServiceSourceChanged", svcSrc.serviceSource);
                                 },
                                 function (response) {
-                                    throw RepoRestService.newRestException("Failed getting VDB Translator name.\n" + response.message);
+                                    throw RepoRestService.newRestException("Failed getting VDB Translator name.\n" + RepoRestService.responseMessage(response));
                                 });
                         },
                         function (response) {
-                            throw RepoRestService.newRestException("Failed getting VDB Connection name.\n" + response.message);
+                            throw RepoRestService.newRestException("Failed getting VDB Connection name.\n" + RepoRestService.responseMessage(response));
                         });
                 } catch (error) {
+                    alert("An exception occurred:\n" + error.message);
                 }
             }
         };
@@ -358,6 +366,9 @@
             ConnectionSelectionService.refresh();
             TranslatorSelectionService.refresh();
         };
+
+        // Initialise service source collection on loading
+        service.refresh();
         
         return service;
     }

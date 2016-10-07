@@ -1,4 +1,4 @@
-<div class="container-fluid" ng-controller="DSSummaryController as vm">
+<div id="ds-summary-container" class="container-fluid" ng-controller="DSSummaryController as vm">
 
     <div id="dataservice-summary-noservices" ng-show="vm.dsLoading==false && vm.getAllDataServices().length==0" class="col-md-10 row" style="border-style:solid;border-width:2px;padding-bottom:10px;border-color:#999999;background-color:#EEEEEE">
 	   <div class="row">
@@ -17,51 +17,49 @@
 	       <div class="col-md-2"></div>
 	   </div>
     </div>
-    
-    <div id="dataservice-summary-table-row" class="col-md-10 row" ng-show="vm.getAllDataServices().length>0">
-	    <div class="row">
-	       <div class="col-md-10"></div>
-	       <div class="col-md-2">
-                <button class="btn btn-primary" ng-click="vm.manageDataSources()" ng-class="{active:vmmain.selectedPage.id == 'dataservice-summary'}">Manage Sources</button>
-	       </div>
-	    </div>
-        <h1><i class="fa fa-cubes" aria-hidden="true"></i> Data Services </h1>
-        <div id="datservice-action-row">
-            <a href ng-click="vmmain.selectPage('dataservice-new',null)"><span class="fa fa-plus"></span> New DataService</a>&nbsp;&nbsp;
-            <a href ng-click="vmmain.selectPage('dataservice-import',null)"><span class="pficon pficon-import"></span> Import DataService</a>
-        </div>
-        <div class="row">
-           <div class="col-md-12">
-             <div pf-toolbar id="dataserviceToolbar" config="vm.toolbarConfig"></div>
-           </div>
-        </div>
-    </div>
-    
     <div id="dataservice-summary-updating" ng-show="vm.dsLoading==true" class="col-md-10 row">
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
         <span class="sr-only">Loading...</span>
     </div>
- 
-    <div id="dataservice-summary-table-row" class="col-md-10 row service-listview" ng-show="vm.dsLoading==false && vm.getAllDataServices().length>0">
-       <div class="row">
-         <div class="col-md-12 list-view-container" ng-if="vm.viewType == 'listView'">
-           <div pf-list-view config="vm.listConfig" items="vm.getDataServices()">
-             <div class="list-view-pf-description">
-               <div class="list-group-item-heading">
-                 {{item.keng__id}}
-               </div>
-               <div class="list-group-item-text">
-                   <span class="label label-info">Local</span>
-               </div>
-             </div>
-             <div class="list-view-pf-additional-info">
-               <div class="list-view-pf-additional-info-item">
-                 {{item.tko__description}}
-               </div>
-             </div>
-           </div>
-         </div>
-         <div class="col-md-12 card-view-container" ng-if="vm.viewType == 'cardView'">
+
+    <div id="ds-summary-table" class="col-md-10 row" ng-show="vm.dsLoading==false && vm.getAllDataServices().length>0">
+        <div pf-toolbar id="dataserviceToolbar" config="vm.toolbarConfig"></div>
+
+        <div class="row ds-summary-results">
+            <div class="col-md-12 list-view-container" ng-if="vm.viewType == 'listView'">
+                <div pf-list-view config="vm.listConfig" items="vm.getDataServices()" menu-actions="vm.menuActions">
+                        <div class="list-view-pf-left">
+                            <span class="fa fa-cube list-view-pf-icon-sm"></span>
+                        </div>
+                        <div class="list-view-pf-body">
+                            <div class="list-view-pf-description display-block">
+                                <div class="list-group-item-heading no-float">
+                                    <a>{{item.keng__id}}</a>
+                                </div>
+                                <div class="list-group-item-text no-float">
+                                    {{item.tko__description}}
+                                </div>
+                            </div>
+                            <div class="list-view-pf-additional-info">
+                                <div class="list-view-pf-additional-info-item" uib-tooltip="The name of the service vdb of this dataservice">
+                                    <span class="pficon pficon-service"></span>
+                                    <strong><i>{{item.serviceVdbName}}</i></strong>
+                                </div>
+
+                                <!-- TODO - consider what else to include here, preferably the service sources available -->
+
+                                <div class="list-view-pf-additional-info-item" uib-tooltip="The number of native data connections, eg. JDBC databases, utilised by this dataservice">
+                                    <span class="pficon  pficon-resource-pool"></span>
+                                    <strong>{{item.connections}}</strong>
+                                    <span>{{item.connections === 1 ? 'Connection' : 'Connections'}}</span>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div> <!-- ds-summary-results -->
+
+        <div class="col-md-12 card-view-container" ng-if="vm.viewType == 'cardView'">
            <div pf-card-view config="vm.listConfig" items="vm.getDataServices()">
              <div class="col-md-12">
                <span>{{item.keng__id}}</span>
@@ -71,7 +69,5 @@
              </div>
            </div>
          </div>
-       </div>
-        
     </div>
 </div>

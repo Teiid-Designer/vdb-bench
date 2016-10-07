@@ -122,7 +122,7 @@
         };
      
         vm.viewsConfig = {
-          views: [pfViewUtils.getListView(), pfViewUtils.getCardView()],
+          views: [pfViewUtils.getListView()], // Only using list view for the moment
           onViewSelect: viewSelected
         };
         vm.viewsConfig.currentView = vm.viewsConfig.views[0].id;
@@ -191,6 +191,16 @@
         };
 
         /**
+         * Handle delete dataservice menu select
+         */
+        var deleteDataServiceMenuAction = function(action, item) {
+            // Need to select the item first
+            DSSelectionService.selectDataService(item);
+
+            deleteDataServiceClicked();
+        };
+
+        /**
          * Handle deploy dataservice click
          */
         var deployDataServiceClicked = function ( ) {
@@ -219,6 +229,16 @@
             // Broadcast the pageChange
             $rootScope.$broadcast("dataServicePageChanged", 'dataservice-test');
         };
+
+        /**
+         * Handle edit dataservice menu select
+         */
+        var deployDataServiceMenuAction = function(action, item) {
+            // Need to select the item first
+            DSSelectionService.selectDataService(item);
+
+            deployDataServiceClicked();
+        };
         
         /**
          * Handle edit dataservice click
@@ -228,12 +248,40 @@
             SvcSourceSelectionService.refresh('dataservice-edit');
         };
 
+        /*
+         * Edit a dataservice
+         */
+        vm.editDataService = function(item) {
+            console.log("HELLO");
+            // Need to select the item first
+            DSSelectionService.selectDataService(item);
+
+            editDataServiceClicked(); 
+        };
+
+        /**
+         * Handle edit dataservice menu select
+         */
+        var editDataServiceMenuAction = function(action, item) {
+            vm.editDataService(item);
+        };
+
         /**
          * Handle clone dataservice click
          */
         var cloneDataServiceClicked = function( ) {
             // Broadcast the pageChange
             $rootScope.$broadcast("dataServicePageChanged", 'dataservice-clone');
+        };
+
+        /**
+         * Handle clone dataservice menu select
+         */
+        var cloneDataServiceMenuAction = function(action, item) {
+            // Need to select the item first
+            DSSelectionService.selectDataService(item);
+
+            cloneDataServiceClicked();
         };
 
         /**
@@ -258,6 +306,16 @@
         var exportDataServiceClicked = function( ) {
             // Broadcast the pageChange
             $rootScope.$broadcast("dataServicePageChanged", 'dataservice-export');
+        };
+
+        /**
+         * Handle export dataservice menu select
+         */
+        var exportDataServiceMenuAction = function(action, item) {
+            // Need to select the item first
+            DSSelectionService.selectDataService(item);
+
+            exportDataServiceClicked();
         };
 
         /** 
@@ -346,7 +404,35 @@
           ],
           actionsInclude: true
         };
-     
+
+        vm.menuActions = [
+            {
+                name: 'Edit',
+                title: 'Edit the Dataservice',
+                actionFn: editDataServiceMenuAction
+            },
+            {
+                name: 'Test',
+                title: 'Test the Dataservice',
+                actionFn: deployDataServiceMenuAction
+            },
+            {
+                name: 'Delete',
+                title: 'Delete the Dataservice',
+                actionFn: deleteDataServiceMenuAction
+            },
+            {
+                name: 'Export',
+                title: 'Export the Dataservice',
+                actionFn: exportDataServiceMenuAction
+            },
+            {
+                name: 'Copy',
+                title: 'Copy the Dataservice',
+                actionFn: cloneDataServiceMenuAction
+            }
+          ];
+
         /**
          * Toolbar Configuration
          */

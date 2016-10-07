@@ -49,6 +49,9 @@
          * When loading finishes on create / deploy
          */
         $scope.$on('loadingServiceSourcesChanged', function (event, loadingState) {
+            if (vm.createAndDeployInProgress === loadingState)
+                return;
+
             if(loadingState === false) {
                 vm.createAndDeployInProgress = false;
             }
@@ -69,11 +72,16 @@
                         if(theVdb.keng__id === svcSourceName) {
                             createVdbModel( svcSourceName, connectionName, translatorName, jndiName );
                         }
+
+                        SvcSourceSelectionService.setLoading(false);
                     },
                     function (resp) {
-                        throw RepoRestService.newRestException("Failed to create the source model. \n" + resp.message);
+                        SvcSourceSelectionService.setLoading(false);
+                        throw RepoRestService.newRestException("Failed to create the service source Vdb. \n" + RepoRestService.responseMessage(resp));
                     });
-            } catch (error) {} finally {
+            } catch (error) {
+                SvcSourceSelectionService.setLoading(false);
+                throw RepoRestService.newRestException("Failed to create the service source Vdb. \n" + error);
             }
         }
 
@@ -88,11 +96,16 @@
                         if(theModel.keng__id === connectionName) {
                             createVdbModelSource( svcSourceName, connectionName, connectionName, translatorName, jndiName );
                         }
+
+                        SvcSourceSelectionService.setLoading(false);
                     },
                     function (resp) {
-                        throw RepoRestService.newRestException("Failed to create the source model. \n" + resp.message);
+                        SvcSourceSelectionService.setLoading(false);
+                        throw RepoRestService.newRestException("Failed to create the source model. \n" + RepoRestService.responseMessage(resp));
                     });
-            } catch (error) {} finally {
+            } catch (error) {
+                SvcSourceSelectionService.setLoading(false);
+                throw RepoRestService.newRestException("Failed to create the source model. \n" + error);
             }
         }
 
@@ -107,9 +120,12 @@
                         deployVdb( vdbName );
                     },
                     function (resp) {
-                        throw RepoRestService.newRestException("Failed to create the source model. \n" + resp.message);
+                        SvcSourceSelectionService.setLoading(false);
+                        throw RepoRestService.newRestException("Failed to create the source model connection. \n" + RepoRestService.responseMessage(resp));
                     });
-            } catch (error) {} finally {
+            } catch (error) {
+                SvcSourceSelectionService.setLoading(false);
+                throw RepoRestService.newRestException("Failed to create the source model connection. \n" + error);
             }
         }
 
@@ -130,12 +146,16 @@
                         }
                         // Reinitialise the list of service sources
                         SvcSourceSelectionService.refresh('datasource-summary');
+                        SvcSourceSelectionService.setLoading(false);
                    },
                     function (response) {
-                        SvcSourceSelectionService.setDeploying(false, vdbName, false, response.message);
-                        throw RepoRestService.newRestException("Failed to deploy the ServiceSource. \n" + response.message);
+                        SvcSourceSelectionService.setDeploying(false, vdbName, false, RepoRestService.responseMessage(response));
+                        SvcSourceSelectionService.setLoading(false);
+                        throw RepoRestService.newRestException("Failed to deploy the Service-source. \n" + RepoRestService.responseMessage(response));
                     });
-            } catch (error) {} finally {
+            } catch (error) {
+                SvcSourceSelectionService.setLoading(false);
+                throw RepoRestService.newRestException("Failed to deploy the Service-source. \n" + error);
             }
         }
 
