@@ -10,7 +10,7 @@
             <div class="row-fluid">
                 <ol class="breadcrumb">
                     <li ng-repeat="page in vmmain.selectedPageCrumbs()">
-                        <a ng-href="{{page.template}}"><span class="fa fa-fw {{page.icon}}"></span><span>{{page.title}}</span></a>
+                        <a ng-click="vmmain.selectPage(page.id)"><span class="fa fa-fw {{page.icon}}"></span><span>{{page.title}}</span></a>
                     </li>
                 </ol>
             </div>
