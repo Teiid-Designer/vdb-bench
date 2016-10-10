@@ -50,6 +50,59 @@
            }
         });
 
+        /**
+         * Set the ddl for the selected service source
+         */
+        function setDDL() {
+            vm.selectedSourceDDL = '';
+
+            if (! vm.displayDdl)
+                return;
+
+            if (_.isEmpty(SvcSourceSelectionService.selectedServiceSource()))
+                return;
+
+            vm.selectedSourceDDL = 'Fetching DDL ...';
+
+            var vdbName = SvcSourceSelectionService.selectedServiceSource().keng__id;
+
+            var schemaSuccessCallback = function(modelName) {
+                try {
+                    RepoRestService.getTeiidVdbModelSchema( vdbName, modelName ).then(
+                        function ( result ) {
+                            vm.selectedSourceDDL = result.Information.schema;
+                        },
+                        function (response) {
+                            vm.selectedSourceDDL = "Failed to get the DDL. \n" + RepoRestService.responseMessage(response);
+                        });
+                } catch (error) {
+                    vm.selectedSourceDDL = "Failed to get the DDL. \n" + error;
+                }
+            };
+
+            var failureCallback = function(errorMsg) {
+                vm.selectedSourceDDL = "Failed to get the DDL. \n" + errorMsg;
+            };
+
+            SvcSourceSelectionService.selectedServiceSourceConnectionName(schemaSuccessCallback, failureCallback);
+        }
+
+        /** 
+         * Sets disabled state of all ServiceSource actions
+         */
+        function setActionsDisabled(enabled) {
+            vm.actionsConfig.primaryActions.forEach(function (theAction) {
+                if(theAction.name!=='New' && theAction.name!='Import') {
+                    theAction.isDisabled = enabled;
+                }
+            });
+            vm.actionsConfig.moreActions.forEach(function (theAction) {
+                if(theAction.name!=='New' && theAction.name!=='Import' && theAction.name!=='Display DDL') {
+                    theAction.isDisabled = enabled;
+                }
+            });
+        }
+
         /*
          * When the selected service source changed
          */
@@ -62,10 +115,30 @@
             }
 
             // Set the DDL for the selected item
-            var selSvcSourceName = SvcSourceSelectionService.selectedServiceSource().keng__id;
-            var selSvcSourceModelName = SvcSourceSelectionService.selectedServiceSourceConnectionName();
-            setDDL(selSvcSourceName,selSvcSourceModelName);
+            setDDL();
         });
+
+                /**
+         * Delete the specified VDB from the server
+         */
+        function deleteServerVdb(vdbName) {
+            try {
+                RepoRestService.deleteTeiidVdb( vdbName ).then(
+                    function () {
+                         // Refresh the list of service sources
+                        SvcSourceSelectionService.refresh(null);
+                        vm.refresh();
+                        // Disable the actions until next selection
+                        setActionsDisabled(true);
+                        vm.selectedSourceDDL = "";
+                    },
+                    function (response) {
+                        throw RepoRestService.newRestException("Failed to remove the ServiceSource. \n" + RepoRestService.responseMessage(response));
+                    });
+            } catch (error) {
+                throw RepoRestService.newRestException("Failed to remove the ServiceSource. \n" + error);
+            }
+        }
 
         /**
          * Delete the specified VDB from the workspace, then delete the server vdb (if it exists)
@@ -86,43 +159,6 @@
             }
         }
 
-        /**
-         * Delete the specified VDB from the server
-         */
-        function deleteServerVdb(vdbName) {
-            try {
-                RepoRestService.deleteTeiidVdb( vdbName ).then(
-                    function () {
-                         // Refresh the list of service sources
-                        SvcSourceSelectionService.refresh(null);
-                        vm.refresh();
-                        // Disable the actions until next selection
-                        setActionsDisabled(true);
-                        vm.selectedSourceDDL = "";
-                    },
-                    function (response) {
-                        throw RepoRestService.newRestException("Failed to remove the ServiceSource. \n" + RepoRestService.responseMessage(response));
-                    });
-            } catch (error) {} finally {
-            }
-        }
-
-        /**
-         * Get the DDL for the specified vdb and model
-         */
-        function setDDL(vdbName, modelName) {
-           try {
-                RepoRestService.getTeiidVdbModelSchema( vdbName, modelName ).then(
-                    function ( result ) {
-                        vm.selectedSourceDDL = result.Information.schema;
-                   },
-                    function (response) {
-                        throw RepoRestService.newRestException("Failed to get the DDL. \n" + RepoRestService.responseMessage(response));
-                    });
-            } catch (error) {} finally {
-            }
-        }
-        
         /**
          * Access to the collection of filtered data services
          */
@@ -271,7 +307,7 @@
          */
         var deleteSvcSourceMenuAction = function(action, item) {
             // Need to select the item first
-            SvcSourceSelectionService.selectServiceSource(item, true);
+            SvcSourceSelectionService.selectServiceSource(item);
 
             deleteSvcSourceClicked();
         };
@@ -359,6 +395,7 @@
          */
         var showHideDDLClicked = function() {
             vm.displayDdl = ! vm.displayDdl;
+            setDDL();
         };
 
         /** 
@@ -375,23 +412,7 @@
                 setActionsDisabled(false);
             }
         };  
-        
-        /** 
-         * Sets disabled state of all ServiceSource actions
-         */
-        var setActionsDisabled = function (enabled) {
-            vm.actionsConfig.primaryActions.forEach(function (theAction) {
-                if(theAction.name!=='New' && theAction.name!='Import') {
-                    theAction.isDisabled = enabled;
-                }
-            });
-            vm.actionsConfig.moreActions.forEach(function (theAction) {
-                if(theAction.name!=='New' && theAction.name!=='Import' && theAction.name!=='Display DDL') {
-                    theAction.isDisabled = enabled;
-                }
-            });
-        };   
-        
+
         /**
          * ServiceSource Actions
          */

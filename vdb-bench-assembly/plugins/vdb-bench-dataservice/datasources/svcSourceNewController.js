@@ -8,10 +8,10 @@
         .module(pluginName)
         .controller('SvcSourceNewController', SvcSourceNewController);
 
-    SvcSourceNewController.$inject = ['$scope', '$rootScope', 'REST_URI', 'RepoRestService', 
+    SvcSourceNewController.$inject = ['$scope', '$rootScope', 'REST_URI', 'SYNTAX', 'RepoRestService',
                                       'SvcSourceSelectionService', 'ConnectionSelectionService', 'TranslatorSelectionService'];
 
-    function SvcSourceNewController($scope, $rootScope, REST_URI, RepoRestService, 
+    function SvcSourceNewController($scope, $rootScope, REST_URI, SYNTAX, RepoRestService,
                                      SvcSourceSelectionService, ConnectionSelectionService, TranslatorSelectionService) {
         var vm = this;
 
@@ -173,10 +173,33 @@
             return vm.allTranslators;
         };
 
-        
+        /**
+         * Can a new source be created
+         */
+        vm.canCreateSvcSource = function() {
+            if (angular.isUndefined(vm.svcSourceName) ||
+                vm.svcSourceName === null || vm.svcSourceName === SYNTAX.EMPTY_STRING)
+                return false;
+
+            if (angular.isUndefined(vm.connection) || vm.connection === null)
+                return false;
+
+            if (angular.isUndefined(vm.translator) || vm.translator === null)
+                return false;
+
+            return true;
+        };
+
         // Event handler for clicking the create button
-        vm.onCreateSvcSourceClicked = function ( svcSourceName, svcSourceDescription, connectionName, jndiName, translatorName ) {
-            createAndDeploySvcSourceVdb( svcSourceName, svcSourceDescription, connectionName, jndiName, translatorName );
+        vm.onCreateSvcSourceClicked = function () {
+            if (! vm.canCreateSvcSource())
+                return;
+
+            var connectionName = vm.connection.keng__id;
+            var jndiName = vm.connection.dv__jndiName;
+            var translatorName = vm.translator.keng__id;
+
+            createAndDeploySvcSourceVdb( vm.svcSourceName, vm.svcSourceDescription, connectionName, jndiName, translatorName );
         };
     }
 

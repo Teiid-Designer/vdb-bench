@@ -27,8 +27,6 @@
         svcSrc.deploymentServiceName = null;
         svcSrc.deploymentSuccess = false;
         svcSrc.deploymentMessage = null;
-        svcSrc.selectedSvcSrcModelName = null;
-        svcSrc.selectedSvcSrcTranslatorName = null;
 
         /*
          * Service instance to be returned
@@ -281,38 +279,7 @@
             // Set the selected serviceSource
             //
             svcSrc.serviceSource = serviceSource;
-
-            //
-            // When deleting we don't want to asynchronously fetch the model
-            // or translator since they will have been deleted
-            //
-            if (angular.isDefined(noUpdateModel) && noUpdateModel)
-                return;
-
-            // Update the selected source modelName and TranslatorName - only if its in local workspace
-            if(svcSrc.serviceSource!==null && svcSrc.serviceSource.keng__dataPath!==null && svcSrc.serviceSource.keng__dataPath.indexOf("tko:workspace") >= 0) {
-                // Update the selected source ModelName and TranslatorName
-                try {
-                    RepoRestService.getVdbModels(svcSrc.serviceSource.keng__id).then(
-                        function (models) {
-                            svcSrc.selectedSvcSrcModelName = models[0].keng__id;
-                            RepoRestService.getVdbModelSources(svcSrc.serviceSource.keng__id,models[0].keng__id).then(
-                                function (modelSources) {
-                                    svcSrc.selectedSvcSrcTranslatorName = modelSources[0].vdb__sourceTranslator;
-                                    // Useful for broadcasting the selected service source has been updated
-                                    $rootScope.$broadcast("selectedServiceSourceChanged", svcSrc.serviceSource);
-                                },
-                                function (response) {
-                                    throw RepoRestService.newRestException("Failed getting VDB Translator name.\n" + RepoRestService.responseMessage(response));
-                                });
-                        },
-                        function (response) {
-                            throw RepoRestService.newRestException("Failed getting VDB Connection name.\n" + RepoRestService.responseMessage(response));
-                        });
-                } catch (error) {
-                    alert("An exception occurred:\n" + error.message);
-                }
-            }
+            $rootScope.$broadcast("selectedServiceSourceChanged", svcSrc.serviceSource);
         };
 
         /*
@@ -325,15 +292,63 @@
         /*
          * return selected serviceSource model name
          */
-        service.selectedServiceSourceConnectionName = function() {
-            return svcSrc.selectedSvcSrcModelName;
+        service.selectedServiceSourceConnectionName = function(onSuccessCallback, onFailureCallback) {
+            if(_.isEmpty(svcSrc.serviceSource)) {
+                onFailureCallback("No service source selected");
+                return;
+            }
+
+            if(_.isEmpty(svcSrc.serviceSource.keng__dataPath)) {
+                onFailureCallback("Selected service does not contain a workspace path");
+                return;
+            }
+
+            // Update the selected source modelName and TranslatorName - only if its in local workspace
+            if (svcSrc.serviceSource.keng__dataPath.indexOf("tko:workspace") < 0) {
+                onFailureCallback("Selected service source is not in the workspace");
+                return;
+            }
+
+            try {
+                RepoRestService.getVdbModels(svcSrc.serviceSource.keng__id).then(
+                    function (models) {
+                        if (_.isEmpty(models) || models.length === 0) {
+                            onFailureCallback("Failed getting VDB Connection name.\nThe service source model is not available");
+                            return;
+                        }
+
+                        var svcSrcModelName = models[0].keng__id;
+                        onSuccessCallback(svcSrcModelName);
+                    },
+                    function (response) {
+                        onFailureCallback("Failed getting VDB Connection name.\n" + RepoRestService.responseMessage(response));
+                    });
+            } catch (error) {
+                onFailureCallback("An exception occurred:\n" + error.message);
+            }
         };
 
         /*
          * return selected serviceSource translator name
          */
-        service.selectedServiceSourceTranslatorName = function() {
-            return svcSrc.selectedSvcSrcTranslatorName;
+        service.selectedServiceSourceTranslatorName = function(onSuccessCallback, onFailureCallback) {
+
+            var connectionNameCallback = function(connName) {
+                RepoRestService.getVdbModelSources(svcSrc.serviceSource.keng__id, connName).then(
+                    function (modelSources) {
+                        if (_.isEmpty(modelSources) || modelSources.length === 0) {
+                            onFailureCallback("Failed getting VDB Translator name.\nThe service source model source is not available");
+                            return;
+                        }
+
+                        onSuccessCallback(modelSources[0].vdb__sourceTranslator);
+                    },
+                    function (response) {
+                        onFailureCallback("Failed getting VDB Translator name.\n" + RepoRestService.responseMessage(response));
+                    });
+            };
+
+            service.selectedServiceSourceConnectionName(connectionNameCallback, onFailureCallback);
         };
 
         /*
