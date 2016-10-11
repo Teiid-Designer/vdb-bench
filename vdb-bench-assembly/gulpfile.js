@@ -157,7 +157,7 @@ gulp.task('connect', ['watch'], function () {
         port: 2772,
         fallback: 'index.html',
         staticAssets: [{
-            path: '/vdb-bench',
+            path: '/ds-builder',
             dir: '.'
     }],
         liveReload: {
