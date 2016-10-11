@@ -381,20 +381,30 @@
         };
 
         /**
+         * Valid formats currently implemented
+         */
+        service.validDocumentTypes = {
+            ZIP: 'zip',
+            VDB: '-vdb.xml',
+            TDS: 'tds',
+            DDL: 'ddl',
+            JAR: 'jar'
+        };
+
+        /**
          * Service: Determine the document type from the given file name
          * Returns: the document type for the file or null if not recognised
          */
         service.documentType = function(fileName) {
-            //
-            // Valid formats currently implemented
-            //
-            var validFormats = ['zip', '-vdb.xml', 'tds', 'ddl', 'jar'];
+
             var documentType = null;
-            validFormats.forEach( function(format) {
-                if (fileName.endsWith(format)) {
-                    documentType = format;
+            for (var key in service.validDocumentTypes) {
+                var suffix = service.validDocumentTypes[key];
+                if (fileName.endsWith(suffix)) {
+                    documentType = suffix;
+                    break;
                 }
-            });
+            }
 
             return documentType;
         };

@@ -95,8 +95,13 @@
 
             vm.documentType = RepoRestService.documentType(filePath);
             if (vm.documentType === null) {
-                alert(filePath + "'s file type is not valid hence the file cannot be imported.");
-                return false;
+                if (! filePath.includes(syntax.DOT)) {
+                    // assume the file is a directory and will be imported as a zip
+                    vm.documentType = RepoRestService.validDocumentTypes.ZIP;
+                } else {
+                    alert(filePath + "'s file type is not valid hence the file cannot be imported.");
+                    return false;
+                }
             }
 
             return true;
