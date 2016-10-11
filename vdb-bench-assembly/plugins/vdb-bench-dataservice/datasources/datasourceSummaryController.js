@@ -22,6 +22,20 @@
         vm.items = vm.allItems;
         vm.selectedSourceDDL = "";
         vm.deleteVdbInProgress = false;
+        vm.displayDdl = false; // Do not display by default
+
+        /**
+         * Options for the codemirror editor used for previewing ddl
+         */
+        vm.ddlEditorOptions = {
+            lineWrapping: true,
+            lineNumbers: true,
+            mode: 'text/x-sql'
+        };
+
+        vm.ddlEditorLoaded = function(_editor) {
+            // Nothing to do at the moment
+        };
 
         /*
          * When the data services have been loaded
@@ -35,6 +49,60 @@
                 vm.deleteVdbInProgress = false;
            }
         });
+
+        /**
+         * Set the ddl for the selected service source
+         */
+        function setDDL() {
+            vm.selectedSourceDDL = '';
+
+            if (! vm.displayDdl)
+                return;
+
+            if (_.isEmpty(SvcSourceSelectionService.selectedServiceSource()))
+                return;
+
+            vm.selectedSourceDDL = 'Fetching DDL ...';
+
+            var vdbName = SvcSourceSelectionService.selectedServiceSource().keng__id;
+
+            var schemaSuccessCallback = function(modelName) {
+                try {
+                    RepoRestService.getTeiidVdbModelSchema( vdbName, modelName ).then(
+                        function ( result ) {
+                            vm.selectedSourceDDL = result.Information.schema;
+                        },
+                        function (response) {
+                            vm.selectedSourceDDL = "Failed to get the DDL. \n" + RepoRestService.responseMessage(response);
+                        });
+                } catch (error) {
+                    vm.selectedSourceDDL = "Failed to get the DDL. \n" + error;
+                }
+            };
+
+            var failureCallback = function(errorMsg) {
+                vm.selectedSourceDDL = "Failed to get the DDL. \n" + errorMsg;
+            };
+
+            SvcSourceSelectionService.selectedServiceSourceConnectionName(schemaSuccessCallback, failureCallback);
+        }
+
+        /** 
+         * Sets disabled state of all ServiceSource actions
+         */
+        function setActionsDisabled(enabled) {
+            vm.actionsConfig.primaryActions.forEach(function (theAction) {
+                if(theAction.name!=='New' && theAction.name!='Import') {
+                    theAction.isDisabled = enabled;
+                }
+            });
+            vm.actionsConfig.moreActions.forEach(function (theAction) {
+                if(theAction.name!=='New' && theAction.name!=='Import' && theAction.name!=='Display DDL') {
+                    theAction.isDisabled = enabled;
+                }
+            });
+        }
+
         /*
          * When the selected service source changed
          */
@@ -47,31 +115,10 @@
             }
 
             // Set the DDL for the selected item
-            var selSvcSourceName = SvcSourceSelectionService.selectedServiceSource().keng__id;
-            var selSvcSourceModelName = SvcSourceSelectionService.selectedServiceSourceConnectionName();
-            setDDL(selSvcSourceName,selSvcSourceModelName);
+            setDDL();
         });
 
-        /**
-         * Delete the specified VDB from the workspace, then delete the server vdb (if it exists)
-         */
-        function deleteVdb(vdbName) {
-           // Set loading true for modal popup
-           vm.deleteVdbInProgress = true;
-           SvcSourceSelectionService.setLoading(true);
-           try {
-                RepoRestService.deleteVdb( vdbName ).then(
-                    function () {
-                        deleteServerVdb(vdbName);
-                    },
-                    function (response) {
-                        throw RepoRestService.newRestException("Failed to remove the ServiceSource. \n" + response.message);
-                    });
-            } catch (error) {} finally {
-            }
-        }
-
-        /**
+                /**
          * Delete the specified VDB from the server
          */
         function deleteServerVdb(vdbName) {
@@ -86,28 +133,32 @@
                         vm.selectedSourceDDL = "";
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to remove the ServiceSource. \n" + response.message);
+                        throw RepoRestService.newRestException("Failed to remove the ServiceSource. \n" + RepoRestService.responseMessage(response));
+                    });
+            } catch (error) {
+                throw RepoRestService.newRestException("Failed to remove the ServiceSource. \n" + error);
+            }
+        }
+
+        /**
+         * Delete the specified VDB from the workspace, then delete the server vdb (if it exists)
+         */
+        function deleteVdb(vdbName) {
+           // Set loading true for modal popup
+           vm.deleteVdbInProgress = true;
+           SvcSourceSelectionService.setLoading(true);
+           try {
+                RepoRestService.deleteVdb( vdbName ).then(
+                    function () {
+                        deleteServerVdb(vdbName);
+                    },
+                    function (response) {
+                        throw RepoRestService.newRestException("Failed to remove the ServiceSource. \n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
             }
         }
 
-        /**
-         * Get the DDL for the specified vdb and model
-         */
-        function setDDL(vdbName, modelName) {
-           try {
-                RepoRestService.getTeiidVdbModelSchema( vdbName, modelName ).then(
-                    function ( result ) {
-                        vm.selectedSourceDDL = result.Information.schema;
-                   },
-                    function (response) {
-                        throw RepoRestService.newRestException("Failed to get the DDL. \n" + response.message);
-                    });
-            } catch (error) {} finally {
-            }
-        }
-        
         /**
          * Access to the collection of filtered data services
          */
@@ -192,7 +243,7 @@
         };
      
         vm.viewsConfig = {
-          views: [pfViewUtils.getListView(), pfViewUtils.getCardView()],
+          views: [pfViewUtils.getListView()], // Only using list view for the moment
           onViewSelect: viewSelected
         };
         vm.viewsConfig.currentView = vm.viewsConfig.views[0].id;
@@ -246,11 +297,21 @@
          */
         var deleteSvcSourceClicked = function ( ) {
             var selVdbName = SvcSourceSelectionService.selectedServiceSource().keng__id;
-            
+
             // Deletes the workspace and server vdb (if exists).  Also does a refresh when complete
             deleteVdb(selVdbName);
         };
 
+        /**
+         * Handle delete ServiceSource menu select
+         */
+        var deleteSvcSourceMenuAction = function(action, item) {
+            // Need to select the item first
+            SvcSourceSelectionService.selectServiceSource(item);
+
+            deleteSvcSourceClicked();
+        };
+ 
         /**
          * Handle export ServiceSource click
          */
@@ -260,7 +321,17 @@
             } catch (error) {} finally {
             }
         };
-        
+
+        /**
+         * Handle export ServiceSource menu select
+         */
+        var exportSvcSourceMenuAction = function(action, item) {
+            // Need to select the item first
+            SvcSourceSelectionService.selectServiceSource(item);
+
+            exportSvcSourceClicked();
+        };
+
         /**
          * Handle edit ServiceSource click
          */
@@ -273,11 +344,31 @@
         };
 
         /**
+         * Handle edit ServiceSource menu select
+         */
+        var editSvcSourceMenuAction = function(action, item) {
+            // Need to select the item first
+            SvcSourceSelectionService.selectServiceSource(item);
+
+            editSvcSourceClicked();
+        };
+
+        /**
          * Handle clone ServiceSource click
          */
         var cloneSvcSourceClicked = function( ) {
             // Broadcast the pageChange
             $rootScope.$broadcast("dataServicePageChanged", 'svcsource-clone');
+        };
+
+        /**
+         * Handle clone ServiceSource menu select
+         */
+        var cloneSvcSourceMenuAction = function(action, item) {
+            // Need to select the item first
+            SvcSourceSelectionService.selectServiceSource(item);
+
+            cloneSvcSourceClicked();
         };
 
         /**
@@ -298,7 +389,15 @@
             // Broadcast the pageChange
             $rootScope.$broadcast("dataServicePageChanged", 'svcsource-import');
         };
-        
+
+        /**
+         * Toggle the displaying of the DDL window
+         */
+        var showHideDDLClicked = function() {
+            vm.displayDdl = ! vm.displayDdl;
+            setDDL();
+        };
+
         /** 
          * Handle listView and cardView selection
          */
@@ -313,23 +412,7 @@
                 setActionsDisabled(false);
             }
         };  
-        
-        /** 
-         * Sets disabled state of all ServiceSource actions
-         */
-        var setActionsDisabled = function (enabled) {
-            vm.actionsConfig.primaryActions.forEach(function (theAction) {
-                if(theAction.name!=='New' && theAction.name!='Import') {
-                    theAction.isDisabled = enabled;
-                }
-            });
-            vm.actionsConfig.moreActions.forEach(function (theAction) {
-                if(theAction.name!=='New' && theAction.name!='Import') {
-                    theAction.isDisabled = enabled;
-                }
-            });
-        };   
-        
+
         /**
          * ServiceSource Actions
          */
@@ -375,11 +458,43 @@
               title: 'Import a ServiceSource',
               actionFn: importSvcSourceClicked,
               isDisabled: false
+            },
+            {
+              isSeparator: true
+            },
+            {
+              name: 'Display DDL',
+              title: 'Show / Hide the DDL window',
+              actionFn: showHideDDLClicked,
+              isDisabled: false
             }
           ],
           actionsInclude: true
         };
-        
+
+        vm.menuActions = [
+            {
+                name: 'Edit',
+                title: 'Edit the Service-source',
+                actionFn: editSvcSourceMenuAction
+            },
+            {
+                name: 'Delete',
+                title: 'Delete the Service-source',
+                actionFn: deleteSvcSourceMenuAction
+            },
+            {
+                name: 'Export',
+                title: 'Export the Service-source',
+                actionFn: exportSvcSourceMenuAction
+            },
+            {
+                name: 'Copy',
+                title: 'Copy the Service-source',
+                actionFn: cloneSvcSourceMenuAction
+            }
+          ];
+
         /**
          * Toolbar Configuration
          */

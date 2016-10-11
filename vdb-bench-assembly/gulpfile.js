@@ -133,8 +133,12 @@ gulp.task('app-templates', function () {
  */
 gulp.task('watch', ['build'], function () {
     plugins.watch(['libs/**/*.{js, css}', 'index.html',
-                            config.app.root + '**/*.{js, less, html}',
-                            config.plugins.root + '**/*.{js, less, html}',
+                            config.app.root + '**/*.js',
+                            config.app.root + '**/*.html',
+                            config.app.root + '**/*.less',
+                            config.plugins.root + '**/*.js',
+                            config.plugins.root + '**/*.less',
+                            config.plugins.root + '**/*.html',
                             '!' + config.plugins.root + config.plugins.templateModule + '.js',
                             '!' + config.app.root + config.app.templateModule + '.js'
                          ], function () {
@@ -153,7 +157,7 @@ gulp.task('connect', ['watch'], function () {
         port: 2772,
         fallback: 'index.html',
         staticAssets: [{
-            path: '/vdb-bench',
+            path: '/ds-builder',
             dir: '.'
     }],
         liveReload: {

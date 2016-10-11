@@ -1,5 +1,22 @@
-<div class="container-fluid" ng-controller="DataServicePageController as vmmain">
-    <div class="col-sm-12">
+<div id="dataservice-main-container" class="container-fluid" ng-controller="DataServicePageController as vmmain">
+
+    <div class="ds-navbar-container">
+        <ng-include src="'plugins/vdb-bench-dataservice/dataservice-navbar.html'"></ng-include>
+    </div>
+
+    <div class="ds-navbar-contents">
+        <!-- breadcrumbs -->
+        <div class="container-fluid dsb-breadcrumbs">
+            <div class="row-fluid">
+                <ol class="breadcrumb">
+                    <li ng-repeat="page in vmmain.selectedPageCrumbs()">
+                        <a ng-click="vmmain.selectPage(page.id)"><span class="fa fa-fw {{page.icon}}"></span><span>{{page.title}}</span></a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- page content -->
         <ng-include src="vmmain.selectedPage.template"></ng-include>
     </div>
 </div>

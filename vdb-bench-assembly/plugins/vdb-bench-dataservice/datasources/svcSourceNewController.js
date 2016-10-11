@@ -8,10 +8,10 @@
         .module(pluginName)
         .controller('SvcSourceNewController', SvcSourceNewController);
 
-    SvcSourceNewController.$inject = ['$scope', '$rootScope', 'REST_URI', 'RepoRestService', 
+    SvcSourceNewController.$inject = ['$scope', '$rootScope', 'REST_URI', 'SYNTAX', 'RepoRestService',
                                       'SvcSourceSelectionService', 'ConnectionSelectionService', 'TranslatorSelectionService'];
 
-    function SvcSourceNewController($scope, $rootScope, REST_URI, RepoRestService, 
+    function SvcSourceNewController($scope, $rootScope, REST_URI, SYNTAX, RepoRestService,
                                      SvcSourceSelectionService, ConnectionSelectionService, TranslatorSelectionService) {
         var vm = this;
 
@@ -49,6 +49,9 @@
          * When loading finishes on create / deploy
          */
         $scope.$on('loadingServiceSourcesChanged', function (event, loadingState) {
+            if (vm.createAndDeployInProgress === loadingState)
+                return;
+
             if(loadingState === false) {
                 vm.createAndDeployInProgress = false;
             }
@@ -69,11 +72,16 @@
                         if(theVdb.keng__id === svcSourceName) {
                             createVdbModel( svcSourceName, connectionName, translatorName, jndiName );
                         }
+
+                        SvcSourceSelectionService.setLoading(false);
                     },
                     function (resp) {
-                        throw RepoRestService.newRestException("Failed to create the source model. \n" + resp.message);
+                        SvcSourceSelectionService.setLoading(false);
+                        throw RepoRestService.newRestException("Failed to create the service source Vdb. \n" + RepoRestService.responseMessage(resp));
                     });
-            } catch (error) {} finally {
+            } catch (error) {
+                SvcSourceSelectionService.setLoading(false);
+                throw RepoRestService.newRestException("Failed to create the service source Vdb. \n" + error);
             }
         }
 
@@ -88,11 +96,16 @@
                         if(theModel.keng__id === connectionName) {
                             createVdbModelSource( svcSourceName, connectionName, connectionName, translatorName, jndiName );
                         }
+
+                        SvcSourceSelectionService.setLoading(false);
                     },
                     function (resp) {
-                        throw RepoRestService.newRestException("Failed to create the source model. \n" + resp.message);
+                        SvcSourceSelectionService.setLoading(false);
+                        throw RepoRestService.newRestException("Failed to create the source model. \n" + RepoRestService.responseMessage(resp));
                     });
-            } catch (error) {} finally {
+            } catch (error) {
+                SvcSourceSelectionService.setLoading(false);
+                throw RepoRestService.newRestException("Failed to create the source model. \n" + error);
             }
         }
 
@@ -107,9 +120,12 @@
                         deployVdb( vdbName );
                     },
                     function (resp) {
-                        throw RepoRestService.newRestException("Failed to create the source model. \n" + resp.message);
+                        SvcSourceSelectionService.setLoading(false);
+                        throw RepoRestService.newRestException("Failed to create the source model connection. \n" + RepoRestService.responseMessage(resp));
                     });
-            } catch (error) {} finally {
+            } catch (error) {
+                SvcSourceSelectionService.setLoading(false);
+                throw RepoRestService.newRestException("Failed to create the source model connection. \n" + error);
             }
         }
 
@@ -130,12 +146,16 @@
                         }
                         // Reinitialise the list of service sources
                         SvcSourceSelectionService.refresh('datasource-summary');
+                        SvcSourceSelectionService.setLoading(false);
                    },
                     function (response) {
-                        SvcSourceSelectionService.setDeploying(false, vdbName, false, response.message);
-                        throw RepoRestService.newRestException("Failed to deploy the ServiceSource. \n" + response.message);
+                        SvcSourceSelectionService.setDeploying(false, vdbName, false, RepoRestService.responseMessage(response));
+                        SvcSourceSelectionService.setLoading(false);
+                        throw RepoRestService.newRestException("Failed to deploy the Service-source. \n" + RepoRestService.responseMessage(response));
                     });
-            } catch (error) {} finally {
+            } catch (error) {
+                SvcSourceSelectionService.setLoading(false);
+                throw RepoRestService.newRestException("Failed to deploy the Service-source. \n" + error);
             }
         }
 
@@ -153,10 +173,33 @@
             return vm.allTranslators;
         };
 
-        
+        /**
+         * Can a new source be created
+         */
+        vm.canCreateSvcSource = function() {
+            if (angular.isUndefined(vm.svcSourceName) ||
+                vm.svcSourceName === null || vm.svcSourceName === SYNTAX.EMPTY_STRING)
+                return false;
+
+            if (angular.isUndefined(vm.connection) || vm.connection === null)
+                return false;
+
+            if (angular.isUndefined(vm.translator) || vm.translator === null)
+                return false;
+
+            return true;
+        };
+
         // Event handler for clicking the create button
-        vm.onCreateSvcSourceClicked = function ( svcSourceName, svcSourceDescription, connectionName, jndiName, translatorName ) {
-            createAndDeploySvcSourceVdb( svcSourceName, svcSourceDescription, connectionName, jndiName, translatorName );
+        vm.onCreateSvcSourceClicked = function () {
+            if (! vm.canCreateSvcSource())
+                return;
+
+            var connectionName = vm.connection.keng__id;
+            var jndiName = vm.connection.dv__jndiName;
+            var translatorName = vm.translator.keng__id;
+
+            createAndDeploySvcSourceVdb( vm.svcSourceName, vm.svcSourceDescription, connectionName, jndiName, translatorName );
         };
     }
 

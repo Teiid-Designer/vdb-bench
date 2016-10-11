@@ -1,10 +1,4 @@
 <div class="container-fluid" ng-controller="SvcSourceEditController as vm">
-    <ol class="breadcrumb">
-        <li><a ng-click="vmmain.selectPage('dataservice-summary')"><i class="fa fa-cubes fa-fw" aria-hidden="true"></i> DataServices</a></li>
-        <li><a ng-click="vmmain.selectPage('datasource-summary')"><i class="fa fa-database fa-fw" aria-hidden="true"></i> Service Sources</a></li>
-        <li>New Service Source</li>
-    </ol>
-    
     <div id="svcsource-edit-updating" ng-show="vm.connsLoading==true || vm.transLoading==true" class="col-md-10 row">
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
         <span class="sr-only">Loading...</span>

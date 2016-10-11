@@ -2,8 +2,8 @@
 <html>
 
 <head>
-    <title>vdb-bench</title>
-    <base href="/vdb-bench/"></base>
+    <title>Dataservice Builder</title>
+    <base href="/ds-builder/"></base>
     <meta charset="UTF8">
 
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
@@ -217,10 +217,9 @@
 </head>
 
 <body ng-controller="App.AppController as vm">
-    <div ng-show="vm.isAuthenticated()">
-        <nav class="navbar navbar-default navbar-fixed-top navbar-pf ng-cloak" role="navigation">
+    <nav id="app-navbar" class="navbar navbar-default navbar-pf ng-cloak" role="navigation" ng-show="vm.authenticated()">
         <div class="navbar-header" hawtio-extension name="hawtio-header">
-            <a class="navbar-brand"><img src="img/hawtio_logo.svg"></a>
+            <a class="navbar-brand"><img src="app/content/img/teiid-dsb-banner.png"></a>
         </div>
         <ul class="nav navbar-nav navbar-utility ng-cloak">
             <li class="dropdown">
@@ -228,19 +227,15 @@
                     <span class="pficon pficon-user"></span> {{vm.getUsername()}}<b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu" hawtio-extension name="hawtio-user">
-                    <!--
-            <li>
-              <a href="#">Link</a>
-            </li>
-            -->
                 </ul>
             </li>
-
         </ul>
-        <ul class="nav navbar-nav navbar-primary" hawtio-main-nav></ul>
-        <ul class="nav navbar-nav navbar-persistent" hawtio-sub-tabs></ul>
+        <!--
+            Commented out as only dataservices module displays a tab
+         -->
+<!--        <ul class="nav navbar-nav navbar-primary" hawtio-main-nav></ul>-->
+<!--        <ul class="nav navbar-nav navbar-persistent" hawtio-sub-tabs></ul>-->
     </nav>
-    </div>
 
     <div id="main" class="container-fluid ng-cloak" ng-controller="HawtioNav.ViewController">
         <div ng-include src="viewPartial"></div>

@@ -1,0 +1,50 @@
+<div id="dsb-nav-menu-shade" style="display:none">
+</div>
+
+<div id="dsb-vertical-nav">
+    <div id="dsb-nav-item-dashboard" class="dsb-nav-item active" ng-click="vmmain.selectNavItem('dv-home')" body-click="vmmain.selectNavItem(null);">
+        <span class="fa fa-fw fa-dashboard"></span>
+        <div>DV Home</div>
+    </div>
+    <div id="dsb-nav-item-dataservices" class="dsb-nav-item" ng-click="vmmain.selectNavItem('dataservice-summary')" body-click="vmmain.selectNavItem(null);">
+        <span class="fa fa-fw fa-cubes"></span>
+        <div>Data Services</div>
+    </div>
+    <div id="ds-nav-item-sources" class="dsb-nav-item" ng-click="vmmain.selectNavItem('datasource-summary')" body-click="vmmain.selectNavItem(null);">
+        <span class="fa fa-fw fa-database"></span>
+        <div>Sources</div>
+    </div>
+    <div class="dsb-nav-item-filler">
+    </div>
+
+    <!-- detail menus -->
+    <div id="dsb-vertical-nav-details" ng-switch="vmmain.selectedNavItem" ng-show="vmmain.navItemSelected()">
+        <div id="dsb-nav-detail-dashboard" class="dsb-nav-detail-item" ng-switch-when="dv-home">
+            <h3>DV Home</h3>
+            <p>Click below to navigate back to the default Data Service dashboard.</p>
+            <ul>
+                <li><a href="dashboard.html">Back to DV Home</a></li>
+            </ul>
+        </div>
+        <div id="dsb-nav-detail-dataservices" class="dsb-nav-detail-item" ng-switch-when="dataservice-summary">
+            <h3>Data Services</h3>
+            <p class="description">Choose from the actions below or jump directly to one of your starred/favorited Data Services.</p>
+            <h4 class="heading">Data Service Actions</h4>
+            <div ng-repeat="page in vmmain.pages(['dataservice-summary', 'dataservice-new', 'dataservice-import'])">
+                <div class="action">
+                    <a ng-click="vmmain.selectPage(page.id)"><span class="fa fa-fw {{page.icon}}"></span><span>{{page.title}}</span></a>
+                </div>
+            </div>
+        </div>
+        <div id="dsb-nav-detail-mappings" class="dsb-nav-detail-item" ng-switch-when="datasource-summary">
+            <h3>Sources</h3>
+            <p class="description">Choose from the actions below or jump directly to one of your starred/favorited Sources.</p>
+            <h4 class="heading">Source Actions</h4>
+            <div ng-repeat="page in vmmain.pages(['datasource-summary', 'svcsource-new', 'svcsource-import'])">
+                <div class="action">
+                    <a ng-click="vmmain.selectPage(page.id)"><span class="fa fa-fw {{page.icon}}"></span><span>{{page.title}}</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

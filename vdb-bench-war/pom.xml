@@ -10,10 +10,10 @@
   <artifactId>vdb-bench-war</artifactId>
   <packaging>war</packaging>
   <name>${project.artifactId}</name>
-  <description>vdb-bench :: Web Console</description>
+  <description>dataservice builder :: Web Console</description>
 
   <properties>
-    <finalName>vdb-bench</finalName>
+    <finalName>ds-builder</finalName>
     <destDir>target/vdb-bench</destDir>
   </properties>
 
@@ -135,7 +135,7 @@
           <webAppSourceDirectory>../vdb-bench-assembly/</webAppSourceDirectory>
           <scanIntervalSeconds>1</scanIntervalSeconds>
           <webAppConfig>
-            <contextPath>/vdb-bench/</contextPath>
+            <contextPath>/ds-builder/</contextPath>
             <!--<contextPath>${context}</contextPath>-->
           </webAppConfig>
           <classesDirectory>${project.build.directory}/${project.name}/WEB-INF/classes</classesDirectory>

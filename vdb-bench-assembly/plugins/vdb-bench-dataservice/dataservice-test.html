@@ -1,10 +1,5 @@
 <div class="container-fluid" ng-controller="DSTestController as vm">
 
-    <ol class="breadcrumb">
-        <li><a ng-click="vmmain.selectPage('dataservice-summary')"><i class="fa fa-cubes fa-fw" aria-hidden="true"></i> DataServices</a></li>
-        <li>Test DataService</li>
-    </ol>
-    
     <!-- Show spinner while deploying -->
     <div ng-show="vm.dsDeploymentInProgress==true" class="col-md-10 row">
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
@@ -14,7 +9,7 @@
     <div ng-show="vm.dsDeploymentInProgress==false" class="row">
         <div class="col-sm-12">
             <div id="ds-test-header">
-                <h1><i class="fa fa-cubes" aria-hidden="true"></i>Test DataService '{{vmmain.selectedDataservice().keng__id}}'</h1>
+                <h1><i class="fa pficon-running" aria-hidden="true"></i> Test DataService '{{vmmain.selectedDataservice().keng__id}}'</h1>
             </div>
         </div>
     </div>

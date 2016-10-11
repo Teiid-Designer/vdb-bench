@@ -1,13 +1,9 @@
 <div class="container-fluid" ng-controller="DSEditController as vm">
-    <ol class="breadcrumb">
-        <li><a ng-click="vmmain.selectPage('dataservice-summary')"><i class="fa fa-cubes fa-fw" aria-hidden="true"></i> DataServices</a></li>
-        <li>Edit DataService</li>
-    </ol>
-    
+
     <div id="dsEdit-edit-controls" ng-show="vm.svcSourcesLoading==false" class="col-md-10 row">
             <div class="row">
                 <div class="col-sm-9">
-                    <h1><i class="fa fa-cubes" aria-hidden="true"></i>Edit DataService '{{vmmain.selectedDataservice().keng__id}}'</h1>
+                    <h1><i class="fa pficon-edit" aria-hidden="true"></i> Edit DataService '{{vmmain.selectedDataservice().keng__id}}'</h1>
                     <h3>&nbsp;&nbsp;Edit the DataService</h3>
                     <form name="dsForm" class="form-horizontal">
                         <div class="form-group">

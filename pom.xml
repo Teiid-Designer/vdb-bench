@@ -50,7 +50,7 @@
 
   <properties>
     <jettyPort>8282</jettyPort>
-    <context>/vdb-bench</context>
+    <context>/ds-builder</context>
     <hawtio-config-dir>${basedir}/hawtio-config</hawtio-config-dir>
     <hawtio-config-repo>https://github.com/hawtio/hawtio-config.git</hawtio-config-repo>
     <hawtio-console-version>1.0.0</hawtio-console-version>

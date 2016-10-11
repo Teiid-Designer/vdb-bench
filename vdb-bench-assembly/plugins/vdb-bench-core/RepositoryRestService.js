@@ -13,10 +13,10 @@
 
     RepoRestService.$inject = ['CONFIG', 'SYNTAX', 'REST_URI', 'VDB_SCHEMA',
                                              'VDB_KEYS', 'RepoSelectionService', 'Restangular',
-                                             '$http', '$q', '$base64', 'AuthService'];
+                                             '$http', '$q', '$base64', 'CredentialService'];
 
     function RepoRestService(CONFIG, SYNTAX, REST_URI, VDB_SCHEMA, VDB_KEYS, RepoSelectionService,
-                                            Restangular, $http, $q, $base64, AuthService) {
+                                            Restangular, $http, $q, $base64, CredentialService) {
 
         /*
          * Service instance to be returned
@@ -71,7 +71,7 @@
         }
         
         function getUserWorkspacePath() {
-            return "/tko:komodo/tko:workspace/" + AuthService.credentials().username;
+            return "/tko:komodo/tko:workspace/" + CredentialService.credentials().username;
         }
 
         /**
@@ -84,7 +84,7 @@
             var repo = RepoSelectionService.getSelected();
             var baseUrl = url(repo);
             var restService = service.cachedServices[baseUrl];
-            var user = AuthService.credentials();
+            var user = CredentialService.credentials();
 
             if (!_.isEmpty(restService)) {
                 restService.setDefaultHeaders(authHeader(user.username, user.password));
@@ -135,7 +135,7 @@
         /**
          * Service: Try and find the reponse's message and return it
          */
-        service.reponseMessage = function(response) {
+        service.responseMessage = function(response) {
             if (response.message)
                 return response.message;
             else if (response.data && response.data.error)
@@ -238,7 +238,7 @@
          */
         service.createVdb = function (vdbName, vdbDescription, isSource) {
             if (!vdbName) {
-                throw RestServiceException("VDB name is not defined");
+                throw new RestServiceException("VDB name is not defined");
             }
 
             return getRestService().then(function (restService) {
@@ -266,7 +266,7 @@
          */
         service.createVdbModel = function (vdbName, modelName) {
             if (!vdbName || !modelName) {
-                throw RestServiceException("VDB name or model name is not defined");
+                throw new RestServiceException("VDB name or model name is not defined");
             }
 
             return getRestService().then(function (restService) {
@@ -287,10 +287,10 @@
          */
         service.createVdbModelSource = function (vdbName, modelName, sourceName, transName, jndiName) {
             if (!vdbName || !modelName || !sourceName) {
-                throw RestServiceException("VDB name, modelName or sourceName is not defined");
+                throw new RestServiceException("VDB name, modelName or sourceName is not defined");
             }
             if (!transName || !jndiName) {
-                throw RestServiceException("Translator name or JNDI name is not defined");
+                throw new RestServiceException("Translator name or JNDI name is not defined");
             }
 
             return getRestService().then(function (restService) {
@@ -314,7 +314,7 @@
          */
         service.deleteVdb = function (vdbName) {
             if (!vdbName) {
-                throw RestServiceException("Vdb name for delete is not defined");
+                throw new RestServiceException("Vdb name for delete is not defined");
             }
 
             return getRestService().then(function (restService) {
@@ -328,7 +328,7 @@
          */
         service.deleteTeiidVdb = function (vdbName) {
             if (!vdbName) {
-                throw RestServiceException("Vdb name for delete is not defined");
+                throw new RestServiceException("Vdb name for delete is not defined");
             }
 
             return getRestService().then(function (restService) {
@@ -342,7 +342,7 @@
          */
         service.cloneVdb = function (vdbName, newVdbName) {
             if (!vdbName || !newVdbName) {
-                throw RestServiceException("Vdb name or name for the copy are not defined");
+                throw new RestServiceException("Vdb name or name for the copy are not defined");
             }
 
             return getRestService().then(function (restService) {
@@ -355,7 +355,7 @@
          */
         service.deployVdb = function (vdbName) {
             if (!vdbName) {
-                throw RestServiceException("VDB name for deploy is not defined");
+                throw new RestServiceException("VDB name for deploy is not defined");
             }
             
             return getRestService().then(function (restService) {
@@ -381,20 +381,30 @@
         };
 
         /**
+         * Valid formats currently implemented
+         */
+        service.validDocumentTypes = {
+            ZIP: 'zip',
+            VDB: '-vdb.xml',
+            TDS: 'tds',
+            DDL: 'ddl',
+            JAR: 'jar'
+        };
+
+        /**
          * Service: Determine the document type from the given file name
          * Returns: the document type for the file or null if not recognised
          */
         service.documentType = function(fileName) {
-            //
-            // Valid formats currently implemented
-            //
-            var validFormats = ['zip', '-vdb.xml', 'tds', 'ddl', 'jar'];
+
             var documentType = null;
-            validFormats.forEach( function(format) {
-                if (fileName.endsWith(format)) {
-                    documentType = format;
+            for (var key in service.validDocumentTypes) {
+                var suffix = service.validDocumentTypes[key];
+                if (fileName.endsWith(suffix)) {
+                    documentType = suffix;
+                    break;
                 }
-            });
+            }
 
             return documentType;
         };
@@ -522,7 +532,7 @@
          */
         service.createDataService = function (dataserviceName, dataserviceDescription) {
             if (!dataserviceName) {
-                throw RestServiceException("Data service name is not defined");
+                throw new RestServiceException("Data service name is not defined");
             }
 
             return getRestService().then(function (restService) {
@@ -543,7 +553,7 @@
          */
         service.cloneDataService = function (dataserviceName, newDataserviceName) {
             if (!dataserviceName || !newDataserviceName) {
-                throw RestServiceException("Data service name or service name for clone are not defined");
+                throw new RestServiceException("Data service name or service name for clone are not defined");
             }
 
             return getRestService().then(function (restService) {
@@ -556,7 +566,7 @@
          */
         service.updateDataService = function (dataserviceName, dataserviceDescription) {
             if (!dataserviceName || !dataserviceDescription) {
-                throw RestServiceException("Data service name or description for update are not defined");
+                throw new RestServiceException("Data service name or description for update are not defined");
             }
             
             return getRestService().then(function (restService) {
@@ -576,7 +586,7 @@
          */
         service.deleteDataService = function (dataserviceName) {
             if (!dataserviceName) {
-                throw RestServiceException("Data service name for delete is not defined");
+                throw new RestServiceException("Data service name for delete is not defined");
             }
 
             return getRestService().then(function (restService) {
@@ -590,7 +600,7 @@
          */
         service.deployDataService = function (dataserviceName) {
             if (!dataserviceName) {
-                throw RestServiceException("Data service name for deploy is not defined");
+                throw new RestServiceException("Data service name for deploy is not defined");
             }
 
             var dataservicePath = getUserWorkspacePath() + "/" +dataserviceName;
@@ -611,7 +621,7 @@
          */
         service.getDataSources = function (serviceType) {
             if (!serviceType) {
-                throw RestServiceException("DataSource serviceType not specified");
+                throw new RestServiceException("DataSource serviceType not specified");
             }
 
             var url = REST_URI.WORKSPACE + REST_URI.DATA_SOURCES;
@@ -641,7 +651,7 @@
          */
         service.getTeiidVdbModelSchema = function (vdbName, modelName) {
             if(!vdbName || !modelName) {
-                throw RestServiceException("VdbName or ModelName not specified");
+                throw new RestServiceException("VdbName or ModelName not specified");
             }
             return getRestService().then(function (restService) {
                 var url = REST_URI.TEIID + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName + REST_URI.SCHEMA;
@@ -655,7 +665,7 @@
          */
         service.createDataSource = function (datasourceName, jndiName, driverName) {
             if (!datasourceName || !driverName || !jndiName) {
-                throw RestServiceException("Data source name, jndiName or driverName is not defined");
+                throw new RestServiceException("Data source name, jndiName or driverName is not defined");
             }
 
             return getRestService().then(function (restService) {
@@ -677,7 +687,7 @@
          */
         service.cloneDataSource = function (datasourceName, newDatasourceName) {
             if (!datasourceName || !newDatasourceName) {
-                throw RestServiceException("Data source name or source name for clone are not defined");
+                throw new RestServiceException("Data source name or source name for clone are not defined");
             }
 
             return getRestService().then(function (restService) {
@@ -691,7 +701,7 @@
          */
         service.updateDataSource = function (datasourceName, jsonPayload) {
             if (!datasourceName || !jsonPayload) {
-                throw RestServiceException("One of the inputs for update are not defined");
+                throw new RestServiceException("One of the inputs for update are not defined");
             }
             
             return getRestService().then(function (restService) {
@@ -704,7 +714,7 @@
          */
         service.deleteDataSource = function (datasourceName) {
             if (!datasourceName) {
-                throw RestServiceException("Data source name for delete is not defined");
+                throw new RestServiceException("Data source name for delete is not defined");
             }
 
             return getRestService().then(function (restService) {
@@ -718,7 +728,7 @@
          */
         service.deployDataSource = function (datasourceName) {
             if (!datasourceName) {
-                throw RestServiceException("Data source name for deploy is not defined");
+                throw new RestServiceException("Data source name for deploy is not defined");
             }
 
             return getRestService().then(function (restService) {
@@ -737,7 +747,7 @@
          */
         service.getDrivers = function (serviceType) {
             if (!serviceType) {
-                throw RestServiceException("Driver serviceType not specified");
+                throw new RestServiceException("Driver serviceType not specified");
             }
 
             var url = REST_URI.WORKSPACE + REST_URI.DRIVERS;
@@ -755,7 +765,7 @@
          */
         service.deployDriver = function (driverName) {
             if (!driverName) {
-                throw RestServiceException("Driver name for deploy is not defined");
+                throw new RestServiceException("Driver name for deploy is not defined");
             }
 
             return getRestService().then(function (restService) {

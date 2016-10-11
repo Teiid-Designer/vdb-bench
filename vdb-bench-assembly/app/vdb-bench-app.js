@@ -8,18 +8,13 @@ var App;
 
     App._module = angular.module(App.pluginName, ['vdb-bench.core']);
 
-    App._module.factory('AuthService', AuthService);
-    AuthService.$inject = ['$rootScope', '$location', '$route', '$window', 'localStorage'];
-    function AuthService($rootScope, $location, $route, $window, localStorage) {
-
+    App._module.factory('CredentialService', CredentialService);
+    CredentialService.$inject = ['localStorage', '$window'];
+    function CredentialService(localStorage, $window) {
         /*
          * Service instance to be returned
          */
         var service = {};
-
-        var listener;
-
-        var lastLocation = {};
 
         var user = {
             username: null,
@@ -28,20 +23,35 @@ var App;
 
         var loggingOut = false;
 
+        service.loggingOut = function() {
+            return loggingOut;
+        };
+
+        service.setLoggingOut = function(value) {
+            loggingOut = value;
+        };
+
         service.credentials = function() {
             if (loggingOut)
                 return user;
 
-            if ('userPrincipal' in $window) {
-                user = $window.userPrincipal;
-                console.debug("User details loaded from parent window: ", StringHelpers.toString(user));
-            }
-            else if ('userPrincipal' in localStorage) {
-                user = angular.fromJson(localStorage.userPrincipal);
-                console.debug("User details loaded from local storage: ", StringHelpers.toString(user));
+            if (user.username === null && user.password === null) {
+                if ('userPrincipal' in $window) {
+                    user = $window.userPrincipal;
+                    console.debug("User details loaded from parent window: ", StringHelpers.toString(user));
+                }
+                else if ('userPrincipal' in localStorage) {
+                    user = angular.fromJson(localStorage.userPrincipal);
+                    console.debug("User details loaded from local storage: ", StringHelpers.toString(user));
+                }
             }
 
             return user;
+        };
+
+        service.reset = function() {
+            user.username = null;
+            user.password = null;
         };
 
         service.setCredentials = function(username, password, remember) {
@@ -58,16 +68,34 @@ var App;
             return 'userPrincipal' in localStorage;
         };
 
-        service.isAuthenticated = function() {
-            return user.password !== null;
+        return service;
+    }
+
+    App._module.factory('AuthService', AuthService);
+    AuthService.$inject = ['CredentialService', '$rootScope', '$location', '$route', 'RepoRestService'];
+    function AuthService(CredentialService, $rootScope, $location, $route, RepoRestService) {
+
+        /*
+         * Service instance to be returned
+         */
+        var service = {};
+
+        var listener;
+
+        var lastLocation = {};
+
+        var authenticated = false;
+
+        service.authenticated = function() {
+            return authenticated;
         };
 
         service.lastLocation = function() {
             return lastLocation.url || '/';
         };
 
-        service.redirect = function() {
-            if (! service.isAuthenticated()) {
+        var redirectCallback = function() {
+            if (! service.authenticated()) {
                 var currentUrl = $location.url();
                 if (!currentUrl.startsWith('/login')) {
                     lastLocation.url = currentUrl;
@@ -79,8 +107,6 @@ var App;
                         $rootScope.reloaded = true;
                     }
                 }
-
-                loggingOut = false;
             }
             else {
                 if ($location.url().startsWith('/login')) {
@@ -93,14 +119,40 @@ var App;
             }
         };
 
-        service.logout = function() {
-            user = {
-                username: null,
-                password: null
-            };
+        service.redirect = function() {
+            if (CredentialService.isRemembered() && ! CredentialService.loggingOut()) {
+                var credentials = CredentialService.credentials();
+                service.login(credentials.username, credentials.password, true, redirectCallback, redirectCallback);
+            } else {
+                redirectCallback();
+            }
+        };
 
+        service.login = function(username, password, remember, onSuccess, onFailure) {
+            CredentialService.setLoggingOut(false);
+
+            RepoRestService.testConnection(username, password)
+                                    .then(
+                                        function(response) {
+                                            if (response === 0) {
+                                                CredentialService.setCredentials(username, password, remember);
+                                                authenticated = true;
+                                                if (angular.isDefined(onSuccess) && onSuccess !== null)
+                                                    onSuccess();
+                                            } else {
+                                                authenticated = false;
+                                                if (angular.isDefined(onFailure) && onFailure !== null)
+                                                    onFailure();
+                                            }
+                                        }
+                                    );
+        };
+
+        service.logout = function() {
+            CredentialService.reset();
+            authenticated = false;
+            CredentialService.setLoggingOut(true);
             service.redirect();
-            loggingOut = true;
         };
 
         listener = $rootScope.$on('$routeChangeStart', function (event, args) {
@@ -133,7 +185,7 @@ var App;
         // to named extension points.
         //
         HawtioExtension.add("hawtio-user", function(scope){
-            var template = "<li ng-controller=\"HawtioPreferences.MenuItemController\" ng-show=\"vm.isAuthenticated()\">\n"+
+            var template = "<li ng-controller=\"HawtioPreferences.MenuItemController\" ng-show=\"vm.authenticated()\">\n"+
                         "<a href=\"\" ng-click=\"vm.logout()\">Log out</a>\n" +
                         "</li>";
             return $compile(template)(scope);
@@ -148,16 +200,16 @@ var App;
     }
 
     App.AppController = App._module.controller('App.AppController', AppController);
-    AppController.$inject = ['AuthService'];
-    function AppController(AuthService) {
+    AppController.$inject = ['AuthService', 'CredentialService'];
+    function AppController(AuthService, CredentialService) {
         var vm = this;
 
-        vm.isAuthenticated = function() {
-            return AuthService.isAuthenticated();
+        vm.authenticated = function() {
+            return AuthService.authenticated();
         };
 
         vm.getUsername = function() {
-            return AuthService.credentials().username || 'User';
+            return CredentialService.credentials().username || 'User';
         };
 
         vm.logout = function() {
@@ -166,8 +218,8 @@ var App;
     }
 
     App.LoginController = App._module.controller('App.LoginController', LoginController);
-    LoginController.$inject = ['$rootScope', '$location', '$scope', 'branding', 'RepoRestService', 'AuthService'];
-    function LoginController ($rootScope, $location, $scope, branding, RepoRestService, AuthService) {
+    LoginController.$inject = ['$rootScope', '$location', '$scope', 'branding', 'RepoRestService', 'CredentialService', 'AuthService'];
+    function LoginController ($rootScope, $location, $scope, branding, RepoRestService, CredentialService, AuthService) {
         var vm = this;
 
         vm.loginError = '';
@@ -177,33 +229,30 @@ var App;
             password: ''
         };
 
-        vm.rememberMe = AuthService.isRemembered();
+        vm.rememberMe = CredentialService.isRemembered();
 
-        var credentials = AuthService.credentials();
+        var credentials = CredentialService.credentials();
         vm.entity.username = credentials.username;
         vm.entity.password = credentials.password;
 
         vm.branding = branding;
+
+        var onLoginSuccessful = function() {
+            vm.loginError = '';
+            $location.path(AuthService.lastLocation());
+            $apply($rootScope);
+        };
+
+        var onLoginFailure = function() {
+            vm.loginError = "Access Denied";
+        };
 
         vm.doLogin = function () {
             if (vm.entity.username.trim() === '') {
                 vm.loginError = 'A user name is required';
             }
 
-            RepoRestService.testConnection(vm.entity.username, vm.entity.password)
-                                    .then(
-                                        function(response) {
-                                            if (response === 0) {
-                                                vm.loginError = '';
-                                                AuthService.setCredentials(vm.entity.username, vm.entity.password, vm.rememberMe);
-                                                $location.path(AuthService.lastLocation());
-                                                $apply($rootScope);
-
-                                            } else {
-                                                vm.loginError = "Access Denied";
-                                            }
-                                        }
-                                    );
+            AuthService.login(vm.entity.username, vm.entity.password, vm.rememberMe, onLoginSuccessful, onLoginFailure);
         };
     }
 })(App || (App = {}));

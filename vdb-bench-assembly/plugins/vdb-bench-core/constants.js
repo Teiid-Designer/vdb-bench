@@ -18,6 +18,7 @@
         })
 
         .constant('SYNTAX', {
+            EMPTY_STRING: '',
             FORWARD_SLASH: '/',
             OPEN_BRACKET: '(',
             CLOSE_BRACKET: ')',

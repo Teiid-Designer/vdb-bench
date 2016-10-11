@@ -1,6 +1,270 @@
 /*
  * === vdb-bench-dataservices ===
  */
+
+.no-float {
+    float: none !important;
+}
+
+.display-block {
+    display: block !important;
+}
+
+.show {
+    display:block;
+}
+
+#dataservice-main-container {
+    /*
+     * Neutralise the container-fluid padding and margin
+     */
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.ds-navbar-container {
+    float: left;
+    width: 6%;
+}
+
+.ds-navbar-contents {
+    float: left;
+    width: 94%;
+}
+
+/*
+ * Navigation bar
+ */
+#dsb-vertical-nav {
+    height: 100vh;
+    background-color: white;
+    position: relative;
+}
+
+#dsb-vertical-nav .dsb-nav-item {
+    color: #666;
+    border-bottom: 1px solid #ddd;
+    padding: 15px 10px 15px 10px;
+    text-align: center;
+    border-right: 1px solid #ddd;
+    box-shadow: 2px 0px 10px 1px #ddd inset;
+}
+
+#dsb-vertical-nav .dsb-nav-item-filler {
+    border-right: 1px solid #ddd;
+    height: 100%;
+}
+
+#dsb-vertical-nav .dsb-nav-item:hover {
+    background-color: #cff5ff;
+    cursor: pointer;
+}
+
+#dsb-vertical-nav .dsb-nav-item.active {
+    color: #0088ce;
+}
+
+#dsb-vertical-nav .dsb-nav-item.selected {
+    border-right: 1px solid white;
+    color: black;
+    background-color: white;
+}
+
+#dsb-vertical-nav .dsb-nav-item > span {
+    font-size: 22px;
+    display: inline-block;
+}
+
+#dsb-vertical-nav .dsb-nav-item > div {
+    font-size: 14px;
+}
+
+#dsb-vertical-nav-details {
+    position: absolute;
+    left: 100%;
+    width: 250%;
+    top: 0;
+    bottom:0;
+    background-color: white;
+    border-right: 1px solid #ddd;
+    z-index: 20;
+    padding: 15px;
+}
+
+#dsb-vertical-nav-details .dsb-nav-detail-item h3 {
+    margin-top:0;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #ddd;
+}
+
+#dsb-vertical-nav-details .dsb-nav-detail-item p.description {
+    line-height: 17px;
+    padding: 3px;
+}
+
+#dsb-vertical-nav-details .dsb-nav-detail-item h4 {
+    font-weight: bold;
+    font-size: 12px;
+    margin-top: 20px;
+}
+
+#dsb-vertical-nav-details .dsb-nav-detail-item .action {
+    padding-left: 8px;
+    cursor: pointer;
+}
+
+#dsb-nav-menu-shade {
+    position: absolute;
+    left: 120px;
+    right:0;
+    top: 30px;
+    bottom:0;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, .2);
+}
+
+#dsb-nav-menu-container {
+    position: absolute;
+    left: 20px;
+    top: 68px;
+    bottom:0;
+    width: 200px;
+    z-index: 20;
+}
+
+#dsb-nav-menu-container .dsb-nav-menu {
+    font-size: 16px;
+    background-color: white;
+}
+
+#dsb-nav-menu-container .dsb-nav-menu > a {
+    text-decoration: none;
+}
+
+#dsb-nav-menu-container .dsb-nav-menu .menu-item {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+}
+
+#dsb-nav-menu-container .dsb-nav-menu .menu-item:hover {
+    background-color: #39a5dc;
+    color: white;
+}
+
+#dsb-nav-menu-container .dsb-nav-menu .menu-item > span.fa {
+    margin-right: 5px;
+}
+
+/*
+ * Breadcrumbs
+ */
+.dsb-breadcrumbs {
+    background: white;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.dsb-breadcrumbs .breadcrumb {
+  margin-bottom: 0;
+  float: left;
+}
+
+.toolbar-pf {
+    background-color: transparent;
+}
+
+.toolbar-pf-actions {
+    background-color: transparent;
+}
+
+.toolbar-pf-results {
+    background-color: white;
+    margin-left: -20px;
+    margin-right: -20px;
+}
+
+#ds-summary-container, #ds-summary-table, #dataserviceToolbar,
+#svcsource-summary-container, #svcsource-summary-table, #svcsourceToolbar {
+    margin-right: 0;
+    margin-left: 0;
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+}
+
+.ds-summary-results {
+    margin-top: 10px;
+}
+
+.ds-summary-results .list-group-item,
+.svcsource-summary-results .list-group-item,
+.ds-summary-results .list-group-item:first-child,
+.svcsource-summary-results .list-group-item:first-child {
+    margin-bottom: 5px;
+    border-top: 1px solid #39a5dc;
+}
+
+.ds-summary-results .list-group-item:hover,
+.svcsource-summary-results .list-group-item:hover {
+    background-color: #cff5ff;
+}
+
+.svcsource-summary-results-container {
+    margin-top: 10px;
+    display: flex;
+    width: 100%;
+}
+
+.svcsource-summary-results {
+    float: left;
+    display: flex;
+    width: 100%;
+}
+
+.svcsource-summary-results-ddl {
+    float: left;
+    display: flex;
+    flex-direction: column;
+    min-width: 28%;
+    max-width: 28%;
+    padding-right: 20px;
+}
+
+.svcsource-summary-results-ddl-titlebar {
+    display: block;
+    background: white;
+    border-top: solid grey 1px;
+    border-left: solid grey 1px;
+    border-right: solid grey 1px;
+}
+
+.svcsource-summary-results-ddl-titlebar-title {
+    float: left;
+    padding-left: 0.25em;
+    font-weight: bold;
+    margin: 0;
+}
+
+.svcsource-summary-results-ddl-titlebar-close {
+    float: right;
+    padding-right: 0.25em;
+    margin: 0;
+    color: grey;
+    cursor: pointer;
+}
+
+.svcsource-summary-results-ddl textarea {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
+//
+// Dataservice Test page
+//
 #ds-test-header h1 {
     float: left;
     margin-top: 5px;
@@ -20,14 +284,9 @@
     padding-top: 0.5em;
 }
 
-.service-listview {
-  margin-top: 1em;
-}
-
-.source-listview {
-  margin-top: 1em;
-}
-
+//
+// Dataservice import export pages
+//
 .ds-import-export-storage-types-form, .ds-export-file-page, .ds-export-git-page, .ds-import-file-page, .ds-import-git-page {
     margin-left: 2em;
     margin-top: 2em;

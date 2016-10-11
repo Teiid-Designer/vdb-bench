@@ -120,7 +120,7 @@
                     function (response) {
                         // Some kind of error has occurred
                         vm.showProgress(false);
-                        setError(RepoRestService.reponseMessage(response));
+                        setError(RepoRestService.responseMessage(response));
                         setResponse('Failed');
                     });
             } catch (error) {

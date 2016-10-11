@@ -1,25 +1,64 @@
-<div id="vdb-login" ng-controller="App.LoginController as vm">
+<div id="vdb-login" ng-controller="App.LoginController as vm" style="background-image: url('app/content/img/bg-login.jpg');">
 
-    <form id="vdb-login-form" name="login" ng-submit="vm.doLogin()">
+    <div class="login-pf">
+        <span id="badge">
+            <img src="app/content/img/teiid-logo.png" alt=" logo" />
+        </span>
 
-        <label class="vdb-login-form-label" for="username">Username:</label>
-        <input class="vdb-login-form-user" id="username" type="text" required ng-model="vm.entity.username" autofill autofocus>
-
-        <label class="vdb-login-form-label" for="username">Password:</label>
-        <input class="vdb-login-form-pswd" id="password" type="password" required ng-model="vm.entity.password" autofill>
-
-        <div id="vdb-login-form-lower">
-
-            <input class="vdb-login-form-input-checkbox" id="rememberMe" type="checkbox" ng-model="vm.rememberMe">
-            <label class="vdb-login-form-label vdb-login-form-check-label" for="checkbox">Keep me logged in</label>
-
-            <input class="vdb-login-form-input-submit" type="submit" value="Login">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="teiid-brand">
+                        <img src="app/content/img/teiid-dsb-banner.png" alt="Data Services Builder">
+                    </div>
+                    <!--/#brand-->
+                </div>
+                <!--/.col-*-->
+                <div class="col-sm-7 col-md-6 col-lg-5 login">
+                    <form class="form-horizontal" role="form" ng-submit="vm.doLogin()">
+                        <div class="form-group">
+                            <label for="inputUsername" class="col-sm-2 col-md-2 control-label">Username</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="text" class="form-control" id="inputUsername" placeholder="" tabindex="1" required ng-model="vm.entity.username" autofill autofocus>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword" class="col-sm-2 col-md-2 control-label">Password</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="password" class="form-control" id="inputPassword" placeholder="" tabindex="2" required ng-model="vm.entity.password" autofill>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-8 col-sm-offset-2 col-sm-6 col-md-offset-2 col-md-6">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" tabindex="3" ng-model="vm.rememberMe"> Remember Credentials
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4 submit">
+                                <button type="submit" class="btn btn-primary btn-lg" tabindex="4">Login</button>
+                            </div>
+                            <div id="vdb-login-error">
+                                <p>{{vm.loginError}}</p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!--/.col-*-->
+                <div class="col-sm-5 col-md-6 col-lg-7 details">
+                    <p>
+                        <strong>Welcome to Data Services Builder</strong> A tool for editing, managing and testing simple data services targeted for accessing your data via the Teiid runtime framework.
+                        The DSB utilizes an editing framework wrapped around a local embedded ModeShape repository.
+                        This repository provides the backbone for managing consistent import/export of runtime resources and content validation.
+                    </p>
+                </div>
+                <!--/.col-*-->
+            </div>
+            <!--/.row-->
         </div>
-
-    </form>
-
-    <div id="vdb-login-error">
-        <p>{{vm.loginError}}</p>
+        <!--/.container-->
     </div>
+
 
 </div>

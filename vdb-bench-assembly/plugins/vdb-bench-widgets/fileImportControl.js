@@ -140,7 +140,7 @@
                         },
                         function (response) {
                             vm.showProgress(false);
-                            setError(RepoRestService.reponseMessage(response));
+                            setError(RepoRestService.responseMessage(response));
                             setResponse(false);
                             vm.onImportComplete({result: response});
                         });
