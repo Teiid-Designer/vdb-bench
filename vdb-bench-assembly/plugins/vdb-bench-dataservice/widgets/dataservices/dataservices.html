@@ -1,0 +1,32 @@
+<div class="ds-dashboard-widgets-dataservices">
+    <uib-progressbar class="progress-striped active" value="dynamic" type="info" ng-show="vm.loading"></uib-progressbar>
+
+    <p ng-show="! vm.loading && vm.error">Status Error:<br/>'{{vm.error}}'</p>
+
+    <div ng-show="! vm.loading && ! vm.error">
+        Number of dataservices: <span style="color: blue;">{{vm.total}}</span>
+
+        <div class="ds-dashboard-widgets-dataservices-list-tr-names-container" ng-show="vm.total > 0">
+            <div class="ds-dashboard-widgets-dataservices-list-tr-names">
+                <input class="accordian-list-filter" type="text" ng-model="vm.trFilter" placeholder="filter...">
+                <div class="list-group accordian-list ds-dashboard-widgets-dataservices-list-group">
+                    <a class="list-group-item" pagination-id="tr-paginate" dir-paginate="tr in vm.names|filter:vm.trFilter|orderBy:'toString()'|itemsPerPage:3">
+                        {{tr}}
+                    </a>
+                    <dir-pagination-controls pagination-id="tr-paginate" max-size="3" direction-links="true" boundary-links="true"></dir-pagination-controls>
+                </div>
+            </div>
+        </div>
+        <div id="ds-dashboard-widgets-dataservices-footer" class="card-pf-footer">
+            <p>
+                <a ng-click="vm.selectPage('dataservice-summary')">
+                    <span class="fa fa-fw {{vm.page('dataservice-summary').icon}}"></span><span>List All</span>
+                </a>
+                <span></span>
+                <a ng-click="vm.selectPage('dataservice-new')" class="pull-right">
+                    <span class="fa fa-fw {{vm.page('dataservice-new').icon}}"></span><span>Create</span>
+                </a>
+            </p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+<div class="dshome-widgets-welcome">
+    <uib-progressbar class="progress-striped active" value="dynamic" type="info" ng-show="vm.loading"></uib-progressbar>
+
+    <div class="card-pf-heading">
+        <h2 class="card-pf-title">
+                <span class="fa fa-fw fa-comment"></span>
+                <span>Welcome to the <strong>Data Service Builder</strong></span>
+            </h2>
+    </div>
+    <div class="card-pf-body">
+        <p>
+            Hey <strong>{{vm.getUsername()}}</strong>, thanks for logging into the <strong>Data Service Builder</strong>. 
+            Hopefully you're finding it easy to use this tool to design and collaborate on new (and existing) Data Services.
+        </p>
+        <div>
+            <ul>
+                <li><a href="http://teiiddesigner.jboss.org">Data Service Builder Project Page</a></li>
+                <li><a href="http://teiid.jboss.org">Teiid Project Page</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

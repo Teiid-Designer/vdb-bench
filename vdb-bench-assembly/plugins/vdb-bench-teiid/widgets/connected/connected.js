@@ -15,7 +15,7 @@
     function config(dashboardProvider, config, syntax) {
         dashboardProvider
             .widget('teiid-connected', {
-                title: 'Connection',
+                title: 'Teiid Connection',
                 description: 'Displays the connected status of the local Teiid Instance',
                 templateUrl: config.pluginDir + syntax.FORWARD_SLASH +
                                     pluginDirName + syntax.FORWARD_SLASH +
