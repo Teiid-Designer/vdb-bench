@@ -15,11 +15,9 @@
                                      SvcSourceSelectionService, ConnectionSelectionService, TranslatorSelectionService) {
         var vm = this;
 
-        //ConnectionSelectionService.refresh();
         vm.connsLoading = ConnectionSelectionService.isLoading();
         vm.allConnections = ConnectionSelectionService.getConnections();
         
-        //TranslatorSelectionService.refresh();
         vm.transLoading = TranslatorSelectionService.isLoading();
         vm.allTranslators = TranslatorSelectionService.getTranslators();
         
@@ -72,8 +70,6 @@
                         if(theVdb.keng__id === svcSourceName) {
                             createVdbModel( svcSourceName, connectionName, translatorName, jndiName );
                         }
-
-                        SvcSourceSelectionService.setLoading(false);
                     },
                     function (resp) {
                         SvcSourceSelectionService.setLoading(false);
@@ -96,8 +92,6 @@
                         if(theModel.keng__id === connectionName) {
                             createVdbModelSource( svcSourceName, connectionName, connectionName, translatorName, jndiName );
                         }
-
-                        SvcSourceSelectionService.setLoading(false);
                     },
                     function (resp) {
                         SvcSourceSelectionService.setLoading(false);
@@ -146,7 +140,6 @@
                         }
                         // Reinitialise the list of service sources
                         SvcSourceSelectionService.refresh('datasource-summary');
-                        SvcSourceSelectionService.setLoading(false);
                    },
                     function (response) {
                         SvcSourceSelectionService.setDeploying(false, vdbName, false, RepoRestService.responseMessage(response));
