@@ -2,16 +2,16 @@
 </div>
 
 <div id="dsb-vertical-nav">
-    <div id="dsb-nav-item-dashboard" class="dsb-nav-item active" ng-click="vmmain.selectNavItem('dv-home')" body-click="vmmain.selectNavItem(null);">
-        <span class="fa fa-fw fa-dashboard"></span>
-        <div>DV Home</div>
+    <div id="dsb-nav-item-dashboard" class="dsb-nav-item active" ng-click="vmmain.selectNavItem('dataservice-home')" body-click="vmmain.selectNavItem(null);">
+        <span class="fa fa-fw {{vmmain.page('dataservice-home').icon}}"></span>
+        <div>DS Home</div>
     </div>
     <div id="dsb-nav-item-dataservices" class="dsb-nav-item" ng-click="vmmain.selectNavItem('dataservice-summary')" body-click="vmmain.selectNavItem(null);">
-        <span class="fa fa-fw fa-cubes"></span>
+        <span class="fa fa-fw {{vmmain.page('dataservice-summary').icon}}"></span>
         <div>Data Services</div>
     </div>
     <div id="ds-nav-item-sources" class="dsb-nav-item" ng-click="vmmain.selectNavItem('datasource-summary')" body-click="vmmain.selectNavItem(null);">
-        <span class="fa fa-fw fa-database"></span>
+        <span class="fa fa-fw {{vmmain.page('datasource-summary').icon}}"></span>
         <div>Sources</div>
     </div>
     <div class="dsb-nav-item-filler">
@@ -19,12 +19,12 @@
 
     <!-- detail menus -->
     <div id="dsb-vertical-nav-details" ng-switch="vmmain.selectedNavItem" ng-show="vmmain.navItemSelected()">
-        <div id="dsb-nav-detail-dashboard" class="dsb-nav-detail-item" ng-switch-when="dv-home">
-            <h3>DV Home</h3>
+        <div id="dsb-nav-detail-dashboard" class="dsb-nav-detail-item" ng-switch-when="dataservice-home">
+            <h3>DS Home</h3>
             <p>Click below to navigate back to the default Data Service dashboard.</p>
-            <ul>
-                <li><a href="dashboard.html">Back to DV Home</a></li>
-            </ul>
+            <div class="action">
+                <a ng-click="vmmain.selectPage('dataservice-home')"><span class="fa fa-fw {{vmmain.page('dataservice-home').icon}}"></span><span>Back to DS Home</span></a>
+            </div>
         </div>
         <div id="dsb-nav-detail-dataservices" class="dsb-nav-detail-item" ng-switch-when="dataservice-summary">
             <h3>Data Services</h3>
