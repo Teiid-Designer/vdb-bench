@@ -37,7 +37,8 @@
             HASH: '#',
             SPEECH_MARKS: '"',
             HTML: 'html',
-            UNKNOWN: 'unknown'
+            UNKNOWN: 'unknown',
+            TEMP: 'temp'
         })
 
         .constant('REST_URI', {
@@ -51,6 +52,10 @@
             SEARCH: '/search',
             TEIID: '/teiid',
             TRANSLATORS: '/VdbTranslators',
+            TABLES: '/Tables',
+            COLUMNS: '/Columns',
+            SERVICE_VDB_FOR_SINGLE_TABLE: 'ServiceVdbForSingleTable',
+            MODEL_FROM_TEIID_DDL: 'ModelFromTeiidDdl',
             DATA_SERVICES_CLONE: '/dataservices/clone',
             DATA_SERVICE: '/dataservice',
             DATA_SERVICES: '/dataservices',
@@ -58,7 +63,7 @@
             DATA_SOURCE: '/datasource',
             DATA_SOURCES: '/datasources',
             VDBS_CLONE: '/vdbs/clone',
-            COPY_TO_REPO: 'copyToRepo',
+            VDBS_FROM_TEIID: 'VdbsFromTeiid',
             DRIVER: '/driver',
             DRIVERS: '/drivers',
             MODEL: '/Model',

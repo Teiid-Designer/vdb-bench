@@ -9,42 +9,34 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label" for="textInput">Name</label>
                             <div class="col-md-6">
-                              <input type="text" readonly="readonly" ng-model="nameVar" ng-init="nameVar=vmmain.selectedDataservice().keng__id" class="form-control">
+                              <input type="text" readonly="readonly" ng-model="vm.serviceName" ng-init="vm.serviceName=vmmain.selectedDataservice().keng__id" class="form-control">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label" for="textInput">Description</label>
                             <div class="col-md-10">
-                              <input type="text" ng-model="descriptionVar" ng-init="descriptionVar=vmmain.selectedDataservice().tko__description" class="form-control">
+                              <input type="text" ng-model="vm.serviceDescription" ng-init="vm.serviceDescription=vmmain.selectedDataservice().tko__description" class="form-control">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label" for="textInput">Service Model</label>
-                            <div class="col-md-4">
-                              <input type="text" ng-model="viewModelVar" class="form-control">
-                            </div>
-                            <label class="col-md-1 control-label" for="textInput">View</label>
-                            <div class="col-md-5">
-                              <input type="text" ng-model="viewNameVar" class="form-control">
-                            </div>
+                        <h4>Choose the source and table for your service</h4>
+                        <div class="col-md-5">
+                            <h4><strong>Sources</strong></h4>
+                            <service-source-list></service-source-list>
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label" for="textInput">View DDL</label>
-                            <div class="col-md-10">
-                              <!-- <input type="textarea" ng-model="viewDdlVar" ng-init="viewDdlVar=vmmain.selectedDataservice().tko__description" class="form-control"> -->
-                              <textarea form="dsForm" rows="6" cols="100" wrap="soft" ng-model="viewDdlVar"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label" for="svcSources">Service Sources</label>
-                            <div class="col-md-6">
-                                <select id="svcSources" size="4" ng-style="{'width': '100px'}" ng-model="svcSourceVar" ng-options="svcSource as svcSource.keng__id for svcSource in vm.getSvcSources()" />
-                            </div>
+                        <div class="col-md-5">
+                            <h4><strong>Tables</strong></h4>
+                            <model-table-list></model-table-list>
                         </div>
                     </form>
-                    <button class="btn btn-primary" ng-click="vm.onUpdateDataServiceClicked(nameVar, descriptionVar)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-edit'}"> Save</button>
-                    <button class="btn btn-default" ng-click="vmmain.selectPage('dataservice-summary')" ng-class="{active:vmmain.selectedPage.id == 'dataservice-edit'}"> Cancel</button>
-                </div>
+                    <div class="col-md-12">
+                        <p></p>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="submit" class="btn btn-primary" value="Save" ng-click="vm.onSaveDataServiceClicked()"
+                                                  ng-disabled="vm.canSaveDataService() !== true || vmmain.selectedPage.id !== 'dataservice-edit'"/>
+                        <input type="button" class="btn btn-default" value="Cancel" ng-click="vmmain.selectPage('dataservice-summary')"
+                                                  ng-disabled="vmmain.selectedPage.id !== 'dataservice-edit'"/>
+                    </div>
             </div>
         </div>
 </div>

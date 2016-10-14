@@ -274,7 +274,7 @@
         /*
          * Select the given serviceSource
          */
-        service.selectServiceSource = function(serviceSource, noUpdateModel) {
+        service.selectServiceSource = function(serviceSource) {
             //
             // Set the selected serviceSource
             //

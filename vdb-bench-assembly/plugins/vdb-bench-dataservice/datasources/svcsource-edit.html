@@ -13,19 +13,19 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label" for="textInput">Name</label>
                     <div class="col-md-6">
-                        <input type="text" readonly="readonly" ng-model="nameVar" ng-init="nameVar=vmmain.selectedServiceSource().keng__id" class="form-control">
+                        <input type="text" readonly="readonly" ng-model="vm.svcSourceName" ng-init="vm.svcSourceName=vmmain.selectedServiceSource().keng__id" class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 control-label" for="textInput">Description</label>
                     <div class="col-md-6">
-                        <input type="text" ng-model="descriptionVar" ng-init="descriptionVar=vmmain.selectedServiceSource().vdb__description" class="form-control">
+                        <input type="text" ng-model="vm.svcSourceDescription" ng-init="vm.svcSourceDescription=vmmain.selectedServiceSource().vdb__description" class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 control-label" for="conns">Connection</label>
                     <div class="col-md-6">
-                        <select id="conns" ng-model="selectedConnection" ng-options="connection as connection.keng__id for connection in vm.getConnections() track by connection.keng__id">
+                        <select id="conns" ng-model="vm.connection" ng-options="connection as connection.keng__id for connection in vm.getConnections()  | orderBy: 'keng__id'">
                             <option value="">-- choose connection --</option>
                         </select>
                     </div>
@@ -33,14 +33,16 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label" for="translators">Translator</label>
                     <div class="col-md-6">
-                        <select id="translators" ng-model="selectedTranslator" ng-options="translator as translator.keng__id for translator in vm.getTranslators()">
+                        <select id="translators" ng-model="vm.translator" ng-options="translator as translator.keng__id for translator in vm.getTranslators() | orderBy: 'keng__id'">
                             <option value="">-- choose translator --</option>
                         </select>
                     </div>
                 </div>
             </form>
-            <button class="btn btn-primary" ng-click="vm.onEditSvcSourceClicked(nameVar,descriptionVar,selectedConnection.keng__id,selectedConnection.tko__jndiName,selectedTranslator.keng__id)" ng-class="{active:vmmain.selectedPage.id == 'svcsource-edit'}"> Save</button>
-            <button class="btn btn-default" ng-click="vmmain.selectPage('datasource-summary')" ng-class="{active:vmmain.selectedPage.id == 'svcsource-edit'}"> Cancel</button>
+            <input type="submit" class="btn btn-success" value="Save" ng-click="vm.onEditSvcSourceClicked()"
+                                              ng-disabled="vm.canUpdateSvcSource() !== true || vmmain.selectedPage.id !== 'svcsource-edit'"/>
+            <input type="button" class="btn btn-primary" value="Cancel" ng-click="vmmain.selectPage('datasource-summary')"
+                                              ng-disabled="vmmain.selectedPage.id !== 'svcsource-edit'"/>
         </div>
       </div>
     </div>

@@ -52,6 +52,13 @@
             SvcSourceSelectionService.refresh('datasource-summary');
         };
 
+        /**
+         * Create New Service click
+         */
+        vm.createNewService = function() {
+            SvcSourceSelectionService.refresh('dataservice-new');
+        };
+        
         var matchesFilter = function (item, filter) {
           var match = true;
      
@@ -288,8 +295,8 @@
          * Handle new dataservice click
          */
         var newDataServiceClicked = function( ) {
-            // Broadcast the pageChange
-            $rootScope.$broadcast("dataServicePageChanged", 'dataservice-new');
+            // Start refresh of Service Sources, changing to new page
+            SvcSourceSelectionService.refresh('dataservice-new');
         };
         
         /**

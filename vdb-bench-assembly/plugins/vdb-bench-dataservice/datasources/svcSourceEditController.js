@@ -8,10 +8,10 @@
         .module(pluginName)
         .controller('SvcSourceEditController', SvcSourceEditController);
 
-    SvcSourceEditController.$inject = ['$scope', '$rootScope', 'REST_URI', 'RepoRestService', 
+    SvcSourceEditController.$inject = ['$scope', '$rootScope', 'REST_URI', 'SYNTAX', 'RepoRestService', 
                                        'SvcSourceSelectionService', 'ConnectionSelectionService', 'TranslatorSelectionService'];
 
-    function SvcSourceEditController($scope, $rootScope, REST_URI, RepoRestService, 
+    function SvcSourceEditController($scope, $rootScope, REST_URI, SYNTAX, RepoRestService, 
                                       SvcSourceSelectionService, ConnectionSelectionService, TranslatorSelectionService) {
         var vm = this;
 
@@ -28,14 +28,21 @@
             vm.connsLoading = loading;
             if(vm.connsLoading === false) {
                 vm.allConnections = ConnectionSelectionService.getConnections();
-                var modelName = SvcSourceSelectionService.selectedServiceSourceConnectionName();
-                for (var i = 0; i < vm.allConnections.length; i++) {
-                    if(vm.allConnections[i].keng__id === modelName) {
-                        $scope.selectedConnection = vm.allConnections[i];
+                var successCallback = function(modelName) {
+                    for (var i = 0; i < vm.allConnections.length; i++) {
+                        if(vm.allConnections[i].keng__id === modelName) {
+                            vm.connection = vm.allConnections[i];
+                        }
                     }
-                }
+                };
+
+                var failureCallback = function(errorMsg) {
+                	alert("Failed to get connection: \n"+errorMsg);
+                };
+                SvcSourceSelectionService.selectedServiceSourceConnectionName(successCallback,failureCallback);
            }
         });
+        
         /*
          * When the translators have been loaded
          */
@@ -43,12 +50,18 @@
             vm.transLoading = loading;
             if(vm.transLoading === false) {
                 vm.allTranslators = TranslatorSelectionService.getTranslators();
-                var transName = SvcSourceSelectionService.selectedServiceSourceTranslatorName();
-                for (var i = 0; i < vm.allTranslators.length; i++) {
-                    if(vm.allTranslators[i].keng__id === transName) {
-                        $scope.selectedTranslator = vm.allTranslators[i];
+                var successCallback = function(translatorName) {
+                    for (var i = 0; i < vm.allTranslators.length; i++) {
+                        if(vm.allTranslators[i].keng__id === translatorName) {
+                            vm.translator = vm.allTranslators[i];
+                        }
                     }
-                }
+                };
+
+                var failureCallback = function(errorMsg) {
+                	alert("Failed to get translator: \n"+errorMsg);
+                };
+                SvcSourceSelectionService.selectedServiceSourceTranslatorName(successCallback,failureCallback);
            }
         });
         
@@ -65,41 +78,66 @@
         vm.getTranslators = function() {
             return vm.allTranslators;
         };
-
         
+        /**
+         * Can a source be updated
+         */
+        vm.canUpdateSvcSource = function() {
+            if (angular.isUndefined(vm.svcSourceName) ||
+                vm.svcSourceName === null || vm.svcSourceName === SYNTAX.EMPTY_STRING)
+                return false;
+
+            if (angular.isUndefined(vm.connection) || vm.connection === null)
+                return false;
+
+            if (angular.isUndefined(vm.translator) || vm.translator === null)
+                return false;
+
+            return true;
+        };
+
         // Event handler for clicking the save button
-        vm.onEditSvcSourceClicked = function ( svcSourceName, svcSourceDescription, connectionName, jndiName, translatorName ) {
+        vm.onEditSvcSourceClicked = function () {
+            if (! vm.canUpdateSvcSource())
+                return;
+
+            var connectionName = vm.connection.keng__id;
+            var jndiName = vm.connection.dv__jndiName;
+            var translatorName = vm.translator.keng__id;
+
             try {
-                RepoRestService.createVdb( svcSourceName, svcSourceDescription ).then(
-                    function (theVdb) {
-                        if(theVdb.keng__id === svcSourceName) {
-                            RepoRestService.createVdbModel( svcSourceName, connectionName ).then(
-                                function (theModel) {
-                                    if(theModel.keng__id === connectionName) {
-                                        RepoRestService.createVdbModelSource( svcSourceName, connectionName, connectionName, translatorName, jndiName ).then(
-                                            function (theModelSource) {
-                                                //alert("Created VDB, Model and ModelSource!");
-                                            },
-                                            function (resp) {
-                                                throw RepoRestService.newRestException("Failed to create the source model. \n" + resp.message);
-                                            }
-                                    );
-                                    }
-                                },
-                                function (resp) {
-                                    throw RepoRestService.newRestException("Failed to create the source model. \n" + resp.message);
-                                }
-                        );
-                        }
-                        // Reinitialise the list of service sources
-                        SvcSourceSelectionService.refresh("datasource-summary");
+                RepoRestService.updateVdbModelSource( vm.svcSourceName, connectionName, connectionName, translatorName, jndiName ).then(
+                    function (theModelSource) {
+                    	updateVdbDescription( vm.svcSourceName, vm.svcSourceDescription);
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to create the service source. \n" + response.message);
+                        throw RepoRestService.newRestException("Failed to update the service source. \n" + response.message);
                     });
             } catch (error) {} finally {
             }
         };
+        
+        /**
+         * Update the VDB description
+         */
+        function updateVdbDescription( svcSourceName, svcSourceDescription ) {
+            // Creates the Model within the VDB, then add the ModelSource to the Model
+            try {
+                RepoRestService.updateVdb( svcSourceName, svcSourceDescription, true ).then(
+                    function (theModel) {
+                        // Reinitialise the list of service sources
+                        SvcSourceSelectionService.refresh("datasource-summary");
+                    },
+                    function (resp) {
+                        // Reinitialise the list of service sources
+                        SvcSourceSelectionService.refresh("datasource-summary");
+                    });
+            } catch (error) {
+                // Reinitialise the list of service sources
+                SvcSourceSelectionService.refresh("datasource-summary");
+            }
+        }
+
     }
 
 })();

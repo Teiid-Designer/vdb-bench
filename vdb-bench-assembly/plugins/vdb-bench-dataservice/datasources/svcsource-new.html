@@ -1,10 +1,10 @@
 <div class="container-fluid" ng-controller="SvcSourceNewController as vm">
-    <div id="svcsource-new-updating" ng-show="vm.connsLoading==true || vm.transLoading==true" class="col-md-10 row">
+    <div id="svcsource-new-updating" ng-show="vm.connsLoading==true || vm.transLoading==true || vm.createAndDeployInProgress==true" class="col-md-10 row">
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
         <span class="sr-only">Loading...</span>
     </div>
     
-    <div id="svcsource-new-controls" ng-show="vm.connsLoading==false && vm.transLoading==false" class="col-md-10 row">
+    <div id="svcsource-new-controls" ng-show="vm.connsLoading==false && vm.transLoading==false && vm.createAndDeployInProgress==false" class="col-md-10 row">
       <div class="row">
         <div class="col-md-11">
             <h1><i class="fa fa-database" aria-hidden="true"></i>New Service Source</h1>
@@ -19,7 +19,7 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label" for="textInput">Description</label>
                     <div class="col-md-6">
-                        <input type="text" ng-model="vm.svcSourceDescripion" class="form-control">
+                        <input type="text" ng-model="vm.svcSourceDescription" class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
@@ -48,27 +48,5 @@
         </div>
       </div>
     </div>
-    
-    <!-- Modal displayed when vdb create starts -->
-    <div id="createVDBModal" class="modal fade in" aria-hidden="false" ng-show="vm.createAndDeployInProgress==true">
-      <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Source Create In Progress</h4>
-          </div>
-          <div class="modal-body">
-            <span><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>Creating the Source</span>
-          </div>
-        </div>
-
-      </div>
-    </div>  
-
-    <!--
-    <progressModalWidget show="vm.createAndDeployInProgress==true" width='750px' height='60%'>
-      <p>Modal Content Goes here<p>
-    </progressModalWidget>
-    -->
-    
+        
 </div>

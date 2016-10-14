@@ -117,6 +117,13 @@
         }
 
         /**
+         * Service: workspace patch
+         */
+        service.workspacePath = function( ) {
+            return getUserWorkspacePath();
+        };
+        
+        /**
          * Service: Simple connection test.
          */
         service.testConnection = function(username, password) {
@@ -196,6 +203,23 @@
         };
 
         /**
+         * Service: Get the VDB with specified name from the repo or from teiid
+         */
+        service.getVdb = function (serviceType, vdbName) {
+            var url = REST_URI.WORKSPACE + REST_URI.VDBS;
+
+            if (serviceType === REST_URI.TEIID_SERVICE)
+                url = REST_URI.TEIID + REST_URI.VDBS;
+
+            return getRestService().then(function (restService) {
+                if (!vdbName)
+                    return null;
+
+                return restService.one(url + SYNTAX.FORWARD_SLASH + vdbName).get();
+            });
+        };
+
+        /**
          * Service: return the list of models in the specified repository VDB
          * Returns: promise object for the VDB Model collection
          */
@@ -228,7 +252,7 @@
          */
         service.copyServerVdbsToWorkspace = function ( ) {
             return getRestService().then(function (restService) {
-                var uri = REST_URI.TEIID + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + REST_URI.COPY_TO_REPO;
+                var uri = REST_URI.TEIID + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + REST_URI.VDBS_FROM_TEIID;
                 return restService.all(uri).post();
             });
         };
@@ -258,6 +282,34 @@
 
                 var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName;
                 return restService.all(uri).post(payload);
+            });
+        };
+
+        /**
+         * Service: updates a VDB in the repository
+         */
+        service.updateVdb = function (vdbName, vdbDescription, isSource) {
+            if (!vdbName) {
+                throw new RestServiceException("VDB name is not defined");
+            }
+
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "keng__id": vdbName,
+                    "keng__dataPath": getUserWorkspacePath()+"/"+vdbName,
+                    "keng__kType": "Vdb",
+                    "vdb__name": vdbName,
+                    "vdb__description": vdbDescription
+                };
+                
+                // Property added to distinguish service sources
+                if (isSource)  {
+                    payload.keng__properties = [{ "name": "serviceSource",
+                                                  "value": "true"}];
+                }
+
+                var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName;
+                return restService.all(uri).customPUT(payload);
             });
         };
 
@@ -309,6 +361,33 @@
             });
         };
         
+        /**
+         * Service: update an existing ModelSource in the repository
+         */
+        service.updateVdbModelSource = function (vdbName, modelName, sourceName, transName, jndiName) {
+            if (!vdbName || !modelName || !sourceName) {
+                throw new RestServiceException("VDB name, modelName or sourceName is not defined");
+            }
+            if (!transName || !jndiName) {
+                throw new RestServiceException("Translator name or JNDI name is not defined");
+            }
+            
+            return getRestService().then(function (restService) {
+                var payload = {
+                        "keng__id": sourceName,
+                        "keng__dataPath": getUserWorkspacePath()+"/"+vdbName+"/"+modelName+"/vdb:sources/"+sourceName,
+                        "keng__kType": "VdbModelSource",
+                        "vdb__sourceJndiName": jndiName,
+                        "vdb__sourceTranslator": transName
+                    };
+
+                var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + 
+                REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName + 
+                REST_URI.MODEL_SOURCES + SYNTAX.FORWARD_SLASH + sourceName;
+                return restService.all(uri).customPUT(payload);
+            });
+        };
+
         /**
          * Service: delete a vdb from the resposiory
          */
@@ -413,7 +492,7 @@
          * Service: Import the given file
          * Returns: promise object for the imported item
          */
-        service.import = function(storageType, parameters, documentType, data) {
+        service.import = function(storageType, artifactPath, parameters, documentType, data) {
             if (!storageType || !documentType)
                 return null;
 
@@ -427,6 +506,11 @@
                     "documentType": documentType,
                     "parameters" : parameters
                 };
+
+                // Add artfactPath if supplied
+                if (angular.isDefined(artifactPath))  {
+                    payload.dataPath = artifactPath;
+                }
 
                 //
                 // content is optional and only if data parameter has been defined
@@ -445,11 +529,11 @@
          * Service: Upload the given file data. Uses the file storage connector.
          * Returns: promise object for the uploaded item
          */
-        service.upload = function(documentType, parameters, data) {
+        service.upload = function(documentType, artifactPath, parameters, data) {
             if (!documentType)
                 return null;
 
-            return service.import('file', parameters, documentType, data);
+            return service.import('file', artifactPath, parameters, documentType, data);
         };
 
         /**
@@ -500,6 +584,54 @@
 
             return getRestService().then(function (restService) {
                 return restService.all(url).getList();
+            });
+        };
+
+        /**
+         * Service: return the list of tables in a vdb model
+         * Returns: promise object for the table collection
+         */
+        service.getVdbModelTables = function (vdbName, modelName) {
+            var url = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + 
+                      REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName + SYNTAX.FORWARD_SLASH + REST_URI.TABLES;
+
+            return getRestService().then(function (restService) {
+                return restService.all(url).getList();
+            });
+        };
+
+        /**
+         * Service: return the list of columns in a vdb model table
+         * Returns: promise object for the column collection
+         */
+        service.getVdbModelTableColumns = function (vdbName, modelName, tableName) {
+            var url = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + 
+                      REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName + SYNTAX.FORWARD_SLASH +
+                      REST_URI.TABLES + SYNTAX.FORWARD_SLASH + tableName + SYNTAX.FORWARD_SLASH + REST_URI.COLUMNS;
+
+            return getRestService().then(function (restService) {
+                return restService.all(url).getList();
+            });
+        };
+
+        /**
+         * Service: Creates/Updates a VDB Model using DDL from the supplied teiid VDB Model
+         */
+        service.updateVdbModelFromDdl = function (vdbName, modelName, teiidVdbName, teiidModelName) {
+            if (!vdbName || !modelName || !teiidVdbName || !teiidModelName) {
+                throw RestServiceException("VDB update inputs are not defined");
+            }
+            
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "vdbName": vdbName,
+                    "modelName": modelName,
+                    "teiidVdbName": teiidVdbName,
+                    "teiidModelName": teiidModelName
+                };
+                
+                var uri = REST_URI.TEIID + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + REST_URI.MODEL_FROM_TEIID_DDL;
+                return restService.all(uri).post(payload);
             });
         };
 
@@ -578,6 +710,26 @@
                 };
 
                 return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + dataserviceName).customPUT(payload);
+            });
+        };
+
+        /**
+         * Service: Sets the DataService's service VDB using a single table source.
+         * update an existing dataservice in the repository
+         */
+        service.setDataServiceVdbForSingleTable = function (dataserviceName, viewTablePath, modelSourcePath) {
+            if (!dataserviceName || !viewTablePath || !modelSourcePath) {
+                throw RestServiceException("Data service update inputs are not defined");
+            }
+            
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "dataserviceName": dataserviceName,
+                    "viewTablePath": getUserWorkspacePath()+"/"+viewTablePath,
+                    "modelSourcePath": getUserWorkspacePath()+"/"+modelSourcePath
+                };
+
+                return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + REST_URI.SERVICE_VDB_FOR_SINGLE_TABLE).post(payload);
             });
         };
 

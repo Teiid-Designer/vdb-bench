@@ -1,0 +1,16 @@
+<div>
+    <div id="serviceSourceList-updating" ng-show="vm.srcLoading==true" class="col-md-10 row">
+        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+        <span class="sr-only">Loading...</span>
+    </div>
+        
+    <div id="serviceSourceList-table-row" class="list-view-container source-listview" ng-show="vm.srcLoading==false">
+       <div pf-list-view config="vm.listConfig" items="vm.getServiceSources()">
+         <div class="list-view-pf-description">
+           <div class="list-group-item-heading">
+             {{item.keng__id}}
+           </div>
+         </div>
+       </div>
+     </div>
+</div>
