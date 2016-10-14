@@ -21,6 +21,18 @@
         vm.fileWizard = false;
         vm.gitWizard = false;
 
+        vm.backCallback = function (step) {
+            return true;
+        };
+
+        $scope.$on("wizard:stepChanged", function (e, parameters) {
+            if (parameters.step.stepId.endsWith('-final')) {
+                vm.nextButtonTitle = "Finish";
+            } else {
+                vm.nextButtonTitle = "Next";
+            }
+        });
+
         vm.storageTypeSet = function() {
             if (angular.isUndefined(vm.storageType))
                 vm.storageType = {};

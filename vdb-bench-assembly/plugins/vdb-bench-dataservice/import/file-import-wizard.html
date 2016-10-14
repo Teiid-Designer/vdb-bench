@@ -1,14 +1,13 @@
 <!--
    -- File Wizard Steps
    -->
-<wz-step wz-title="Import the Artifact" wz-disabled="{{!vm.wizardActive}}">
-    <h1>Import the dataservice from a  file</h1>
+<div pf-wizard-step step-title="Import the Artifact"
+        wz-disabled="{{!vm.wizardActive}}"
+        step-id="import-from-file-final">
+    <h1>Import the dataservice from a file</h1>
 
     <!-- Show the import dialog when importing -->
     <div class="ds-import-file-page">
         <file-import-control on-import-complete="vm.onImportDone(result)" show-cancel="false"></file-import-control>
     </div>
-
-    <input type="submit" wz-previous value="Previous" />
-    <input type="submit" wz-finish value="Finish" />
-</wz-step>
+</div>

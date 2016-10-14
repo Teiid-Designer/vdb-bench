@@ -1,13 +1,13 @@
 <!--
    -- File Wizard Steps
    -->
-<wz-step wz-title="Download the Artifact" wz-disabled="{{!vm.wizardActive}}">
+<div pf-wizard-step step-title="Download the Artifact"
+        wz-disabled="{{!vm.wizardActive}}"
+        step-id="export-from-file-final">
     <h1>Download the dataservice as a file</h1>
 
     <div class="ds-export-file-page">
         <a class="btn" ng-click="vm.onExportDataServiceClicked()">Download</a>
     </div>
 
-    <input type="submit" wz-previous value="Previous" />
-    <input type="submit" wz-finish value="Finish" />
-</wz-step>
+</div>

@@ -17,7 +17,7 @@
         'angularUtils.directives.dirPagination',
         'patternfly.views',
         'patternfly.toolbars',
-        'mgo-angular-wizard',
+        'patternfly.wizard',
 
         /*
          * Our reusable cross app code modules

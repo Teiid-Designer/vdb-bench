@@ -1,7 +1,11 @@
 <!--
    -- Git Wizard Steps
    -->
-<wz-step wz-title="Repository Properties" wz-disabled="{{!vm.wizardActive}}" canexit="vm.validateCredentials">
+<div pf-wizard-step
+        step-title="Repository Properties"
+        step-id="import-from-git-credentials"
+        wz-disabled="{{!vm.wizardActive}}"
+        ok-to-nav-away="vm.validateCredentials">
     <h1>Enter the details for the source git repository</h1>
 
     <git-credentials-control show-name="false"
@@ -9,12 +13,12 @@
                                         show-security-attributes="true"
                                         on-selection="vm.onRepoSelection(selected)">
     </git-credentials-control>
+</div>
 
-    <input type="submit" wz-previous value="Previous" />
-    <input type="submit" wz-next value="Next" />
-</wz-step>
-
-<wz-step wz-title="Extract from Repository" wz-disabled="{{!vm.wizardActive}}">
+<div pf-wizard-step
+        step-title="Extract from Repository"
+        step-id="import-from-git-final"
+        wz-disabled="{{!vm.wizardActive}}">
     <h1>Import the artifact from the repository</h1>
 
     <div class="ds-import-git-page">
@@ -36,7 +40,4 @@
             </div>
         </div>
     </div>
-
-    <input type="submit" wz-previous value="Previous" />
-    <input type="submit" wz-finish value="Finish" />
-</wz-step>
+</div>
