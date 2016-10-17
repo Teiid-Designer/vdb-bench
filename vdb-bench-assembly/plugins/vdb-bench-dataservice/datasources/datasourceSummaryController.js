@@ -423,14 +423,20 @@
         vm.actionsConfig = {
           primaryActions: [
             {
+              name: 'New',
+              title: 'Create a Source',
+              actionFn: newSvcSourceClicked,
+              isDisabled: false
+            },
+            {
               name: 'Edit',
-              title: 'Edit the ServiceSource',
+              title: 'Edit the Source',
               actionFn: editSvcSourceClicked,
               isDisabled: true
             },
             {
               name: 'Delete',
-              title: 'Delete the ServiceSource',
+              title: 'Delete the Source',
               actionFn: deleteSvcSourceClicked,
               isDisabled: true
             }
@@ -438,13 +444,13 @@
           moreActions: [
             {
               name: 'Export',
-              title: 'Export the ServiceSource',
+              title: 'Export the Source',
               actionFn: exportSvcSourceClicked,
               isDisabled: true
             },
             {
               name: 'Copy',
-              title: 'Copy the ServiceSource',
+              title: 'Copy the Source',
               actionFn: cloneSvcSourceClicked,
               isDisabled: true
             },
@@ -452,14 +458,8 @@
               isSeparator: true
             },
             {
-              name: 'New',
-              title: 'Create a ServiceSource',
-              actionFn: newSvcSourceClicked,
-              isDisabled: false
-            },
-            {
               name: 'Import',
-              title: 'Import a ServiceSource',
+              title: 'Import a Source',
               actionFn: importSvcSourceClicked,
               isDisabled: false
             },
@@ -479,22 +479,22 @@
         vm.menuActions = [
             {
                 name: 'Edit',
-                title: 'Edit the Service-source',
+                title: 'Edit the Source',
                 actionFn: editSvcSourceMenuAction
             },
             {
                 name: 'Delete',
-                title: 'Delete the Service-source',
+                title: 'Delete the Source',
                 actionFn: deleteSvcSourceMenuAction
             },
             {
                 name: 'Export',
-                title: 'Export the Service-source',
+                title: 'Export the Source',
                 actionFn: exportSvcSourceMenuAction
             },
             {
                 name: 'Copy',
-                title: 'Copy the Service-source',
+                title: 'Copy the Source',
                 actionFn: cloneSvcSourceMenuAction
             }
           ];

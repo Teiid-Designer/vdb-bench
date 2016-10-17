@@ -294,18 +294,18 @@
          */
         service.selectedServiceSourceConnectionName = function(onSuccessCallback, onFailureCallback) {
             if(_.isEmpty(svcSrc.serviceSource)) {
-                onFailureCallback("No service source selected");
+                onFailureCallback("No source selected");
                 return;
             }
 
             if(_.isEmpty(svcSrc.serviceSource.keng__dataPath)) {
-                onFailureCallback("Selected service does not contain a workspace path");
+                onFailureCallback("Selected source does not contain a workspace path");
                 return;
             }
 
             // Update the selected source modelName and TranslatorName - only if its in local workspace
             if (svcSrc.serviceSource.keng__dataPath.indexOf("tko:workspace") < 0) {
-                onFailureCallback("Selected service source is not in the workspace");
+                onFailureCallback("Selected source is not in the workspace");
                 return;
             }
 
@@ -313,7 +313,7 @@
                 RepoRestService.getVdbModels(svcSrc.serviceSource.keng__id).then(
                     function (models) {
                         if (_.isEmpty(models) || models.length === 0) {
-                            onFailureCallback("Failed getting VDB Connection name.\nThe service source model is not available");
+                            onFailureCallback("Failed getting VDB Connection name.\nThe source model is not available");
                             return;
                         }
 

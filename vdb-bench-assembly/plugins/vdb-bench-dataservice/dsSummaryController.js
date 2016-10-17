@@ -320,7 +320,6 @@
          * Edit a dataservice
          */
         vm.editDataService = function(item) {
-            console.log("HELLO");
             // Need to select the item first
             DSSelectionService.selectDataService(item);
 
@@ -423,6 +422,12 @@
        vm.actionsConfig = {
           primaryActions: [
             {
+              name: 'New',
+              title: 'Create a Dataservice',
+              actionFn: newDataServiceClicked,
+              isDisabled: false
+            },
+            {
               name: 'Edit',
               title: 'Edit the Dataservice',
               actionFn: editDataServiceClicked,
@@ -456,12 +461,6 @@
             },
             {
               isSeparator: true
-            },
-            {
-              name: 'New',
-              title: 'Create a Dataservice',
-              actionFn: newDataServiceClicked,
-              isDisabled: false
             },
             {
               name: 'Import',
