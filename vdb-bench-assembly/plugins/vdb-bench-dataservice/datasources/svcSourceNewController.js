@@ -73,11 +73,11 @@
                     },
                     function (resp) {
                         SvcSourceSelectionService.setLoading(false);
-                        throw RepoRestService.newRestException("Failed to create the service source Vdb. \n" + RepoRestService.responseMessage(resp));
+                        throw RepoRestService.newRestException("Failed to create the source Vdb. \n" + RepoRestService.responseMessage(resp));
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
-                throw RepoRestService.newRestException("Failed to create the service source Vdb. \n" + error);
+                throw RepoRestService.newRestException("Failed to create the source Vdb. \n" + error);
             }
         }
 
@@ -87,7 +87,7 @@
         function createVdbModel( svcSourceName, connectionName, translatorName, jndiName ) {
             // Creates the Model within the VDB, then add the ModelSource to the Model
             try {
-                RepoRestService.createVdbModel( svcSourceName, connectionName ).then(
+                RepoRestService.createVdbModel( svcSourceName, connectionName, true ).then(
                     function (theModel) {
                         if(theModel.keng__id === connectionName) {
                             createVdbModelSource( svcSourceName, connectionName, connectionName, translatorName, jndiName );
@@ -144,11 +144,11 @@
                     function (response) {
                         SvcSourceSelectionService.setDeploying(false, vdbName, false, RepoRestService.responseMessage(response));
                         SvcSourceSelectionService.setLoading(false);
-                        throw RepoRestService.newRestException("Failed to deploy the Service-source. \n" + RepoRestService.responseMessage(response));
+                        throw RepoRestService.newRestException("Failed to deploy the Source. \n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
-                throw RepoRestService.newRestException("Failed to deploy the Service-source. \n" + error);
+                throw RepoRestService.newRestException("Failed to deploy the Source. \n" + error);
             }
         }
 

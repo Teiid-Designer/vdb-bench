@@ -157,7 +157,7 @@
         };
         pages[service.SERVICESOURCE_SUMMARY_PAGE] = {
             id: service.SERVICESOURCE_SUMMARY_PAGE,
-            title: 'Service-source Summary',
+            title: 'Source Summary',
             icon: 'pficon-storage-domain',
             parent: service.DS_HOME_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
@@ -167,7 +167,7 @@
         };
         pages[service.SERVICESOURCE_NEW_PAGE] = {
             id: service.SERVICESOURCE_NEW_PAGE,
-            title: 'New Service-source',
+            title: 'New Source',
             icon: 'fa-plus',
             parent: service.SERVICESOURCE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
@@ -177,7 +177,7 @@
         };
         pages[service.SERVICESOURCE_EDIT_PAGE] = {
             id: service.SERVICESOURCE_EDIT_PAGE,
-            title: 'Edit Service-source',
+            title: 'Edit Source',
             icon: 'pficon-edit',
             parent: service.SERVICESOURCE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
@@ -187,7 +187,7 @@
         };
         pages[service.SERVICESOURCE_CLONE_PAGE] = {
             id: service.SERVICESOURCE_CLONE_PAGE,
-            title: 'Clone Service-source',
+            title: 'Clone Source',
             icon: 'pficon-replicator',
             parent: service.SERVICESOURCE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
@@ -197,7 +197,7 @@
         };
         pages[service.SERVICESOURCE_IMPORT_PAGE] = {
             id: service.SERVICESOURCE_IMPORT_PAGE,
-            title: 'Import Service-source',
+            title: 'Import Source',
             icon: 'pficon-import',
             parent: service.SERVICESOURCE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +

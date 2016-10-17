@@ -37,7 +37,7 @@
                         deployVdb(newSvcSourceName);
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to clone the service source. \n" + response.message);
+                        throw RepoRestService.newRestException("Failed to clone the source. \n" + response.message);
                     });
             } catch (error) {} finally {
             }
