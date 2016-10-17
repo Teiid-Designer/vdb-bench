@@ -271,7 +271,8 @@
                     "keng__dataPath": getUserWorkspacePath()+"/"+vdbName,
                     "keng__kType": "Vdb",
                     "vdb__name": vdbName,
-                    "vdb__description": vdbDescription
+                    "vdb__description": vdbDescription,
+                    "vdb__originalFile" : getUserWorkspacePath()+"/"+vdbName
                 };
                 
                 // Property added to distinguish service sources
@@ -299,7 +300,8 @@
                     "keng__dataPath": getUserWorkspacePath()+"/"+vdbName,
                     "keng__kType": "Vdb",
                     "vdb__name": vdbName,
-                    "vdb__description": vdbDescription
+                    "vdb__description": vdbDescription,
+                    "vdb__originalFile" : getUserWorkspacePath()+"/"+vdbName
                 };
                 
                 // Property added to distinguish service sources
@@ -316,7 +318,7 @@
         /**
          * Service: create a new VDB in the repository
          */
-        service.createVdbModel = function (vdbName, modelName) {
+        service.createVdbModel = function (vdbName, modelName, isSource) {
             if (!vdbName || !modelName) {
                 throw new RestServiceException("VDB name or model name is not defined");
             }
@@ -328,6 +330,19 @@
                     "keng__kType": "Model",
                     "mmcore__modelType": "PHYSICAL"
                 };
+                
+                
+                // Adds importer properties for service sources
+                if (isSource)  {
+                    payload.keng__properties = [{ "name": "importer.TableTypes",
+                                                  "value": "TABLE"},
+                                                { "name": "importer.UseFullSchemaName",
+                                                  "value": "false"},
+                                                { "name": "importer.UseQualifiedName",
+                                                  "value": "false"},
+                                                { "name": "importer.UseCatalogName",
+                                                  "value": "false"}];
+                }
 
                 var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + SYNTAX.FORWARD_SLASH + REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName;
                 return restService.all(uri).post(payload);
