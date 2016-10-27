@@ -16,6 +16,9 @@
         var directive = {
             restrict: 'E',
             scope: {},
+            bindToController: {
+                selection : '@'
+            },
             controller: ModelTableListController,
             controllerAs: 'vm',
             templateUrl: config.pluginDir + syntax.FORWARD_SLASH +
@@ -55,11 +58,12 @@
                         function ( result ) {
                             vm.allItems = result;
                             vm.items = vm.allItems;
+                            setSelection();
                             vm.tablesLoading = false;
                        },
                         function (response) {
                             vm.tablesLoading = false;
-                            throw RepoRestService.newRestException("Failed to get Tables. \n" + response.data.error);
+                            throw RepoRestService.newRestException("Failed to get Tables. \n" + RepoRestService.responseMessage(response));
                         });
                 } catch (error) {} finally {
                 }
@@ -72,6 +76,22 @@
             SvcSourceSelectionService.selectedServiceSourceConnectionName(successCallback,failureCallback);
         });
 
+        function setSelection() {
+            // Selection if specified
+            var selItems = [];
+            if(vm.selection !== null) {
+            	// See if item match
+                var itemsLength = vm.items.length;
+                for (var i = 0; i < itemsLength; i++) {
+                	if(vm.items[i].keng__id==vm.selection) {
+                		selItems.push(vm.items[i]);
+                        break;
+                	}
+                } 
+            }
+            vm.listConfig.selectedItems = selItems;
+        }
+        
         /**
          * Access to the collection of filtered data services
          */

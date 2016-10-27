@@ -15,6 +15,8 @@
                                      SvcSourceSelectionService, ConnectionSelectionService, TranslatorSelectionService) {
         var vm = this;
 
+        vm.numberSources = 0;
+        
         vm.connsLoading = ConnectionSelectionService.isLoading();
         vm.allConnections = ConnectionSelectionService.getConnections();
         
@@ -61,6 +63,7 @@
         function createAndDeploySvcSourceVdb ( svcSourceName, svcSourceDescription, connectionName, jndiName, translatorName ) {
             // Set loading true for modal popup
             vm.createAndDeployInProgress = true;
+            vm.numberSources = SvcSourceSelectionService.getServiceSources().length;
             SvcSourceSelectionService.setLoading(true);
             
             // Creates the VDB.  On success, the VDB Model is added to the VDB
@@ -138,8 +141,12 @@
                         } else {
                             SvcSourceSelectionService.setDeploying(false, vdbName, false, result.Information.ErrorMessage1);
                         }
-                        // Reinitialise the list of service sources
-                        SvcSourceSelectionService.refresh('datasource-summary');
+                        // Refresh and direct to appropriate page.  If no sources prior to this create, go directly to new service page
+                        if(vm.numberSources===0) {
+                            SvcSourceSelectionService.refresh('dataservice-new');
+                        } else {
+                            SvcSourceSelectionService.refresh('datasource-summary');
+                        }
                    },
                     function (response) {
                         SvcSourceSelectionService.setDeploying(false, vdbName, false, RepoRestService.responseMessage(response));

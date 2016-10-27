@@ -23,6 +23,7 @@
         vm.selectedSourceDDL = "";
         vm.deleteVdbInProgress = false;
         vm.displayDdl = false; // Do not display by default
+        vm.hasSources = false;
 
         /**
          * Options for the codemirror editor used for previewing ddl
@@ -47,7 +48,10 @@
                 vm.items = vm.allItems;
                 vm.filterConfig.resultsCount = vm.items.length;
                 vm.deleteVdbInProgress = false;
-           }
+                vm.hasSources = vm.allItems.length>0;
+            } else {
+                vm.hasSources = false;
+            }
         });
 
         /**
@@ -524,6 +528,7 @@
             vm.allItems = SvcSourceSelectionService.getServiceSources();
             vm.items = vm.allItems;
             vm.filterConfig.resultsCount = vm.items.length;
+            vm.hasSources = vm.allItems.length>0;
         };
 
         vm.refresh();

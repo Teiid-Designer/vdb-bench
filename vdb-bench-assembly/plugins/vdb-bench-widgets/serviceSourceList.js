@@ -16,6 +16,9 @@
         var directive = {
             restrict: 'E',
             scope: {},
+            bindToController: {
+                selection : '@'
+            },
             controller: ServiceSourceListController,
             controllerAs: 'vm',
             templateUrl: config.pluginDir + syntax.FORWARD_SLASH +
@@ -42,7 +45,7 @@
             if(vm.srcLoading === false) {
                 vm.allItems = SvcSourceSelectionService.getServiceSources();
                 vm.items = vm.allItems;
-           }
+            }
         });
 
         /**
@@ -80,7 +83,8 @@
           multiSelect: false,
           selectionMatchProp: 'keng__id',
           onSelect: handleSelect,
-          checkDisabled: false
+          checkDisabled: false,
+          selectedItems: {}
         };
         
         /**
@@ -89,6 +93,23 @@
         vm.refresh = function() {
             vm.allItems = SvcSourceSelectionService.getServiceSources();
             vm.items = vm.allItems;
+            
+            // Set the selection (if specified)
+            var selItems = [];
+            if(vm.selection !== null) {
+            	// See if item match
+                var itemsLength = vm.items.length;
+                for (var i = 0; i < itemsLength; i++) {
+                	if(vm.items[i].keng__id==vm.selection) {
+                		selItems.push(vm.items[i]);
+                        break;
+                	}
+                } 
+            }
+            if(selItems.length==1) {
+                vm.listConfig.selectedItems = selItems;
+                SvcSourceSelectionService.selectServiceSource(selItems[0]);
+            }
         };
 
         vm.refresh();

@@ -1,32 +1,46 @@
 <div id="ds-summary-container" class="container-fluid" ng-controller="DSSummaryController as vm">
 
-    <div id="dataservice-summary-noservices" ng-show="vm.dsLoading==false && vm.getAllDataServices().length==0" class="col-md-10 row" style="border-style:solid;border-width:2px;padding-bottom:10px;border-color:#999999;background-color:#EEEEEE">
-	   <div class="row">
-           <div class="col-md-2"></div>
-	       <div class="col-md-8">
-	           <img src="plugins/vdb-bench-dataservice/content/img/EmptyLibraryImage.png" style="max-height:100%;max-width:100%;">
-	       </div>
-           <div class="col-md-2"></div>
-	   </div>
-	   <div class="row">
-	       <div class="col-md-4"></div>
-	       <div class="col-md-6">
-                <button class="btn btn-primary" ng-click="vm.createNewService()" ng-class="{active:vmmain.selectedPage.id == 'dataservice-summary'}">Create Data Service</button>
-                <button class="btn btn-primary" ng-click="vmmain.selectPage('dataservice-import')" ng-class="{active:vmmain.selectedPage.id == 'dataservice-summary'}">Import Data Service</button>
-	       </div>
-	       <div class="col-md-2"></div>
-	   </div>
+    <!-- Content shown if No Sources or DataServices yet -->
+    <div id="dataservice-summary-nosources" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasSources==false && vm.hasServices==false" class="col-md-10 row">
+        <div class="row">
+            <h2>Welcome to the <strong>Data Services Builder</strong>!</h2>
+            <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
+            <p>A Data Service is created using one or more Sources.  To create your first Source, click 
+               <a href ng-click="vmmain.selectPage('svcsource-new')"><span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span><span>{{vmmain.page('svcsource-new').title}}</span></a>
+               <br>
+               You can also import an existing Data Service.  To import a Data Service,
+               click <a href ng-click="vmmain.selectPage('dataservice-import')"><span class="fa fa-fw {{vmmain.page('dataservice-import').icon}}"></span><span>{{vmmain.page('dataservice-import').title}}</span></a>
+            </p>
+        </div>
     </div>
-    <div id="dataservice-summary-updating" ng-show="vm.dsLoading==true" class="col-md-10 row">
+
+    <!-- Content shown if No DataServices yet -->
+    <div id="dataservice-summary-noservices" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasSources==true && vm.hasServices==false" class="col-md-10 row">
+        <div class="row">
+            <h2>Welcome to the <strong>Data Services Builder</strong>!</h2>
+            <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
+            <p>A Data Service is created using one or more Sources.  To create your first Data Service, click 
+               <a href ng-click="vmmain.selectPage('dataservice-new')"><span class="fa fa-fw {{vmmain.page('dataservice-new').icon}}"></span><span>{{vmmain.page('dataservice-new').title}}</span></a>
+               <br>
+               You can also import an existing Data Service.  To import a Data Service,
+               click <a href ng-click="vmmain.selectPage('dataservice-import')"><span class="fa fa-fw {{vmmain.page('dataservice-import').icon}}"></span><span>{{vmmain.page('dataservice-import').title}}</span></a>
+            </p>
+        </div>
+    </div>
+
+    <div id="dataservice-summary-updating" ng-show="vm.dsLoading==true || vm.sourcesLoading==true" class="col-md-10 row">
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
         <span class="sr-only">Loading...</span>
     </div>
 
-    <div id="ds-summary-table" class="col-md-10 row" ng-show="vm.dsLoading==false && vm.getAllDataServices().length>0">
+    <div id="ds-summary-table" class="col-md-10 row" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasServices==true">
+        <div class="row">
+            <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
+        </div>
         <div pf-toolbar id="dataserviceToolbar" config="vm.toolbarConfig"></div>
 
-        <div class="row ds-summary-results">
             <div class="col-md-12 list-view-container" ng-if="vm.viewType == 'listView'">
+        <div class="row ds-summary-results">
                 <div pf-list-view config="vm.listConfig" items="vm.getDataServices()" menu-actions="vm.menuActions">
                         <div class="list-view-pf-left">
                             <span class="fa fa-cube list-view-pf-icon-sm"></span>

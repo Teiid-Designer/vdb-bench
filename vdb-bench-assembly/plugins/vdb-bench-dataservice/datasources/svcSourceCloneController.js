@@ -37,7 +37,7 @@
                         deployVdb(newSvcSourceName);
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to clone the service source. \n" + response.message);
+                        throw RepoRestService.newRestException("Failed to clone the source. \n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
             }
@@ -63,7 +63,7 @@
                    },
                     function (response) {
                         SvcSourceSelectionService.setDeploying(false, vdbName, false, response.message);
-                        throw RepoRestService.newRestException("Failed to deploy the ServiceSource. \n" + response.message);
+                        throw RepoRestService.newRestException("Failed to deploy the ServiceSource. \n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
             }

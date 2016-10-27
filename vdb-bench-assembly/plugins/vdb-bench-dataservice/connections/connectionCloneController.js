@@ -26,7 +26,7 @@
                         $rootScope.$broadcast("dataServicePageChanged", 'connection-summary');
                    },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to clone the connection. \n" + response.message);
+                        throw RepoRestService.newRestException("Failed to clone the connection. \n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
             }

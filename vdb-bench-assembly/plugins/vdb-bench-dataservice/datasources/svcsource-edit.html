@@ -7,10 +7,10 @@
     <div id="svcsource-edit-controls" ng-show="vm.connsLoading==false && vm.transLoading==false" class="col-md-10 row">
       <div class="row">
         <div class="col-md-11">
-            <h1><i class="fa fa-database" aria-hidden="true"></i>Edit Service Source</h1>
-            <h3>&nbsp;&nbsp;Edit the Service Source</h3>
+            <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
+            <h4>Reconfigure an existing Source:</h4>
             <form class="form-horizontal">
-                <div class="form-group">
+                <div class="form-group" style="margin-top: 20px">
                     <label class="col-md-2 control-label" for="textInput">Name</label>
                     <div class="col-md-6">
                         <input type="text" readonly="readonly" ng-model="vm.svcSourceName" ng-init="vm.svcSourceName=vmmain.selectedServiceSource().keng__id" class="form-control">

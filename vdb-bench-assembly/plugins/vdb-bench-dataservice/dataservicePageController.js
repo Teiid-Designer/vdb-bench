@@ -133,7 +133,7 @@
             return ConnectionSelectionService.getConnectionState(conn);
         };
 
-        vm.selectPage(DSPageService.DS_HOME_PAGE);
+        vm.selectPage(DSPageService.DATASERVICE_SUMMARY_PAGE);
     }
 
 })();

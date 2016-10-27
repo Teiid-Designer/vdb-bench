@@ -748,6 +748,34 @@
         };
 
         /**
+         * Service: Gets the workspace source VDB matches for a DataService's sources.
+         */
+        service.getWkspSourceVdbsForDataService = function (dataserviceName) {
+            return getRestService().then(function (restService) {
+                if (!dataserviceName) {
+                    throw RestServiceException("Data service name is not defined");
+                }
+
+                var uri = REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + dataserviceName + SYNTAX.FORWARD_SLASH + REST_URI.SOURCE_VDB_MATCHES;
+                return restService.one(uri).get();
+            });
+        };
+
+        /**
+         * Service: Gets the service view tableNames for a DataService's view.
+         */
+        service.getTableNamesForDataService = function (dataserviceName) {
+            return getRestService().then(function (restService) {
+                if (!dataserviceName) {
+                    throw RestServiceException("Data service name is not defined");
+                }
+
+                var uri = REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + dataserviceName + SYNTAX.FORWARD_SLASH + REST_URI.SERVICE_VIEW_TABLES;
+                return restService.one(uri).get();
+            });
+        };
+
+        /**
          * Service: deploy a data service from the resposiory
          */
         service.deployDataService = function (dataserviceName) {

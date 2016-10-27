@@ -54,7 +54,7 @@
         };
         pages[service.DATASERVICE_SUMMARY_PAGE] = {
             id: service.DATASERVICE_SUMMARY_PAGE,
-            title: 'Data Services',
+            title: 'Data Service Summary',
             icon: 'fa-search',
             parent: service.DS_HOME_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
@@ -149,7 +149,7 @@
         };
         pages[service.CLONE_CONNECTION_PAGE] = {
             id: service.CLONE_CONNECTION_PAGE,
-            title: 'Clone Connection',
+            title: 'Copy Connection',
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
                             'connections' + syntax.FORWARD_SLASH +
@@ -167,8 +167,8 @@
         };
         pages[service.SERVICESOURCE_NEW_PAGE] = {
             id: service.SERVICESOURCE_NEW_PAGE,
-            title: 'New Service-source',
-            icon: 'fa-plus',
+            title: 'Configure Source',
+            icon: 'pficon-settings',
             parent: service.SERVICESOURCE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
@@ -187,7 +187,7 @@
         };
         pages[service.SERVICESOURCE_CLONE_PAGE] = {
             id: service.SERVICESOURCE_CLONE_PAGE,
-            title: 'Clone Service-source',
+            title: 'Copy Source',
             icon: 'pficon-replicator',
             parent: service.SERVICESOURCE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +

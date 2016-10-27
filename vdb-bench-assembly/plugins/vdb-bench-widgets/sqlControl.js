@@ -137,7 +137,7 @@
                 },
                 function (response) {
                     vm.showProgress(false);
-                    vm.errorMsg = response.data.error;
+                    vm.errorMsg = RepoRestService.responseMessage(response);
                 });
         };
     }

@@ -7,10 +7,10 @@
     <div id="svcsource-new-controls" ng-show="vm.connsLoading==false && vm.transLoading==false && vm.createAndDeployInProgress==false" class="col-md-10 row">
       <div class="row">
         <div class="col-md-11">
-            <h1><i class="fa fa-database" aria-hidden="true"></i>New Service Source</h1>
-            <h3>&nbsp;&nbsp;Create a new Service Source</h3>
+            <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
+            <h4>Sources are the building blocks for your Data Services.  Start the Source configuration by selecting one of your available Connection definitions.</h4>
             <form class="form-horizontal">
-                <div class="form-group">
+                <div class="form-group" style="margin-top: 20px">
                     <label class="col-md-2 control-label" for="textInput">Name</label>
                     <div class="col-md-6">
                         <input type="text" ng-model="vm.svcSourceName" class="form-control" required="true">
