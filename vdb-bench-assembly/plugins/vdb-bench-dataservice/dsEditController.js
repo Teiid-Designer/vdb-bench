@@ -8,10 +8,10 @@
         .module(pluginName)
         .controller('DSEditController', DSEditController);
 
-    DSEditController.$inject = ['$scope', '$rootScope', 'REST_URI', 'SYNTAX', 'RepoRestService', 'DSSelectionService', 
+    DSEditController.$inject = ['$scope', '$rootScope', '$document', 'REST_URI', 'SYNTAX', 'RepoRestService', 'DSSelectionService', 
                                 'SvcSourceSelectionService', 'TableSelectionService'];
 
-    function DSEditController($scope, $rootScope, REST_URI, SYNTAX, RepoRestService, DSSelectionService, 
+    function DSEditController($scope, $rootScope, $document, REST_URI, SYNTAX, RepoRestService, DSSelectionService, 
                                SvcSourceSelectionService, TableSelectionService) {
         var vm = this;
         
@@ -25,7 +25,7 @@
         /*
          * Set initial source selection
          */
-        angular.element(document).ready(function () {
+        $document.ready(function () {
             // Initialize the selections if possible for the selected dataservice
             vm.initialSourceName = DSSelectionService.getEditSourceSelection();
             vm.initialSourceTableName = DSSelectionService.getEditSourceTableSelection();
