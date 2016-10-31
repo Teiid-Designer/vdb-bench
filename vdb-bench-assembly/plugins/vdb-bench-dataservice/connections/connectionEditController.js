@@ -24,7 +24,7 @@
                         $rootScope.$broadcast("dataServicePageChanged", 'connection-summary');
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to update the connection. \n" + response.message);
+                        throw RepoRestService.newRestException("Failed to update the connection. \n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
             }

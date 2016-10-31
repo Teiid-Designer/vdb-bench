@@ -26,7 +26,7 @@
                         $rootScope.$broadcast("dataServicePageChanged", 'dataservice-summary');
                    },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to clone the dataservice. \n" + response.message);
+                        throw RepoRestService.newRestException("Failed to clone the dataservice. \n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
             }

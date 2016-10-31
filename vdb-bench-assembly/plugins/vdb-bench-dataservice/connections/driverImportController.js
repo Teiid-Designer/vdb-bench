@@ -56,8 +56,8 @@
                             }
                        },
                         function (response) {
-                            DriverSelectionService.setDeploying(false, driverName, false, response.message);
-                            throw RepoRestService.newRestException("Failed to deploy the driver. \n" + response.message);
+                            DriverSelectionService.setDeploying(false, driverName, false, RepoRestService.responseMessage(response));
+                            throw RepoRestService.newRestException("Failed to deploy the driver. \n" + RepoRestService.responseMessage(response));
                         });
                 } catch (error) {} finally {
                     vm.deploymentSuccess = false;

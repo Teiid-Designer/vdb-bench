@@ -151,7 +151,7 @@
                         ConnectionSelectionService.refresh();
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to remove the connection. \n" + response.message);
+                        throw RepoRestService.newRestException("Failed to remove the connection. \n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
             }
@@ -179,8 +179,8 @@
                         }
                    },
                     function (response) {
-                        ConnectionSelectionService.setDeploying(false, selConnName, false, response.message);
-                        throw RepoRestService.newRestException("Failed to deploy the connection. \n" + response.message);
+                        ConnectionSelectionService.setDeploying(false, selConnName, false, RepoRestService.responseMessage(response));
+                        throw RepoRestService.newRestException("Failed to deploy the connection. \n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
                 vm.deploymentSuccess = false;

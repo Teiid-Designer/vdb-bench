@@ -23,6 +23,8 @@
         ds.deploymentServiceName = null;
         ds.deploymentSuccess = false;
         ds.deploymentMessage = null;
+        ds.editServiceSourceSelection = null;
+        ds.editServiceSourceTableSelection = null;
 
         /*
          * Service instance to be returned
@@ -116,6 +118,22 @@
          */
         service.getDataServices = function() {
             return ds.dataservices;
+        };
+
+        service.setEditSourceSelection = function(sourceName) {
+            ds.editServiceSourceSelection = sourceName;
+        };
+
+        service.getEditSourceSelection = function() {
+            return ds.editServiceSourceSelection;
+        };
+
+        service.setEditSourceTableSelection = function(tableName) {
+            ds.editServiceSourceTableSelection = tableName;
+        };
+
+        service.getEditSourceTableSelection = function() {
+            return ds.editServiceSourceTableSelection;
         };
 
         /*

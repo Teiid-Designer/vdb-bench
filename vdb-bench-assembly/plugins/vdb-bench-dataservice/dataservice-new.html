@@ -1,45 +1,60 @@
 <div class="container-fluid" ng-controller="DSNewController as vm">
 
-    <div class="row">
-        <div class="col-sm-8 col-md-9">                
-            <div class="row">
-                <div class="col-sm-9">
-                    <h1><i class="fa fa-plus" aria-hidden="true"></i> New DataService</h1>
-                    <h3>&nbsp;&nbsp;Create a new DataService</h3>
-                    <form class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-2 control-label" for="textInput">Name</label>
-                            <div class="col-md-6">
-                              <input type="text" ng-model="vm.serviceName" class="form-control">
-                            </div>
+    <!-- Content shown if No Sources yet -->
+    <div id="dataservice-new-nosources" ng-show="vm.hasSources==false" class="col-md-10 row">
+        <div class="row">
+            <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
+            <p>Before you can create a new Data Service, you will need to configure a source.  To configure a Source, 
+            click <a href ng-click="vmmain.selectPage('svcsource-new')"><span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span><span>{{vmmain.page('svcsource-new').title}}</span></a></p>
+        </div>
+    </div>
+    
+    <div id="dataservice-new-controls" ng-show="vm.hasSources==true" class="col-md-10 row">
+        <div class="col-sm-9 row">
+            <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
+            <h4>A Data Service can be composed of one or more of your available sources.  Start creating a Data Service by selecting a source, then
+            select one of it's source tables.  If you don't see your desired source, click 
+            <a href ng-click="vmmain.selectPage('svcsource-new')"><span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span><span>{{vmmain.page('svcsource-new').title}}</span></a>
+            </h4>
+            <div class="col-md-5">
+                <h4><strong>Sources</strong></h4>
+                <service-source-list></service-source-list>
+            </div>
+            <div class="col-md-5">
+                <h4><strong>Tables</strong></h4>
+                <model-table-list></model-table-list>
+            </div>
+            <div class="col-md-12" ng-show="vm.showNameAndDescription">
+                <p></p>
+                <h4>Choose a name (and optional description) for your Data Service</h4>
+                <p></p>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="textInput">Name</label>
+                        <div class="col-md-6">
+                          <input type="text" ng-model="vm.serviceName" class="form-control">
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label" for="textInput">Description</label>
-                            <div class="col-md-10">
-                              <input type="text" ng-model="vm.serviceDescription" class="form-control">
-                            </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="textInput">Description</label>
+                        <div class="col-md-6">
+                          <input type="text" ng-model="vm.serviceDescription" class="form-control">
                         </div>
-                        <h4>Choose the source and table for your service</h4>
-                        <div class="col-md-5">
-                            <h4><strong>Sources</strong></h4>
-                            <service-source-list></service-source-list>
-                        </div>
-                        <div class="col-md-5">
-                            <h4><strong>Tables</strong></h4>
-                            <model-table-list></model-table-list>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-md-12">
-                    <p></p>
-                </div>
-                <div class="col-md-12">
-                    <input type="submit" class="btn btn-primary" value="Create" ng-click="vm.onCreateDataServiceClicked()"
-                                              ng-disabled="vm.canCreateDataService() !== true || vmmain.selectedPage.id !== 'dataservice-new'"/>
-                    <input type="button" class="btn btn-default" value="Cancel" ng-click="vmmain.selectPage('dataservice-summary')"
-                                              ng-disabled="vmmain.selectedPage.id !== 'dataservice-new'"/>
-                </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-12">
+                <p></p>
+            </div>
+            <div class="col-md-12">
+                <input type="submit" class="btn btn-primary" value="Create" ng-click="vm.onCreateDataServiceClicked()"
+                                          ng-disabled="vm.canCreateDataService() !== true || vmmain.selectedPage.id !== 'dataservice-new'"/>
+                <input type="button" class="btn btn-default" value="Cancel" ng-click="vmmain.selectPage('dataservice-summary')"
+                                          ng-disabled="vmmain.selectedPage.id !== 'dataservice-new'"/>
             </div>
         </div>
     </div>
+
 </div>

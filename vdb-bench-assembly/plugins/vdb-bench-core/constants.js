@@ -55,6 +55,8 @@
             TABLES: '/Tables',
             COLUMNS: '/Columns',
             SERVICE_VDB_FOR_SINGLE_TABLE: 'ServiceVdbForSingleTable',
+            SERVICE_VIEW_TABLES: 'serviceViewTables',
+            SOURCE_VDB_MATCHES: 'sourceVdbMatches',
             MODEL_FROM_TEIID_DDL: 'ModelFromTeiidDdl',
             DATA_SERVICES_CLONE: '/dataservices/clone',
             DATA_SERVICE: '/dataservice',

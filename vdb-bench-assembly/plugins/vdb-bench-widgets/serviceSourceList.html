@@ -4,13 +4,18 @@
         <span class="sr-only">Loading...</span>
     </div>
         
-    <div id="serviceSourceList-table-row" class="list-view-container source-listview" ng-show="vm.srcLoading==false">
-       <div pf-list-view config="vm.listConfig" items="vm.getServiceSources()">
-         <div class="list-view-pf-description">
-           <div class="list-group-item-heading">
-             {{item.keng__id}}
-           </div>
-         </div>
-       </div>
-     </div>
+    <div class="pick-list-container">
+        <div class="pick-list-results">
+            <div id="serviceSourceList-table-row" class="source-list-view-container" ng-show="vm.srcLoading==false">
+                <div pf-list-view class="source-list-view-content" config="vm.listConfig" items="vm.getServiceSources()">
+                  <div class="list-view-pf-description">
+                    <div class="list-group-item-heading">
+                      {{item.keng__id}}
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 </div>

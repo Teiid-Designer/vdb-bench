@@ -17,8 +17,20 @@
         
         vm.svcSourcesLoading = SvcSourceSelectionService.isLoading();
         vm.svcSources = SvcSourceSelectionService.getServiceSources();
-        vm.saveButtonDisabled = true;
-        
+        vm.initialSourceName = null;
+        vm.initialSourceTableName = null;
+        vm.sourceInit = true;
+        vm.tableInit = true;
+
+        /*
+         * Set initial source selection
+         */
+        angular.element(document).ready(function () {
+            // Initialize the selections if possible for the selected dataservice
+            vm.initialSourceName = DSSelectionService.getEditSourceSelection();
+            vm.initialSourceTableName = DSSelectionService.getEditSourceTableSelection();
+        });
+
         /*
          * When the selected service source changed
          */
@@ -30,12 +42,19 @@
                 return;
             }
             // Get the source name
-            var selSvcSourceName = selectedSrc.keng__id;
+            var selectedSvcSourceName = selectedSrc.keng__id;
             
+            // The initial Source selection is cleared after the first change event
+            if (vm.sourceInit===false) {
+                vm.initialSourceName = null;
+                TableSelectionService.selectTable(null);
+            }
+            vm.sourceInit = false;
+
             // Gets selected model name, then builds a temp model based on its ddl
             var successCallback = function(selSvcSourceModelName) {
                 // Create Temp Model in the workspace using the selected model ddl
-                buildTempVdbAndModel(selSvcSourceName,selSvcSourceModelName);
+                buildTempVdbAndModel(selectedSvcSourceName,selSvcSourceModelName);
             };
 
             var failureCallback = function(errorMsg) {
@@ -43,6 +62,13 @@
             };
             
             SvcSourceSelectionService.selectedServiceSourceConnectionName(successCallback, failureCallback);
+        });
+
+        /*
+         * When the selected table changes
+         */
+        $scope.$on('selectedTableChanged', function (event) {
+           	vm.initialSourceTableName = null;
         });
 
         // Gets the available service sources
@@ -79,16 +105,24 @@
             if (angular.isUndefined(vm.serviceName) ||
                 vm.serviceName === null || vm.serviceName === SYNTAX.EMPTY_STRING)
                 return false;
-            
-            var selectedSrc = SvcSourceSelectionService.selectedServiceSource();
-            if(selectedSrc===null) return false;
 
-            var selectedTable = TableSelectionService.selectedTable();
-            if(selectedTable === null) return false;
+            // Ok if initialSourceName and TableName are set
+            if(vm.initialSourceName !== null && vm.initialSourceTableName !== null) {
+                return true;
+            }
+
+            // Otherwise ensure source and table selections
+            var selectedSrc = SvcSourceSelectionService.selectedServiceSource();
+            if(selectedSrc===null) {
+                return false;
+            }
+
+            var selTableName = TableSelectionService.selectedTable();
+            if(selTableName === null) return false;
 
             return true;
         };
-        
+
         // Event handler for clicking the save button
         //   - generate the data service using selections
         //   - delete 'scratch' models when done
@@ -118,7 +152,7 @@
                             $rootScope.$broadcast("dataServicePageChanged", 'dataservice-summary');
                         },
                         function (response) {
-                            throw RepoRestService.newRestException("Failed to update the dataservice. \n" + response.message);
+                            throw RepoRestService.newRestException("Failed to update the dataservice. \n" + RepoRestService.responseMessage(response));
                         });
                 } catch (error) {} finally {
                 }
@@ -131,5 +165,5 @@
             SvcSourceSelectionService.selectedServiceSourceConnectionName(successCallback, failureCallback);
         };
     }
-
+    
 })();

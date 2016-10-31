@@ -1,16 +1,31 @@
 <div id="svcsource-summary-container" class="container-fluid" ng-controller="DatasourceSummaryController as vm">
     
+    <!-- Content shown if No Sources yet -->
+    <div id="svcsource-summary-nosources" ng-show="vm.srcLoading==false && vm.hasSources==false" class="col-md-10 row">
+        <div class="row">
+            <h2>Welcome to the <strong>Data Services Builder</strong>!</h2>
+            <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
+            <p>Currently, there are no Sources configured.  To get started, 
+               click <a href ng-click="vmmain.selectPage('svcsource-new')"><span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span><span>{{vmmain.page('svcsource-new').title}}</span></a>
+            </p>
+        </div>
+    </div>
+    
     <div id="svcsource-summary-updating" ng-show="vm.srcLoading==true" class="col-md-10 row">
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
         <span class="sr-only">Loading...</span>
     </div>
 
-    <div id="svcsource-summary-table" class="col-md-10 row">
+    <div id="svcsource-summary-table" class="col-md-10 row" ng-show="vm.srcLoading==false && vm.hasSources==true">
+        <div class="row">
+            <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
+        </div>
+
         <div pf-toolbar id="svcsourceToolbar" config="vm.toolbarConfig"></div>
 
         <div class="svcsource-summary-results-container">
             <div class="svcsource-summary-results">
-                <div class="col-md-12 list-view-container" ng-if="vm.viewType == 'listView'" ng-show="vm.srcLoading==false">
+                <div class="col-md-12 list-view-container" ng-if="vm.viewType == 'listView'">
                     <div pf-list-view config="vm.listConfig" items="vm.getServiceSources()" menu-actions="vm.menuActions">
                         <div class="list-view-pf-left">
                             <span class="fa fa-database list-view-pf-icon-sm"></span>

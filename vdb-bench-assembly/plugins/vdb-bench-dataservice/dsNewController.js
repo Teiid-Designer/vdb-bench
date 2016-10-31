@@ -17,6 +17,10 @@
         
         vm.svcSourcesLoading = SvcSourceSelectionService.isLoading();
         vm.svcSources = SvcSourceSelectionService.getServiceSources();
+        vm.hasSources = vm.svcSources.length>0;
+        vm.selectedSrc = null;
+        vm.selectedTable = null;
+        vm.showNameAndDescription = false;
         
         SvcSourceSelectionService.selectServiceSource(null);
         TableSelectionService.selectTable(null);
@@ -25,14 +29,16 @@
          * When the selected service source changed
          */
         $scope.$on('selectedServiceSourceChanged', function (event) {
-            var selectedSrc = SvcSourceSelectionService.selectedServiceSource();
-            if(selectedSrc === null) {
+            vm.selectedSrc = SvcSourceSelectionService.selectedServiceSource();
+            vm.selectedTable = null;
+            updateNameDescriptionState();
+            if(vm.selectedSrc === null) {
                 // Requests modelTable to refresh
                 $rootScope.$broadcast("refreshModelTableList");
                 return;
             }
             // Get Selected source name
-            var selSvcSourceName = selectedSrc.keng__id;
+            var selSvcSourceName = vm.selectedSrc.keng__id;
             
             // Gets selected model name, then builds a temp model based on its ddl
             var successCallback = function(selSvcSourceModelName) {
@@ -45,6 +51,14 @@
             };
             
             SvcSourceSelectionService.selectedServiceSourceConnectionName(successCallback, failureCallback);
+        });
+
+        /*
+         * When the selected table changes
+         */
+        $scope.$on('selectedTableChanged', function (event) {
+            vm.selectedTable = TableSelectionService.selectedTable();
+            updateNameDescriptionState();
         });
         
         // Gets the available service sources
@@ -94,6 +108,17 @@
 
             return true;
         };
+
+        /**
+         * should show name and description
+         */
+        function updateNameDescriptionState() {
+            if(vm.selectedTable === null || vm.selectedSrc === null) {
+                vm.showNameAndDescription = false;
+            } else {
+                vm.showNameAndDescription = true;
+            }
+        }
         
         // Event handler for clicking the create button
         vm.onCreateDataServiceClicked = function ( ) {
@@ -106,7 +131,7 @@
                         setDataserviceServiceVdb(vm.serviceName);
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to create the dataservice. \n" + response.message);
+                        throw RepoRestService.newRestException("Failed to create the dataservice. \n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
             }
@@ -138,7 +163,7 @@
                             $rootScope.$broadcast("dataServicePageChanged", 'dataservice-summary');
                         },
                         function (response) {
-                            throw RepoRestService.newRestException("Failed to update the dataservice. \n" + response.message);
+                            throw RepoRestService.newRestException("Failed to update the dataservice. \n" + RepoRestService.responseMessage(response));
                         });
                 } catch (error) {} finally {
                 }

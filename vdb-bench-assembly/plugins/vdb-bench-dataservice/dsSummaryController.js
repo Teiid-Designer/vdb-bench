@@ -14,6 +14,9 @@
         var vm = this;
 
         vm.dsLoading = DSSelectionService.isLoading();
+        vm.sourcesLoading = SvcSourceSelectionService.isLoading();
+        vm.hasSources = false;
+        vm.hasServices = false;
         vm.deploymentSuccess = false;
         vm.deploymentMessage = null;
         vm.allItems = DSSelectionService.getDataServices();
@@ -25,10 +28,22 @@
         $scope.$on('loadingDataServicesChanged', function (event, loading) {
             vm.dsLoading = loading;
             if(vm.dsLoading === false) {
-                vm.allItems = DSSelectionService.getDataServices();
-                vm.items = vm.allItems;
-                vm.filterConfig.resultsCount = vm.items.length;
+                vm.refreshServices();
+           } else {
+                vm.hasServices = false;
            }
+        });
+        
+        /*
+         * When the service sources have been loaded
+         */
+        $scope.$on('loadingServiceSourcesChanged', function (event, loading) {
+            vm.sourcesLoading = loading;
+            if(vm.sourcesLoading === false) {
+                vm.refreshSourceState();
+            } else {
+                vm.hasSources = false;
+            }
         });
 
         /**
@@ -188,11 +203,11 @@
                         DSSelectionService.refresh();
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to remove the dataservice. \n" + response.message);
+                        throw RepoRestService.newRestException("Failed to remove the dataservice. \n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
             }
-            vm.refresh();
+
             // Disable the actions until next selection
             setActionsDisabled(true);
         };
@@ -224,8 +239,8 @@
                         }
                    },
                     function (response) {
-                        DSSelectionService.setDeploying(false, selDSName, false, response.message);
-                        throw RepoRestService.newRestException("Failed to deploy the dataservice. \n" + response.message);
+                        DSSelectionService.setDeploying(false, selDSName, false, RepoRestService.responseMessage(response));
+                        throw RepoRestService.newRestException("Failed to deploy the dataservice. \n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
                 vm.deploymentSuccess = false;
@@ -251,10 +266,56 @@
          * Handle edit dataservice click
          */
         var editDataServiceClicked = function( ) {
-            // Start refresh of Service Sources, changing to edit page
-            SvcSourceSelectionService.refresh('dataservice-edit');
+            // Updates the selections first
+            var selDSName = DSSelectionService.selectedDataService().keng__id;
+            updateServiceEditSelections(selDSName);
         };
 
+        /**
+         * Initialize the source and table selections for the dataservice
+         */
+        function updateServiceEditSelections ( dataServiceName ) {
+            // Gets the teiid model schema.  If successful, create a temp model using the schema
+            try {
+                RepoRestService.getWkspSourceVdbsForDataService( dataServiceName ).then(
+                    function ( result ) {
+                        var vdbsLength = result.length;
+                        for (var i = 0; i < vdbsLength; i++) {
+                            var srcName = result[i].keng__id;
+                            DSSelectionService.setEditSourceSelection(srcName);
+                        }
+                        initTableSelections( dataServiceName );
+                    },
+                    function (response) {
+                        throw RepoRestService.newRestException("Failed to find source VDBs. \n" + RepoRestService.responseMessage(response));
+                    });
+            } catch (error) {
+            } finally {
+            }
+        }
+
+        /**
+         * Initialize the source and table selections for the dataservice
+         */
+        function initTableSelections ( dataServiceName ) {
+            // Gets the teiid model schema.  If successful, create a temp model using the schema
+            try {
+                RepoRestService.getTableNamesForDataService( dataServiceName ).then(
+                    function ( result ) {
+                        var tableName = result.Information.SourceTable1;
+                        DSSelectionService.setEditSourceTableSelection(tableName);
+                        
+                        // Start refresh of Service Sources, changing to edit page
+                        SvcSourceSelectionService.refresh('dataservice-edit');
+                    },
+                    function (response) {
+                        throw RepoRestService.newRestException("Failed to find view tables. \n" + RepoRestService.responseMessage(response));
+                    });
+            } catch (error) {
+            } finally {
+            }
+        }
+        
         /*
          * Edit a dataservice
          */
@@ -465,13 +526,22 @@
         /**
          * Access to the collection of data services
          */
-        vm.refresh = function() {
+        vm.refreshServices = function() {
             vm.allItems = DSSelectionService.getDataServices();
             vm.items = vm.allItems;
             vm.filterConfig.resultsCount = vm.items.length;
+            vm.hasServices = vm.allItems.length>0;
+        };
+        
+        /**
+         * Refresh the source state
+         */
+        vm.refreshSourceState = function() {
+        	vm.hasSources = SvcSourceSelectionService.getServiceSources().length>0;
         };
 
-        vm.refresh();
+        vm.refreshServices();
+        vm.refreshSourceState();
         setActionsDisabled(true);
     }
 

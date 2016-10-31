@@ -111,7 +111,7 @@
                     	updateVdbDescription( vm.svcSourceName, vm.svcSourceDescription);
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to update the service source. \n" + response.message);
+                        throw RepoRestService.newRestException("Failed to update the source. \n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
             }
