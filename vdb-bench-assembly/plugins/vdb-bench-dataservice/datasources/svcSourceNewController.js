@@ -16,32 +16,29 @@
         var vm = this;
 
         vm.numberSources = 0;
-        
-        vm.connsLoading = ConnectionSelectionService.isLoading();
-        vm.allConnections = ConnectionSelectionService.getConnections();
-        
-        vm.transLoading = TranslatorSelectionService.isLoading();
+
+        vm.selectedConnection = null;
+        vm.selectedTranslator = null;
+        vm.showNameAndDescription = false;
+        vm.showTranslator = false;
+        vm.selectedTranslator = null;
+        vm.selectedTranslatorImage = null;
         vm.allTranslators = TranslatorSelectionService.getTranslators();
         
         vm.createAndDeployInProgress = false;
-        
+
         /*
-         * When connection loading state changes
+         * Handle Change in selected connection
          */
-        $scope.$on('loadingConnectionsChanged', function (event, loadingState) {
-            vm.connsLoading = loadingState;
-            if(vm.connsLoading === false) {
-                vm.allConnections = ConnectionSelectionService.getConnections();
-            }
-        });
-        
-        /*
-         * When translator loading state changes
-         */
-        $scope.$on('loadingTranslatorsChanged', function (event, loadingState) {
-            vm.transLoading = loadingState;
-            if(vm.transLoading === false) {
-                vm.allTranslators = TranslatorSelectionService.getTranslators();
+        $scope.$on('selectedConnectionChanged', function (event) {
+            vm.selectedConnection = ConnectionSelectionService.selectedConnection();
+            if(vm.selectedConnection !== null) {
+                selectTranslatorForConnection(vm.selectedConnection.keng__id);
+            } else {
+                vm.selectedTranslator = null;
+                vm.selectedTranslatorImage = null;
+                updateTranslatorVisibility();
+                updateNameDescriptionVisibility();
             }
         });
 
@@ -60,8 +57,45 @@
         /**
          * Creates and Deploys the Service Source VDB
          */
+        function selectTranslatorForConnection ( connectionName ) {
+            
+            // Gets the suggested translator for the Teiid connection type and sets the selection
+            try {
+                RepoRestService.getDefaultTranslatorForConnection( connectionName ).then(
+                    function (result) {
+                        var translatorName = result.Information.Translator;
+                        if(translatorName === 'unknown') {
+                            vm.selectedTranslator = null;
+                            vm.selectedTranslatorImage = TranslatorSelectionService.getImageLink(null);
+                        } else {
+                            for (var i = 0; i < vm.allTranslators.length; i++) {
+                                if (vm.allTranslators[i].keng__id === translatorName) {
+                                    vm.selectedTranslator = vm.allTranslators[i];
+                                    vm.selectedTranslatorImage = TranslatorSelectionService.getImageLink(vm.selectedTranslator.keng__id);
+                                    break;
+                                }
+                            }
+                        }
+                        updateTranslatorVisibility();
+                        updateNameDescriptionVisibility();
+                    },
+                    function (resp) {
+                        updateTranslatorVisibility();
+                        updateNameDescriptionVisibility();
+                        throw RepoRestService.newRestException("Failed attempting to fetch translator. \n" + RepoRestService.responseMessage(resp));
+                    });
+            } catch (error) {
+                updateTranslatorVisibility();
+                updateNameDescriptionVisibility();
+                throw RepoRestService.newRestException("Failed attempting to fetch translator. \n" + error);
+            }
+        }
+
+        /**
+         * Creates and Deploys the Service Source VDB
+         */
         function createAndDeploySvcSourceVdb ( svcSourceName, svcSourceDescription, connectionName, jndiName, translatorName ) {
-            // Set loading true for modal popup
+            // Set in progress status
             vm.createAndDeployInProgress = true;
             vm.numberSources = SvcSourceSelectionService.getServiceSources().length;
             SvcSourceSelectionService.setLoading(true);
@@ -160,17 +194,37 @@
         }
 
         /**
-         * Access to the collection of connections
+         * should show name and description
          */
-        vm.getConnections = function() {
-            return vm.allConnections;
-        };
+        function updateNameDescriptionVisibility() {
+            if(vm.selectedConnection === null || vm.selectedTranslator === null) {
+                vm.showNameAndDescription = false;
+            } else {
+                vm.showNameAndDescription = true;
+            }
+        }
 
         /**
-         * Access to the collection of translators
+         * should show translator dropdown
          */
-        vm.getTranslators = function() {
-            return vm.allTranslators;
+        function updateTranslatorVisibility() {
+            if(vm.selectedConnection === null) {
+                vm.showTranslator = false;
+            } else {
+                vm.showTranslator = true;
+            }
+        }
+
+        /**
+         * handles translator change
+         */
+        vm.translatorChanged = function() {
+            if(vm.selectedTranslator===null) {
+                vm.selectedTranslatorImage = TranslatorSelectionService.getImageLink(null);
+            } else {
+                vm.selectedTranslatorImage = TranslatorSelectionService.getImageLink(vm.selectedTranslator.keng__id);
+            }
+            updateNameDescriptionVisibility();
         };
 
         /**
@@ -181,10 +235,10 @@
                 vm.svcSourceName === null || vm.svcSourceName === SYNTAX.EMPTY_STRING)
                 return false;
 
-            if (angular.isUndefined(vm.connection) || vm.connection === null)
+            if (angular.isUndefined(vm.selectedConnection) || vm.selectedConnection === null)
                 return false;
 
-            if (angular.isUndefined(vm.translator) || vm.translator === null)
+            if (angular.isUndefined(vm.selectedTranslator) || vm.selectedTranslator === null)
                 return false;
 
             return true;
@@ -195,9 +249,9 @@
             if (! vm.canCreateSvcSource())
                 return;
 
-            var connectionName = vm.connection.keng__id;
-            var jndiName = vm.connection.dv__jndiName;
-            var translatorName = vm.translator.keng__id;
+            var connectionName = vm.selectedConnection.keng__id;
+            var jndiName = vm.selectedConnection.dv__jndiName;
+            var translatorName = vm.selectedTranslator.keng__id;
 
             createAndDeploySvcSourceVdb( vm.svcSourceName, vm.svcSourceDescription, connectionName, jndiName, translatorName );
         };

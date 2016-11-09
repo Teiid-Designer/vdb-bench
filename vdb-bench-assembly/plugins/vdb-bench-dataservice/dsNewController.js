@@ -41,16 +41,16 @@
             var selSvcSourceName = vm.selectedSrc.keng__id;
             
             // Gets selected model name, then builds a temp model based on its ddl
-            var successCallback = function(selSvcSourceModelName) {
+            var successCallback = function(model) {
                 // Create Temp Model in the workspace using the selected model ddl
-                buildTempVdbAndModel(selSvcSourceName,selSvcSourceModelName);
+                buildTempVdbAndModel(selSvcSourceName,model.keng__id);
             };
 
             var failureCallback = function(errorMsg) {
                 alert("Failed to get connection: \n"+errorMsg);
             };
             
-            SvcSourceSelectionService.selectedServiceSourceConnectionName(successCallback, failureCallback);
+            SvcSourceSelectionService.selectedServiceSourceModel(successCallback, failureCallback);
         });
 
         /*
@@ -146,7 +146,8 @@
             var selSvcSourceName = selectedSrc.keng__id;
             
             // Gets selected model name, create the dataservice VDB
-            var successCallback = function(selSvcSourceModelName) {
+            var successCallback = function(model) {
+            	var selSvcSourceModelName = model.keng__id;
                 var table = TableSelectionService.selectedTable();
                 var tableName = table.keng__id;
                 
@@ -173,7 +174,7 @@
                 alert("Failed to get connection: \n"+errorMsg);
             };
             
-            SvcSourceSelectionService.selectedServiceSourceConnectionName(successCallback, failureCallback);
+            SvcSourceSelectionService.selectedServiceSourceModel(successCallback, failureCallback);
         }
 
     }

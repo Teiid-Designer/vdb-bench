@@ -11,24 +11,27 @@
         </div>
     </div>
     
-    <div id="svcsource-summary-updating" ng-show="vm.srcLoading==true" class="col-md-10 row">
-        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-        <span class="sr-only">Loading...</span>
-    </div>
-
-    <div id="svcsource-summary-table" class="col-md-10 row" ng-show="vm.srcLoading==false && vm.hasSources==true">
-        <div class="row">
+    <div id="svcsource-summary-table" class="col-md-10 row">
+        <div class="row" ng-show="vm.srcLoading==true || vm.hasSources==true">
             <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
         </div>
 
-        <div pf-toolbar id="svcsourceToolbar" config="vm.toolbarConfig"></div>
+        <div pf-toolbar id="svcsourceToolbar" config="vm.toolbarConfig" ng-show="vm.srcLoading==true || vm.hasSources==true"></div>
 
-        <div class="svcsource-summary-results-container">
+        <div id="svcsource-summary-updating" ng-show="vm.srcLoading==true">
+            <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+            <span class="sr-only">Loading...</span>
+        </div>
+
+        <div class="svcsource-summary-results-container" ng-show="vm.srcLoading==false && vm.hasSources==true">
             <div class="svcsource-summary-results">
                 <div class="col-md-12 list-view-container" ng-if="vm.viewType == 'listView'">
                     <div pf-list-view config="vm.listConfig" items="vm.getServiceSources()" menu-actions="vm.menuActions">
                         <div class="list-view-pf-left">
                             <span class="fa fa-database list-view-pf-icon-sm"></span>
+                        </div>
+                        <div class="list-view-pf-left">
+                            <img src="{{prop.value}}" width="42" height="24" ng-repeat="prop in item.keng__properties" ng-show="prop.name=='dsbTranslatorImageLink'"/>
                         </div>
                         <div class="list-view-pf-body">
                             <div class="list-view-pf-description display-block">
@@ -36,14 +39,20 @@
                                     {{item.keng__id}}
                                 </div>
                                 <div class="list-group-item-text no-float">
-                                    {{item.tko__description}}
+                                    {{item.vdb__description}}
                                 </div>
                             </div>
                             <div class="list-view-pf-additional-info">
-                                <div class="list-view-pf-additional-info-item"
-                                        uib-tooltip="The status of the service-source. If 'Active' then its deployed and available while 'New' means it remains in the workspace">
-                                    <span ng-class="{ 'label label-success': prop.value=='Active' , 'label label-warning': prop.value=='Modified' , 'label label-info': prop.value=='New' }"
-                                              ng-repeat="prop in item.keng__properties" ng-show="prop.name=='status'">
+                                <div class="list-view-pf-additional-info-item" data-toggle="tooltip" data-placement="right" title="{{ttip.value}}" ng-repeat="ttip in item.keng__properties" ng-show="ttip.name=='dsbTeiidStatusMessage'"> 
+                                    <span ng-class="{ 'label label-success': prop.value=='Active' , 'label label-danger': prop.value=='Error' ,'label label-warning': prop.value=='Loading' || prop.value=='Unknown' , 'label label-info': prop.value=='New' }"
+                                              ng-repeat="prop in item.keng__properties" ng-show="prop.name=='dsbTeiidStatus'">
+                                        {{prop.value}}
+                                    </span>
+                                </div>
+
+                                <div class="list-view-pf-additional-info-item" data-toggle="tooltip" data-placement="right" title="The connection for this source" >
+                                    <span class="fa fa-cog"></span>
+                                    <span ng-repeat="prop in item.keng__properties" ng-show="prop.name=='dsbSourceConnection'">
                                         {{prop.value}}
                                     </span>
                                 </div>

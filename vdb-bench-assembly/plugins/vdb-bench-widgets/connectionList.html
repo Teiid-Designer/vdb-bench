@@ -1,0 +1,20 @@
+<div>
+    <div id="connectionList-updating" ng-show="vm.connectionsLoading==true" class="col-md-10 row">
+        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+        <span class="sr-only">Loading...</span>
+    </div>
+    
+    <div class="pick-list-container">
+        <div class="pick-list-results">
+            <div id="connectionList-table-row" class="list-view-container" ng-show="vm.connectionsLoading==false">
+                <div pf-list-view config="vm.listConfig" items="vm.items">
+                    <div class="list-view-pf-description">
+                        <div class="list-group-item-heading">
+                        {{item.keng__id}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

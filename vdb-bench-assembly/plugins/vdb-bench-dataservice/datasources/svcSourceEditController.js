@@ -8,77 +8,124 @@
         .module(pluginName)
         .controller('SvcSourceEditController', SvcSourceEditController);
 
-    SvcSourceEditController.$inject = ['$scope', '$rootScope', 'REST_URI', 'SYNTAX', 'RepoRestService', 
+    SvcSourceEditController.$inject = ['$scope', '$rootScope', '$document', 'REST_URI', 'SYNTAX', 'RepoRestService', 
                                        'SvcSourceSelectionService', 'ConnectionSelectionService', 'TranslatorSelectionService'];
 
-    function SvcSourceEditController($scope, $rootScope, REST_URI, SYNTAX, RepoRestService, 
+    function SvcSourceEditController($scope, $rootScope, $document, REST_URI, SYNTAX, RepoRestService, 
                                       SvcSourceSelectionService, ConnectionSelectionService, TranslatorSelectionService) {
         var vm = this;
 
-        vm.connsLoading = ConnectionSelectionService.isLoading();
-        vm.allConnections = ConnectionSelectionService.getConnections();
-        
+        vm.initialConnectionName = null;
+        vm.initialConnectionJndi = null;
+        vm.connectionInit = true;
+        vm.selectedSource = SvcSourceSelectionService.selectedServiceSource();
+        vm.selectedConnection = null;
+        vm.selectedTranslator = TranslatorSelectionService.selectedTranslator();
+        vm.selectedTranslatorImage = null;
         vm.transLoading = TranslatorSelectionService.isLoading();
+        vm.connsLoading = ConnectionSelectionService.isLoading();
         vm.allTranslators = TranslatorSelectionService.getTranslators();
+        vm.updateAndDeployInProgress = false;
 
         /*
-         * When the connections have been loaded
+         * Set initial source selection
+         */
+        $document.ready(function () {
+            // Initialize the selections if possible for the selected connection
+            vm.initialConnectionName = SvcSourceSelectionService.getEditSourceConnectionNameSelection();
+            vm.initialConnectionJndi = SvcSourceSelectionService.getEditSourceConnectionJndiSelection();
+            vm.selectedTranslator = TranslatorSelectionService.selectedTranslator();
+            vm.selectedTranslatorImage = TranslatorSelectionService.getImageLink(vm.selectedTranslator.keng__id);
+            vm.selectedSource = SvcSourceSelectionService.selectedServiceSource();
+        });
+        
+        /*
+         * Handler for selected connection changes
+         */
+        $scope.$on('selectedConnectionChanged', function (event) {
+            vm.selectedConnection = ConnectionSelectionService.selectedConnection();
+            // The initial Connection selection is cleared after the first change event
+            if (vm.connectionInit===false) {
+                vm.initialConnectionName = null;
+                vm.initialConnectionJndi = null;
+                if(vm.selectedConnection !== null) {
+                    selectTranslatorDefaultForConnection(vm.selectedConnection.keng__id);
+                } else {
+                    vm.selectedTranslator = null;
+                    vm.selectedTranslatorImage = TranslatorSelectionService.getImageLink(null);
+                }
+            }
+            vm.connectionInit = false;
+        });
+
+        /*
+         * Handler for connection loading changes
          */
         $scope.$on('loadingConnectionsChanged', function (event, loading) {
             vm.connsLoading = loading;
-            if(vm.connsLoading === false) {
-                vm.allConnections = ConnectionSelectionService.getConnections();
-                var successCallback = function(modelName) {
-                    for (var i = 0; i < vm.allConnections.length; i++) {
-                        if(vm.allConnections[i].keng__id === modelName) {
-                            vm.connection = vm.allConnections[i];
-                        }
-                    }
-                };
-
-                var failureCallback = function(errorMsg) {
-                	alert("Failed to get connection: \n"+errorMsg);
-                };
-                SvcSourceSelectionService.selectedServiceSourceConnectionName(successCallback,failureCallback);
-           }
         });
-        
+
         /*
-         * When the translators have been loaded
+         * Handler for translator loading changes
          */
         $scope.$on('loadingTranslatorsChanged', function (event, loading) {
             vm.transLoading = loading;
-            if(vm.transLoading === false) {
-                vm.allTranslators = TranslatorSelectionService.getTranslators();
-                var successCallback = function(translatorName) {
-                    for (var i = 0; i < vm.allTranslators.length; i++) {
-                        if(vm.allTranslators[i].keng__id === translatorName) {
-                            vm.translator = vm.allTranslators[i];
-                        }
-                    }
-                };
-
-                var failureCallback = function(errorMsg) {
-                	alert("Failed to get translator: \n"+errorMsg);
-                };
-                SvcSourceSelectionService.selectedServiceSourceTranslatorName(successCallback,failureCallback);
-           }
         });
-        
-        /**
-         * Access to the collection of connections
+
+        /*
+         * When loading finishes on create / deploy
          */
-        vm.getConnections = function() {
-            return vm.allConnections;
+        $scope.$on('loadingServiceSourcesChanged', function (event, loadingState) {
+            if (vm.updateAndDeployInProgress === loadingState)
+                return;
+
+            if(loadingState === false) {
+                vm.updateAndDeployInProgress = false;
+            }
+        });
+
+        /**
+         * handles translator change
+         */
+        vm.translatorChanged = function() {
+            if(vm.selectedTranslator===null) {
+                vm.selectedTranslatorImage = TranslatorSelectionService.getImageLink(null);
+            } else {
+                vm.selectedTranslatorImage = TranslatorSelectionService.getImageLink(vm.selectedTranslator.keng__id);
+            }
         };
 
         /**
-         * Access to the collection of translators
+         * Set the selected translator default
          */
-        vm.getTranslators = function() {
-            return vm.allTranslators;
-        };
-        
+        function selectTranslatorDefaultForConnection ( connectionName ) {
+            
+            // Gets the suggested translator for the Teiid connection type and sets the selection
+            try {
+                RepoRestService.getDefaultTranslatorForConnection( connectionName ).then(
+                    function (result) {
+                        var translatorName = result.Information.Translator;
+                        if(translatorName === 'unknown') {
+                            vm.selectedTranslator = null;
+                            vm.selectedTranslatorImage = TranslatorSelectionService.getImageLink(null);
+                        } else {
+                            for (var i = 0; i < vm.allTranslators.length; i++) {
+                                if (vm.allTranslators[i].keng__id === translatorName) {
+                                    vm.selectedTranslator = vm.allTranslators[i];
+                                    vm.selectedTranslatorImage = TranslatorSelectionService.getImageLink(vm.selectedTranslator.keng__id);
+                                    break;
+                                }
+                            }
+                        }
+                    },
+                    function (resp) {
+                        throw RepoRestService.newRestException("Failed attempting to fetch translator. \n" + RepoRestService.responseMessage(resp));
+                    });
+            } catch (error) {
+                throw RepoRestService.newRestException("Failed attempting to fetch translator. \n" + error);
+            }
+        }
+
         /**
          * Can a source be updated
          */
@@ -87,10 +134,14 @@
                 vm.svcSourceName === null || vm.svcSourceName === SYNTAX.EMPTY_STRING)
                 return false;
 
-            if (angular.isUndefined(vm.connection) || vm.connection === null)
+            if (vm.initialConnectionName !== null && vm.intialConnectionJndi !== null && vm.selectedTranslator !== null) {
+                return true;
+            }
+
+            if (angular.isUndefined(vm.selectedConnection) || vm.selectedConnection === null)
                 return false;
 
-            if (angular.isUndefined(vm.translator) || vm.translator === null)
+            if (angular.isUndefined(vm.selectedTranslator) || vm.selectedTranslator === null)
                 return false;
 
             return true;
@@ -101,10 +152,22 @@
             if (! vm.canUpdateSvcSource())
                 return;
 
-            var connectionName = vm.connection.keng__id;
-            var jndiName = vm.connection.dv__jndiName;
-            var translatorName = vm.translator.keng__id;
+            var connectionName = null;
+            var jndiName = null;
+            var translatorName = null;
+            if (vm.initialConnectionName !== null && vm.intialConnectionJndi !== null && vm.selectedTranslator !== null) {
+                connectionName = vm.initialConnectionName;
+                jndiName = vm.initialConnectionJndi;
+                translatorName = vm.selectedTranslator.keng__id;
+            } else {
+                connectionName = vm.selectedConnection.keng__id;
+                jndiName = vm.selectedConnection.dv__jndiName;
+                translatorName = vm.selectedTranslator.keng__id;
+            }
 
+            // Set in progress status
+            vm.updateAndDeployInProgress = true;
+            
             try {
                 RepoRestService.updateVdbModelSource( vm.svcSourceName, connectionName, connectionName, translatorName, jndiName ).then(
                     function (theModelSource) {
@@ -125,16 +188,43 @@
             try {
                 RepoRestService.updateVdb( svcSourceName, svcSourceDescription, true ).then(
                     function (theModel) {
-                        // Reinitialise the list of service sources
-                        SvcSourceSelectionService.refresh("datasource-summary");
+                        deployVdb(svcSourceName);
                     },
                     function (resp) {
-                        // Reinitialise the list of service sources
-                        SvcSourceSelectionService.refresh("datasource-summary");
+                        SvcSourceSelectionService.setLoading(false);
+                        throw RepoRestService.newRestException("Failed to update the source. \n" + RepoRestService.responseMessage(resp));
                     });
             } catch (error) {
-                // Reinitialise the list of service sources
-                SvcSourceSelectionService.refresh("datasource-summary");
+                SvcSourceSelectionService.setLoading(false);
+                throw RepoRestService.newRestException("Failed to update the source. \n" + error);
+            }
+        }
+
+        /**
+         * Deploys the specified VDB to the server
+         */
+        function deployVdb(vdbName) {
+            // Deploy the VDB to the server.  At the end, fire notification to go to summary page
+            try {
+                SvcSourceSelectionService.setDeploying(true, vdbName, false, null);
+                RepoRestService.deployVdb( vdbName ).then(
+                    function ( result ) {
+                        vm.deploymentSuccess = (result.Information.deploymentSuccess === "true");
+                        if(vm.deploymentSuccess === true) {
+                            SvcSourceSelectionService.setDeploying(false, vdbName, true, null);
+                        } else {
+                            SvcSourceSelectionService.setDeploying(false, vdbName, false, result.Information.ErrorMessage1);
+                        }
+                        SvcSourceSelectionService.refresh('datasource-summary');
+                   },
+                    function (response) {
+                        SvcSourceSelectionService.setDeploying(false, vdbName, false, RepoRestService.responseMessage(response));
+                        SvcSourceSelectionService.setLoading(false);
+                        throw RepoRestService.newRestException("Failed to deploy the Source. \n" + RepoRestService.responseMessage(response));
+                    });
+            } catch (error) {
+                SvcSourceSelectionService.setLoading(false);
+                throw RepoRestService.newRestException("Failed to deploy the Source. \n" + error);
             }
         }
 

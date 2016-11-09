@@ -12,7 +12,7 @@
 
     function SvcSourceCloneController($scope, $rootScope, RepoRestService, SvcSourceSelectionService) {
         var vm = this;
-        var cloneVdbInProgress = false;
+        vm.cloneVdbInProgress = false;
 
         /*
          * When loading finishes on copy / deploy
@@ -63,7 +63,7 @@
                    },
                     function (response) {
                         SvcSourceSelectionService.setDeploying(false, vdbName, false, response.message);
-                        throw RepoRestService.newRestException("Failed to deploy the ServiceSource. \n" + RepoRestService.responseMessage(response));
+                        throw RepoRestService.newRestException("Failed to deploy the Source. \n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
             }

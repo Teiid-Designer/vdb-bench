@@ -46,6 +46,7 @@
                 RepoRestService.getDataSources(REST_URI.TEIID_SERVICE).then(
                     function (newDataSources) {
                         RepoRestService.copy(newDataSources, conn.connections);
+                        conn.connections = sortByKey(conn.connections, 'keng__id');
                         setLoading(false);
                     },
                     function (response) {
@@ -63,7 +64,14 @@
             // Removes any outdated selection
             service.selectConnection(null);
         }
-        
+
+        function sortByKey(array, key) {
+            return array.sort(function(a, b) {
+                var x = a[key]; var y = b[key];
+                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+            });
+        }
+
         /*
          * Are the connections currently loading
          */

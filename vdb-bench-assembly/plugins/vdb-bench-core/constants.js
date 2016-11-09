@@ -51,6 +51,7 @@
             SCHEMA: '/schema',
             SEARCH: '/search',
             TEIID: '/teiid',
+            TRANSLATOR_DEFAULT: '/TranslatorDefault',
             TRANSLATORS: '/VdbTranslators',
             TABLES: '/Tables',
             COLUMNS: '/Columns',

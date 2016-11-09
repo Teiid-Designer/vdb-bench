@@ -51,10 +51,10 @@
             }
             var tempVdbName = SYNTAX.TEMP+selectedSource.keng__id;
             
-            var successCallback = function(modelName) {
+            var successCallback = function(model) {
                 // Update the items using the Repo scratch object
                 try {
-                    RepoRestService.getVdbModelTables( tempVdbName, modelName ).then(
+                    RepoRestService.getVdbModelTables( tempVdbName, model.keng__id ).then(
                         function ( result ) {
                             vm.allItems = result;
                             vm.items = vm.allItems;
@@ -73,7 +73,7 @@
             	alert("Failed to get connection: \n"+errorMsg);
             };
             
-            SvcSourceSelectionService.selectedServiceSourceConnectionName(successCallback,failureCallback);
+            SvcSourceSelectionService.selectedServiceSourceModel(successCallback,failureCallback);
         });
 
         function setSelection() {

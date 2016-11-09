@@ -21,12 +21,13 @@
         svcSrc.loading = false;
         svcSrc.serviceSources = [];
         svcSrc.serviceSource = null;
-        svcSrc.teiidVdbs = [];
-        svcSrc.teiidVdbNames = [];
         svcSrc.deploymentInProgress = false;
         svcSrc.deploymentServiceName = null;
         svcSrc.deploymentSuccess = false;
         svcSrc.deploymentMessage = null;
+        svcSrc.editSourceConnectionNameSelection = null;
+        svcSrc.editSourceConnectionJndiSelection = null;
+        svcSrc.editSourceTranslatorNameSelection = null;
 
         /*
          * Service instance to be returned
@@ -67,13 +68,11 @@
          */
         function initVdbs(pageId) {
             svcSrc.serviceSources = [];
-            svcSrc.teiidVdbs = [];
-            svcSrc.teiidVdbNames = [];
              try {
                 RepoRestService.copyServerVdbsToWorkspace( ).then(
                     // Get workspace VDBs
                     function (result) {
-                        initTeiidVdbs(pageId);
+                        updateVdbStatusProperties(pageId);
                     },
                     function (response) {
                         throw RepoRestService.newRestException("Failed to sync workspace VDBs with server.\n" + response.message);
@@ -94,18 +93,7 @@
                         // only include 'serviceSource' vdbs
                         var filteredWkspVdbs = getSourceVdbs(wkspVdbs);
                         RepoRestService.copy(filteredWkspVdbs, svcSrc.serviceSources);
-                        
-                        // Set VDB status to distinguish server VDBs
-                        var sourcesLength = svcSrc.serviceSources.length;
-                        for (var i = 0; i < sourcesLength; i++) {
-                            // If not deployed to server, set status to New
-                            if(!contains(svcSrc.teiidVdbNames,svcSrc.serviceSources[i].keng__id)) {
-                                setVdbStatus(svcSrc.serviceSources[i],"New");
-                            // Deployed to server, set status to Active
-                            } else {
-                                setVdbStatus(svcSrc.serviceSources[i],"Active");
-                            }
-                        } 
+
                         setLoading(false);
                         if(pageId) {
                             // Broadcast the pageChange
@@ -126,23 +114,13 @@
         }
         
         /**
-         * Fetch the VDBs from the cachedTeiid and save them.  Then init the workspace VDBs
+         * Updates the Workspace VDB status based on teiid deployments
          */
-        function initTeiidVdbs(pageId) {
+        function updateVdbStatusProperties(pageId) {
             try {
-                RepoRestService.getVdbs(REST_URI.TEIID_SERVICE).then(
-                    function (serverVdbs) {
-                        // only include 'serviceSource' vdbs
-                        var filteredServerVdbs = getSourceVdbs(serverVdbs);
-                        RepoRestService.copy(filteredServerVdbs, svcSrc.teiidVdbs);
-                        
-                        // Save names of server VDB
-                        var teiidVdbsLength = svcSrc.teiidVdbs.length;
-                        for (var i = 0; i < teiidVdbsLength; i++) {
-                            svcSrc.teiidVdbNames.push(svcSrc.teiidVdbs[i].keng__id);
-                        } 
-                        
-                        // Now get the workspace vdbs and set statuses
+                RepoRestService.updateWorkspaceVdbStatusFromTeiid().then(
+                    function (result) {
+                        // After status update, get the workspace service source VDBs
                         initWorkspaceVdbs(pageId);
                     },
                     function (response) {
@@ -166,28 +144,42 @@
                     if((typeof allVdbs[i].keng__properties === "undefined") || allVdbs[i].keng__properties.length===0) {
                         continue;
                     } else {
+                        var isSource = false;
+                        var srcTranslatorName = null;
                         for(var key in allVdbs[i].keng__properties) {
                             var test = allVdbs[i].keng__properties[key].name;
                             var value = allVdbs[i].keng__properties[key].value;
-                            if(test=='serviceSource' && value=='true') {
-                                sourceVdbs.push(allVdbs[i]);
+                            if(test=='dsbServiceSource' && value=='true') {
+                                isSource = true;
                             }
+                            if(test=='dsbSourceTranslator') {
+                               srcTranslatorName = value;
+                            }
+                        }
+                        if(isSource) {
+                            addTranslatorImageLink(allVdbs[i], srcTranslatorName);
+                            sourceVdbs.push(allVdbs[i]);
                         }
                     }
                 }
             }
             return sourceVdbs;
         }
-        
-        /**
-         * Set the VDB Status property
-         */
-        function setVdbStatus(theVdb, state) {
-            var statusProperty = {};
-            statusProperty.name = 'status';
-            statusProperty.value = state;
-            var props = [statusProperty];
-            theVdb[VDB_KEYS.PROPERTIES] = props;
+
+        function addTranslatorImageLink(vdb, srcTranslatorName) {
+            var imageLink = TranslatorSelectionService.getImageLink(srcTranslatorName);
+            // Use image link found in map.  If not found, use transparent image.
+            if(imageLink !== null) {
+                vdb.keng__properties.push({ 
+                    "name" : "dsbTranslatorImageLink",
+                    "value": imageLink
+                });
+            } else {
+                vdb.keng__properties.push({ 
+                    "name" : "dsbTranslatorImageLink",
+                    "value": "plugins/vdb-bench-core/content/img/Transparent_70x40.png"
+                });
+            }
         }
 
         /*
@@ -195,26 +187,6 @@
          */
         service.setLoading = function(isLoading) {
             setLoading(isLoading);
-        };
-
-        /*
-         * determine if the supplied vdb exists on the server
-         */
-        service.isTeiidVdb = function(vdbName) {
-            var teiidVdbsLength = svcSrc.teiidVdbNames.length;
-            for(var i=0; i<teiidVdbsLength; i++) {
-                if(svcSrc.teiidVdbNames[i] === vdbName) {
-                    return true;
-                }
-            }
-            return false;
-        };
-
-        /*
-         * updates vdb status
-         */
-        service.updateStatus = function(vdb, status) {
-            setVdbStatus(vdb,status);
         };
 
         /*
@@ -290,9 +262,51 @@
         };
 
         /*
-         * return selected serviceSource model name
+         * Set the selected connection name for the editor
          */
-        service.selectedServiceSourceConnectionName = function(onSuccessCallback, onFailureCallback) {
+        service.setEditSourceConnectionNameSelection = function(connectionName) {
+            svcSrc.editSourceConnectionNameSelection = connectionName;
+        };
+
+        /*
+         * Returns the selected connection name for the editor
+         */
+        service.getEditSourceConnectionNameSelection = function() {
+            return svcSrc.editSourceConnectionNameSelection;
+        };
+
+        /*
+         * Set the selected connection jndi for the editor
+         */
+        service.setEditSourceConnectionJndiSelection = function(connectionJndi) {
+            svcSrc.editSourceConnectionJndiSelection = connectionJndi;
+        };
+
+        /*
+         * Returns the selected connection jndi for the editor
+         */
+        service.getEditSourceConnectionJndiSelection = function() {
+            return svcSrc.editSourceConnectionJndiSelection;
+        };
+
+        /*
+         * Set the selected translator name for the editor
+         */
+        service.setEditSourceTranslatorNameSelection = function(translatorName) {
+            svcSrc.editSourceTranslatorNameSelection = translatorName;
+        };
+
+        /*
+         * Returns the selected translator name for the editor
+         */
+        service.getEditSourceTranslatorNameSelection = function() {
+            return svcSrc.editSourceTranslatorNameSelection;
+        };
+
+        /*
+         * return selected serviceSource vdb model
+         */
+        service.selectedServiceSourceModel = function(onSuccessCallback, onFailureCallback) {
             if(_.isEmpty(svcSrc.serviceSource)) {
                 onFailureCallback("No source selected");
                 return;
@@ -317,8 +331,7 @@
                             return;
                         }
 
-                        var svcSrcModelName = models[0].keng__id;
-                        onSuccessCallback(svcSrcModelName);
+                        onSuccessCallback(models[0]);
                     },
                     function (response) {
                         onFailureCallback("Failed getting VDB Connection name.\n" + RepoRestService.responseMessage(response));
@@ -329,26 +342,26 @@
         };
 
         /*
-         * return selected serviceSource translator name
+         * return selected serviceSource ModelSource
          */
-        service.selectedServiceSourceTranslatorName = function(onSuccessCallback, onFailureCallback) {
+        service.selectedServiceSourceModelSource = function(onSuccessCallback, onFailureCallback) {
 
-            var connectionNameCallback = function(connName) {
-                RepoRestService.getVdbModelSources(svcSrc.serviceSource.keng__id, connName).then(
+            var srcModelCallback = function(model) {
+                RepoRestService.getVdbModelSources(svcSrc.serviceSource.keng__id, model.keng__id).then(
                     function (modelSources) {
                         if (_.isEmpty(modelSources) || modelSources.length === 0) {
                             onFailureCallback("Failed getting VDB Translator name.\nThe service source model source is not available");
                             return;
                         }
 
-                        onSuccessCallback(modelSources[0].vdb__sourceTranslator);
+                        onSuccessCallback(modelSources[0]);
                     },
                     function (response) {
                         onFailureCallback("Failed getting VDB Translator name.\n" + RepoRestService.responseMessage(response));
                     });
             };
 
-            service.selectedServiceSourceConnectionName(connectionNameCallback, onFailureCallback);
+            service.selectedServiceSourceModel(srcModelCallback, onFailureCallback);
         };
 
         /*
