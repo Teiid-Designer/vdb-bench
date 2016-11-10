@@ -1,0 +1,36 @@
+{
+
+    "shared" : {
+        "Cancel" : "Cancel",
+        "Connection" : "Connection",
+        "CopyThis" : "Copy {{this}}",
+        "DataService" : "Data Service",
+        "Description" : "Description",
+        "Driver" : "Driver",
+        "EditThis" : "Edit {{this}}",
+        "ExportThis" : "Export {{this}}",
+        "ImportThis" : "Import {{this}}",
+        "Name" : "Name",
+        "NewThis" : "New {{this}}",
+        "Save" : "Save",
+        "Source" : "Source",
+        "ThisSummary" : "{{this}} Summary"
+    },
+
+    "dsPageService" : {
+        "configureSoureTitle" : "Configure Source",
+        "homeTitle" : "Dashboard",
+        "testDataServiceTitle" : "Test Data Service"
+    },
+
+    "dataservice-edit" : {
+        "Cancel" : "@:shared.Cancel",
+        "Description" : "@:shared.Description",
+        "instructionsMsg" : "Change the definition of your Data Service by choosing a different source and table",
+        "Name" : "@:shared.Name",
+        "Save" : "@:shared.Save",
+        "Sources" : "Sources",
+        "Tables" : "Tables"
+    }
+
+}
