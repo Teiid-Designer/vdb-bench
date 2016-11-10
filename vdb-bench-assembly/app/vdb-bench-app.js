@@ -6,7 +6,7 @@ var App;
     App.pluginName = 'VdbBenchApp';
     App.templatePath = 'app/';
 
-    App._module = angular.module(App.pluginName, ['vdb-bench.core']);
+    App._module = angular.module(App.pluginName, ['vdb-bench.core', 'pascalprecht.translate']);
 
     App._module.factory('CredentialService', CredentialService);
     CredentialService.$inject = ['localStorage', '$window'];
@@ -163,8 +163,8 @@ var App;
     }
 
     App._module.config(configure);
-    configure.$inject = ["$locationProvider", "$routeProvider", "$dialogProvider"];
-    function configure($locationProvider, $routeProvider, $dialogProvider) {
+    configure.$inject = ["$locationProvider", "$routeProvider", "$dialogProvider", "$translateProvider"];
+    function configure($locationProvider, $routeProvider, $dialogProvider, $translateProvider) {
         $locationProvider.html5Mode(true);
         $dialogProvider.options({
             backdropFade: true,
@@ -174,6 +174,35 @@ var App;
             .when('/login', {
                 templateUrl: App.templatePath + 'login.html'
             });
+        
+        // configure i18n
+        $translateProvider.useSanitizeValueStrategy('sanitize');
+        $translateProvider.useStaticFilesLoader({
+            prefix: 'app/i18n/messages-',
+            suffix: '.json'
+        });
+        
+        // default all en_* and every other locale to en right now
+        $translateProvider.registerAvailableLanguageKeys(['en'], {
+            'en_*': 'en',
+            '*': 'en'
+         });
+        
+        // try to get locale from browser
+        var l_lang;
+        if (navigator.languages != undefined) { // Chrome
+        	l_lang = navigator.languages[0];
+        } else if (navigator.userLanguage) { // Explorer
+            l_lang = navigator.userLanguage;
+        } else if (navigator.language) { // FF
+            l_lang = navigator.language;
+        } else {
+        	l_lang = 'en'; // fallback
+        }
+        
+        // must set lang
+        $translateProvider.preferredLanguage(l_lang);
+        $translateProvider.fallbackLanguage('en');
     }
 
     App._module.run(run);
