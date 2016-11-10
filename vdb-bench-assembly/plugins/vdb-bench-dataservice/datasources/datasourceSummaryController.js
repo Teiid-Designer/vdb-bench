@@ -9,10 +9,10 @@
         .controller('DatasourceSummaryController', DatasourceSummaryController);
 
     DatasourceSummaryController.$inject = ['$scope', '$rootScope', 'RepoRestService', 'REST_URI', 'SYNTAX', 
-                                           'SvcSourceSelectionService', 'DownloadService', 'pfViewUtils'];
+                                           'SvcSourceSelectionService', 'TranslatorSelectionService', 'DownloadService', 'pfViewUtils'];
 
     function DatasourceSummaryController($scope, $rootScope, RepoRestService, REST_URI, SYNTAX, 
-                                          SvcSourceSelectionService, DownloadService, pfViewUtils) {
+                                          SvcSourceSelectionService, TranslatorSelectionService, DownloadService, pfViewUtils) {
         var vm = this;
 
         vm.srcLoading = SvcSourceSelectionService.isLoading();
@@ -70,9 +70,9 @@
 
             var vdbName = SvcSourceSelectionService.selectedServiceSource().keng__id;
 
-            var schemaSuccessCallback = function(modelName) {
+            var schemaSuccessCallback = function(model) {
                 try {
-                    RepoRestService.getTeiidVdbModelSchema( vdbName, modelName ).then(
+                    RepoRestService.getTeiidVdbModelSchema( vdbName, model.keng__id ).then(
                         function ( result ) {
                             vm.selectedSourceDDL = result.Information.schema;
                         },
@@ -88,7 +88,7 @@
                 vm.selectedSourceDDL = "Failed to get the DDL. \n" + errorMsg;
             };
 
-            SvcSourceSelectionService.selectedServiceSourceConnectionName(schemaSuccessCallback, failureCallback);
+            SvcSourceSelectionService.selectedServiceSourceModel(schemaSuccessCallback, failureCallback);
         }
 
         /** 
@@ -96,12 +96,12 @@
          */
         function setActionsDisabled(enabled) {
             vm.actionsConfig.primaryActions.forEach(function (theAction) {
-                if(theAction.name!=='New' && theAction.name!='Import') {
+                if(theAction.name!=='Refresh' && theAction.name!=='New' && theAction.name!='Import') {
                     theAction.isDisabled = enabled;
                 }
             });
             vm.actionsConfig.moreActions.forEach(function (theAction) {
-                if(theAction.name!=='New' && theAction.name!=='Import' && theAction.name!=='Display DDL') {
+                if(theAction.name!=='Refresh' && theAction.name!=='New' && theAction.name!=='Import' && theAction.name!=='Display DDL') {
                     theAction.isDisabled = enabled;
                 }
             });
@@ -340,13 +340,34 @@
          * Handle edit ServiceSource click
          */
         var editSvcSourceClicked = function( ) {
-            // Start refresh of Connections and Translators, then broadcast a page change
-            SvcSourceSelectionService.refreshConnectionsAndTranslators();
-            //
-            // Broadcast the pageChange
-            $rootScope.$broadcast("dataServicePageChanged", 'svcsource-edit');
-        };
+            // Get the connectionName and TranslatorName for the selected source,
+            // then transfer to the edit page.
+        	
+            var successCallback = function(model) {
+                // Update the connection name for the source being edited
+                SvcSourceSelectionService.setEditSourceConnectionNameSelection(model.keng__id);
+                
+                var modelSourceSuccessCallback = function(modelSource) {
+                    TranslatorSelectionService.selectTranslatorName(modelSource.vdb__sourceTranslator);
+                    SvcSourceSelectionService.setEditSourceConnectionJndiSelection(modelSource.vdb__sourceJndiName);
 
+                    //
+                    // Broadcast the pageChange
+                    $rootScope.$broadcast("dataServicePageChanged", 'svcsource-edit');
+                };
+                var modelSourceFailureCallback = function(modelSourceErrorMsg) {
+                    alert("Failed to get model source: \n"+modelSourceErrorMsg);
+                };
+                SvcSourceSelectionService.selectedServiceSourceModelSource(modelSourceSuccessCallback,modelSourceFailureCallback);
+            };
+
+            var failureCallback = function(errorMsg) {
+            	alert("Failed to get connection: \n"+errorMsg);
+            };
+
+            SvcSourceSelectionService.selectedServiceSourceModel(successCallback, failureCallback);
+        };
+        
         /**
          * Handle edit ServiceSource menu select
          */
@@ -375,6 +396,18 @@
             cloneSvcSourceClicked();
         };
 
+        /**
+         * Handle refresh click
+         */
+        var refreshClicked = function( ) {
+            // Refresh the list of service sources
+            SvcSourceSelectionService.refresh(null);
+            vm.refresh();
+            // Disable the actions until next selection
+            setActionsDisabled(true);
+            vm.selectedSourceDDL = "";
+        };
+        
         /**
          * Handle new ServiceSource click
          */
@@ -422,6 +455,12 @@
          */
         vm.actionsConfig = {
           primaryActions: [
+            {
+              name: 'Refresh',
+              title: 'Refresh the Table',
+              actionFn: refreshClicked,
+              isDisabled: false
+            },
             {
               name: 'New',
               title: 'Create a Source',

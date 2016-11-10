@@ -52,16 +52,16 @@
             vm.sourceInit = false;
 
             // Gets selected model name, then builds a temp model based on its ddl
-            var successCallback = function(selSvcSourceModelName) {
+            var successCallback = function(model) {
                 // Create Temp Model in the workspace using the selected model ddl
-                buildTempVdbAndModel(selectedSvcSourceName,selSvcSourceModelName);
+                buildTempVdbAndModel(selectedSvcSourceName,model.keng__id);
             };
 
             var failureCallback = function(errorMsg) {
                 alert("Failed to get connection: \n"+errorMsg);
             };
             
-            SvcSourceSelectionService.selectedServiceSourceConnectionName(successCallback, failureCallback);
+            SvcSourceSelectionService.selectedServiceSourceModel(successCallback, failureCallback);
         });
 
         /*
@@ -124,18 +124,33 @@
         };
 
         // Event handler for clicking the save button
-        //   - generate the data service using selections
-        //   - delete 'scratch' models when done
         vm.onSaveDataServiceClicked = function ( ) {
             if (! vm.canSaveDataService())
                 return;
             
+            try {
+                RepoRestService.updateDataService( vm.serviceName, vm.serviceDescription ).then(
+                    function () {
+                        setDataserviceServiceVdb(vm.serviceName);
+                    },
+                    function (response) {
+                        throw RepoRestService.newRestException("Failed to update the dataservice. \n" + RepoRestService.responseMessage(response));
+                    });
+            } catch (error) {} finally {
+            }
+        };
+        
+        // Event handler for clicking the save button
+        //   - generate the data service using selections
+        //   - delete 'scratch' models when done
+        function setDataserviceServiceVdb( dataserviceName ) {
             // Gets the VDB / Model / Table selections
             var selectedSrc = SvcSourceSelectionService.selectedServiceSource();
             var selSvcSourceName = selectedSrc.keng__id;
             
             // Gets selected model name, create the dataservice VDB
-            var successCallback = function(selSvcSourceModelName) {
+            var successCallback = function(model) {
+            	var selSvcSourceModelName = model.keng__id;
                 var table = TableSelectionService.selectedTable();
                 var tableName = table.keng__id;
                 
@@ -144,7 +159,7 @@
                 var relativeTablePath = SYNTAX.TEMP+selSvcSourceName+"/"+selSvcSourceModelName+"/"+tableName;
                 
                 try {
-                    RepoRestService.setDataServiceVdbForSingleTable( vm.serviceName, relativeTablePath, relativeModelSourcePath ).then(
+                    RepoRestService.setDataServiceVdbForSingleTable( dataserviceName, relativeTablePath, relativeModelSourcePath ).then(
                         function () {
                             // Reinitialise the list of data services
                             DSSelectionService.refresh();
@@ -162,8 +177,8 @@
                 alert("Failed to get connection: \n"+errorMsg);
             };
             
-            SvcSourceSelectionService.selectedServiceSourceConnectionName(successCallback, failureCallback);
-        };
+            SvcSourceSelectionService.selectedServiceSourceModel(successCallback, failureCallback);
+        }
     }
     
 })();

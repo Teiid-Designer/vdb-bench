@@ -1,52 +1,58 @@
 <div class="container-fluid" ng-controller="SvcSourceNewController as vm">
-    <div id="svcsource-new-updating" ng-show="vm.connsLoading==true || vm.transLoading==true || vm.createAndDeployInProgress==true" class="col-md-10 row">
+    <div id="svcsource-new-updating" ng-show="vm.createAndDeployInProgress==true" class="col-md-10 row">
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
         <span class="sr-only">Loading...</span>
     </div>
     
-    <div id="svcsource-new-controls" ng-show="vm.connsLoading==false && vm.transLoading==false && vm.createAndDeployInProgress==false" class="col-md-10 row">
-      <div class="row">
-        <div class="col-md-11">
-            <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
-            <h4>Sources are the building blocks for your Data Services.  Start the Source configuration by selecting one of your available Connection definitions.</h4>
-            <form class="form-horizontal">
-                <div class="form-group" style="margin-top: 20px">
-                    <label class="col-md-2 control-label" for="textInput">Name</label>
-                    <div class="col-md-6">
-                        <input type="text" ng-model="vm.svcSourceName" class="form-control" required="true">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="textInput">Description</label>
-                    <div class="col-md-6">
+    <div id="svcsource-new-controls" ng-show="vm.createAndDeployInProgress==false" class="col-md-10 row">
+      <div class="col-sm-9 row">
+          <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
+          <h4>Start configuring a new Source by selecting one of your available Connection definitions.</h4>
+          <div class="col-md-5">
+              <h4><strong>Connections</strong></h4>
+              <connection-list></connection-list>
+          </div>
+          <div class="col-md-5" ng-show="vm.showTranslator">
+              <h4><strong>Translator</strong></h4>
+              <img src="{{vm.selectedTranslatorImage}}" width="42" height="24"/>
+              <select id="translators" ng-model="vm.selectedTranslator" ng-options="trans as trans.keng__id for trans in vm.allTranslators" 
+                      ng-change="vm.translatorChanged()">
+                  <option value="">-- choose translator --</option>
+              </select>
+          </div>
+
+          <div class="col-md-12" ng-show="vm.showNameAndDescription">
+              <p></p>
+              <h4>Choose a name (and optional description) for your Source</h4>
+              <p></p>
+              <form class="form-horizontal">
+                  <div class="form-group">
+                      <label class="col-md-2 control-label" for="textInput">Name</label>
+                      <div class="col-md-6">
+                        <input type="text" ng-model="vm.svcSourceName" class="form-control">
+                      </div>
+                      <div class="col-md-4"></div>
+                  </div>
+                  <div class="form-group">
+                      <label class="col-md-2 control-label" for="textInput">Description</label>
+                      <div class="col-md-6">
                         <input type="text" ng-model="vm.svcSourceDescription" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="conns">Connection</label>
-                    <div class="col-md-6">
-                        <select id="conns" ng-model="vm.connection" required="true"
-                                ng-options="connection as connection.keng__id for connection in vm.getConnections() | orderBy: 'keng__id'">
-                            <option value="" disabled selected hidden>-- choose connection --</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="translators">Translator</label>
-                    <div class="col-md-6">
-                        <select id="translators" ng-model="vm.translator" required="true"
-                                    ng-options="translator as translator.keng__id for translator in vm.getTranslators() | orderBy: 'keng__id'">
-                            <option value="" disabled selected hidden>-- choose translator --</option>
-                        </select>
-                    </div>
-                </div>
-            </form>
-            <input type="submit" class="btn btn-success" value="Create" ng-click="vm.onCreateSvcSourceClicked()"
-                                              ng-disabled="vm.canCreateSvcSource() !== true || vmmain.selectedPage.id !== 'svcsource-new'"/>
-            <input type="button" class="btn btn-primary" value="Cancel" ng-click="vmmain.selectPage('datasource-summary')"
-                                              ng-disabled="vmmain.selectedPage.id !== 'svcsource-new'"/>
+                      </div>
+                      <div class="col-md-4"></div>
+                  </div>
+              </form>
+          </div>
+          <div class="col-md-12">
+              <p></p>
+          </div>
+
+          <div class="col-md-12">
+              <input type="submit" class="btn btn-primary" value="Save" ng-click="vm.onCreateSvcSourceClicked()"
+                                   ng-disabled="vm.canCreateSvcSource() !== true || vmmain.selectedPage.id !== 'svcsource-new'"/>
+              <input type="button" class="btn btn-default" value="Cancel" ng-click="vmmain.selectPage('datasource-summary')"
+                                   ng-disabled="vmmain.selectedPage.id !== 'svcsource-new'"/>
+          </div>
         </div>
-      </div>
     </div>
         
 </div>

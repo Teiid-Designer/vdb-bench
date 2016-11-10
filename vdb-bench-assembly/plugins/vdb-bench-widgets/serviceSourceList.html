@@ -8,11 +8,14 @@
         <div class="pick-list-results">
             <div id="serviceSourceList-table-row" class="source-list-view-container" ng-show="vm.srcLoading==false">
                 <div pf-list-view class="source-list-view-content" config="vm.listConfig" items="vm.getServiceSources()">
-                  <div class="list-view-pf-description">
-                    <div class="list-group-item-heading">
-                      {{item.keng__id}}
+                    <div class="list-view-pf-left">
+                        <img src="{{prop.value}}" width="35" height="20" ng-repeat="prop in item.keng__properties" ng-show="prop.name=='dsbTranslatorImageLink'"/>
                     </div>
-                  </div>
+                    <div class="list-view-pf-description">
+                        <div class="list-group-item-heading">
+                          {{item.keng__id}}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

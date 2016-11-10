@@ -45,7 +45,7 @@
         var pages = {};
         pages[service.DS_HOME_PAGE] = {
             id: service.DS_HOME_PAGE,
-            title: 'DS Home',
+            title: 'Dashboard',
             icon: 'fa-dashboard',
             parent: null,
             template: config.pluginDir + syntax.FORWARD_SLASH +
@@ -55,8 +55,8 @@
         pages[service.DATASERVICE_SUMMARY_PAGE] = {
             id: service.DATASERVICE_SUMMARY_PAGE,
             title: 'Data Service Summary',
-            icon: 'fa-search',
-            parent: service.DS_HOME_PAGE,
+            icon: 'fa-table',
+            parent: null,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
                             service.DATASERVICE_SUMMARY_PAGE + syntax.DOT + syntax.HTML
@@ -100,7 +100,7 @@
         pages[service.CLONE_DATASERVICE_PAGE] = {
             id: service.CLONE_DATASERVICE_PAGE,
             title: 'Copy Data Service',
-            icon: 'pficon-replicator',
+            icon: 'fa-copy',
             parent: service.DATASERVICE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
@@ -158,8 +158,8 @@
         pages[service.SERVICESOURCE_SUMMARY_PAGE] = {
             id: service.SERVICESOURCE_SUMMARY_PAGE,
             title: 'Source Summary',
-            icon: 'pficon-storage-domain',
-            parent: service.DS_HOME_PAGE,
+            icon: 'fa-database',
+            parent: null,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
                             'datasources' + syntax.FORWARD_SLASH +
@@ -188,7 +188,7 @@
         pages[service.SERVICESOURCE_CLONE_PAGE] = {
             id: service.SERVICESOURCE_CLONE_PAGE,
             title: 'Copy Source',
-            icon: 'pficon-replicator',
+            icon: 'fa-copy',
             parent: service.SERVICESOURCE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +

@@ -256,6 +256,16 @@
                 return restService.all(uri).post();
             });
         };
+        
+        /**
+         * Service: updates workspace VDB status from teiid
+         */
+        service.updateWorkspaceVdbStatusFromTeiid = function ( ) {
+            return getRestService().then(function (restService) {
+                var uri = REST_URI.TEIID + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + REST_URI.VDBS_FROM_TEIID;
+                return restService.all(uri).customPUT();
+            });
+        };
 
         /**
          * Service: create a new VDB in the repository
@@ -277,7 +287,7 @@
                 
                 // Property added to distinguish service sources
                 if (isSource)  {
-                    payload.keng__properties = [{ "name": "serviceSource",
+                    payload.keng__properties = [{ "name": "dsbServiceSource",
                                                   "value": "true"}];
                 }
 
@@ -306,7 +316,7 @@
                 
                 // Property added to distinguish service sources
                 if (isSource)  {
-                    payload.keng__properties = [{ "name": "serviceSource",
+                    payload.keng__properties = [{ "name": "dsbServiceSource",
                                                   "value": "true"}];
                 }
 
@@ -1141,6 +1151,16 @@
         service.getTeiidVdbStatus = function() {
             return getRestService().then(function (restService) {
                 return restService.one(REST_URI.TEIID + REST_URI.STATUS + REST_URI.VDBS).get();
+            });
+        };
+
+        /**
+         * Service: get the default translator for a teiid connection
+         */
+        service.getDefaultTranslatorForConnection = function(connectionName) {
+            return getRestService().then(function (restService) {
+                var url = REST_URI.TEIID + REST_URI.DATA_SOURCES + SYNTAX.FORWARD_SLASH + connectionName + REST_URI.TRANSLATOR_DEFAULT;
+                return restService.one(url).get();
             });
         };
 
