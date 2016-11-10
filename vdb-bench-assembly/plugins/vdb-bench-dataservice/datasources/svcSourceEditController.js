@@ -15,6 +15,7 @@
                                       SvcSourceSelectionService, ConnectionSelectionService, TranslatorSelectionService) {
         var vm = this;
 
+        vm.originalConnectionName = null;
         vm.initialConnectionName = null;
         vm.initialConnectionJndi = null;
         vm.connectionInit = true;
@@ -33,6 +34,7 @@
         $document.ready(function () {
             // Initialize the selections if possible for the selected connection
             vm.initialConnectionName = SvcSourceSelectionService.getEditSourceConnectionNameSelection();
+            vm.originalConnectionName = vm.initialConnectionName;
             vm.initialConnectionJndi = SvcSourceSelectionService.getEditSourceConnectionJndiSelection();
             vm.selectedTranslator = TranslatorSelectionService.selectedTranslator();
             vm.selectedTranslatorImage = TranslatorSelectionService.getImageLink(vm.selectedTranslator.keng__id);
@@ -169,13 +171,25 @@
             vm.updateAndDeployInProgress = true;
             
             try {
-                RepoRestService.updateVdbModelSource( vm.svcSourceName, connectionName, connectionName, translatorName, jndiName ).then(
-                    function (theModelSource) {
-                    	updateVdbDescription( vm.svcSourceName, vm.svcSourceDescription);
-                    },
-                    function (response) {
-                        throw RepoRestService.newRestException("Failed to update the source. \n" + RepoRestService.responseMessage(response));
-                    });
+                // If a different connection was chosen, the original VdbModel must be deleted
+                if(connectionName !== vm.originalConnectionName) {
+                    RepoRestService.deleteVdbModel( vm.svcSourceName, vm.startingConnectionName).then(
+                            function (theModelSource) {
+                                createVdbModel( vm.svcSourceName, connectionName, translatorName, jndiName );
+                            },
+                            function (response) {
+                                throw RepoRestService.newRestException("Failed to update the source. \n" + RepoRestService.responseMessage(response));
+                            });
+                // Connection was not changed, we can update the existing model source
+                } else {
+                    RepoRestService.updateVdbModelSource( vm.svcSourceName, connectionName, connectionName, translatorName, jndiName ).then(
+                        function (theModelSource) {
+                        	updateVdbDescription( vm.svcSourceName, vm.svcSourceDescription);
+                        },
+                        function (response) {
+                            throw RepoRestService.newRestException("Failed to update the source. \n" + RepoRestService.responseMessage(response));
+                        });
+                }
             } catch (error) {} finally {
             }
         };
@@ -225,6 +239,48 @@
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
                 throw RepoRestService.newRestException("Failed to deploy the Source. \n" + error);
+            }
+        }
+        
+        /**
+         * Create a Model and ModelSource within the VDB, then deploy it
+         */
+        function createVdbModel( svcSourceName, connectionName, translatorName, jndiName ) {
+            // Creates the Model within the VDB, then add the ModelSource to the Model
+            try {
+                RepoRestService.createVdbModel( svcSourceName, connectionName, true ).then(
+                    function (theModel) {
+                        if(theModel.keng__id === connectionName) {
+                            createVdbModelSource( svcSourceName, connectionName, connectionName, translatorName, jndiName );
+                        }
+                    },
+                    function (resp) {
+                        SvcSourceSelectionService.setLoading(false);
+                        throw RepoRestService.newRestException("Failed to create the source model. \n" + RepoRestService.responseMessage(resp));
+                    });
+            } catch (error) {
+                SvcSourceSelectionService.setLoading(false);
+                throw RepoRestService.newRestException("Failed to create the source model. \n" + error);
+            }
+        }
+
+        /**
+         * Create a ModelSource within the VDB Model, then deploy the VDB
+         */
+        function createVdbModelSource( vdbName, modelName, sourceName, translatorName, jndiName ) {
+            // Creates the ModelSource within the VDB Model, then deploys the completed VDB
+            try {
+                RepoRestService.createVdbModelSource( vdbName, modelName, sourceName, translatorName, jndiName ).then(
+                    function (theModelSource) {
+                        deployVdb( vdbName );
+                    },
+                    function (resp) {
+                        SvcSourceSelectionService.setLoading(false);
+                        throw RepoRestService.newRestException("Failed to create the source model connection. \n" + RepoRestService.responseMessage(resp));
+                    });
+            } catch (error) {
+                SvcSourceSelectionService.setLoading(false);
+                throw RepoRestService.newRestException("Failed to create the source model connection. \n" + error);
             }
         }
 
