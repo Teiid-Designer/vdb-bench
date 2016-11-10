@@ -132,11 +132,115 @@
             var testUrl = baseUrl + REST_URI.SERVICE + REST_URI.ABOUT;
 
             return $http.get(testUrl, httpHeaders(username, password))
-                            .then(function (response) {
-                                return 0;
-                            }, function (response) {
-                                return 1;
-                            });
+                    .then(function (response) {
+                        return 0;
+                    }, function (response) {
+                        return 1;
+                    });
+        };
+
+        function isXML(xml){
+            try {
+                var xmlDoc = $.parseXML(xml); //is valid XML
+                return true;
+            } catch (err) {
+                // was not XML
+                return false;
+            }
+        }
+
+        function tryJsonParse (jsonString){
+            try {
+                var o = JSON.parse(jsonString);
+
+                // Handle non-exception-throwing cases:
+                // Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
+                // but... JSON.parse(null) returns null, and typeof null === "object", 
+                // so we must check for that, too. Thankfully, null is falsey, so this suffices:
+                if (o && typeof o === "object") {
+                    return o;
+                }
+            } catch (e) {}
+
+            return null;
+        }
+
+        function tryNumberParse(jsonString) {
+            try {
+                var n = parseInt(jsonString);
+                if (n && typeof n === "number") {
+                    return n;
+                }
+            } catch (e) {}
+
+            return null;
+        }
+
+        /**
+         * Service: Simple connection test.
+         */
+        service.odataGet = function(url) {
+            var user = CredentialService.credentials();
+            return $http.get(
+                            url,
+                            {
+                                headers: authHeader(user.username, user.password),
+                                transformResponse:function(data) {
+                                    var jobj = tryJsonParse(data);
+                                    if (_.isObject(jobj)) {
+                                        return jobj;
+                                    } else if (isXML(data)) {
+                                        // convert the data to JSON and provide
+                                        // it to the success function below
+                                        var x2js = new X2JS();
+                                        var json = x2js.xml_str2json( data );
+                                        return json;
+                                    }
+
+                                    var n = tryNumberParse(data);
+                                    if (n) {
+                                        return {
+                                            count: n
+                                        };
+                                    }
+
+                                    if (typeof data === 'string' || data instanceof String) {
+                                        return {
+                                            value: data
+                                        };
+                                    }
+
+                                    return {
+                                        error: 'Error: Request to ' + url + " produces an unexpected response: " + data
+                                    };
+                                }
+                            }
+                        ).then(function (response) {
+                            // this callback will be called asynchronously
+                            // when the response is available
+                            if (response.data && response.data.error) {
+                                return {
+                                    status: 500,
+                                    error: response.data.error
+                                };
+                            }
+
+                            return response;
+
+                        }, function (response) {
+                            // called asynchronously if an error occurs
+                            // or server returns response with an error status.
+
+                            var errorMsg = response.statusText;
+                            if (response.data && response.data.error && response.data.error.message) {
+                                errorMsg = errorMsg + SYNTAX.COLON + SYNTAX.SPACE + response.data.error.message;
+                            }
+
+                            return {
+                                status: response.status,
+                                error: errorMsg
+                            };
+                        });
         };
 
         /**

@@ -18,6 +18,9 @@
         'patternfly.views',
         'patternfly.toolbars',
         'patternfly.wizard',
+        'ui.select',
+        'ui.grid',
+        'ui.grid.pagination',
 
         /*
          * Our reusable cross app code modules

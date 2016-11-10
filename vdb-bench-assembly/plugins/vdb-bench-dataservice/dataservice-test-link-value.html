@@ -1,0 +1,8 @@
+<div class="ui-grid-cell-contents" ng-show="grid.appScope.vm.isUrl(COL_FIELD)">
+    <a href="" ng-click="grid.appScope.vm.displayLinkContent(grid, row, col, COL_FIELD)">
+        &ltlinked-value&gt
+    </a>
+</div>
+<div class="ui-grid-cell-contents" ng-show="! grid.appScope.vm.isUrl(COL_FIELD)">
+    {{ COL_FIELD }}
+</div>

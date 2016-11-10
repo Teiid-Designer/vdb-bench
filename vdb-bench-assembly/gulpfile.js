@@ -161,7 +161,7 @@ gulp.task('connect', ['watch'], function () {
             dir: '.'
     }],
         liveReload: {
-            enabled: true
+            enabled: false
         }
     });
 
