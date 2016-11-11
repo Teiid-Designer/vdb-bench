@@ -8,10 +8,10 @@
         .module(pluginName)
         .controller('SvcSourceNewController', SvcSourceNewController);
 
-    SvcSourceNewController.$inject = ['$scope', '$rootScope', 'REST_URI', 'SYNTAX', 'RepoRestService',
+    SvcSourceNewController.$inject = ['$scope', '$rootScope', '$translate', 'REST_URI', 'SYNTAX', 'RepoRestService',
                                       'SvcSourceSelectionService', 'ConnectionSelectionService', 'TranslatorSelectionService'];
 
-    function SvcSourceNewController($scope, $rootScope, REST_URI, SYNTAX, RepoRestService,
+    function SvcSourceNewController($scope, $rootScope, $translate, REST_URI, SYNTAX, RepoRestService,
                                      SvcSourceSelectionService, ConnectionSelectionService, TranslatorSelectionService) {
         var vm = this;
 
@@ -82,12 +82,14 @@
                     function (resp) {
                         updateTranslatorVisibility();
                         updateNameDescriptionVisibility();
-                        throw RepoRestService.newRestException("Failed attempting to fetch translator. \n" + RepoRestService.responseMessage(resp));
+                        var fetchFailedMsg = $translate.instant('svcSourceNewController.getTranslatorsFailedMsg');
+                        throw RepoRestService.newRestException(fetchFailedMsg + "\n" + RepoRestService.responseMessage(resp));
                     });
             } catch (error) {
                 updateTranslatorVisibility();
                 updateNameDescriptionVisibility();
-                throw RepoRestService.newRestException("Failed attempting to fetch translator. \n" + error);
+                var fetchFailedMsg = $translate.instant('svcSourceNewController.getTranslatorsFailedMsg');
+                throw RepoRestService.newRestException(fetchFailedMsg + "\n" + error);
             }
         }
 
@@ -110,11 +112,13 @@
                     },
                     function (resp) {
                         SvcSourceSelectionService.setLoading(false);
-                        throw RepoRestService.newRestException("Failed to create the source Vdb. \n" + RepoRestService.responseMessage(resp));
+                        var sourceCreateFailedMsg = $translate.instant('svcSourceNewController.sourceCreateFailedMsg');
+                        throw RepoRestService.newRestException(sourceCreateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
-                throw RepoRestService.newRestException("Failed to create the source Vdb. \n" + error);
+                var sourceCreateFailedMsg = $translate.instant('svcSourceNewController.sourceCreateFailedMsg');
+                throw RepoRestService.newRestException(sourceCreateFailedMsg + "\n" + error);
             }
         }
 
@@ -132,11 +136,13 @@
                     },
                     function (resp) {
                         SvcSourceSelectionService.setLoading(false);
-                        throw RepoRestService.newRestException("Failed to create the source model. \n" + RepoRestService.responseMessage(resp));
+                        var sourceModelCreateFailedMsg = $translate.instant('svcSourceNewController.sourceModelCreateFailedMsg');
+                        throw RepoRestService.newRestException(sourceModelCreateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
-                throw RepoRestService.newRestException("Failed to create the source model. \n" + error);
+                var sourceModelCreateFailedMsg = $translate.instant('svcSourceNewController.sourceModelCreateFailedMsg');
+                throw RepoRestService.newRestException(sourceModelCreateFailedMsg + "\n" + error);
             }
         }
 
@@ -152,11 +158,13 @@
                     },
                     function (resp) {
                         SvcSourceSelectionService.setLoading(false);
-                        throw RepoRestService.newRestException("Failed to create the source model connection. \n" + RepoRestService.responseMessage(resp));
+                        var sourceModelConnectionCreateFailedMsg = $translate.instant('svcSourceNewController.sourceModelConnectionCreateFailedMsg');
+                        throw RepoRestService.newRestException(sourceModelConnectionCreateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
-                throw RepoRestService.newRestException("Failed to create the source model connection. \n" + error);
+                var sourceModelConnectionCreateFailedMsg = $translate.instant('svcSourceNewController.sourceModelConnectionCreateFailedMsg');
+                throw RepoRestService.newRestException(sourceModelConnectionCreateFailedMsg + "\n" + error);
             }
         }
 
@@ -185,11 +193,13 @@
                     function (response) {
                         SvcSourceSelectionService.setDeploying(false, vdbName, false, RepoRestService.responseMessage(response));
                         SvcSourceSelectionService.setLoading(false);
-                        throw RepoRestService.newRestException("Failed to deploy the Source. \n" + RepoRestService.responseMessage(response));
+                        var sourceDeployFailedMsg = $translate.instant('svcSourceNewController.sourceDeployFailedMsg');
+                        throw RepoRestService.newRestException(sourceDeployFailedMsg + "\n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
-                throw RepoRestService.newRestException("Failed to deploy the Source. \n" + error);
+                var sourceDeployFailedMsg = $translate.instant('svcSourceNewController.sourceDeployFailedMsg');
+                throw RepoRestService.newRestException(sourceDeployFailedMsg + "\n" + error);
             }
         }
 

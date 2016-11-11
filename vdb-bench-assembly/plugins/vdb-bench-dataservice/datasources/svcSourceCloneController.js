@@ -8,9 +8,9 @@
         .module(pluginName)
         .controller('SvcSourceCloneController', SvcSourceCloneController);
 
-    SvcSourceCloneController.$inject = ['$scope', '$rootScope', 'RepoRestService', 'SvcSourceSelectionService'];
+    SvcSourceCloneController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'SvcSourceSelectionService'];
 
-    function SvcSourceCloneController($scope, $rootScope, RepoRestService, SvcSourceSelectionService) {
+    function SvcSourceCloneController($scope, $rootScope, $translate, RepoRestService, SvcSourceSelectionService) {
         var vm = this;
         vm.cloneVdbInProgress = false;
 
@@ -37,7 +37,8 @@
                         deployVdb(newSvcSourceName);
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to clone the source. \n" + RepoRestService.responseMessage(response));
+                        var copyFailedMsg = $translate.instant('svcSourceCloneController.copyFailedMsg');
+                        throw RepoRestService.newRestException(copyFailedMsg + "\n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
             }
@@ -63,7 +64,8 @@
                    },
                     function (response) {
                         SvcSourceSelectionService.setDeploying(false, vdbName, false, response.message);
-                        throw RepoRestService.newRestException("Failed to deploy the Source. \n" + RepoRestService.responseMessage(response));
+                        var deployFailedMsg = $translate.instant('svcSourceCloneController.deployFailedMsg');
+                        throw RepoRestService.newRestException(deployFailedMsg + "\n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
             }

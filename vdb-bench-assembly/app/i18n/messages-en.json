@@ -4,23 +4,30 @@
         "Cancel" : "Cancel",
         "Connection" : "Connection",
         "Connections" : "Connections",
+        "Copy" : "Copy",
         "CopyThis" : "Copy {{this}}",
         "Create" : "Create",
         "Dashboard" : "Dashboard",
         "DataService" : "Data Service",
         "DataServices" : "Data Services",
+        "Delete" : "Delete",
         "Description" : "Description",
         "Driver" : "Driver",
+        "Edit" : "Edit",
         "EditThis" : "Edit {{this}}",
+        "Export" : "Export",
         "ExportThis" : "Export {{this}}",
+        "Import" : "Import",
         "ImportThis" : "Import {{this}}",
         "loadingProgressMsg" : "Loading...",
         "Name" : "Name",
+        "New" : "New",
         "NewThis" : "New {{this}}",
         "Save" : "Save",
         "Source" : "Source",
         "Sources" : "Sources",
         "Tables" : "Tables",
+        "Translator" : "Translator",
         "ThisSummary" : "{{this}} Summary"
     },
 
@@ -82,6 +89,94 @@
         "enterQueryMsg" : "Enter an SQL query to test the DataService",
         "failedDeploymentMsg" : "The Data Service could not be deployed:",
         "ODataEndpoint" : "OData Endpoint: "
+    },
+
+    "datasource-summary" : {
+        "welcomeMsg" : "Welcome to the <strong>Data Services Builder</strong>!",
+        "Loading" : "@:shared.loadingProgressMsg",
+        "noSourcesInstructionsMsg" : "Currently, there are no Sources configured.  To get started, click ",
+        "sourceSchema" : "Source Schema"
+    },
+    
+    "datasourceSummaryController" : {
+        "actionNameCopy" : "@:shared.Copy",
+        "actionNameDelete" : "@:shared.Delete",
+        "actionNameDisplayDdl" : "Display DDL",
+        "actionNameEdit" : "@:shared.Edit",
+        "actionNameExport" : "@:shared.Export",
+        "actionNameImport" : "@:shared.Import",
+        "actionNameNew" : "@:shared.New",
+        "actionNameRefresh" : "Refresh",
+        "actionTitleCopy" : "Copy the Source",
+        "actionTitleDelete" : "Delete the Source",
+        "actionTitleDisplayDdl" : "Show / Hide the DDL window",
+        "actionTitleEdit" : "Edit the Source",
+        "actionTitleExport" : "Export the Source",
+        "actionTitleImport" : "Import a Source",
+        "actionTitleNew" : "Create a Source",
+        "actionTitleRefresh" : "Refresh the Table",
+        "gettingDdlMsg" : "Fetching DDL ...",
+        "getDdlFailedMsg" : "Failed to get the DDL.",
+        "removeSourceFailedMsg" : "Failed to remove the ServiceSource.",
+        "getModelSourceFailedMsg" : "Failed to get model source:",
+        "getModelSourceConnectionFailedMsg" : "Failed to get connection:"
+    },
+
+    "svcsource-clone" : {
+        "Cancel" : "@:shared.Cancel",
+        "Create" : "@:shared.Create",
+        "instructionsMsg" : "Enter a name for the new source",
+        "Loading" : "@:shared.loadingProgressMsg",
+        "Name" : "@:shared.Name"
+    },
+
+    "svcsource-edit" : {
+        "Cancel" : "@:shared.Cancel",
+        "Connections" : "@:shared.Connections",
+        "Description" : "@:shared.Description",
+        "instructionsMsg" : "Reconfigure an existing Source:",
+        "Loading" : "@:shared.loadingProgressMsg",
+        "Name" : "@:shared.Name",
+        "Save" : "@:shared.Save",
+        "Translator" : "@:shared.Translator"
+    },
+
+    "svcsource-import" : {
+        "instructionsMsg" : "Choose the VDB file to import from your file system"
+    },
+
+    "svcsource-new" : {
+        "Cancel" : "@:shared.Cancel",
+        "chooseTranslator" : "-- choose translator --",
+        "Connections" : "@:shared.Connections",
+        "Description" : "@:shared.Description",
+        "instructionsMsg" : "Start configuring a new Source by selecting one of your available Connection definitions.",
+        "Loading" : "@:shared.loadingProgressMsg",
+        "nameDescriptionInstructionsMsg" : "Choose a name (and optional description) for your Source",
+        "Name" : "@:shared.Name",
+        "Save" : "@:shared.Save",
+        "Translator" : "@:shared.Translator"
+    },
+
+    "svcSourceCloneController" : {
+        "copyFailedMsg" : "Failed to copy the source.",
+        "deployFailedMsg" : "Failed to deploy the source."
+    },
+
+    "svcSourceEditController" : {
+        "getTranslatorsFailedMsg" : "Failed attempting to fetch translator.",
+        "sourceUpdateFailedMsg" : "Failed to update the source.",
+        "sourceDeployFailedMsg" : "Failed to deploy the source.",
+        "sourceModelCreateFailedMsg" : "Failed to create the source model.",
+        "sourceModelConnectionCreateFailedMsg" : "Failed to create the source model connection."
+    },
+
+    "svcSourceNewController" : {
+        "getTranslatorsFailedMsg" : "Failed attempting to fetch translator.",
+        "sourceCreateFailedMsg" : "Failed to create the source.",
+        "sourceDeployFailedMsg" : "Failed to deploy the source.",
+        "sourceModelCreateFailedMsg" : "Failed to create the source model.",
+        "sourceModelConnectionCreateFailedMsg" : "Failed to create the source model connection."
     }
 
 }
