@@ -8,10 +8,10 @@
         .module(pluginName)
         .controller('DatasourceSummaryController', DatasourceSummaryController);
 
-    DatasourceSummaryController.$inject = ['$scope', '$rootScope', 'RepoRestService', 'REST_URI', 'SYNTAX', 
+    DatasourceSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 
                                            'SvcSourceSelectionService', 'TranslatorSelectionService', 'DownloadService', 'pfViewUtils'];
 
-    function DatasourceSummaryController($scope, $rootScope, RepoRestService, REST_URI, SYNTAX, 
+    function DatasourceSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, 
                                           SvcSourceSelectionService, TranslatorSelectionService, DownloadService, pfViewUtils) {
         var vm = this;
 
@@ -66,7 +66,7 @@
             if (_.isEmpty(SvcSourceSelectionService.selectedServiceSource()))
                 return;
 
-            vm.selectedSourceDDL = 'Fetching DDL ...';
+            vm.selectedSourceDDL = $translate.instant('datasourceSummaryController.gettingDdlMsg');
 
             var vdbName = SvcSourceSelectionService.selectedServiceSource().keng__id;
 
@@ -77,15 +77,18 @@
                             vm.selectedSourceDDL = result.Information.schema;
                         },
                         function (response) {
-                            vm.selectedSourceDDL = "Failed to get the DDL. \n" + RepoRestService.responseMessage(response);
+                            var getDdlFailedMsg = $translate.instant('datasourceSummaryController.getDdlFailedMsg');
+                            vm.selectedSourceDDL = getDdlFailedMsg + "\n" + RepoRestService.responseMessage(response);
                         });
                 } catch (error) {
-                    vm.selectedSourceDDL = "Failed to get the DDL. \n" + error;
+                    var getDdlFailedMsg = $translate.instant('datasourceSummaryController.getDdlFailedMsg');
+                    vm.selectedSourceDDL = getDdlFailedMsg + "\n" + error;
                 }
             };
 
             var failureCallback = function(errorMsg) {
-                vm.selectedSourceDDL = "Failed to get the DDL. \n" + errorMsg;
+                var getDdlFailedMsg = $translate.instant('datasourceSummaryController.getDdlFailedMsg');
+                vm.selectedSourceDDL = getDdlFailedMsg + "\n" + errorMsg;
             };
 
             SvcSourceSelectionService.selectedServiceSourceModel(schemaSuccessCallback, failureCallback);
@@ -137,10 +140,12 @@
                         vm.selectedSourceDDL = "";
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to remove the ServiceSource. \n" + RepoRestService.responseMessage(response));
+                        var removeSourceFailedMsg = $translate.instant('datasourceSummaryController.removeSourceFailedMsg');
+                        throw RepoRestService.newRestException(removeSourceFailedMsg + "\n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {
-                throw RepoRestService.newRestException("Failed to remove the ServiceSource. \n" + error);
+                var removeSourceFailedMsg = $translate.instant('datasourceSummaryController.removeSourceFailedMsg');
+                throw RepoRestService.newRestException(removeSourceFailedMsg + "\n" + error);
             }
         }
 
@@ -157,7 +162,8 @@
                         deleteServerVdb(vdbName);
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to remove the ServiceSource. \n" + RepoRestService.responseMessage(response));
+                        var removeSourceFailedMsg = $translate.instant('datasourceSummaryController.removeSourceFailedMsg');
+                        throw RepoRestService.newRestException(removeSourceFailedMsg + "\n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {} finally {
             }
@@ -356,17 +362,20 @@
                     $rootScope.$broadcast("dataServicePageChanged", 'svcsource-edit');
                 };
                 var modelSourceFailureCallback = function(modelSourceErrorMsg) {
-                    alert("Failed to get model source: \n"+modelSourceErrorMsg);
+                    var getModelSourceFailedMsg = $translate.instant('datasourceSummaryController.getModelSourceFailedMsg');
+                    alert(getModelSourceFailedMsg + "\n" + modelSourceErrorMsg);
                 };
                 SvcSourceSelectionService.selectedServiceSourceModelSource(modelSourceSuccessCallback,modelSourceFailureCallback);
             };
 
             var failureCallback = function(errorMsg) {
-            	alert("Failed to get connection: \n"+errorMsg);
+                var getModelSourceConnectionFailedMsg = $translate.instant('datasourceSummaryController.getModelSourceConnectionFailedMsg');
+            	alert(getModelSourceConnectionFailedMsg + "\n" + errorMsg);
             };
 
             SvcSourceSelectionService.selectedServiceSourceModel(successCallback, failureCallback);
         };
+
         
         /**
          * Handle edit ServiceSource menu select
@@ -456,40 +465,40 @@
         vm.actionsConfig = {
           primaryActions: [
             {
-              name: 'Refresh',
-              title: 'Refresh the Table',
+              name: $translate.instant('datasourceSummaryController.actionNameRefresh'),
+              title: $translate.instant('datasourceSummaryController.actionTitleRefresh'),
               actionFn: refreshClicked,
               isDisabled: false
             },
             {
-              name: 'New',
-              title: 'Create a Source',
+              name: $translate.instant('datasourceSummaryController.actionNameNew'),
+              title: $translate.instant('datasourceSummaryController.actionTitleNew'),
               actionFn: newSvcSourceClicked,
               isDisabled: false
             },
             {
-              name: 'Edit',
-              title: 'Edit the Source',
+              name: $translate.instant('datasourceSummaryController.actionNameEdit'),
+              title: $translate.instant('datasourceSummaryController.actionTitleEdit'),
               actionFn: editSvcSourceClicked,
               isDisabled: true
             },
             {
-              name: 'Delete',
-              title: 'Delete the Source',
+              name: $translate.instant('datasourceSummaryController.actionNameDelete'),
+              title: $translate.instant('datasourceSummaryController.actionTitleDelete'),
               actionFn: deleteSvcSourceClicked,
               isDisabled: true
             }
           ],
           moreActions: [
             {
-              name: 'Export',
-              title: 'Export the Source',
+              name: $translate.instant('datasourceSummaryController.actionNameExport'),
+              title: $translate.instant('datasourceSummaryController.actionTitleExport'),
               actionFn: exportSvcSourceClicked,
               isDisabled: true
             },
             {
-              name: 'Copy',
-              title: 'Copy the Source',
+              name: $translate.instant('datasourceSummaryController.actionNameCopy'),
+              title: $translate.instant('datasourceSummaryController.actionTitleCopy'),
               actionFn: cloneSvcSourceClicked,
               isDisabled: true
             },
@@ -497,8 +506,8 @@
               isSeparator: true
             },
             {
-              name: 'Import',
-              title: 'Import a Source',
+              name: $translate.instant('datasourceSummaryController.actionNameImport'),
+              title: $translate.instant('datasourceSummaryController.actionTitleImport'),
               actionFn: importSvcSourceClicked,
               isDisabled: false
             },
@@ -506,8 +515,8 @@
               isSeparator: true
             },
             {
-              name: 'Display DDL',
-              title: 'Show / Hide the DDL window',
+              name: $translate.instant('datasourceSummaryController.actionNameDisplayDdl'),
+              title: $translate.instant('datasourceSummaryController.actionTitleDisplayDdl'),
               actionFn: showHideDDLClicked,
               isDisabled: false
             }
@@ -517,23 +526,23 @@
 
         vm.menuActions = [
             {
-                name: 'Edit',
-                title: 'Edit the Source',
+                name: $translate.instant('datasourceSummaryController.actionNameEdit'),
+                title: $translate.instant('datasourceSummaryController.actionTitleEdit'),
                 actionFn: editSvcSourceMenuAction
             },
             {
-                name: 'Delete',
-                title: 'Delete the Source',
+                name: $translate.instant('datasourceSummaryController.actionNameDelete'),
+                title: $translate.instant('datasourceSummaryController.actionTitleDelete'),
                 actionFn: deleteSvcSourceMenuAction
             },
             {
-                name: 'Export',
-                title: 'Export the Source',
+                name: $translate.instant('datasourceSummaryController.actionNameExport'),
+                title: $translate.instant('datasourceSummaryController.actionTitleExport'),
                 actionFn: exportSvcSourceMenuAction
             },
             {
-                name: 'Copy',
-                title: 'Copy the Source',
+                name: $translate.instant('datasourceSummaryController.actionNameCopy'),
+                title: $translate.instant('datasourceSummaryController.actionTitleCopy'),
                 actionFn: cloneSvcSourceMenuAction
             }
           ];

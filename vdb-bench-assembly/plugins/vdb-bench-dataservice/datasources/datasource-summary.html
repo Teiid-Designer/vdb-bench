@@ -3,14 +3,14 @@
     <!-- Content shown if No Sources yet -->
     <div id="svcsource-summary-nosources" ng-show="vm.srcLoading==false && vm.hasSources==false" class="col-md-10 row">
         <div class="row">
-            <h2>Welcome to the <strong>Data Services Builder</strong>!</h2>
+            <h2 ng-bind-html=":: 'datasource-summary.welcomeMsg' | translate"></h2>
             <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
-            <p>Currently, there are no Sources configured.  To get started, 
-               click <a href ng-click="vmmain.selectPage('svcsource-new')"><span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span><span>{{vmmain.page('svcsource-new').title}}</span></a>
+            <p>{{:: 'datasource-summary.noSourcesInstructionsMsg' | translate}}
+            <a href ng-click="vmmain.selectPage('svcsource-new')"><span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span><span>{{vmmain.page('svcsource-new').title}}</span></a>
             </p>
         </div>
     </div>
-    
+
     <div id="svcsource-summary-table" class="col-md-10 row">
         <div class="row" ng-show="vm.srcLoading==true || vm.hasSources==true">
             <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
@@ -20,7 +20,7 @@
 
         <div id="svcsource-summary-updating" ng-show="vm.srcLoading==true">
             <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-            <span class="sr-only">Loading...</span>
+            <span class="sr-only">{{:: 'datasource-summary.Loading' | translate}}</span>
         </div>
 
         <div class="svcsource-summary-results-container" ng-show="vm.srcLoading==false && vm.hasSources==true">
@@ -64,7 +64,7 @@
 
             <div class="svcsource-summary-results-ddl" ng-show="vm.srcLoading==false && vm.getServiceSources().length>0 && vm.displayDdl==true">
                 <div class="svcsource-summary-results-ddl-titlebar">
-                    <h5 class="svcsource-summary-results-ddl-titlebar-title">Source Schema</h5>
+                    <h5 class="svcsource-summary-results-ddl-titlebar-title">{{:: 'datasource-summary.sourceSchema' | translate}}</h5>
                     <h5 class="svcsource-summary-results-ddl-titlebar-close" ng-click="vm.displayDdl = false">X</h5>
                 </div>
                 <div ui-codemirror="{ onLoad : vm.ddlEditorLoaded }" ng-model="vm.selectedSourceDDL" ui-codemirror-opts="vm.ddlEditorOptions">

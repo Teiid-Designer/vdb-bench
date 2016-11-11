@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-sm-9">
                     <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
-                    <h3>&nbsp;&nbsp;Choose the VDB file to import from your file system</h3>
+                    <h3>&nbsp;&nbsp;{{:: 'svcsource-import.instructionsMsg' | translate}}</h3>
                     <!-- Show the import dialog when importing -->
                     <div ng-init="vm.onImportSvcSourceClicked()" ng-show="!vm.init && vm.showImport">
                         <file-import-control on-import-complete="vm.onImportDone(result)" on-cancel="vm.onImportCancel()"></file-import-control>

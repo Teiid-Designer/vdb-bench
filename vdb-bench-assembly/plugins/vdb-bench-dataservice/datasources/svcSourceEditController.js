@@ -8,10 +8,10 @@
         .module(pluginName)
         .controller('SvcSourceEditController', SvcSourceEditController);
 
-    SvcSourceEditController.$inject = ['$scope', '$rootScope', '$document', 'REST_URI', 'SYNTAX', 'RepoRestService', 
+    SvcSourceEditController.$inject = ['$scope', '$rootScope', '$translate', '$document', 'REST_URI', 'SYNTAX', 'RepoRestService', 
                                        'SvcSourceSelectionService', 'ConnectionSelectionService', 'TranslatorSelectionService'];
 
-    function SvcSourceEditController($scope, $rootScope, $document, REST_URI, SYNTAX, RepoRestService, 
+    function SvcSourceEditController($scope, $rootScope, $translate, $document, REST_URI, SYNTAX, RepoRestService, 
                                       SvcSourceSelectionService, ConnectionSelectionService, TranslatorSelectionService) {
         var vm = this;
 
@@ -121,10 +121,12 @@
                         }
                     },
                     function (resp) {
-                        throw RepoRestService.newRestException("Failed attempting to fetch translator. \n" + RepoRestService.responseMessage(resp));
+                        var fetchFailedMsg = $translate.instant('svcSourceEditController.getTranslatorsFailedMsg');
+                        throw RepoRestService.newRestException(fetchFailedMsg + "\n" + RepoRestService.responseMessage(resp));
                     });
             } catch (error) {
-                throw RepoRestService.newRestException("Failed attempting to fetch translator. \n" + error);
+                var fetchFailedMsg = $translate.instant('svcSourceEditController.getTranslatorsFailedMsg');
+                throw RepoRestService.newRestException(fetchFailedMsg + "\n" + error);
             }
         }
 
@@ -178,7 +180,8 @@
                                 createVdbModel( vm.svcSourceName, connectionName, translatorName, jndiName );
                             },
                             function (response) {
-                                throw RepoRestService.newRestException("Failed to update the source. \n" + RepoRestService.responseMessage(response));
+                                var sourceUpdateFailedMsg = $translate.instant('svcSourceEditController.sourceUpdateFailedMsg');
+                                throw RepoRestService.newRestException(sourceUpdateFailedMsg + "\n" + RepoRestService.responseMessage(response));
                             });
                 // Connection was not changed, we can update the existing model source
                 } else {
@@ -187,13 +190,14 @@
                         	updateVdbDescription( vm.svcSourceName, vm.svcSourceDescription);
                         },
                         function (response) {
-                            throw RepoRestService.newRestException("Failed to update the source. \n" + RepoRestService.responseMessage(response));
+                            var sourceUpdateFailedMsg = $translate.instant('svcSourceEditController.sourceUpdateFailedMsg');
+                            throw RepoRestService.newRestException(sourceUpdateFailedMsg + "\n" + RepoRestService.responseMessage(response));
                         });
                 }
             } catch (error) {} finally {
             }
         };
-        
+
         /**
          * Update the VDB description
          */
@@ -206,11 +210,13 @@
                     },
                     function (resp) {
                         SvcSourceSelectionService.setLoading(false);
-                        throw RepoRestService.newRestException("Failed to update the source. \n" + RepoRestService.responseMessage(resp));
+                        var sourceUpdateFailedMsg = $translate.instant('svcSourceEditController.sourceUpdateFailedMsg');
+                        throw RepoRestService.newRestException(sourceUpdateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
-                throw RepoRestService.newRestException("Failed to update the source. \n" + error);
+                var sourceUpdateFailedMsg = $translate.instant('svcSourceEditController.sourceUpdateFailedMsg');
+                throw RepoRestService.newRestException(sourceUpdateFailedMsg + "\n" + error);
             }
         }
 
@@ -234,11 +240,13 @@
                     function (response) {
                         SvcSourceSelectionService.setDeploying(false, vdbName, false, RepoRestService.responseMessage(response));
                         SvcSourceSelectionService.setLoading(false);
-                        throw RepoRestService.newRestException("Failed to deploy the Source. \n" + RepoRestService.responseMessage(response));
+                        var sourceDeployFailedMsg = $translate.instant('svcSourceEditController.sourceDeployFailedMsg');
+                        throw RepoRestService.newRestException(sourceDeployFailedMsg + "\n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
-                throw RepoRestService.newRestException("Failed to deploy the Source. \n" + error);
+                var sourceDeployFailedMsg = $translate.instant('svcSourceEditController.sourceDeployFailedMsg');
+                throw RepoRestService.newRestException(sourceDeployFailedMsg + "\n" + error);
             }
         }
         
@@ -256,11 +264,13 @@
                     },
                     function (resp) {
                         SvcSourceSelectionService.setLoading(false);
-                        throw RepoRestService.newRestException("Failed to create the source model. \n" + RepoRestService.responseMessage(resp));
+                        var sourceModelCreateFailedMsg = $translate.instant('svcSourceEditController.sourceModelCreateFailedMsg');
+                        throw RepoRestService.newRestException(sourceModelCreateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
-                throw RepoRestService.newRestException("Failed to create the source model. \n" + error);
+                var sourceModelCreateFailedMsg = $translate.instant('svcSourceEditController.sourceModelCreateFailedMsg');
+                throw RepoRestService.newRestException(sourceModelCreateFailedMsg + "\n" + error);
             }
         }
 
@@ -276,11 +286,13 @@
                     },
                     function (resp) {
                         SvcSourceSelectionService.setLoading(false);
-                        throw RepoRestService.newRestException("Failed to create the source model connection. \n" + RepoRestService.responseMessage(resp));
+                        var sourceModelConnectionCreateFailedMsg = $translate.instant('svcSourceEditController.sourceModelConnectionCreateFailedMsg');
+                        throw RepoRestService.newRestException(sourceModelConnectionCreateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
-                throw RepoRestService.newRestException("Failed to create the source model connection. \n" + error);
+                var sourceModelConnectionCreateFailedMsg = $translate.instant('svcSourceEditController.sourceModelConnectionCreateFailedMsg');
+                throw RepoRestService.newRestException(sourceModelConnectionCreateFailedMsg + "\n" + error);
             }
         }
 
