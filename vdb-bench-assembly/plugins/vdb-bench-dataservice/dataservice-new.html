@@ -4,40 +4,39 @@
     <div id="dataservice-new-nosources" ng-show="vm.hasSources==false" class="col-md-10 row">
         <div class="row">
             <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
-            <p>Before you can create a new Data Service, you will need to configure a source.  To configure a Source, 
-            click <a href ng-click="vmmain.selectPage('svcsource-new')"><span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span><span>{{vmmain.page('svcsource-new').title}}</span></a></p>
+            <p>{{:: 'dataservice-new.configureSourceMsg' | translate}}
+                <a href ng-click="vmmain.selectPage('svcsource-new')"><span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span><span>{{vmmain.page('svcsource-new').title}}</span></a></p>
         </div>
     </div>
     
     <div id="dataservice-new-controls" ng-show="vm.hasSources==true" class="col-md-10 row">
         <div class="col-sm-9 row">
             <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
-            <h4>A Data Service can be composed of one or more of your available sources.  Start creating a Data Service by selecting a source, then
-            select one of it's source tables.  If you don't see your desired source, click 
-            <a href ng-click="vmmain.selectPage('svcsource-new')"><span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span><span>{{vmmain.page('svcsource-new').title}}</span></a>
+            <h4>{{:: 'dataservice-new.instructionsMsg' | translate}} 
+                <a href ng-click="vmmain.selectPage('svcsource-new')"><span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span><span>{{vmmain.page('svcsource-new').title}}</span></a>
             </h4>
             <div class="col-md-5">
-                <h4><strong>Sources</strong></h4>
+                <h4><strong>{{:: 'shared.Sources' | translate}}</strong></h4>
                 <service-source-list></service-source-list>
             </div>
             <div class="col-md-5">
-                <h4><strong>Tables</strong></h4>
+                <h4><strong>{{:: 'shared.Tables' | translate}}</strong></h4>
                 <model-table-list></model-table-list>
             </div>
             <div class="col-md-12" ng-show="vm.showNameAndDescription">
                 <p></p>
-                <h4>Choose a name (and optional description) for your Data Service</h4>
+                <h4>{{:: 'dataservice-new.inputFieldsHelpMsg' | translate}}</h4>
                 <p></p>
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-md-2 control-label" for="textInput">Name</label>
+                        <label class="col-md-2 control-label" for="textInput">{{:: 'shared.Name' | translate}}</label>
                         <div class="col-md-6">
                           <input type="text" ng-model="vm.serviceName" class="form-control">
                         </div>
                         <div class="col-md-4"></div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-2 control-label" for="textInput">Description</label>
+                        <label class="col-md-2 control-label" for="textInput">{{:: 'shared.Description' | translate}}</label>
                         <div class="col-md-6">
                           <input type="text" ng-model="vm.serviceDescription" class="form-control">
                         </div>
@@ -49,9 +48,9 @@
                 <p></p>
             </div>
             <div class="col-md-12">
-                <input type="submit" class="btn btn-primary" value="Create" ng-click="vm.onCreateDataServiceClicked()"
+                <input type="submit" class="btn btn-primary" value="{{:: 'shared.Create' | translate}}" ng-click="vm.onCreateDataServiceClicked()"
                                           ng-disabled="vm.canCreateDataService() !== true || vmmain.selectedPage.id !== 'dataservice-new'"/>
-                <input type="button" class="btn btn-default" value="Cancel" ng-click="vmmain.selectPage('dataservice-summary')"
+                <input type="button" class="btn btn-default" value="{{:: 'shared.Cancel' | translate}}" ng-click="vmmain.selectPage('dataservice-summary')"
                                           ng-disabled="vmmain.selectedPage.id !== 'dataservice-new'"/>
             </div>
         </div>

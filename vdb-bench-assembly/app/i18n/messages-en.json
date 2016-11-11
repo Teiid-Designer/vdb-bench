@@ -3,34 +3,85 @@
     "shared" : {
         "Cancel" : "Cancel",
         "Connection" : "Connection",
+        "Connections" : "Connections",
         "CopyThis" : "Copy {{this}}",
+        "Create" : "Create",
+        "Dashboard" : "Dashboard",
         "DataService" : "Data Service",
+        "DataServices" : "Data Services",
         "Description" : "Description",
         "Driver" : "Driver",
         "EditThis" : "Edit {{this}}",
         "ExportThis" : "Export {{this}}",
         "ImportThis" : "Import {{this}}",
+        "loadingProgressMsg" : "Loading...",
         "Name" : "Name",
         "NewThis" : "New {{this}}",
         "Save" : "Save",
         "Source" : "Source",
+        "Sources" : "Sources",
+        "Tables" : "Tables",
         "ThisSummary" : "{{this}} Summary"
     },
 
     "dsPageService" : {
         "configureSoureTitle" : "Configure Source",
-        "homeTitle" : "Dashboard",
+        "homeTitle" : "@:shared.Dashboard",
         "testDataServiceTitle" : "Test Data Service"
     },
 
-    "dataservice-edit" : {
+    "dataservice-clone" : {
         "Cancel" : "@:shared.Cancel",
-        "Description" : "@:shared.Description",
-        "instructionsMsg" : "Change the definition of your Data Service by choosing a different source and table",
-        "Name" : "@:shared.Name",
-        "Save" : "@:shared.Save",
-        "Sources" : "Sources",
-        "Tables" : "Tables"
+        "Create" : "@:shared.Create",
+        "instructionsMsg" : "Enter a name for the new data service",
+        "Name" : "@:shared.Name"
+    },
+
+    "dataservice-edit" : {
+        "instructionsMsg" : "Change the definition of your Data Service by choosing a different source and table"
+    },
+
+    "dataservice-export" : {
+        "exportTypeStepTitle" : "Export Type",
+        "instructionsMsg" : "Select how the data service should be exported",
+        "wizardTitle" : "Export Data Service"
+    },
+
+    "dataservice-import" : {
+        "importTypeStepTitle" : "Import Source",
+        "instructionsMsg" : "Select the source of the data service",
+        "wizardTitle" : "Import Data Service"
+    },
+
+    "dataservice-navbar" : {
+        "BackToDashboard" : "Back to Dashboard",
+        "backToDashboardMsg" : "Click below to navigate back to the default Data Service dashboard.",
+        "DataServiceActions" : "Data Service Actions",
+        "dataServiceActionsMsg" : "Choose from the actions below or jump directly to one of your starred/favorited Data Services.",
+        "SourceActions" : "Source Actions",
+        "sourceActionsMsg" : "Choose from the actions below or jump directly to one of your starred/favorited Sources."
+    },
+
+    "dataservice-new" : {
+        "configureSourceMsg" : "Before you can create a new Data Service, you will need to configure a source. To configure a Source, click ",
+        "inputFieldsHelpMsg" : "Choose a name (and optional description) for your Data Service",
+        "instructionsMsg" : "A Data Service can be composed of one or more of your available sources. Start creating a Data Service by selecting a source, then select one of it's source tables. If you don't see your desired source, click "
+    },
+
+    "dataservice-summary" : {
+        "connectionsNumberToolTip" : "The number of native data connections, eg. JDBC databases, utilised by this dataservice",
+        "createDataServiceMsg" : "A Data Service is created using one or more Sources. To create your first Data Service, click ",
+        "createSourceMsg" : "A Data Service is created using one or more Sources. To create your first Source, click ",
+        "importDataServiceMsg" : "You can also import an existing Data Service. To import a Data Service, click ",
+        "serviceVdbToolTip" : "The name of the service VDB of this dataservice",
+        "welcomeMsg" : "Welcome to the <strong>Data Services Builder</strong>!"
+    },
+
+    "dataservice-test" : {
+        "endpointNotAvailableMsg" : "The endpoint is not available",
+        "enterQueryMsg" : "Enter an SQL query to test the DataService",
+        "failedDeploymentMsg" : "The Data Service could not be deployed:",
+        "ODataEndpoint" : "OData Endpoint: "
     }
 
 }

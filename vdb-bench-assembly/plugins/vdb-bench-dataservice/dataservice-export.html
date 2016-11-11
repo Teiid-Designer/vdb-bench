@@ -2,7 +2,7 @@
 
     <div class="row">
         <div class="wizard-pf-container">
-            <div pf-wizard title="Export Data Service"
+            <div pf-wizard title="{{:: 'dataservice-export.wizardTitle' | translate}}"
                     on-finish="vmmain.selectPage('dataservice-summary',null)"
                     on-cancel="vmmain.selectPage('dataservice-summary',null)"
                     back-callback="vm.backCallback"
@@ -13,9 +13,9 @@
                 <!--
                     -- Export Type Step
                     -->
-                <div pf-wizard-step step-title="Export Type"
+                <div pf-wizard-step step-title="{{:: 'dataservice-export.exportTypeStepTitle' | translate}}"
                         step-id="export-type">
-                    <h1>Select how the dataservice should be exported</h1>
+                    <h1>{{:: 'dataservice-export.instructionsMsg' | translate}}</h1>
 
                     <form class="ds-import-export-storage-types-form">
                         <div ng-repeat="storageType in vm.storageTypes">
