@@ -13,10 +13,10 @@
 
     RepoRestService.$inject = ['CONFIG', 'SYNTAX', 'REST_URI', 'VDB_SCHEMA',
                                              'VDB_KEYS', 'RepoSelectionService', 'Restangular',
-                                             '$http', '$q', '$base64', 'CredentialService'];
+                                             '$http', '$q', '$base64', 'CredentialService', '$interval'];
 
     function RepoRestService(CONFIG, SYNTAX, REST_URI, VDB_SCHEMA, VDB_KEYS, RepoSelectionService,
-                                            Restangular, $http, $q, $base64, CredentialService) {
+                                            Restangular, $http, $q, $base64, CredentialService, $interval) {
 
         /*
          * Service instance to be returned
@@ -833,6 +833,43 @@
                 var uri = REST_URI.TEIID + REST_URI.DATA_SERVICE;
                 return restService.all(uri).post(payload);
             });
+        };
+
+        /**
+         * Service: Poll the teiid server for the point that the vdb becomes active
+         * Has a timeout limit of 1 minute.
+         */
+        service.pollForActiveVdb = function(vdbName, successCallback, failCallback) {
+
+            var promise = $interval(function() {
+                service.getTeiidVdbStatus().then(
+                    function (status) {
+                        if (_.isEmpty(status) || _.isEmpty(status.vdbs))
+                            return;
+
+                        for (var i = 0; i < status.vdbs.length; ++i) {
+                            var vdb = status.vdbs[i];
+                            if (vdbName !== vdb.name)
+                                continue;
+
+                            if (vdb.active) {
+                                successCallback();
+                                $interval.cancel(promise);
+                                return;
+                            }
+                        }
+                    },
+                    function (response) {
+                        if (failCallback)
+                            failCallback(service.responseMessage(response));
+
+                        //
+                        // Failure to connect the first time means its not
+                        // going to connect the remaining 59 times
+                        //
+                        $interval.cancel(promise);
+                    });
+            }, 2000, 30); // timeout after 30 iterations (or 60 seconds)
         };
 
         /**

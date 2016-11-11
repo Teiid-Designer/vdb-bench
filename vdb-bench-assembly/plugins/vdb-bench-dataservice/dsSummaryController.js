@@ -226,14 +226,29 @@
          * Handle deploy dataservice click
          */
         var deployDataServiceClicked = function ( ) {
-            var selDSName = DSSelectionService.selectedDataService().keng__id;
+            var selDS = DSSelectionService.selectedDataService();
+            var selDSName = selDS.keng__id;
+            var dsVdbName = DSSelectionService.selectedDataServiceVdbName();
+
             DSSelectionService.setDeploying(true, selDSName, false, null);
             try {
                 RepoRestService.deployDataService( selDSName ).then(
                     function ( result ) {
                         vm.deploymentSuccess = result.Information.deploymentSuccess == "true";
                         if(vm.deploymentSuccess === true) {
-                            DSSelectionService.setDeploying(false, selDSName, true, null);
+
+                            var successCallback = function() {
+                                DSSelectionService.setDeploying(false, selDSName, true, null);
+                            };
+                            var failCallback = function(failMessage) {
+                                DSSelectionService.setDeploying(false, selDSName, false, failMessage);
+                            };
+
+                            //
+                            // Monitor the service vdb of the dataservice to determine when its active
+                            //
+                            RepoRestService.pollForActiveVdb(dsVdbName, successCallback, failCallback);
+
                         } else {
                             DSSelectionService.setDeploying(false, selDSName, false, result.Information.ErrorMessage1);
                         }
