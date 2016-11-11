@@ -14,9 +14,9 @@
         .module('vdb-bench.dataservice')
         .factory('DSPageService', DSPageService);
 
-    DSPageService.$inject = ['SYNTAX', 'CONFIG', '$translate'];
+    DSPageService.$inject = ['SYNTAX', 'CONFIG', '$translate', '$rootScope'];
 
-    function DSPageService(syntax, config, $translate) {
+    function DSPageService(syntax, config, $translate, $rootScope) {
         /*
          * Service instance to be returned
          */
@@ -43,6 +43,34 @@
         };
 
         var pages = {};
+
+        /**
+         * Translations are loaded asynchonously while $translate.instant
+         * assumes the table is already present. Await the async loading
+         * before setting the translations.
+         */
+        $rootScope.$on('$translateChangeSuccess', function () {
+            pages[service.DS_HOME_PAGE].title = $translate.instant('dsPageService.homeTitle');
+            pages[service.DATASERVICE_SUMMARY_PAGE].title = $translate.instant('shared.ThisSummary', $translate.instant('shared.DataService'));
+            pages[service.NEW_DATASERVICE_PAGE].title = $translate.instant('shared.NewThis', $translate.instant('shared.DataService'));
+            pages[service.IMPORT_DATASERVICE_PAGE].title = $translate.instant('shared.ImportThis', $translate.instant('shared.DataService'));
+            pages[service.EXPORT_DATASERVICE_PAGE].title = $translate.instant('shared.ExportThis', $translate.instant('shared.DataService'));
+            pages[service.EDIT_DATASERVICE_PAGE].title = $translate.instant('shared.EditThis', $translate.instant('shared.DataService'));
+            pages[service.CLONE_DATASERVICE_PAGE].title = $translate.instant('shared.CopyThis', $translate.instant('shared.DataService'));
+            pages[service.TEST_DATASERVICE_PAGE].title = $translate.instant('dsPageService.testDataServiceTitle');
+            pages[service.CONNECTION_SUMMARY_PAGE].title = $translate.instant('shared.ThisSummary', $translate.instant('shared.Connection'));
+            pages[service.NEW_CONNECTION_PAGE].title = $translate.instant('shared.NewThis', $translate.instant('shared.Connection'));
+            pages[service.IMPORT_CONNECTION_PAGE].title = $translate.instant('shared.ImportThis', $translate.instant('shared.Connection'));
+            pages[service.EDIT_CONNECTION_PAGE].title = $translate.instant('shared.EditThis', $translate.instant('shared.Connection'));
+            pages[service.CLONE_CONNECTION_PAGE].title = $translate.instant('shared.CopyThis', $translate.instant('shared.Connection'));
+            pages[service.SERVICESOURCE_SUMMARY_PAGE].title = $translate.instant('shared.ThisSummary', $translate.instant('shared.Source'));
+            pages[service.SERVICESOURCE_NEW_PAGE].title = $translate.instant('dsPageService.configureSoureTitle');
+            pages[service.SERVICESOURCE_EDIT_PAGE].title = $translate.instant('shared.EditThis', $translate.instant('shared.Source'));
+            pages[service.SERVICESOURCE_CLONE_PAGE].title = $translate.instant('shared.CopyThis', $translate.instant('shared.Source'));
+            pages[service.SERVICESOURCE_IMPORT_PAGE].title = $translate.instant('shared.ImportThis', $translate.instant('shared.Source'));
+            pages[service.IMPORT_DRIVER_PAGE].title = $translate.instant('shared.ImportThis', $translate.instant('shared.Driver'));
+        });
+
         pages[service.DS_HOME_PAGE] = {
             id: service.DS_HOME_PAGE,
             title: $translate.instant('dsPageService.homeTitle'),
