@@ -428,6 +428,21 @@
         };
 
         /**
+         * Service: delete the specified model from a repository vdb
+         */
+        service.deleteVdbModel = function (vdbName, modelName) {
+            if (!vdbName || !modelName) {
+                throw new RestServiceException("Vdb name or model name for delete is not defined");
+            }
+
+            return getRestService().then(function (restService) {
+
+                return restService.one(REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + 
+                		               REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName).remove();
+            });
+        };
+
+        /**
          * Service: delete a vdb from the resposiory
          */
         service.deleteTeiidVdb = function (vdbName) {
