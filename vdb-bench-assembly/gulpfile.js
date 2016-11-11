@@ -191,6 +191,7 @@ gulp.task('site-files', function () {
     // Copy images and lib artifacts to site
     return gulp.src(['favicon.ico', 'img/**',
                             config.app.root + '**/content/img/**',
+                            config.app.root + '**/i18n/**',
                             config.plugins.root + '**/content/img/**',
                             config.libFiles], {
             base: '.'

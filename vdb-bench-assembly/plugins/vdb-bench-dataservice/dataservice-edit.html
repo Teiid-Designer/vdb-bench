@@ -7,22 +7,22 @@
                 <h3>{{:: 'dataservice-edit.instructionsMsg' | translate}}</h3>
                 <form name="dsForm" class="form-horizontal">
                     <div class="col-md-5">
-                        <h4><strong>{{:: 'dataservice-edit.Sources' | translate}}</strong></h4>
+                        <h4><strong>{{:: 'shared.Sources' | translate}}</strong></h4>
                         <service-source-list selection="{{vm.initialSourceName}}"></service-source-list>
                     </div>
                     <div class="col-md-5">
-                        <h4><strong>{{:: 'dataservice-edit.Tables' | translate}}</strong></h4>
+                        <h4><strong>{{:: 'shared.Tables' | translate}}</strong></h4>
                         <model-table-list selection="{{vm.initialSourceTableName}}"></model-table-list>
                     </div>
                     <div class="col-md-12"></div>
                     <div class="form-group">
-                        <label class="col-md-2 control-label" style="margin-top: 20px" for="textInput">{{:: 'dataservice-edit.Name' | translate}}</label>
+                        <label class="col-md-2 control-label" style="margin-top: 20px" for="textInput">{{:: 'shared.Name' | translate}}</label>
                         <div class="col-md-6" style="margin-top: 20px" >
                           <input type="text" readonly="readonly" ng-model="vm.serviceName" ng-init="vm.serviceName=vmmain.selectedDataservice().keng__id" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-2 control-label" for="textInput">{{:: 'dataservice-edit.Description' | translate}}</label>
+                        <label class="col-md-2 control-label" for="textInput">{{:: 'shared.Description' | translate}}</label>
                         <div class="col-md-6">
                           <input type="text" ng-model="vm.serviceDescription" ng-init="vm.serviceDescription=vmmain.selectedDataservice().tko__description" class="form-control">
                         </div>
@@ -32,9 +32,9 @@
                     <p></p>
                 </div>
                 <div class="col-md-12">
-                    <input type="submit" class="btn btn-primary" value="{{:: 'dataservice-edit.Save' | translate}}" ng-click="vm.onSaveDataServiceClicked()"
+                    <input type="submit" class="btn btn-primary" value="{{:: 'shared.Save' | translate}}" ng-click="vm.onSaveDataServiceClicked()"
                                               ng-disabled="vm.canSaveDataService() !== true || vmmain.selectedPage.id !== 'dataservice-edit'"/>
-                    <input type="button" class="btn btn-default" value="{{:: 'dataservice-edit.Cancel' | translate}}" ng-click="vmmain.selectPage('dataservice-summary')"
+                    <input type="button" class="btn btn-default" value="{{:: 'shared.Cancel' | translate}}" ng-click="vmmain.selectPage('dataservice-summary')"
                                               ng-disabled="vmmain.selectedPage.id !== 'dataservice-edit'"/>
                 </div>
             </div>
