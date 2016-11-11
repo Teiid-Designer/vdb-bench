@@ -190,7 +190,7 @@ var App;
         
         // try to get locale from browser
         var l_lang;
-        if (navigator.languages != undefined) { // Chrome
+        if (navigator.languages !== undefined) { // Chrome
         	l_lang = navigator.languages[0];
         } else if (navigator.userLanguage) { // Explorer
             l_lang = navigator.userLanguage;

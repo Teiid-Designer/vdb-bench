@@ -9,7 +9,7 @@
         .directive('sqlControl', SQLControl);
 
     SQLControl.$inject = ['CONFIG', 'SYNTAX'];
-    SQLController.$inject = ['$scope', 'SYNTAX', 'RepoRestService', '$window'];
+    SQLController.$inject = ['$scope', 'SYNTAX', 'RepoRestService', '$window', 'HelpService'];
 
     function SQLControl(config, syntax) {
         var directive = {
@@ -31,7 +31,7 @@
         return directive;
     }
 
-    function SQLController($scope, SYNTAX, RepoRestService, $window) {
+    function SQLController($scope, SYNTAX, RepoRestService, $window, HelpService) {
         var vm = this;
 
         vm.showProgress = function(display) {
@@ -42,6 +42,7 @@
 
         vm.limit = -1;
         vm.offset = 0;
+        vm.showResultsTable = false;
 
         /**
          * Options for the codemirror editor used for previewing vdb xml
@@ -56,33 +57,10 @@
             _editor.setSize(null, vm.editorHeight);
         };
 
-        vm.exampleColDefs = [
-            { name: 'Column 1' },
-            { name: 'Column 2' },
-            { name: 'Column 3' }
-        ];
-
-        vm.exampleData = [
-            {
-                "Column 1": "value 1",
-                "Column 2": "value 2",
-                "Column 3": "value 3"
-            },
-            {
-                "Column 1": "value 1",
-                "Column 2": "value 2",
-                "Column 3": "value 3"
-            },
-            {
-                "Column 1": "value 1",
-                "Column 2": "value 2",
-                "Column 3": "value 3"
-            }
-        ];
-
         vm.gridOptions = {
-            columnDefs: vm.exampleColDefs,
-            data: vm.exampleData
+            paginationPageSizes: [25, 50, 75],
+            paginationPageSize: 25,
+            enableFiltering: true,
         };
 
         vm.refreshData = function(results) {
@@ -133,12 +111,21 @@
             RepoRestService.query(vm.queryText, vm.target, vm.limit, vm.offset).then(
                 function (queryResults) {
                     vm.showProgress(false);
+                    vm.showResultsTable = true;
                     vm.refreshData(queryResults);
                 },
                 function (response) {
                     vm.showProgress(false);
                     vm.errorMsg = RepoRestService.responseMessage(response);
+                    vm.showResultsTable = false;
                 });
+        };
+
+        /**
+         * Handler for fetching help content for the given context
+         */
+        vm.help = function (context) {
+            return HelpService.help(context);
         };
     }
 })();

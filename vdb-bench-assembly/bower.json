@@ -24,7 +24,7 @@
     "hawtio-preferences": "~2.0.3",
     "hawtio-template-cache": "~2.0.3",
     "hawtio-forms": "~2.0.0",
-    "angular-bootstrap": "~0.14.0",
+    "angular-bootstrap": "~1.0.0",
     "restangular": "~1.5.1",
     "angular-ui-codemirror": "~0.3.0",
     "angular-pretty-xml": "~0.1.1",
@@ -42,7 +42,9 @@
     "angular-ui-grid": "^3.2.1",
     "angular-patternfly": "^3.6.0",
     "hawtio-extension-service": "^2.0.3",
-    "d3": "^4.2.7"
+    "d3": "^4.2.7",
+    "angular-ui-select": "^0.19.6",
+    "abdmob/x2js": "^1.2.0"
   },
   "devDependencies": {
     "bootstrap": "~3.3.5",
@@ -54,7 +56,7 @@
     "jquery": "^2.0",
     "angular-dashboard-framework": "^0.11.0",
     "bootstrap": "~3.3.5",
-    "angular-bootstrap": "~0.14.0",
+    "angular-bootstrap": "~1.0.0",
     "angular-route": "~1.5",
     "angular": "~1.5",
     "patternfly": "~3.6",

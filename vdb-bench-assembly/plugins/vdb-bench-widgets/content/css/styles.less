@@ -149,35 +149,51 @@ svg {
  */
 .sql-control-controls {
     margin-top: 0.5em;
-    margin-left: 1em;
-    margin-right: 1em;
-    float: left;
-    text-align: right;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
 }
 .sql-control-control-title {
-    text-align: right;
-    text-shadow: 1px 1px 1px #000;
-    color: #BFBEC0;
+    float: left;
+    color: grey;
+}
+.sql-control-controls-query {
+    float: right;
+    margin-bottom: 0.5em;
+}
+.sql-control-query-help {
+    float: right;
+    margin-left: 0.5em;
+}
+.sql-control-editor {
+    clear: both;
+    border-color: grey;
+    border-style: inset;
+    border-width: 1px;
 }
 .sql-control-controls-limit {
     margin-bottom: 0.5em;
+     display: inline-block;
 }
 .sql-control-controls-limit input[type=number] {
     width: 5em;
 }
 .sql-control-controls-offset {
+    display: inline-block;
+    margin-left: 4em;
 }
 .sql-control-controls-offset input[type=number] {
     width: 5em;
 }
-.sql-control-controls-query {
-    float: right;
-    margin-top: 1.5em;
-    margin-right: 0.5em;
-}
 .sql-control-query-grid {
-    width: 100%;
+    width: 50vw;
     height: 60vh;
+}
+#sql-control-failure {
+    color: red;
+    font-style: italic;
+    font-weight: bold;
+    padding-left: 7em;
 }
 
 /*

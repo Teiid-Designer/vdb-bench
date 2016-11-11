@@ -1,7 +1,10 @@
 <div class="container-fluid" ng-controller="DSTestController as vm">
 
+    <!--
+        -- Deployment
+        -->
     <!-- Show spinner while deploying -->
-    <div ng-show="vm.dsDeploymentInProgress==true" class="col-md-10 row">
+    <div id="deployment-spinner" ng-show="vm.dsDeploymentInProgress==true" class="col-md-10 row">
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
         <span class="sr-only">Loading...</span>
     </div>
@@ -21,29 +24,235 @@
         </div>
     </div>
 
-    <div ng-show="vm.dsDeploymentInProgress==false  && vm.dsDeploymentSuccess==true" class="row">
-        <div class="col-sm-12">
-            <h3>OData Endpoint: </h3>
-            <div id="odata-link" ng-show="vm.selectedDataserviceODataLinkValid()">
-                <a href="{{vm.selectedDataserviceODataLink()}}" target="_blank">{{vm.selectedDataserviceODataLink()}}</a>
-            </div>
-            <div id="odata-link" ng-show="!vm.selectedDataserviceODataLinkValid()">
-                <strong>The endpoint is not available</strong>
-            </div>
-        </div>
-    </div>
+    <div id="deployed-test-search-tabs" ng-show="vm.dsDeploymentInProgress==false && vm.dsDeploymentSuccess==true">
+        <uib-tabset>
+        <uib-tab heading="Query" ng-click="vm.onTabSelected('Standard')">
 
-    <div ng-show="vm.dsDeploymentInProgress==false && vm.dsDeploymentSuccess==true" class="row">
-        <div class="col-sm-12">
-            <div id="ds-test-description">
-                <h3>Enter an SQL query to test the DataService</h3>
+            <!--
+                -- OData Querying
+                -->
+            <div id="odata-endpoint-url" class="row col-sm-8" ng-show="vm.hasOdataAttributes() == true" ng-cloak>
+                <input type="text" readonly="true" value="{{vm.endPointUrl()}}" class="col-sm-12">
             </div>
-            <div id="ds-test-sql-edit-box">
-                <sql-control editor-height="20em"
-                                    target="{{vmmain.selectedDataservice().keng__dataPath}}"
-                                    query-text="{{vm.selectedDataserviceQueryText()}}">
-                </sql-control>
+
+            <div id="odata-query-button" class="row col-sm-1" ng-show="vm.hasOdataAttributes() == true" ng-cloak>
+                <button class="btn btn-primary" type="button" class="col-sm-11" title="Search"
+                            ng-click="vm.onSearchEndPoint()" ng-disabled="! vm.canQuery()">
+                    <span class="fa fa-fw fa-search"></span>Search
+                </button>
+                <label class="help-label" class="col-sm-1">
+                    <span class="fa fa-info-circle" uib-tooltip-html="{{vm.help('ds-test-endpoint-search')}}"
+                          tooltip-class="custom-tooltip"></span>
+                </label>
             </div>
-        </div>
+
+            <div id="odata-control-panel" class="col-sm-4" ng-show="vm.hasOdataAttributes() == true" ng-cloak>
+                <uib-accordion close-others="false">
+                    <!-- -->
+                    <!-- -->
+                    <!-- Select Group -->
+                    <!-- -->
+                    <!-- -->
+                    <uib-accordion-group heading="Select" ng-init="selectIsOpen = true" is-open="selectIsOpen">
+                        <uib-accordion-heading>
+                            <div class="odata-control-panel-title">Select</div>
+                            <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
+                            <div class="pull-right" uib-dropdown>
+                                <label class="help-label">
+                                        <span class="fa fa-info-circle" uib-tooltip-html="{{vm.help('ds-test-select')}}"
+                                                  tooltip-class="custom-tooltip"></span>
+                                </label>
+                            </div>
+                        </uib-accordion-heading>
+                        <form name="odata-exp-select" role="form">
+                            <div class="odata-exp-select-group">
+                                <div class="col-xs-7">
+                                    <ui-select ng-model="vm.odata.entity" theme="bootstrap" title="Select the view to be queried">
+                                        <ui-select-match placeholder="Select a view in the list...">{{$select.selected.name}}</ui-select-match>
+                                        <ui-select-choices repeat="entity in vm.odata.entities">
+                                            <div ng-bind-html="entity.name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+
+                                <div class="col-xs-5">
+                                    <ui-select ng-model="vm.odata.limit" theme="bootstrap" title="Select the number of results to be initially returned">
+                                        <ui-select-match placeholder="Select result limit...">{{$select.selected}}</ui-select-match>
+                                        <ui-select-choices repeat="limit in vm.odata.limits">
+                                            <div ng-bind-html="limit | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </form>
+                    </uib-accordion-group>
+                    <!-- -->
+                    <!-- -->
+                    <!-- Column Group -->
+                    <!-- -->
+                    <!-- -->
+                    <uib-accordion-group heading="Columns">
+                        <uib-accordion-heading>
+                            <div class="odata-control-panel-title">Columns</div>
+                            <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
+                            <div class="pull-right" uib-dropdown>
+                                <label class="help-label">
+                                        <span class="fa fa-info-circle" uib-tooltip="{{vm.help('ds-test-columns')}}"
+                                                  tooltip-class="custom-tooltip"></span>
+                                </label>
+                            </div>
+                        </uib-accordion-heading>
+                        <form name="odata-exp-columns" role="form">
+                            <div class="form-group odata-exp-column-group" ng-repeat="column in vm.odata.columns()">
+                                <div class="odata-exp-column-group-row checkbox">
+                                    <label>
+                                        <input type="checkbox" value=""
+                                                    ng-checked="vm.isColumnSelected(column.name)"
+                                                    ng-click="vm.updateColumnSelection($event, column.name)">{{column.name}}
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </uib-accordion-group>
+                    <!-- -->
+                    <!-- -->
+                    <!-- Where Group -->
+                    <!-- -->
+                    <!-- -->
+                    <uib-accordion-group heading="Where" is-open="vm.odata.hasWhere">
+                        <uib-accordion-heading>
+                            <div class="odata-control-panel-title">Where</div>
+                            <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
+                            <div class="pull-right" uib-dropdown>
+                                <button type="button" class="glyphicon glyphicon-plus odata-form-where-add-btn"
+                                                uib-dropdown-toggle ng-click="vm.onAddWhereClicked($event)">
+                                </button>
+                                <label class="help-label">
+                                        <span class="fa fa-info-circle" uib-tooltip-html="{{vm.help('ds-test-where')}}"
+                                                  tooltip-class="custom-tooltip"></span>
+                                </label>
+                            </div>
+                        </uib-accordion-heading>
+                        <form name="odata-exp-where" role="form">
+                            <div class="form-group odata-exp-where-group" ng-repeat="where in vm.odata.where">
+                                <div class="col-xs-4 odata-exp-where-group-row">
+                                    <ui-select ng-model="where.column" theme="bootstrap" on-select="vm.onWhereColumnSelected($item, where)">
+                                        <ui-select-match placeholder="column">{{$select.selected.name}}</ui-select-match>
+                                        <ui-select-choices repeat="column in vm.odata.columns()">
+                                            <div ng-bind-html="column.name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="col-xs-4 odata-exp-where-group-row" ng-show="! where.error">
+                                    <ui-select ng-model="where.condition" theme="bootstrap">
+                                        <ui-select-match placeholder="condition">{{$select.selected}}</ui-select-match>
+                                        <ui-select-choices repeat="condition in vm.whereConditions(where)">
+                                            <div ng-bind-html="condition | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="col-xs-3 odata-exp-where-group-row" ng-show="! where.error">
+                                    <input type="text" class="odata-form-control" ng-model="where.value" name="value" placeholder="Value" />
+                                </div>
+                                <div class="col-xs-1 odata-exp-where-group-row">
+                                    <button type="button" class="odata-form-where-remove-btn" ng-click="vm.onRemoveWhereClicked($event, where)">
+                                        <span class="glyphicon glyphicon-minus"></span>
+                                    </button>
+                                </div>
+
+                                <div class="odata-exp-where-error-msg">
+                                    {{where.error}}
+                                </div>
+                            </div>
+
+                        </form>
+                    </uib-accordion-group>
+                    <!-- -->
+                    <!-- -->
+                    <!-- Order by Group -->
+                    <!-- -->
+                    <!-- -->
+                    <uib-accordion-group heading="Order by">
+                        <uib-accordion-heading>
+                            <div class="odata-control-panel-title">Order by</div>
+                            <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
+                            <div class="pull-right" uib-dropdown>
+                                <label class="help-label">
+                                        <span class="fa fa-info-circle" uib-tooltip="{{vm.help('ds-test-order-by')}}"
+                                                  tooltip-class="custom-tooltip"></span>
+                                </label>
+                            </div>
+                        </uib-accordion-heading>
+                        <form name="odata-exp-order-by" role="form">
+                            <div class="form-group odata-exp-order-by-group" ng-repeat="column in vm.odata.columns()">
+                                <div class="odata-exp-order-by-group-row form-group">
+                                    <div class='odata-exp-order-by-group-row-label radio-inline'>
+                                        <label>{{column.name}}</label>
+                                    </div>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="{{column}}-sort-option" value=""
+                                                    ng-model="column.sort">
+                                        No sort
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="{{column}}-sort-option" value="asc"
+                                                    ng-model="column.sort">
+                                        Asc
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="{{column}}-sort-option" value="desc"
+                                                    ng-model="column.sort">
+                                        Desc
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </uib-accordion-group>
+                </uib-accordion>
+            </div>
+
+            <div id="odata-results-table" class="col-sm-7" ng-show="vm.hasOdataAttributes() == true && vm.showResultsTable == true" ng-cloak>
+                <div ui-grid="vm.resultGridOptions" ui-grid-pagination class="odata-results-table-grid"></div>
+            </div>
+
+            <div id="odata-results-table-help" class="col-sm-1" ng-show="vm.hasOdataAttributes() == true && vm.showResultsTable == true" ng-cloak>
+                <label class="help-label">
+                    <span class="fa fa-info-circle" uib-tooltip-html="{{vm.help('ds-test-results-table')}}"
+                                tooltip-class="custom-tooltip"></span>
+                </label>
+            </div>
+
+            <div id="odata-results-msg" class="col-sm-8" ng-show="vm.hasOdataAttributes() == true && vm.searchMsg != null" ng-cloak>
+                <h3>{{vm.searchMsg}}</h3>
+            </div>
+
+            <!-- Show spinner while searching -->
+            <div id="odata-search-progress-spinner" class="col-md-8" ng-show="vm.searchInProgress==true">
+                <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                <span class="sr-only">Searching...</span>
+            </div>
+
+            <div id="odata-metadata-fetch-failure" class="col-sm-12"
+                    ng-show="vm.dsDeploymentInProgress == false && vm.hasOdataAttributes() == false && vm.odate.metadataFailure == true" ng-cloak>
+                <h3>Failed to get the odata metadata for the deployed artifact.</h3>
+            </div>
+        </uib-tab>
+
+        <uib-tab heading="Advanced" ng-click="vm.onTabSelected('Advanced')">
+            <!--
+                -- JDBC Querying
+                -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="ds-test-sql-edit-box">
+                        <sql-control editor-height="20em"
+                                            target="{{vmmain.selectedDataservice().keng__dataPath}}"
+                                            query-text="{{vm.selectedDataserviceQueryText()}}">
+                        </sql-control>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+        </uib-tabset>
     </div>
 </div>

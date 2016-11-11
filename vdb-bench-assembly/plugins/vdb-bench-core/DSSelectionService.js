@@ -199,7 +199,7 @@
         };
         
         /*
-         * return selected dataservice
+         * return selected dataservice view model
          */
         service.selectedDataServiceViewModel = function() {
             if ( !angular.isDefined(ds.dataservice) || _.isEmpty(ds.dataservice) || ds.dataservice === null )
@@ -212,7 +212,7 @@
         };
         
         /*
-         * return selected dataservice
+         * return selected dataservice view
          */
         service.selectedDataServiceView = function() {
             if ( !angular.isDefined(ds.dataservice) || _.isEmpty(ds.dataservice) || ds.dataservice === null )
