@@ -179,15 +179,26 @@
                     function ( result ) {
                         vm.deploymentSuccess = (result.Information.deploymentSuccess === "true");
                         if(vm.deploymentSuccess === true) {
-                            SvcSourceSelectionService.setDeploying(false, vdbName, true, null);
+                            var successCallback = function() {
+                                SvcSourceSelectionService.setDeploying(false, vdbName, true, null);
+                                // Refresh and direct to appropriate page.  If no sources prior to this create, go directly to new service page
+                                if(vm.numberSources===0) {
+                                    SvcSourceSelectionService.refresh('dataservice-new');
+                                } else {
+                                    SvcSourceSelectionService.refresh('datasource-summary');
+                                }
+                            };
+                            var failCallback = function(failMessage) {
+                                SvcSourceSelectionService.setDeploying(false, vdbName, false, failMessage);
+                                // Refresh and direct to summary page
+                                SvcSourceSelectionService.refresh('datasource-summary');
+                            };
+                            //
+                            // Monitors the source vdb to determine when its active
+                            //
+                            RepoRestService.pollForActiveVdb(vdbName, successCallback, failCallback);
                         } else {
                             SvcSourceSelectionService.setDeploying(false, vdbName, false, result.Information.ErrorMessage1);
-                        }
-                        // Refresh and direct to appropriate page.  If no sources prior to this create, go directly to new service page
-                        if(vm.numberSources===0) {
-                            SvcSourceSelectionService.refresh('dataservice-new');
-                        } else {
-                            SvcSourceSelectionService.refresh('datasource-summary');
                         }
                    },
                     function (response) {
