@@ -5,7 +5,7 @@
         <div class="row">
             <h2 ng-bind-html=":: 'dataservice-summary.welcomeMsg' | translate"></h2>
             <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
-            <p>{{:: 'dataservice-summary.createSourceMsg' | translate}}
+            <p translate="dataservice-summary.createSourceMsg">
                <a href ng-click="vmmain.selectPage('svcsource-new')"><span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span><span>{{vmmain.page('svcsource-new').title}}</span></a>
                <br>
                {{:: 'dataservice-summary.importDataServiceMsg' | translate}}
@@ -19,7 +19,7 @@
         <div class="row">
             <h2 ng-bind-html=":: 'dataservice-summary.welcomeMsg' | translate"></h2>
             <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
-            <p>{{:: 'dataservice-summary.createDataServiceMsg' | translate}}
+            <p translate="dataservice-summary.createDataServiceMsg">
                <a href ng-click="vmmain.selectPage('dataservice-new')"><span class="fa fa-fw {{vmmain.page('dataservice-new').icon}}"></span><span>{{vmmain.page('dataservice-new').title}}</span></a>
                <br>
                {{:: 'dataservice-summary.importDataServiceMsg' | translate}}
@@ -36,7 +36,7 @@
 
         <div id="dataservice-summary-updating" ng-show="vm.dsLoading==true || vm.sourcesLoading==true" class="col-md-10 row">
             <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-            <span class="sr-only">{{:: 'shared.loadingProgressMsg' | translate}}</span>
+            <span class="sr-only" translate="shared.loadingProgressMsg"></span>
         </div>
 
         <div class="ds-summary-results-container" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasServices==true">
@@ -61,7 +61,7 @@
                                 <div class="list-view-pf-additional-info-item" uib-tooltip="{{:: 'dataservice-summary.connectionsNumberToolTip' | translate}}">
                                     <span class="fa fa-cog"></span>
                                     <strong>{{item.connections}}</strong>
-                                    <span>{{item.connections === 1 ? 'Connection' : 'Connections'}}</span>
+                                    <span>{{item.connections === 1 ? 'shared.Connection' : 'shared.Connections' | translate}}</span>
                                 </div>
                             </div>
                         </div>

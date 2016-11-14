@@ -4,25 +4,25 @@
         <div class="row">
             <div class="col-sm-9">
                 <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}} '{{vmmain.selectedDataservice().keng__id}}'</span></h2>
-                <h3>{{:: 'dataservice-edit.instructionsMsg' | translate}}</h3>
+                <h3 translate="dataservice-edit.instructionsMsg"></h3>
                 <form name="dsForm" class="form-horizontal">
                     <div class="col-md-5">
-                        <h4><strong>{{:: 'shared.Sources' | translate}}</strong></h4>
+                        <h4><strong translate="shared.Sources"></strong></h4>
                         <service-source-list selection="{{vm.initialSourceName}}"></service-source-list>
                     </div>
                     <div class="col-md-5">
-                        <h4><strong>{{:: 'shared.Tables' | translate}}</strong></h4>
+                        <h4><strong translate="shared.Tables"></strong></h4>
                         <model-table-list selection="{{vm.initialSourceTableName}}"></model-table-list>
                     </div>
                     <div class="col-md-12"></div>
                     <div class="form-group">
-                        <label class="col-md-2 control-label" style="margin-top: 20px" for="textInput">{{:: 'shared.Name' | translate}}</label>
+                        <label class="col-md-2 control-label" style="margin-top: 20px" for="textInput" translate="shared.Name"></label>
                         <div class="col-md-6" style="margin-top: 20px" >
                           <input type="text" readonly="readonly" ng-model="vm.serviceName" ng-init="vm.serviceName=vmmain.selectedDataservice().keng__id" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-2 control-label" for="textInput">{{:: 'shared.Description' | translate}}</label>
+                        <label class="col-md-2 control-label" for="textInput" translate="shared.Description"></label>
                         <div class="col-md-6">
                           <input type="text" ng-model="vm.serviceDescription" ng-init="vm.serviceDescription=vmmain.selectedDataservice().tko__description" class="form-control">
                         </div>

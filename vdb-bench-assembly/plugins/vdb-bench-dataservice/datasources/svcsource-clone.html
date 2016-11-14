@@ -1,7 +1,7 @@
 <div class="container-fluid" ng-controller="SvcSourceCloneController as vm">
     <div id="svcsource-clone" ng-show="vm.cloneVdbInProgress==true" class="col-md-10 row">
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-        <span class="sr-only">{{:: 'svcsource-clone.Loading' | translate}}</span>
+        <span class="sr-only" translate="svcsource-clone.Loading"></span>
     </div>
     
     <div id="svcsource-clone-controls" ng-show="vm.cloneVdbInProgress==false" class="col-md-10 row">
@@ -11,14 +11,14 @@
           <h3>&nbsp;&nbsp;{{:: 'svcsource-clone.instructionsMsg' | translate}}</h3>
           <form class="form-horizontal">
               <div class="form-group">
-                  <label class="col-md-2 control-label" for="textInput">{{:: 'svcsource-clone.Name' | translate}}</label>
+                  <label class="col-md-2 control-label" for="textInput" translate="svcsource-clone.Name"></label>
                   <div class="col-md-6">
                     <input type="text" ng-model="nameVar" class="form-control">
                   </div>
               </div>
           </form>
-          <button class="btn btn-primary" ng-click="vm.onCloneSvcSourceClicked(vmmain.selectedServiceSource().keng__id, nameVar)" ng-class="{active:vmmain.selectedPage.id == 'svcsource-clone'}">{{:: 'svcsource-clone.Create' | translate}}</button>
-          <button class="btn btn-default" ng-click="vmmain.selectPage('datasource-summary')" ng-class="{active:vmmain.selectedPage.id == 'svcsource-clone'}">{{:: 'svcsource-clone.Cancel' | translate}}</button>
+          <button class="btn btn-primary" ng-click="vm.onCloneSvcSourceClicked(vmmain.selectedServiceSource().keng__id, nameVar)" ng-class="{active:vmmain.selectedPage.id == 'svcsource-clone'}" translate="svcsource-clone.Create"></button>
+          <button class="btn btn-default" ng-click="vmmain.selectPage('datasource-summary')" ng-class="{active:vmmain.selectedPage.id == 'svcsource-clone'}" translate="svcsource-clone.Cancel"></button>
         </div>
       </div>
     </div>

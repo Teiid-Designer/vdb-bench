@@ -5,17 +5,17 @@
             <div class="row">
                 <div class="col-sm-9">
                     <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}} '{{vmmain.selectedDataservice().keng__id}}'</span></h2>
-                    <h3>{{:: 'dataservice-clone.instructionsMsg' | translate}}</h3>
+                    <h3 translate="dataservice-clone.instructionsMsg"></h3>
                     <form class="form-horizontal">
                         <div class="form-group">
-                            <label class="col-md-2 control-label" for="textInput">{{:: 'dataservice-clone.Name' | translate}}</label>
+                            <label class="col-md-2 control-label" for="textInput" translate="dataservice-clone.Name"></label>
                             <div class="col-md-6">
                               <input type="text" ng-model="nameVar" class="form-control">
                             </div>
                         </div>
                     </form>
-                    <button class="btn btn-primary" ng-click="vm.onCloneDataServiceClicked(vmmain.selectedDataservice().keng__id, nameVar)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-clone'}">{{:: 'dataservice-clone.Create' | translate}}</button>
-                    <button class="btn btn-default" ng-click="vmmain.selectPage('dataservice-summary')" ng-class="{active:vmmain.selectedPage.id == 'dataservice-clone'}">{{:: 'dataservice-clone.Cancel' | translate}}</button>
+                    <button class="btn btn-primary" ng-click="vm.onCloneDataServiceClicked(vmmain.selectedDataservice().keng__id, nameVar)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-clone'}" translate="dataservice-clone.Create"></button>
+                    <button class="btn btn-default" ng-click="vmmain.selectPage('dataservice-summary')" ng-class="{active:vmmain.selectedPage.id == 'dataservice-clone'}" translate="dataservice-clone.Cancel"></button>
                 </div>
             </div>
         </div>

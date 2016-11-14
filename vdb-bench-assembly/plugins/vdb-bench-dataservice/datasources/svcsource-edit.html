@@ -1,21 +1,21 @@
 <div class="container-fluid" ng-controller="SvcSourceEditController as vm">
     <div id="svcsource-edit-updating" ng-show="vm.transLoading==true || vm.updateAndDeployInProgress==true" class="col-md-10 row">
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-        <span class="sr-only">{{:: 'svcsource-edit.Loading' | translate}}</span>
+        <span class="sr-only" translate="svcsource-edit.Loading"></span>
     </div>
     
     <div id="svcsource-edit-controls" ng-show="vm.transLoading==false && vm.updateAndDeployInProgress==false" class="col-md-10 row">
       <div class="row">
         <div class="col-md-11">
             <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
-            <h4>{{:: 'svcsource-edit.instructionsMsg' | translate}}</h4>
+            <h4 translate="svcsource-edit.instructionsMsg"></h4>
             <form class="form-horizontal">
                 <div class="col-md-5">
-                    <h4><strong>{{:: 'svcsource-edit.Connections' | translate}}</strong></h4>
+                    <h4><strong translate="svcsource-edit.Connections"></strong></h4>
                     <connection-list selection="{{vm.initialConnectionName}}"></connection-list>
                 </div>
                 <div class="col-md-5">
-                    <h4><strong>{{:: 'svcsource-edit.Translator' | translate}}</strong></h4>
+                    <h4><strong translate="svcsource-edit.Translator"></strong></h4>
                     <img src="{{vm.selectedTranslatorImage}}" width="42" height="24"/>
                     <select id="translators" ng-model="vm.selectedTranslator" ng-options="trans as trans.keng__id for trans in vm.allTranslators"
                                              ng-change="vm.translatorChanged()">
@@ -24,13 +24,13 @@
                 </div>
                 <div class="col-md-12"></div>
                 <div class="form-group" style="margin-top: 20px">
-                    <label class="col-md-2 control-label" for="textInput">{{:: 'svcsource-edit.Name' | translate}}</label>
+                    <label class="col-md-2 control-label" for="textInput" translate="svcsource-edit.Name"></label>
                     <div class="col-md-6">
                         <input type="text" readonly="readonly" ng-model="vm.svcSourceName" ng-init="vm.svcSourceName=vmmain.selectedServiceSource().keng__id" class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-2 control-label" for="textInput">{{:: 'svcsource-edit.Description' | translate}}</label>
+                    <label class="col-md-2 control-label" for="textInput" translate="svcsource-edit.Description"></label>
                     <div class="col-md-6">
                         <input type="text" ng-model="vm.svcSourceDescription" ng-init="vm.svcSourceDescription=vmmain.selectedServiceSource().vdb__description" class="form-control">
                     </div>
