@@ -5,8 +5,12 @@
         <div class="row">
             <h2 ng-bind-html=":: 'datasource-summary.welcomeMsg' | translate"></h2>
             <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
-            <p translate="datasource-summary.noSourcesInstructionsMsg">
-            <a href ng-click="vmmain.selectPage('svcsource-new')"><span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span><span>{{vmmain.page('svcsource-new').title}}</span></a>
+            <p>
+                <span translate="datasource-summary.noSourcesInstructionsMsg" />
+                <a href ng-click="vmmain.selectPage('svcsource-new')">
+                    <span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span>
+                    <span>{{vmmain.page('svcsource-new').title}}</span>
+                </a>
             </p>
         </div>
     </div>
