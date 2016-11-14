@@ -5,11 +5,18 @@
         <div class="row">
             <h2 ng-bind-html=":: 'dataservice-summary.welcomeMsg' | translate"></h2>
             <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
-            <p translate="dataservice-summary.createSourceMsg">
-               <a href ng-click="vmmain.selectPage('svcsource-new')"><span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span><span>{{vmmain.page('svcsource-new').title}}</span></a>
-               <br>
-               {{:: 'dataservice-summary.importDataServiceMsg' | translate}}
-               <a href ng-click="vmmain.selectPage('dataservice-import')"><span class="fa fa-fw {{vmmain.page('dataservice-import').icon}}"></span><span>{{vmmain.page('dataservice-import').title}}</span></a>
+            <p>
+                <span translate="dataservice-summary.createSourceMsg" />
+                <a href ng-click="vmmain.selectPage('svcsource-new')">
+                    <span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span>
+                    <span>{{vmmain.page('svcsource-new').title}}</span>
+                </a>
+                <br/>
+                <span translate="dataservice-summary.importDataServiceMsg" />
+                <a href ng-click="vmmain.selectPage('dataservice-import')">
+                    <span class="fa fa-fw {{vmmain.page('dataservice-import').icon}}"></span>
+                    <span>{{vmmain.page('dataservice-import').title}}</span>
+                </a>
             </p>
         </div>
     </div>
@@ -19,11 +26,18 @@
         <div class="row">
             <h2 ng-bind-html=":: 'dataservice-summary.welcomeMsg' | translate"></h2>
             <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
-            <p translate="dataservice-summary.createDataServiceMsg">
-               <a href ng-click="vmmain.selectPage('dataservice-new')"><span class="fa fa-fw {{vmmain.page('dataservice-new').icon}}"></span><span>{{vmmain.page('dataservice-new').title}}</span></a>
+            <p>
+                <span translate="dataservice-summary.createDataServiceMsg" />
+                <a href ng-click="vmmain.selectPage('dataservice-new')">
+                    <span class="fa fa-fw {{vmmain.page('dataservice-new').icon}}"></span>
+                    <span>{{vmmain.page('dataservice-new').title}}</span>
+                </a>
                <br>
-               {{:: 'dataservice-summary.importDataServiceMsg' | translate}}
-               <a href ng-click="vmmain.selectPage('dataservice-import')"><span class="fa fa-fw {{vmmain.page('dataservice-import').icon}}"></span><span>{{vmmain.page('dataservice-import').title}}</span></a>
+               <span translate="dataservice-summary.importDataServiceMsg" />
+               <a href ng-click="vmmain.selectPage('dataservice-import')">
+                   <span class="fa fa-fw {{vmmain.page('dataservice-import').icon}}"></span>
+                   <span>{{vmmain.page('dataservice-import').title}}</span>
+               </a>
             </p>
         </div>
     </div>
