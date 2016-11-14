@@ -175,7 +175,7 @@
             try {
                 // If a different connection was chosen, the original VdbModel must be deleted
                 if(connectionName !== vm.originalConnectionName) {
-                    RepoRestService.deleteVdbModel( vm.svcSourceName, vm.startingConnectionName).then(
+                    RepoRestService.deleteVdbModel( vm.svcSourceName, vm.originalConnectionName).then(
                             function (theModelSource) {
                                 createVdbModel( vm.svcSourceName, connectionName, translatorName, jndiName );
                             },
@@ -231,12 +231,24 @@
                     function ( result ) {
                         vm.deploymentSuccess = (result.Information.deploymentSuccess === "true");
                         if(vm.deploymentSuccess === true) {
-                            SvcSourceSelectionService.setDeploying(false, vdbName, true, null);
+                            var successCallback = function() {
+                                SvcSourceSelectionService.setDeploying(false, vdbName, true, null);
+                                // Refresh and direct to summary page
+                                SvcSourceSelectionService.refresh('datasource-summary');
+                            };
+                            var failCallback = function(failMessage) {
+                                SvcSourceSelectionService.setDeploying(false, vdbName, false, failMessage);
+                                // Refresh and direct to summary page
+                                SvcSourceSelectionService.refresh('datasource-summary');
+                            };
+                            //
+                            // Monitors the source vdb to determine when its active
+                            //
+                            RepoRestService.pollForActiveVdb(vdbName, successCallback, failCallback);
                         } else {
                             SvcSourceSelectionService.setDeploying(false, vdbName, false, result.Information.ErrorMessage1);
                         }
-                        SvcSourceSelectionService.refresh('datasource-summary');
-                   },
+                    },
                     function (response) {
                         SvcSourceSelectionService.setDeploying(false, vdbName, false, RepoRestService.responseMessage(response));
                         SvcSourceSelectionService.setLoading(false);
