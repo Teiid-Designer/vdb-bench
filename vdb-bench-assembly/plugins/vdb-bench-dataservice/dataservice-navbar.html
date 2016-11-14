@@ -4,15 +4,15 @@
 <div id="dsb-vertical-nav">
     <div id="dsb-nav-item-dataservices" class="dsb-nav-item" ng-click="vmmain.selectNavItem('dataservice-summary')" body-click="vmmain.selectNavItem(null);">
         <span class="fa fa-fw {{vmmain.page('dataservice-summary').icon}}"></span>
-        <div>{{:: 'shared.DataServices' | translate}}</div>
+        <div translate="shared.DataServices"></div>
     </div>
     <div id="ds-nav-item-sources" class="dsb-nav-item" ng-click="vmmain.selectNavItem('datasource-summary')" body-click="vmmain.selectNavItem(null);">
         <span class="fa fa-fw {{vmmain.page('datasource-summary').icon}}"></span>
-        <div>{{:: 'shared.Sources' | translate}}</div>
+        <div translate="shared.Sources"></div>
     </div>
     <div id="dsb-nav-item-dashboard" class="dsb-nav-item" ng-click="vmmain.selectPage('dataservice-home')" body-click="vmmain.selectNavItem(null);">
         <span class="fa fa-fw {{vmmain.page('dataservice-home').icon}}"></span>
-        <div>{{:: 'shared.Dashboard' | translate}}</div>
+        <div translate="shared.Dashboard"></div>
     </div>
     <div class="dsb-nav-item-filler">
     </div>
@@ -20,9 +20,9 @@
     <!-- detail menus -->
     <div id="dsb-vertical-nav-details" ng-switch="vmmain.selectedNavItem" ng-show="vmmain.navItemSelected()">
         <div id="dsb-nav-detail-dataservices" class="dsb-nav-detail-item" ng-switch-when="dataservice-summary">
-            <h3>{{:: 'shared.DataServices' | translate}}</h3>
-            <p class="description">{{:: 'dataservice-navbar.dataServiceActionsMsg' | translate}}</p>
-            <h4 class="heading">{{:: 'dataservice-navbar.DataServiceActions' | translate}}</h4>
+            <h3 translate="shared.DataServices"></h3>
+            <p class="description" translate="dataservice-navbar.dataServiceActionsMsg"></p>
+            <h4 class="heading" translate="dataservice-navbar.DataServiceActions"></h4>
             <div ng-repeat="page in vmmain.pages(['dataservice-summary', 'dataservice-new', 'dataservice-import'])">
                 <div class="action">
                     <a ng-click="vmmain.selectPage(page.id)"><span class="fa fa-fw {{page.icon}}"></span><span>{{page.title}}</span></a>
@@ -30,9 +30,9 @@
             </div>
         </div>
         <div id="dsb-nav-detail-mappings" class="dsb-nav-detail-item" ng-switch-when="datasource-summary">
-            <h3>{{:: 'shared.Sources' | translate}}</h3>
-            <p class="description">{{:: 'dataservice-navbar.sourceActionsMsg' | translate}}</p>
-            <h4 class="heading">{{:: 'dataservice-navbar.SourceActions' | translate}}</h4>
+            <h3 translate="shared.Sources"></h3>
+            <p class="description" translate="dataservice-navbar.sourceActionsMsg"></p>
+            <h4 class="heading" translate="dataservice-navbar.SourceActions"></h4>
             <div ng-repeat="page in vmmain.pages(['datasource-summary', 'svcsource-new', 'svcsource-import'])">
                 <div class="action">
                     <a ng-click="vmmain.selectPage(page.id)"><span class="fa fa-fw {{page.icon}}"></span><span>{{page.title}}</span></a>
