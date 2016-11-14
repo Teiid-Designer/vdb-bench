@@ -517,7 +517,7 @@
             }
 
             if (vm.linkGatherer)
-                vm.linkGatherer.cancel();
+                $interval.cancel(vm.linkGatherer);
 
             vm.searchMsg = null;
             vm.searchInProgress = true;
