@@ -10,39 +10,39 @@
         .module(pluginName)
         .controller('DSTestController', DSTestController);
 
-    DSTestController.$inject = ['$scope', 'CONFIG', 'SYNTAX', 'RepoSelectionService', 'DSSelectionService', 'RepoRestService', 'HelpService', '$interval'];
+    DSTestController.$inject = ['$scope', '$translate', 'CONFIG', 'SYNTAX', 'RepoSelectionService', 'DSSelectionService', 'RepoRestService', 'HelpService', '$interval'];
 
-    function DSTestController($scope, CONFIG, SYNTAX, RepoSelectionService, DSSelectionService, RepoRestService, HelpService, $interval) {
+    function DSTestController($scope, $translate, CONFIG, SYNTAX, RepoSelectionService, DSSelectionService, RepoRestService, HelpService, $interval) {
         var vm = this;
 
-        var EQUALS = 'equals';
-        var NOT_EQUALS = 'not equals';
-        var GREATER_THAN = 'greater than';
-        var GREATER_THAN_EQ_TO = 'greater than or equal to';
-        var LESS_THAN = 'less than';
-        var LESS_THAN_EQ_TO = 'less than or equal to';
-        var IN = 'in (separated by ;)';
-        var EQUALS_CINS = 'equals (case insensitive)';
-        var NOT_EQUALS_CINS = 'not equals (case insensitive)';
-        var STARTS_WITH = 'starts with';
-        var NO_STARTS_WITH = 'does not start with';
-        var ENDS_WITH = 'ends with';
-        var NO_ENDS_WITH = 'does not end with';
-        var CONTAINS = 'contains';
-        var LENGTH_EQ = 'length equals';
-        var BEFORE_DATE = 'before date';
-        var AFTER_DATE = 'after date';
-        var BEFORE_EQ = 'before or equals';
-        var AFTER_EQ = 'after or equals';
+        var EQUALS = $translate.instant('dsTestController.condition.equals');
+        var NOT_EQUALS = $translate.instant('dsTestController.condition.notEquals');
+        var GREATER_THAN = $translate.instant('dsTestController.condition.greaterThan');
+        var GREATER_THAN_EQ_TO = $translate.instant('dsTestController.condition.greaterThanEqTo');
+        var LESS_THAN = $translate.instant('dsTestController.condition.lessThan');
+        var LESS_THAN_EQ_TO = $translate.instant('dsTestController.condition.lessThanEqTo');
+        var IN = $translate.instant('dsTestController.condition.in');
+        var EQUALS_CINS = $translate.instant('dsTestController.condition.equalsCaseInsensitive');
+        var NOT_EQUALS_CINS = $translate.instant('dsTestController.condition.notEqualsCaseInsensitive');
+        var STARTS_WITH = $translate.instant('dsTestController.condition.startsWith');
+        var NO_STARTS_WITH = $translate.instant('dsTestController.condition.notStartsWith');
+        var ENDS_WITH = $translate.instant('dsTestController.condition.endsWith');
+        var NO_ENDS_WITH = $translate.instant('dsTestController.condition.notEndsWith');
+        var CONTAINS = $translate.instant('dsTestController.condition.contains');
+        var LENGTH_EQ = $translate.instant('dsTestController.condition.lengthEq');
+        var BEFORE_DATE = $translate.instant('dsTestController.condition.beforeDate');
+        var AFTER_DATE = $translate.instant('dsTestController.condition.afterDate');
+        var BEFORE_EQ = $translate.instant('dsTestController.condition.beforeEq');
+        var AFTER_EQ = $translate.instant('dsTestController.condition.afterEq');
 
-        var NO_LIMIT = 'no limit';
-        var COUNT_ONLY = 'count only';
-        var TOP_1 = 'top 1';
-        var TOP_10 = 'top 10';
-        var TOP_50 = 'top 50';
-        var TOP_100 = 'top 100';
-        var TOP_1000 = 'top 1000';
-        var TOP_10000 = 'top 10000';
+        var NO_LIMIT = $translate.instant('dsTestController.rowLimit.none');
+        var COUNT_ONLY = $translate.instant('dsTestController.rowLimit.countOnly');
+        var TOP_1 = $translate.instant('dsTestController.rowLimit.top1');
+        var TOP_10 = $translate.instant('dsTestController.rowLimit.top10');
+        var TOP_50 = $translate.instant('dsTestController.rowLimit.top50');
+        var TOP_100 = $translate.instant('dsTestController.rowLimit.top100');
+        var TOP_1000 = $translate.instant('dsTestController.rowLimit.top1000');
+        var TOP_10000 = $translate.instant('dsTestController.rowLimit.top10000');
 
         var STANDARD_TAB_ID = "Standard";
         var ADVANCED_TAB_ID = "Advanced";
@@ -95,7 +95,7 @@
                 { column:'', condition: '', value: ''}
             ],
             /* The limit of the query results */
-            limit: 'no limit',
+            limit: NO_LIMIT,
             /* Set to true if where there are where clauses */
             hasWhere: false
         };
@@ -180,7 +180,7 @@
             if (vm.odata.limits[1] === vm.odata.limit)
                 return SYNTAX.FORWARD_SLASH + '$count' + SYNTAX.QMARK; // count
 
-            return vm.odata.limit.replace('top ', SYNTAX.QMARK + '$top=') + SYNTAX.AMPERSAND;
+            return vm.odata.limit.replace($translate.instant('dsTestController.rowLimit.topPrefix'), SYNTAX.QMARK + '$top=') + SYNTAX.AMPERSAND;
         }
 
         /**
@@ -534,12 +534,12 @@
                     vm.searchInProgress = false;
 
                     if (response.status !== 200) {
-                        vm.searchMsg = "Error: failed to get any results: " + response.error;
+                        vm.searchMsg = $translate.instant('dsTestController.searchErrorMsg', {responseError: response.error});
                         return;
                     }
 
                     if (_.isEmpty(response.data)) {
-                        vm.searchMsg = "No data was returned from the query";
+                        vm.searchMsg = $translate.instant('dsTestController.noResultsMsg');
                         return;
                     }
 
@@ -547,7 +547,7 @@
                         //
                         // Handles the count function by returning a 
                         //
-                        vm.searchMsg = "The total number of results returned by the query is " + response.data.count;
+                        vm.searchMsg = $translate.instant('dsTestController.resultCountMsg', {count: response.data.count});
                         return;
                     }
 
@@ -593,13 +593,14 @@
             //
             function populate(response) {
                 if (response.status !== 200) {
-                    row[columnName] = "Err: Failed!";
-                    console.warn("Error: Failed to get value at link " + value + ": " + response.error);
+                    row[columnName] = $translate.instant('dsTestController.searchErrorColumnName');
+                    console.warn($translate.instant('dsTestController.searchErrorColumnName', 
+                    		                        {link: value, responseError: response.error}));
                     return;
                 }
 
                 if (_.isEmpty(response.data)) {
-                    row[columnName] = "Err: No Data!";
+                    row[columnName] = $translate.instant('dsTestController.noResultsColumnName');
                     return;
                 }
 
@@ -671,18 +672,18 @@
          */
         vm.endPointUrl = function () {
             if (vm.dsDeploymentInProgress === true)
-                return 'Not Available';
+                return $translate.instant('shared.NotAvailable');
 
             if (vm.dsDeploymentSuccess === false)
-                return 'Not Available';
+                return $translate.instant('shared.NotAvailable');
 
             var baseUrl = vm.rootUrl();
             if (baseUrl === null)
-                return "Not Available";
+                return $translate.instant('shared.NotAvailable');
 
             var service = vm.odata.entity;
             if (_.isEmpty(service))
-                return "Not Available";
+                return $translate.instant('shared.NotAvailable');
 
             var odataUrl = baseUrl + service.name;
 
@@ -764,7 +765,7 @@
 
             var index = _.indexOf(vm.odata.queryableTypes, column.type);
             if (index < 0)
-                where.error = "The chosen column has a type (" + column.type + ") which cannot be used in a where condition";
+                where.error = $translate.instant('dsTestController.whereErrorMsg', {columnType: column.type});
             else
                 where.error = null;
         };
