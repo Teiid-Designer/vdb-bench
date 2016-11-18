@@ -24,10 +24,12 @@
         "ImportWhat" : "Import {{what}}",
         "loadingProgressMsg" : "Loading...",
         "Name" : "Name",
+        "NameLabel" : "Name:",
         "New" : "New",
         "NewWhat" : "New {{what}}",
         "Next" : "Next",
         "NotAvailable" : "Not Available",
+        "PasswordLabel" : "Password:",
         "Save" : "Save",
         "Source" : "Source",
         "Sources" : "Sources",
@@ -35,6 +37,8 @@
         "Test" : "Test",
         "TestWhat" : "Test {{what}}",
         "Translator" : "Translator",
+        "UserNameLabel" : "User Name:",
+        "userNamePlaceholder" : "Enter the user name",
         "WhatSummary" : "{{what}} Summary"
     },
 
@@ -205,11 +209,59 @@
         "actionTitleImport" : "Import a Source",
         "actionTitleNew" : "Create a Source",
         "actionTitleRefresh" : "Refresh the Table",
-        "gettingDdlMsg" : "Fetching DDL ...",
+        "gettingDdlMsg" : "Fetching DDL...",
         "getDdlFailedMsg" : "Failed to get the DDL.",
         "removeSourceFailedMsg" : "Failed to remove the ServiceSource.",
         "getModelSourceFailedMsg" : "Failed to get model source:",
-        "getModelSourceConnectionFailedMsg" : "Failed to get connection:"
+        "getModhelSourceConnectionFailedMsg" : "Failed to get connection:"
+    },
+    
+    "gitCredentialsControl" : {
+        "AuthorEmailLabel" : "Author Email Address:",
+        "authorEmailPlaceholder" : "Enter the email address of the author",
+        "AuthorNameLabel" : "Author Name:",
+        "authorNamePlaceholder" : "Enter the name of the author",
+        "credentialsSectionTitle" : "Authentication Settings",
+        "fileApisNotSupportedMsg" : "The File APIs are not fully supported in this browser. Not able to read the file {{fileName}}",
+        "fileGenericeReadErrorMsg" : "The file encountered a generic read error",
+        "fileLockedMsg" : "The file is in a locked state",
+        "fileNotFoundMsg" : "The file cannot be found",
+        "fileNotReadableMsg" : "The file is not readable",
+        "fileReadAbortedMsg" : "The file read operation was aborted",
+        "hostsFileLabel" : "Known Hosts File:",
+        "PassphraseLabel" : "Passphrase:",
+        "passphrasePlaceholder" : "Enter the passphrase",
+        "passwordPlaceholder" : "Enter the password",
+        "passwordTabTitle" : "Password Authentication",
+        "PrivateKeyFileLabel" : "Private Key File:",
+        "privateKeyTabTitle" : "Private Key Authentication",
+        "RelativeFilePathLabel" : "Relative File Path:",
+        "relativeFilePathPlaceholder" : "Enter the relative file path or just the name of the destination filename",
+        "RepositoryBranchLabel" : "Repository Branch:",
+        "repositoryBranchPlaceholder" : "Enter git repository branch, eg. master",
+        "repositoryNamePlaceholder" : "Enter a name for this repository",
+        "RepositoryUrlLabel" : "Repository URL:",
+        "repositoryUrlPlaceholder" : "Enter git repository URL",
+        "SavedRepositories" : "Saved Repositories",
+        "help" : {
+            "authorEmail" : "Specifies the email address of the author to be used when commiting to the repository",
+            "authorName" : "Specifies the name of the author to be used when commiting to the repository",
+            "httpPassword" : "Specifies the password for HTTP authentication",
+            "hostsFileKeyAuthentication" : "Specifies the file containing the ssh known hosts for key-based authentication",
+            "hostsFilePasswordAuthentication" : "Specifies the file containing the ssh known hosts for password-based authentication",
+            "passphrase" : "Specifies the ssh passphrase for key-based authentication",
+            "privateKeyFile" : "Specifies the file containing the ssh private key for key-based authentication",
+            "relativePath" : "The relative (to the repository root directory) path of the file. It is enough to specify only the name of the file.",
+            "repositoryBranch" : "The branch that should be checked out of the repository. If not specified then the  master branch is assumed.",
+            "repositoryName" : "A name to identify this git repository",
+            "repositoryUrl" : "The URL location of the git repository to use as the destination storage",
+            "sshPassword" : "Specifies the ssh password for password-based authentication",
+            "userName" : "Specifies the user name for HTTP authentication"
+        }
+    },
+    
+    "git-preferences-config" : {
+        "tabTitle" : "Git Repository Configurations"
     },
 
     "svcsource-clone" : {
@@ -267,6 +319,22 @@
         "sourceDeployFailedMsg" : "Failed to deploy the source.",
         "sourceModelCreateFailedMsg" : "Failed to create the source model.",
         "sourceModelConnectionCreateFailedMsg" : "Failed to create the source model connection."
+    },
+    
+    "teiid-preference-config" : {
+        "tabTitle" : "Teiid Settings"
+    },
+    
+    "teiid-preferences" : {
+        "Administration" : "Administration",
+        "adminPasswordPlaceholder" : "Enter the Teiid administration password",
+        "adminUserNamePlaceholder" : "Enter the Teiid administration user name",
+        "jdbcPasswordPlaceholder" : "Enter the Teiid JDBC password",
+        "jdbcSecureLabel" : "Is Secure:",
+        "jdbcUserNamePlaceholder" : "Enter the Teiid JDBC user name",
+        "StatusErrorLabel" : "Status Error:",
+        "TestAdminConnection" : "Test Admin Connection",
+        "TestJdbcConnection" : "Test JDBC Connection"
     }
 
 }

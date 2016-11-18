@@ -9,13 +9,15 @@
         .module(pluginName)
         .run(run);
 
-    run.$inject = ['preferencesRegistry', 'CONFIG', 'SYNTAX'];
+    run.$inject = ['$rootScope', '$translate', 'preferencesRegistry', 'CONFIG', 'SYNTAX'];
 
-    function run(preferencesRegistry, config, syntax) {
-        preferencesRegistry.addTab("Git Repository Configurations",
-                                    config.pluginDir + syntax.FORWARD_SLASH +
-                                    pluginDirName + syntax.FORWARD_SLASH +
-                                    templateName);
+    function run($rootScope, $translate, preferencesRegistry, config, syntax) {
+        $rootScope.$on('$translateChangeSuccess', function () {
+            preferencesRegistry.addTab($translate.instant('git-preferences-config.tabTitle'),
+                                       config.pluginDir + syntax.FORWARD_SLASH +
+                                       pluginDirName + syntax.FORWARD_SLASH +
+                                       templateName);
+        });
     }
 
     hawtioPluginLoader.addModule(pluginName);

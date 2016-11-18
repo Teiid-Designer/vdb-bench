@@ -4,7 +4,7 @@
         <uib-progressbar class="progress-striped active" value="dynamic" type="info"></uib-progressbar>
     </div>
 
-    <p ng-show="! vm.loading && vm.error">Status Error:
+    <p ng-show="! vm.loading && vm.error" translate="teiid-preferences.StatusErrorLabel">
         <br/>'{{vm.error}}'
     </p>
 
@@ -13,29 +13,27 @@
 
             <div id="teiid-pref-administration" class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">
-                        Administration
-                    </h3>
+                    <h3 class="panel-title" translate="teiid-preferences.Administration" />
                 </div>
 
                 <div class="panel-body">
                     <div class="control-group row">
-                        <label class="control-label col-sm-2" for="adminUser">User Name</label>
+                        <label class="control-label col-sm-2" for="adminUser" translate="shared.UserNameLabel"></label>
                         <div class="controls col-sm-9">
-                            <input type="text" id="teiid-pref-adminUser" class="form-control" ng-model="vm.teiid.adminUser" required>
+                            <input type="text" id="teiid-pref-adminUser" class="form-control" ng-model="vm.teiid.adminUser" placeholder="{{:: 'teiid-preferences.adminUserNamePlaceholder' | translate}}" required>
                         </div>
                     </div>
 
                     <div class="control-group row">
-                        <label class="control-label col-sm-2" for="adminPasswd">Password</label>
+                        <label class="control-label col-sm-2" for="adminPasswd" translate="shared.PasswordLabel"></label>
                         <div class="controls col-sm-9">
-                            <input type="password" id="teiid-pref-adminPasswd" class="form-control" ng-model="vm.teiid.adminPasswd" required>
+                            <input type="password" id="teiid-pref-adminPasswd" class="form-control" ng-model="vm.teiid.adminPasswd" placeholder="{{:: 'teiid-preferences.adminPasswordPlaceholder' | translate}}" required>
                         </div>
                     </div>
 
                     <div class="teiid-pref-test-button row">
                         <div class=col-sm-2></div>
-                        <button class="btn btn-default col-sm-2" ng-click="vm.ping('admin')">Test Admin Connection</button>
+                        <button class="btn btn-default col-sm-2" ng-click="vm.ping('admin')" translate="teiid-preferences.TestAdminConnection"></button>
                         <span ng-class="vm.pingAdminResultStyleClass" class="teiid-pref-pingResult col-sm-7">{{vm.adminPingResult}}</span>
                     </div>
                 </div>
@@ -50,21 +48,21 @@
 
                 <div class="panel-body">
                     <div class="control-group row">
-                        <label class="control-label col-sm-2" for="jdbcUser">User Name</label>
+                        <label class="control-label col-sm-2" for="jdbcUser" translate="shared.UserNameLabel"></label>
                         <div class="controls col-sm-9">
-                            <input type="text" id="teiid-pref-jdbcUser" class="form-control" ng-model="vm.teiid.jdbcUser" required>
+                            <input type="text" id="teiid-pref-jdbcUser" class="form-control" ng-model="vm.teiid.jdbcUser" placeholder="{{:: 'teiid-preferences.jdbcUserNamePlaceholder' | translate}}" required>
                         </div>
                     </div>
 
                     <div class="control-group row">
-                        <label class="control-label col-sm-2" for="jdbcPasswd">Password</label>
+                        <label class="control-label col-sm-2" for="jdbcPasswd" translate="shared.PasswordLabel"></label>
                         <div class="controls col-sm-9">
-                            <input type="password" id="teiid-pref-jdbcPasswd" class="form-control" ng-model="vm.teiid.jdbcPasswd" required>
+                            <input type="password" id="teiid-pref-jdbcPasswd" class="form-control" ng-model="vm.teiid.jdbcPasswd" placeholder="{{:: 'teiid-preferences.jdbcPasswordPlaceholder' | translate}}" required>
                         </div>
                     </div>
 
                     <div class="control-group row">
-                        <label class="control-label col-sm-2" for="jdbcSecure">Is Secure?</label>
+                        <label class="control-label col-sm-2" for="jdbcSecure" translate="teiid-preferences.jdbcSecureLabel"></label>
                         <div class="controls col-sm-9">
                             <input type="checkbox" id="teiid-pref-jdbcSecure" class="form-control" ng-model="vm.teiid.jdbcSecure">
                         </div>
@@ -72,7 +70,7 @@
 
                     <div class="teiid-pref-test-button row">
                         <div class=col-sm-2></div>
-                        <button class="btn btn-default col-sm-2" ng-click="vm.ping('jdbc')">Test Jdbc Connection</button>
+                        <button class="btn btn-default col-sm-2" ng-click="vm.ping('jdbc')" translate="teiid-preferences.TestJdbcConnection"></button>
                         <span ng-class="vm.pingJdbcResultStyleClass" class="teiid-pref-pingResult col-sm-7">{{vm.jdbcPingResult}}</span>
                     </div>
                 </div>
