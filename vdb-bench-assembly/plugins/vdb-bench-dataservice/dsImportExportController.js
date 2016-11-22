@@ -11,9 +11,9 @@
         .module(pluginName)
         .controller('DSImportExportController', DSImportExportController);
 
-    DSImportExportController.$inject = ['CONFIG', 'SYNTAX', 'RepoRestService', '$scope'];
+    DSImportExportController.$inject = ['$translate', 'CONFIG', 'SYNTAX', 'RepoRestService', '$scope'];
 
-    function DSImportExportController(config, syntax, RepoRestService, $scope) {
+    function DSImportExportController($translate, config, syntax, RepoRestService, $scope) {
         var vm = this;
 
         vm.storageTypes = {};
@@ -27,9 +27,9 @@
 
         $scope.$on("wizard:stepChanged", function (e, parameters) {
             if (parameters.step.stepId.endsWith('-final')) {
-                vm.nextButtonTitle = "Finish";
+                vm.nextButtonTitle = $translate.instant('shared.Finish');
             } else {
-                vm.nextButtonTitle = "Next";
+                vm.nextButtonTitle = $translate.instant('shared.Next');
             }
         });
 

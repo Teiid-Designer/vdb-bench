@@ -8,9 +8,9 @@
         .module(pluginName)
         .controller('DSSummaryController', DSSummaryController);
 
-    DSSummaryController.$inject = ['$scope', '$rootScope', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSSelectionService', 'SvcSourceSelectionService', 'DownloadService', 'pfViewUtils'];
+    DSSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSSelectionService', 'SvcSourceSelectionService', 'DownloadService', 'pfViewUtils'];
 
-    function DSSummaryController($scope, $rootScope, RepoRestService, REST_URI, SYNTAX, DSSelectionService, SvcSourceSelectionService, DownloadService, pfViewUtils) {
+    function DSSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, DSSelectionService, SvcSourceSelectionService, DownloadService, pfViewUtils) {
         var vm = this;
 
         vm.dsLoading = DSSelectionService.isLoading();
@@ -123,14 +123,14 @@
           fields: [
             {
               id: 'name',
-              title:  'Name',
-              placeholder: 'Filter by Name...',
+              title: $translate.instant('shared.Name'),
+              placeholder: $translate.instant('dsSummaryController.nameFilterPlaceholder'),
               filterType: 'text'
             },
             {
               id: 'description',
-              title:  'Description',
-              placeholder: 'Filter by Description...',
+              title: $translate.instant('shared.Description'),
+              placeholder: $translate.instant('dsSummaryController.descriptionFilterPlaceholder'),
               filterType: 'text'
             }
           ],
@@ -179,12 +179,12 @@
           fields: [
             {
               id: 'name',
-              title:  'Name',
+              title: $translate.instant('shared.Name'),
               sortType: 'alpha'
             },
             {
               id: 'description',
-              title:  'Description',
+              title: $translate.instant('shared.Description'),
               sortType: 'alpha'
             }
           ],
@@ -203,7 +203,8 @@
                         DSSelectionService.refresh();
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to remove the dataservice. \n" + RepoRestService.responseMessage(response));
+                        throw RepoRestService.newRestException($translate.instant('dsSummaryController.deleteFailedMsg', 
+                                                                                  {response: RepoRestService.responseMessage(response)}));
                     });
             } catch (error) {} finally {
             }
@@ -255,7 +256,8 @@
                    },
                     function (response) {
                         DSSelectionService.setDeploying(false, selDSName, false, RepoRestService.responseMessage(response));
-                        throw RepoRestService.newRestException("Failed to deploy the dataservice. \n" + RepoRestService.responseMessage(response));
+                        throw RepoRestService.newRestException($translate.instant('dsSummaryController.deployFailedMsg', 
+                                                                                  {response: RepoRestService.responseMessage(response)}));
                     });
             } catch (error) {} finally {
                 vm.deploymentSuccess = false;
@@ -302,7 +304,8 @@
                         initTableSelections( dataServiceName );
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to find source VDBs. \n" + RepoRestService.responseMessage(response));
+                        throw RepoRestService.newRestException($translate.instant('dsSummaryController.findSourceVdbsFailedMsg', 
+                                                                                  {response: RepoRestService.responseMessage(response)}));
                     });
             } catch (error) {
             } finally {
@@ -324,7 +327,8 @@
                         SvcSourceSelectionService.refresh('dataservice-edit');
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to find view tables. \n" + RepoRestService.responseMessage(response));
+                        throw RepoRestService.newRestException($translate.instant('dsSummaryController.findViewTablesFailedMsg', 
+                                                                                  {response: RepoRestService.responseMessage(response)}));
                     });
             } catch (error) {
             } finally {
@@ -420,12 +424,12 @@
          */
         var setActionsDisabled = function (enabled) {
             vm.actionsConfig.primaryActions.forEach(function (theAction) {
-                if(theAction.name!=='New' && theAction.name!='Import') {
+                if(theAction.name!==$translate.instant('shared.New') && theAction.name!=$translate.instant('shared.Import')) {
                     theAction.isDisabled = enabled;
                 }
             });
             vm.actionsConfig.moreActions.forEach(function (theAction) {
-                if(theAction.name!=='New' && theAction.name!='Import') {
+                if(theAction.name!==$translate.instant('shared.New') && theAction.name!=$translate.instant('shared.Import')) {
                     theAction.isDisabled = enabled;
                 }
             });
@@ -437,40 +441,40 @@
        vm.actionsConfig = {
           primaryActions: [
             {
-              name: 'New',
-              title: 'Create a Dataservice',
+              name: $translate.instant('shared.New'),
+              title: $translate.instant('shared.NewWhat', {what: $translate.instant('shared.DataService')}),
               actionFn: newDataServiceClicked,
               isDisabled: false
             },
             {
-              name: 'Edit',
-              title: 'Edit the Dataservice',
+              name: $translate.instant('shared.Edit'),
+              title: $translate.instant('shared.EditWhat', {what: $translate.instant('shared.DataService')}),
               actionFn: editDataServiceClicked,
               isDisabled: true
             },
             {
-              name: 'Test',
-              title: 'Test the Dataservice',
+              name: $translate.instant('shared.Test'),
+              title: $translate.instant('shared.TestWhat', {what: $translate.instant('shared.DataService')}),
               actionFn: deployDataServiceClicked,
               isDisabled: true
             },
             {
-              name: 'Delete',
-              title: 'Delete the Dataservice',
+              name: $translate.instant('shared.Delete'),
+              title: $translate.instant('shared.DeleteWhat', {what: $translate.instant('shared.DataService')}),
               actionFn: deleteDataServiceClicked,
               isDisabled: true
             }
           ],
           moreActions: [
             {
-              name: 'Export',
-              title: 'Export the Dataservice',
+              name: $translate.instant('shared.Export'),
+              title: $translate.instant('shared.ExportWhat', {what: $translate.instant('shared.DataService')}),
               actionFn: exportDataServiceClicked,
               isDisabled: true
             },
             {
-              name: 'Copy',
-              title: 'Copy the Dataservice',
+              name: $translate.instant('shared.Copy'),
+              title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.DataService')}),
               actionFn: cloneDataServiceClicked,
               isDisabled: true
             },
@@ -478,8 +482,8 @@
               isSeparator: true
             },
             {
-              name: 'Import',
-              title: 'Import a Dataservice',
+              name: $translate.instant('shared.Import'),
+              title: $translate.instant('shared.ImportWhat', {what: $translate.instant('shared.DataService')}),
               actionFn: importDataServiceClicked,
               isDisabled: false
             }
@@ -489,28 +493,28 @@
 
         vm.menuActions = [
             {
-                name: 'Edit',
-                title: 'Edit the Dataservice',
+                name: $translate.instant('shared.Edit'),
+                title: $translate.instant('shared.EditWhat', {what: $translate.instant('shared.DataService')}),
                 actionFn: editDataServiceMenuAction
             },
             {
-                name: 'Test',
-                title: 'Test the Dataservice',
+                name: $translate.instant('shared.Test'),
+                title: $translate.instant('shared.TestWhat', {what: $translate.instant('shared.DataService')}),
                 actionFn: deployDataServiceMenuAction
             },
             {
-                name: 'Delete',
-                title: 'Delete the Dataservice',
+                name: $translate.instant('shared.Delete'),
+                title: $translate.instant('shared.DeleteWhat', {what: $translate.instant('shared.DataService')}),
                 actionFn: deleteDataServiceMenuAction
             },
             {
-                name: 'Export',
-                title: 'Export the Dataservice',
+                name: $translate.instant('shared.Export'),
+                title: $translate.instant('shared.ExportWhat', {what: $translate.instant('shared.DataService')}),
                 actionFn: exportDataServiceMenuAction
             },
             {
-                name: 'Copy',
-                title: 'Copy the Dataservice',
+                name: $translate.instant('shared.Copy'),
+                title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.DataService')}),
                 actionFn: cloneDataServiceMenuAction
             }
           ];

@@ -51,24 +51,40 @@
          */
         $rootScope.$on('$translateChangeSuccess', function () {
             pages[service.DS_HOME_PAGE].title = $translate.instant('dsPageService.homeTitle');
-            pages[service.DATASERVICE_SUMMARY_PAGE].title = $translate.instant('shared.ThisSummary', $translate.instant('shared.DataService'));
-            pages[service.NEW_DATASERVICE_PAGE].title = $translate.instant('shared.NewThis', $translate.instant('shared.DataService'));
-            pages[service.IMPORT_DATASERVICE_PAGE].title = $translate.instant('shared.ImportThis', $translate.instant('shared.DataService'));
-            pages[service.EXPORT_DATASERVICE_PAGE].title = $translate.instant('shared.ExportThis', $translate.instant('shared.DataService'));
-            pages[service.EDIT_DATASERVICE_PAGE].title = $translate.instant('shared.EditThis', $translate.instant('shared.DataService'));
-            pages[service.CLONE_DATASERVICE_PAGE].title = $translate.instant('shared.CopyThis', $translate.instant('shared.DataService'));
+            pages[service.DATASERVICE_SUMMARY_PAGE].title = $translate.instant('shared.WhatSummary', 
+                                                                               {what: $translate.instant('shared.DataService')});
+            pages[service.NEW_DATASERVICE_PAGE].title = $translate.instant('shared.NewWhat',
+                                                                           {what: $translate.instant('shared.DataService')});
+            pages[service.IMPORT_DATASERVICE_PAGE].title = $translate.instant('shared.ImportWhat',
+                                                                              {what: $translate.instant('shared.DataService')});
+            pages[service.EXPORT_DATASERVICE_PAGE].title = $translate.instant('shared.ExportWhat', 
+                                                                              {what: $translate.instant('shared.DataService')});
+            pages[service.EDIT_DATASERVICE_PAGE].title = $translate.instant('shared.EditWhat',
+                                                                            {what: $translate.instant('shared.DataService')});
+            pages[service.CLONE_DATASERVICE_PAGE].title = $translate.instant('shared.CopyWhat',
+                                                                             {what: $translate.instant('shared.DataService')});
             pages[service.TEST_DATASERVICE_PAGE].title = $translate.instant('dsPageService.testDataServiceTitle');
-            pages[service.CONNECTION_SUMMARY_PAGE].title = $translate.instant('shared.ThisSummary', $translate.instant('shared.Connection'));
-            pages[service.NEW_CONNECTION_PAGE].title = $translate.instant('shared.NewThis', $translate.instant('shared.Connection'));
-            pages[service.IMPORT_CONNECTION_PAGE].title = $translate.instant('shared.ImportThis', $translate.instant('shared.Connection'));
-            pages[service.EDIT_CONNECTION_PAGE].title = $translate.instant('shared.EditThis', $translate.instant('shared.Connection'));
-            pages[service.CLONE_CONNECTION_PAGE].title = $translate.instant('shared.CopyThis', $translate.instant('shared.Connection'));
-            pages[service.SERVICESOURCE_SUMMARY_PAGE].title = $translate.instant('shared.ThisSummary', $translate.instant('shared.Source'));
+            pages[service.CONNECTION_SUMMARY_PAGE].title = $translate.instant('shared.WhatSummary',
+                                                                              {what: $translate.instant('shared.Connection')});
+            pages[service.NEW_CONNECTION_PAGE].title = $translate.instant('shared.NewWhat',
+                                                                          {what: $translate.instant('shared.Connection')});
+            pages[service.IMPORT_CONNECTION_PAGE].title = $translate.instant('shared.ImportWhat',
+                                                                             {what: $translate.instant('shared.Connection')});
+            pages[service.EDIT_CONNECTION_PAGE].title = $translate.instant('shared.EditWhat',
+                                                                           {what: $translate.instant('shared.Connection')});
+            pages[service.CLONE_CONNECTION_PAGE].title = $translate.instant('shared.CopyWhat',
+                                                                            {what: $translate.instant('shared.Connection')});
+            pages[service.SERVICESOURCE_SUMMARY_PAGE].title = $translate.instant('shared.WhatSummary',
+                                                                                 {what: $translate.instant('shared.Source')});
             pages[service.SERVICESOURCE_NEW_PAGE].title = $translate.instant('dsPageService.configureSoureTitle');
-            pages[service.SERVICESOURCE_EDIT_PAGE].title = $translate.instant('shared.EditThis', $translate.instant('shared.Source'));
-            pages[service.SERVICESOURCE_CLONE_PAGE].title = $translate.instant('shared.CopyThis', $translate.instant('shared.Source'));
-            pages[service.SERVICESOURCE_IMPORT_PAGE].title = $translate.instant('shared.ImportThis', $translate.instant('shared.Source'));
-            pages[service.IMPORT_DRIVER_PAGE].title = $translate.instant('shared.ImportThis', $translate.instant('shared.Driver'));
+            pages[service.SERVICESOURCE_EDIT_PAGE].title = $translate.instant('shared.EditWhat',
+                                                                              {what: $translate.instant('shared.Source')});
+            pages[service.SERVICESOURCE_CLONE_PAGE].title = $translate.instant('shared.CopyWhat',
+                                                                               {what: $translate.instant('shared.Source')});
+            pages[service.SERVICESOURCE_IMPORT_PAGE].title = $translate.instant('shared.ImportWhat',
+                                                                                {what: $translate.instant('shared.Source')});
+            pages[service.IMPORT_DRIVER_PAGE].title = $translate.instant('shared.ImportWhat',
+                                                                         {what: $translate.instant('shared.Driver')});
         });
 
         pages[service.DS_HOME_PAGE] = {
@@ -82,7 +98,7 @@
         };
         pages[service.DATASERVICE_SUMMARY_PAGE] = {
             id: service.DATASERVICE_SUMMARY_PAGE,
-            title: $translate.instant('shared.ThisSummary', $translate.instant('shared.DataService')),
+            title: $translate.instant('shared.WhatSummary', {what: $translate.instant('shared.DataService')}),
             icon: 'fa-table',
             parent: null,
             template: config.pluginDir + syntax.FORWARD_SLASH +
@@ -91,7 +107,7 @@
         };
         pages[service.NEW_DATASERVICE_PAGE] = {
             id: service.NEW_DATASERVICE_PAGE,
-            title: $translate.instant('shared.NewThis', $translate.instant('shared.DataService')),
+            title: $translate.instant('shared.NewWhat', {what: $translate.instant('shared.DataService')}),
             icon: 'fa-plus',
             parent: service.DATASERVICE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
@@ -100,7 +116,7 @@
         };
         pages[service.IMPORT_DATASERVICE_PAGE] = {
             id: service.IMPORT_DATASERVICE_PAGE,
-            title: $translate.instant('shared.ImportThis', $translate.instant('shared.DataService')),
+            title: $translate.instant('shared.ImportWhat', {what: $translate.instant('shared.DataService')}),
             icon: 'pficon-import',
             parent: service.DATASERVICE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
@@ -109,7 +125,7 @@
         };
         pages[service.EXPORT_DATASERVICE_PAGE] = {
             id: service.EXPORT_DATASERVICE_PAGE,
-            title: $translate.instant('shared.ExportThis', $translate.instant('shared.DataService')),
+            title: $translate.instant('shared.ExportWhat', {what: $translate.instant('shared.DataService')}),
             icon: 'pficon-export',
             parent: service.DATASERVICE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
@@ -118,7 +134,7 @@
         };
         pages[service.EDIT_DATASERVICE_PAGE] = {
             id: service.EDIT_DATASERVICE_PAGE,
-            title: $translate.instant('shared.EditThis', $translate.instant('shared.DataService')),
+            title: $translate.instant('shared.EditWhat', {what: $translate.instant('shared.DataService')}),
             icon: 'pficon-edit',
             parent: service.DATASERVICE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
@@ -127,7 +143,7 @@
         };
         pages[service.CLONE_DATASERVICE_PAGE] = {
             id: service.CLONE_DATASERVICE_PAGE,
-            title: $translate.instant('shared.CopyThis', $translate.instant('shared.DataService')),
+            title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.DataService')}),
             icon: 'fa-copy',
             parent: service.DATASERVICE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
@@ -145,7 +161,7 @@
         };
         pages[service.CONNECTION_SUMMARY_PAGE] = {
             id: service.CONNECTION_SUMMARY_PAGE,
-            title: $translate.instant('shared.ThisSummary', $translate.instant('shared.Connection')),
+            title: $translate.instant('shared.WhatSummary', {what: $translate.instant('shared.Connection')}),
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
                             'connections' + syntax.FORWARD_SLASH +
@@ -153,7 +169,7 @@
         };
         pages[service.NEW_CONNECTION_PAGE] = {
             id: service.NEW_CONNECTION_PAGE,
-            title: $translate.instant('shared.NewThis', $translate.instant('shared.Connection')),
+            title: $translate.instant('shared.NewWhat', {what: $translate.instant('shared.Connection')}),
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
                             'connections' + syntax.FORWARD_SLASH +
@@ -161,7 +177,7 @@
         };
         pages[service.IMPORT_CONNECTION_PAGE] = {
             id: service.IMPORT_CONNECTION_PAGE,
-            title: $translate.instant('shared.ImportThis', $translate.instant('shared.Connection')),
+            title: $translate.instant('shared.ImportWhat', {what: $translate.instant('shared.Connection')}),
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
                             'connections' + syntax.FORWARD_SLASH +
@@ -169,7 +185,7 @@
         };
         pages[service.EDIT_CONNECTION_PAGE] = {
             id: service.EDIT_CONNECTION_PAGE,
-            title: $translate.instant('shared.EditThis', $translate.instant('shared.Connection')),
+            title: $translate.instant('shared.EditWhat', {what: $translate.instant('shared.Connection')}),
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
                             'connections' + syntax.FORWARD_SLASH +
@@ -177,7 +193,7 @@
         };
         pages[service.CLONE_CONNECTION_PAGE] = {
             id: service.CLONE_CONNECTION_PAGE,
-            title: $translate.instant('shared.CopyThis', $translate.instant('shared.Connection')),
+            title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.Connection')}),
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
                             'connections' + syntax.FORWARD_SLASH +
@@ -185,7 +201,7 @@
         };
         pages[service.SERVICESOURCE_SUMMARY_PAGE] = {
             id: service.SERVICESOURCE_SUMMARY_PAGE,
-            title: $translate.instant('shared.ThisSummary', $translate.instant('shared.Source')),
+            title: $translate.instant('shared.WhatSummary', {what: $translate.instant('shared.Source')}),
             icon: 'fa-database',
             parent: null,
             template: config.pluginDir + syntax.FORWARD_SLASH +
@@ -205,7 +221,7 @@
         };
         pages[service.SERVICESOURCE_EDIT_PAGE] = {
             id: service.SERVICESOURCE_EDIT_PAGE,
-            title: $translate.instant('shared.EditThis', $translate.instant('shared.Source')),
+            title: $translate.instant('shared.EditWhat', {what: $translate.instant('shared.Source')}),
             icon: 'pficon-edit',
             parent: service.SERVICESOURCE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
@@ -215,7 +231,7 @@
         };
         pages[service.SERVICESOURCE_CLONE_PAGE] = {
             id: service.SERVICESOURCE_CLONE_PAGE,
-            title: $translate.instant('shared.CopyThis', $translate.instant('shared.Source')),
+            title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.Source')}),
             icon: 'fa-copy',
             parent: service.SERVICESOURCE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
@@ -225,7 +241,7 @@
         };
         pages[service.SERVICESOURCE_IMPORT_PAGE] = {
             id: service.SERVICESOURCE_IMPORT_PAGE,
-            title: $translate.instant('shared.ImportThis', $translate.instant('shared.Source')),
+            title: $translate.instant('shared.ImportWhat', {what: $translate.instant('shared.Source')}),
             icon: 'pficon-import',
             parent: service.SERVICESOURCE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
@@ -235,7 +251,7 @@
         };
         pages[service.IMPORT_DRIVER_PAGE] = {
             id: service.IMPORT_DRIVER_PAGE,
-            title: $translate.instant('shared.ImportThis', $translate.instant('shared.Driver')),
+            title: $translate.instant('shared.ImportWhat', {what: $translate.instant('shared.Driver')}),
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
                             'connections' + syntax.FORWARD_SLASH +

@@ -8,10 +8,10 @@
         .module(pluginName)
         .controller('DSNewController', DSNewController);
 
-    DSNewController.$inject = ['$scope', '$rootScope', 'REST_URI', 'SYNTAX', 'RepoRestService', 'DSSelectionService', 
+    DSNewController.$inject = ['$scope', '$rootScope', '$translate', 'REST_URI', 'SYNTAX', 'RepoRestService', 'DSSelectionService', 
                                'SvcSourceSelectionService', 'TableSelectionService'];
 
-    function DSNewController($scope, $rootScope, REST_URI, SYNTAX, RepoRestService, DSSelectionService, 
+    function DSNewController($scope, $rootScope, $translate, REST_URI, SYNTAX, RepoRestService, DSSelectionService, 
                              SvcSourceSelectionService, TableSelectionService) {
         var vm = this;
         
@@ -47,7 +47,7 @@
             };
 
             var failureCallback = function(errorMsg) {
-                alert("Failed to get connection: \n"+errorMsg);
+                alert($translate.instant('shared.changedConnectionFailedMsg', {errorMsg: errorMsg}));
             };
             
             SvcSourceSelectionService.selectedServiceSourceModel(successCallback, failureCallback);
@@ -131,7 +131,8 @@
                         setDataserviceServiceVdb(vm.serviceName);
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to create the dataservice. \n" + RepoRestService.responseMessage(response));
+                        throw RepoRestService.newRestException($translate.instant('dsNewController.createFailedMsg', 
+                        		                                                  {response: RepoRestService.responseMessage(response)}));
                     });
             } catch (error) {} finally {
             }
@@ -164,14 +165,15 @@
                             $rootScope.$broadcast("dataServicePageChanged", 'dataservice-summary');
                         },
                         function (response) {
-                            throw RepoRestService.newRestException("Failed to update the dataservice. \n" + RepoRestService.responseMessage(response));
+                            throw RepoRestService.newRestException($translate.instant('dsNewController.saveFailedMsg', 
+                                                                                      {response: RepoRestService.responseMessage(response)}));
                         });
                 } catch (error) {} finally {
                 }
             };
 
             var failureCallback = function(errorMsg) {
-                alert("Failed to get connection: \n"+errorMsg);
+                alert($translate.instant('shared.changedConnectionFailedMsg', {errorMsg: errorMsg}));
             };
             
             SvcSourceSelectionService.selectedServiceSourceModel(successCallback, failureCallback);

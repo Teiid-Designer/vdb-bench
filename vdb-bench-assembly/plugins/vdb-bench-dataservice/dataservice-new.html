@@ -4,16 +4,25 @@
     <div id="dataservice-new-nosources" ng-show="vm.hasSources==false" class="col-md-10 row">
         <div class="row">
             <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
-            <p translate="dataservice-new.configureSourceMsg">
-                <a href ng-click="vmmain.selectPage('svcsource-new')"><span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span><span>{{vmmain.page('svcsource-new').title}}</span></a></p>
+            <p>
+                <span translate="dataservice-new.configureSourceMsg" />
+                    <a href ng-click="vmmain.selectPage('svcsource-new')">
+                    <span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}">
+                </span>
+                <span>{{vmmain.page('svcsource-new').title}}</span></a>
+            </p>
         </div>
     </div>
     
     <div id="dataservice-new-controls" ng-show="vm.hasSources==true" class="col-md-10 row">
         <div class="col-sm-9 row">
             <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
-            <h4 translate="dataservice-new.instructionsMsg">
-                <a href ng-click="vmmain.selectPage('svcsource-new')"><span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span><span>{{vmmain.page('svcsource-new').title}}</span></a>
+            <h4>
+                <span translate="dataservice-new.instructionsMsg" />
+                    <a href ng-click="vmmain.selectPage('svcsource-new')">
+                    <span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}">
+                </span>
+                <span>{{vmmain.page('svcsource-new').title}}</span></a>
             </h4>
             <div class="col-md-5">
                 <h4><strong translate="shared.Sources"></strong></h4>

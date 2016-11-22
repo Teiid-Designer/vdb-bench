@@ -13,7 +13,7 @@
         .directive('gitCredentialsControl', GitCredentialsControl);
 
     GitCredentialsControl.$inject = ['CONFIG', 'SYNTAX'];
-    GitCredentialsControlController.$inject = ['StorageService', '$scope', '$base64', '$window'];
+    GitCredentialsControlController.$inject = ['$translate', 'StorageService', '$scope', '$base64', '$window'];
 
     function GitCredentialsControl(config, syntax) {
         var directive = {
@@ -36,7 +36,7 @@
         return directive;
     }
 
-    function GitCredentialsControlController(StorageService, $scope, $base64, $window) {
+    function GitCredentialsControlController($translate, StorageService, $scope, $base64, $window) {
         var vm = this;
 
         var defaultRepo = {
@@ -184,21 +184,21 @@
             var reason = '';
             switch (event.target.error.code) {
                 case event.target.error.NOT_FOUND_ERR:
-                    reason = "cannot be found";
+                    reason = $translate.instant('gitCredentialsControl.fileNotFoundMsg');
                     break;
                 case event.target.error.NOT_READABLE_ERR:
-                    reason = "is not readable";
+                    reason = $translate.instant('gitCredentialsControl.fileNotReadableMsg');
                     break;
                 case event.target.error.ABORT_ERR:
-                    reason = "read operation was aborted";
+                    reason = $translate.instant('gitCredentialsControl.fileReadAbortedMsg');
                     break;
                 case event.target.error.SECURITY_ERR:
-                    reason = "is in a locked state";
+                    reason = $translate.instant('gitCredentialsControl.fileLockedMsg');
                     break;
                 default:
-                    reason = "encountered a generic read error";
+                    reason = $translate.instant('gitCredentialsControl.fileGenericeReadErrorMsg');
             }
-            alert('The file ' + reason);
+            alert(reason);
         }
 
         /**
@@ -223,7 +223,7 @@
             $scope.$apply(function (scope) {
                 // Check for the various File API support.
                 if (! $window.File || ! $window.FileReader || ! $window.FileList || ! $window.Blob) {
-                    alert('The File APIs are not fully supported in this browser. Not able to read the file ' + fName);
+                    alert($translate.instant('gitCredentialsControl.fileApisNotSupportedMsg', {fileName: fName}));
                     return;
                 }
 
