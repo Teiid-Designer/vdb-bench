@@ -63,14 +63,16 @@
                        },
                         function (response) {
                             vm.tablesLoading = false;
-                            throw RepoRestService.newRestException("Failed to get Tables. \n" + RepoRestService.responseMessage(response));
+                        	var msg = $translate.instant('modelTableList.getTablesErrorMsg', 
+                                                         {errorMsg: RepoRestService.responseMessage(response)});
+                            throw RepoRestService.newRestException(msg);
                         });
                 } catch (error) {} finally {
                 }
             };
 
             var failureCallback = function(errorMsg) {
-            	alert("Failed to get connection: \n"+errorMsg);
+            	alert($translate.instant('modelTableList.connectionFailedErrorMsg', {error: errorMsg}));
             };
             
             SvcSourceSelectionService.selectedServiceSourceModel(successCallback,failureCallback);

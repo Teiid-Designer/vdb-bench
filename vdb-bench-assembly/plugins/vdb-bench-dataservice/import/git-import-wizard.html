@@ -2,11 +2,11 @@
    -- Git Wizard Steps
    -->
 <div pf-wizard-step
-        step-title="Repository Properties"
+        step-title="{{:: 'git-import-wizard.repositoryDetailsStepTitle' | translate}}"
         step-id="import-from-git-credentials"
         wz-disabled="{{!vm.wizardActive}}"
         ok-to-nav-away="vm.validateCredentials">
-    <h1>Enter the details for the source git repository</h1>
+    <h1 translate="git-import-wizard.repositoryDetailsStepMsg" />
 
     <git-credentials-control show-name="false"
                                         show-file-path="true"
@@ -16,10 +16,10 @@
 </div>
 
 <div pf-wizard-step
-        step-title="Extract from Repository"
+        step-title="{{:: 'git-import-wizard.extractStepTitle' | translate}}"
         step-id="import-from-git-final"
         wz-disabled="{{!vm.wizardActive}}">
-    <h1>Import the artifact from the repository</h1>
+    <h1 translate="git-import-wizard.extractStepMsg" />
 
     <div class="ds-import-git-page">
         <!-- Show progress bar on import -->
@@ -29,7 +29,7 @@
 
         <div ng-show="!vm.inProgress">
             <div class="ds-import-git-page-button">
-                <a class="btn btn-default btn-primary" ng-click="vm.onImportDataServiceClicked()">Import</a>
+                <a class="btn btn-default btn-primary" ng-click="vm.onImportDataServiceClicked()" translate="shared.Import" />
             </div>
             <div class="ds-import-git-page-response">
                 <div ng-class="vm.responseStyleClass">{{vm.response}}</div>

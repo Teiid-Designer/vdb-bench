@@ -95,7 +95,7 @@
             $scope.$apply(function (scope) {
                 // Check for the various File API support.
                 if (! $window.File || ! $window.FileReader || ! $window.FileList || ! $window.Blob) {
-                    setError('The File APIs are not fully supported in this browser. Cannot proceed with import.');
+                    setError($translate.instant('fileImportControl.fileApisNotSupportedMsg'));
                     return;
                 }
 
@@ -103,7 +103,7 @@
                 var fName = myFile.name;
                 var documentType = RepoRestService.documentType(fName);
                 if (documentType === null) {
-                    setError(fName + "'s file type is not valid hence the file cannot be imported.");
+                    setError($translate.instant('fileImportControl.invalidFileTypeMsg' , {fileName: fName}));
                     return;
                 }
 
@@ -155,21 +155,21 @@
                     var reason = '';
                     switch (event.target.error.code) {
                         case event.target.error.NOT_FOUND_ERR:
-                            reason = "cannot be found";
+                            reason = $translate.instant('fileImportControl.fileNotFoundMsg', {fileName: myFile.name});
                             break;
                         case event.target.error.NOT_READABLE_ERR:
-                            reason = "is not readable";
+                            reason = $translate.instant('fileImportControl.fileNotReadableMsg', {fileName: myFile.name});
                             break;
                         case event.target.error.ABORT_ERR:
-                            reason = "Read operation was aborted";
+                            reason = $translate.instant('fileImportControl.fileReadAbortedMsg', {fileName: myFile.name});
                             break;
                         case event.target.error.SECURITY_ERR:
-                            reason = "File is in a locked state";
+                            reason = $translate.instant('fileImportControl.fileLockedMsg', {fileName: myFile.name});
                             break;
                         default:
-                            reason = "Read error";
+                            reason = $translate.instant('fileImportControl.fileReadErrorMsg', {fileName: myFile.name});
                     }
-                    setError('The file "' + myFile.name + '" ' + reason);
+                    setError(reason);
                     setResponse(false);
                     vm.inProgress = false;
                 };
@@ -180,8 +180,9 @@
                 try {
                     reader.readAsBinaryString(myFile);
                 } catch (exception) {
-                    setError('Failed to read ' + SYNTAX.SPEECH_MARKS + myFile.name +
-                                    SYNTAX.SPEECH_MARKS + SYNTAX.COLON + SYNTAX.SPACE + exception.message);
+                	var msg = $translate.instant('fileImportControl.binaryReadErrorMsg', 
+                			                     {fileName: myFile.name, errorMsg: exception.message});
+                    setError(msg);
                     setResponse(false);
                     vm.inProgress = false;
                 }
