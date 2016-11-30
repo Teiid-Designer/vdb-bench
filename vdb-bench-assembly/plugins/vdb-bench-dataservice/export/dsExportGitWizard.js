@@ -83,12 +83,12 @@
                 return false;
 
             if (_.isEmpty(vm.repo.parameters['repo-path-property'])) {
-                alert("The repository URL is required");
+                alert($translate.instant('dsExportGitWizard.missingRepositoryUrlMsg'));
                 return false;
             }
 
             if (_.isEmpty(vm.repo.parameters['file-path-property'])) {
-                alert("The relative file path property is required");
+                alert($translate.instant('dsExportGitWizard.missingPathMsg'));
                 return false;
             }
 

@@ -594,7 +594,7 @@
             function populate(response) {
                 if (response.status !== 200) {
                     row[columnName] = $translate.instant('dsTestController.searchErrorColumnName');
-                    console.warn($translate.instant('dsTestController.searchErrorColumnName', 
+                    console.warn($translate.instant('dsTestController.searchErrorConsoleMsg', 
                     		                        {link: value, responseError: response.error}));
                     return;
                 }

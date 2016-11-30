@@ -1,6 +1,8 @@
 {
 
     "shared" : {
+        "Add" : "Add",
+        "BrowseMsg" : "Browse...",
         "Cancel" : "Cancel",
         "changedConnectionFailedMsg" : "Failed to get connection: \n{{errorMsg}}",
         "Connection" : "Connection",
@@ -30,7 +32,9 @@
         "Next" : "Next",
         "NotAvailable" : "Not Available",
         "PasswordLabel" : "Password:",
+        "Remove" : "Remove",
         "Save" : "Save",
+        "Search" : "Search",
         "Source" : "Source",
         "Sources" : "Sources",
         "Tables" : "Tables",
@@ -39,7 +43,8 @@
         "Translator" : "Translator",
         "UserNameLabel" : "User Name:",
         "userNamePlaceholder" : "Enter the user name",
-        "WhatSummary" : "{{what}} Summary"
+        "WhatSummary" : "{{what}} Summary",
+        "Workspace" : "Workspace"
     },
 
     "dataservice-clone" : {
@@ -119,6 +124,17 @@
     "dsEditController" : {
         "saveFailedMsg" : "Failed to update the data service. \n{{response}}"
     },
+    
+    "dsExportGitWizard" : {
+        "missingPathMsg" : "@:dsImportGitWizard.missingPathMsg",
+        "missingRepositoryUrlMsg" : "@:dsImportGitWizard.missingRepositoryUrlMsg"
+    },
+
+    "dsImportGitWizard" : {
+        "invalidFileTypeMsg" : "{{fileName}}'s file type is not valid hence the file cannot be imported.",
+        "missingPathMsg" : "The relative file path property is required",
+        "missingRepositoryUrlMsg" : "The repository URL is required"
+    },
 
     "dsNewController" : {
         "createFailedMsg" : "Failed to create the data service. \n{{response}}",
@@ -145,7 +161,7 @@
         "noResultsMsg" : "No data was returned from the query",
         "resultCountMsg" : "The total number of results returned by the query is {{count}}",
         "searchErrorColumnName" : "Err: Failed!",
-        "searchErrorConsoleMsg" : "Error: Failed to get value at link {{link}: {{responseError}}}",
+        "searchErrorConsoleMsg" : "Error: Failed to get value at link {{link}}: {{responseError}}",
         "searchErrorMsg" : "Error: failed to get any results: {{responseError}}",
         "whereErrorMsg" : "The chosen column has a type ({{columnType}}) which cannot be used in a where condition",
         "condition" : {
@@ -216,11 +232,27 @@
         "getModhelSourceConnectionFailedMsg" : "Failed to get connection:"
     },
     
+    "fileImportControl" : {
+        "fileApisNotSupportedMsg" : "The File APIs are not fully supported in this browser. Cannot proceed with import.",
+        "fileLockedMsg" : "The file '{{fileName}}' is in a locked state",
+        "fileNotFoundMsg" : "The file '{{fileName}}' cannot be found",
+        "fileNotReadableMsg" : "The file '{{fileName}}' is not readable",
+        "fileReadAbortedMsg" : "The file '{{fileName}}' Read operation was aborted",
+        "fileReadErrorMsg" : "The file '{{fileName}}' Read error",
+        "invalidFileTypeMsg" : "{{fileName}}'s file type is not valid hence the file cannot be imported.",
+        "selectFileMsg" : "Select the File to Import"
+    },
+    
+    "file-import-wizard" : {
+        "importFromFileMsg" : "Import the dataservice from a file"
+    },
+    
     "gitCredentialsControl" : {
         "AuthorEmailLabel" : "Author Email Address:",
         "authorEmailPlaceholder" : "Enter the email address of the author",
         "AuthorNameLabel" : "Author Name:",
         "authorNamePlaceholder" : "Enter the name of the author",
+        "binaryReadErrorMsg" : "Failed to read '{{fileName}}': {{errorMsg}}",
         "credentialsSectionTitle" : "Authentication Settings",
         "fileApisNotSupportedMsg" : "The File APIs are not fully supported in this browser. Not able to read the file {{fileName}}",
         "fileGenericeReadErrorMsg" : "The file encountered a generic read error",
@@ -260,8 +292,33 @@
         }
     },
     
+    "git-import-wizard" : {
+        "extractStepMsg" : "Import the artifact from the repository",
+        "extractStepTitle" : "Extract from Repository",
+        "repositoryDetailsStepMsg" : "Enter the details for the source git repository",
+        "repositoryDetailsStepTitle" : "Repository Properties",
+        "missingRepositoryUrlMsg" : "@:dsImportGitWizard.missingRepositoryUrlMsg"
+    },
+
     "git-preferences-config" : {
         "tabTitle" : "Git Repository Configurations"
+    },
+
+    "modelTableList" : {
+        "connectionFailedErrorMsg" : "Failed to get connection: \n{{error}}",
+        "getTablesErrorMsg" : "Failed to get Tables. \n{{errorMsg}}"
+    },
+    
+    "sqlControl" : {
+        "controlFailedMsg" : "Encountered query error: {{errorMsg}}",
+        "instructionMsg" : "Enter query text then click Search",
+        "RecordLimit" : "Record Limit",
+        "searchingProgressMsg" : "Searching...",
+        "StartingRecordIndex" : "Starting Record Index",
+        "help" : {
+            "recordLimit" : "Limits the number of records returned from the query (-1 for no limit)",
+            "recordOffset" : "Sets the index of the first record returned (0 for no offset)"
+        }
     },
 
     "svcsource-clone" : {

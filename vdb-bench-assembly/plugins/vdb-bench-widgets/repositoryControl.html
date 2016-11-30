@@ -1,5 +1,5 @@
 <div class="col-sm-12">
-    <h5>Workspace</h5>
+    <h5 translate="shared.Workspace" />
 </div>
 
 <div>
@@ -14,14 +14,21 @@
     <div class="col-sm-12" ng-show="vm.edit">
         <div class="row" style="margin-top: 0.5em;">
             <div class="col-sm-6">
-                <button id="btn-add-repo" class="btn btn-xs btn-default" ng-click="vm.onAddClicked()">Add</button>
+                <button id="btn-add-repo" 
+                        class="btn btn-xs btn-default" 
+                        ng-click="vm.onAddClicked()"
+                        translate="shared.Add" />
             </div>
             <!--
                 Disables the remove button if the controller's selected field is undefined,
                 no selection yet made or locahost selected
             -->
             <div class="col-sm-6">
-                <button id="btn-remove-repo" class="btn btn-xs btn-default" ng-click="vm.onRemoveClicked()" ng-disabled="!vm.isWorkspaceSelected() || vm.isDefaultSelected()">Remove</button>
+                <button id="btn-remove-repo" 
+                        class="btn btn-xs btn-default" 
+                        ng-click="vm.onRemoveClicked()" 
+                        ng-disabled="!vm.isWorkspaceSelected() || vm.isDefaultSelected()"
+                        translate="shared.Remove" />
             </div>
         </div>
     </div>

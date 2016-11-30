@@ -6,15 +6,12 @@
 
     <!-- Import control -->
     <div ng-show="! vm.inProgress">
-        <div class="import-control-title">
-            Select the File to Import
-        </div>
+        <div class="import-control-title" translate="fileImportControl.selectFileMsg" />
         <div class="import-control-button">
-            <label class="btn btn-primary">
-                Browse&hellip;
+            <label class="btn btn-primary" translate="shared.BrowseMsg">
                 <input ng-model="fileToImport" type="file" style="display: none;" file-input-handler="vm.importFile">
             </label>
-            <button class="btn" ng-click="vm.cancel()" ng-show="vm.displayCancel()">Cancel</button>
+            <button class="btn" ng-click="vm.cancel()" ng-show="vm.displayCancel()" translate="shared.Cancel"></button>
         </div>
         <div class="import-control-response">
             <div ng-class="vm.responseStyleClass">{{vm.response}}</div>

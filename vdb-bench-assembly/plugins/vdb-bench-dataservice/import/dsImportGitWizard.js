@@ -83,13 +83,13 @@
                 return false;
 
             if (_.isEmpty(vm.repo.parameters['repo-path-property'])) {
-                alert("The repository URL is required");
+                alert($translate.instant('dsImportGitWizard.missingRepositoryUrlMsg'));
                 return false;
             }
 
             var filePath = vm.repo.parameters['file-path-property'];
             if (_.isEmpty(filePath)) {
-                alert("The relative file path property is required");
+                alert($translate.instant('dsImportGitWizard.missingPathMsg'));
                 return false;
             }
 
@@ -99,7 +99,7 @@
                     // assume the file is a directory and will be imported as a zip
                     vm.documentType = RepoRestService.validDocumentTypes.ZIP;
                 } else {
-                    alert(filePath + "'s file type is not valid hence the file cannot be imported.");
+                    alert($translate.instant('dsImportGitWizard.invalidFileTypeMsg', {fileName: filePath}));
                     return false;
                 }
             }

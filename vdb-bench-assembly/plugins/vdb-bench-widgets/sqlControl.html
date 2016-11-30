@@ -1,15 +1,13 @@
 <div class="row">
     <div class="col-sm-5">
-        <div class=sql-control-control-title>
-            Enter query text then click Search
-        </div>
+        <div class=sql-control-control-title translate="sqlControl.instructionMsg" />
         <label class="help-label sql-control-query-help">
             <span class="fa fa-info-circle" uib-tooltip-html="{{vm.help('ds-test-sql-search')}}"
                         tooltip-class="custom-tooltip"></span>
         </label>
         <div class="sql-control-controls-query">
             <button class="btn btn-primary" ng-click="vm.query()">
-                <span class="fa fa-fw fa-search"></span>Search
+                <span class="fa fa-fw fa-search"></span>{{:: 'shared.Search' | translate}}
             </button>
         </div>
 
@@ -22,28 +20,25 @@
 
         <div class="sql-control-controls">
             <div class="sql-control-controls-limit">
-                Record Limit
+                {{:: 'sqlControl.RecordLimit' | translate}}
                 <input type="number" min="-1" max="1000" step="1" ng-model="vm.limit"
-                       uib-tooltip="Limits the number of records returned from the query (-1 for no limit)"/>
+                       uib-tooltip="{{:: 'sqlControl.help.recordLimit' | translate}}"/>
             </div>
             <div class="sql-control-controls-offset">
-                Starting Record Index
+                {{:: 'sqlControl.StartingRecordIndex' | translate}}
                 <input type="number" min="0" max="1000" step="1" ng-model="vm.offset"
-                       uib-tooltip="Sets the index of the first record returned (0 for no offset)"/>
+                       uib-tooltip="{{:: 'sqlControl.help.recordOffset' | translate}}"/>
             </div>
         </div>
 
-    </div>
-
-    <div id="sql-control-failure" class="col-sm-7" ng-show="vm.errorMsg">
-        Encountered query error:
-        <br/>'{{vm.errorMsg}}'
+    <div id="sql-control-failure" class="col-sm-7" ng-show="vm.errorMsg"
+         translate="sqlControl.controlFailedMsg" translate-values="{errorMsg: vm.errorMsg}">
     </div>
 
     <!-- Show spinner while searching -->
     <div id="sql-search-progress-spinner" class="col-sm-4" ng-show="vm.inProgress==true">
         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-        <span class="sr-only">Searching...</span>
+        <span class="sr-only"></span>{{:: 'sqlControl.searchingProgressMsg' | translate}}
     </div>
 
     <div class="col-sm-6" ng-show="! vm.errorMsg && vm.showResultsTable == true">
