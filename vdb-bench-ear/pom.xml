@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>org.teiid</groupId>
+		<artifactId>vdb-bench</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>vdb-bench-ear</artifactId>
+	<packaging>ear</packaging>
+	<name>${project.artifactId}</name>
+	<description>dataservice builder - komodo :: Web Kit</description>
+
+	<properties>
+		<version.komodo.rest>0.0.4-SNAPSHOT</version.komodo.rest>
+		<finalName>ds-builder-archive</finalName>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.komodo</groupId>
+				<artifactId>komodo-rest</artifactId>
+				<type>war</type>
+				<version>${version.komodo.rest}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.komodo</groupId>
+			<artifactId>komodo-rest</artifactId>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>org.teiid</groupId>
+			<artifactId>vdb-bench-war</artifactId>
+			<type>war</type>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<!-- we do not want version in the EAR name -->
+		<finalName>${finalName}</finalName>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-ear-plugin</artifactId>
+				<configuration>
+					<modules>
+						<webModule>
+							<groupId>org.komodo</groupId>
+							<artifactId>komodo-rest</artifactId>
+							<contextRoot>vdb-builder</contextRoot>
+							<bundleFileName>vdb-builder.war</bundleFileName>
+						</webModule>
+						<webModule>
+							<groupId>org.teiid</groupId>
+							<artifactId>vdb-bench-war</artifactId>
+							<contextRoot>ds-builder</contextRoot>
+							<bundleFileName>ds-builder.war</bundleFileName>
+						</webModule>
+					</modules>
+				</configuration>
+			</plugin>
+		</plugins>
+
+	</build>
+
+</project>

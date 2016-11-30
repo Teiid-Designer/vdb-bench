@@ -1,5 +1,5 @@
 node_modules/
-libs/
+libs*/
 
 # Generated template cache script
 app/vdb-bench-app-templates.js
