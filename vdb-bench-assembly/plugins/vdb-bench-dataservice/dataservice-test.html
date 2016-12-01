@@ -41,7 +41,7 @@
                     <span class="fa fa-fw fa-search"></span>
                 </button>
                 <label class="help-label" class="col-sm-1">
-                    <span class="fa fa-info-circle" uib-tooltip-html="{{vm.help('ds-test-endpoint-search')}}"
+                    <span class="fa fa-info-circle" uib-tooltip-html="{{ 'dataservice-test.help.endpointSearch' | translate }}"
                           tooltip-class="custom-tooltip"></span>
                 </label>
             </div>
@@ -57,11 +57,11 @@
                         <uib-accordion-heading>
                             <div class="odata-control-panel-title" translate="dataservice-test.Select"></div>
                             <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
-                            <div class="pull-right" uib-dropdown>
-                                <label class="help-label">
-                                        <span class="fa fa-info-circle" uib-tooltip-html="{{vm.help('ds-test-select')}}"
+                            <div class="pull-left" uib-dropdown>
+                             <label class="help-label">
+                                        <span class="fa fa-info-circle" uib-tooltip-html="{{ 'dataservice-test.help.select' | translate }}"
                                                   tooltip-class="custom-tooltip"></span>
-                                </label>
+                             </label>
                             </div>
                         </uib-accordion-heading>
                         <form name="odata-exp-select" role="form">
@@ -95,9 +95,9 @@
                         <uib-accordion-heading>
                             <div class="odata-control-panel-title" translate="dataservice-test.Columns"></div>
                             <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
-                            <div class="pull-right" uib-dropdown>
+                            <div class="pull-left" uib-dropdown>
                                 <label class="help-label">
-                                        <span class="fa fa-info-circle" uib-tooltip="{{vm.help('ds-test-columns')}}"
+                                        <span class="fa fa-info-circle" uib-tooltip="{{ 'dataservice-test.help.columns' | translate }}"
                                                   tooltip-class="custom-tooltip"></span>
                                 </label>
                             </div>
@@ -123,12 +123,12 @@
                         <uib-accordion-heading>
                             <div class="odata-control-panel-title" translate="dataservice-test.Where"></div>
                             <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
-                            <div class="pull-right" uib-dropdown>
+                            <div class="pull-left" uib-dropdown>
                                 <button type="button" class="glyphicon glyphicon-plus odata-form-where-add-btn"
                                                 uib-dropdown-toggle ng-click="vm.onAddWhereClicked($event)">
                                 </button>
                                 <label class="help-label">
-                                        <span class="fa fa-info-circle" uib-tooltip-html="{{vm.help('ds-test-where')}}"
+                                        <span class="fa fa-info-circle" uib-tooltip-html="{{ 'dataservice-test.help.where' | translate }}"
                                                   tooltip-class="custom-tooltip"></span>
                                 </label>
                             </div>
@@ -176,9 +176,9 @@
                         <uib-accordion-heading>
                             <div class="odata-control-panel-title">Order by</div>
                             <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
-                            <div class="pull-right" uib-dropdown>
+                            <div class="pull-left" uib-dropdown>
                                 <label class="help-label">
-                                        <span class="fa fa-info-circle" uib-tooltip="{{vm.help('ds-test-order-by')}}"
+                                        <span class="fa fa-info-circle" uib-tooltip="{{ 'dataservice-test.help.orderBy' | translate }}"
                                                   tooltip-class="custom-tooltip"></span>
                                 </label>
                             </div>
@@ -217,7 +217,7 @@
 
             <div id="odata-results-table-help" class="col-sm-1" ng-show="vm.hasOdataAttributes() == true && vm.showResultsTable == true" ng-cloak>
                 <label class="help-label">
-                    <span class="fa fa-info-circle" uib-tooltip-html="{{vm.help('ds-test-results-table')}}"
+                    <span class="fa fa-info-circle" uib-tooltip-html="{{ 'dataservice-test.help.table' | translate }}"
                                 tooltip-class="custom-tooltip"></span>
                 </label>
             </div>

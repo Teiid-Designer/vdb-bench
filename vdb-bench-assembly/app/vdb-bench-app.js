@@ -185,6 +185,7 @@ var App;
         // default all en_* and every other locale to en right now
         $translateProvider.registerAvailableLanguageKeys(['en'], {
             'en_*': 'en',
+            'en-*': 'en',
             '*': 'en'
          });
         
