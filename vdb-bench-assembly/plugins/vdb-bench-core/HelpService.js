@@ -14,9 +14,9 @@
         .module(pluginName)
         .factory('HelpService', HelpService);
 
-    HelpService.$inject = ['SYNTAX'];
+    HelpService.$inject = ['$translate', 'SYNTAX'];
 
-    function HelpService(SYNTAX) {
+    function HelpService($translate, SYNTAX) {
         /*
          * Service instance to be returned
          */
@@ -35,6 +35,13 @@
                 return SYNTAX.EMPTY_STRING;
 
             return service[context];
+        };
+
+        /*
+         * Obtain the <div> for the help page for the specified translation identifier.
+         */
+        service.pageHelpFor = function( translationId ) {
+            return $translate.instant( translationId );
         };
 
         return service;

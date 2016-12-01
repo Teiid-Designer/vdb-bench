@@ -1,0 +1,8 @@
+<a class="page-help-icon pficon-help" href="" ng-click="vm.togglePageHelp()">
+    <div pageslide ps-open="vm.showPageHelp" ps-size="25%" ps-key-listener="true">
+        <div style="padding:20px">
+            <div id="page-help-content" ng-bind-html="vm.getPageHelp()" />
+            <button class="btn" ng-click="vm.togglePageHelp()" translate="shared.Close" />
+        </div>
+    </div>
+</a>
