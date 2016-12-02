@@ -18,12 +18,14 @@
         vm.numberSources = 0;
 
         vm.selectedConnection = null;
+        vm.selectedJdbcConnection = null;
         vm.selectedTranslator = null;
         vm.showNameAndDescription = false;
         vm.showTranslator = false;
         vm.selectedTranslator = null;
         vm.selectedTranslatorImage = null;
-        vm.allTranslators = TranslatorSelectionService.getTranslators();
+        vm.allTranslators = TranslatorSelectionService.getTranslators(false);
+        vm.filterSchema = false;
         
         vm.createAndDeployInProgress = false;
 
@@ -31,12 +33,21 @@
          * Handle Change in selected connection
          */
         $scope.$on('selectedConnectionChanged', function (event) {
+            // Deselect filter checkbox
+            vm.filterSchema = false;
+
             vm.selectedConnection = ConnectionSelectionService.selectedConnection();
             if(vm.selectedConnection !== null) {
                 selectTranslatorForConnection(vm.selectedConnection.keng__id);
+                if(vm.selectedConnection.dv__type === true) {
+                    vm.selectedJdbcConnection = vm.selectedConnection;
+                } else {
+                    vm.selectedJdbcConnection = null;
+                }
             } else {
                 vm.selectedTranslator = null;
                 vm.selectedTranslatorImage = null;
+                vm.selectedJdbcConnection = null;
                 updateTranslatorVisibility();
                 updateNameDescriptionVisibility();
             }
@@ -96,7 +107,7 @@
         /**
          * Creates and Deploys the Service Source VDB
          */
-        function createAndDeploySvcSourceVdb ( svcSourceName, svcSourceDescription, connectionName, jndiName, translatorName ) {
+        function createAndDeploySvcSourceVdb ( svcSourceName, svcSourceDescription, connectionName, jndiName, translatorName, importerProperties ) {
             // Set in progress status
             vm.createAndDeployInProgress = true;
             vm.numberSources = SvcSourceSelectionService.getServiceSources().length;
@@ -107,7 +118,7 @@
                 RepoRestService.createVdb( svcSourceName, svcSourceDescription, true ).then(
                     function (theVdb) {
                         if(theVdb.keng__id === svcSourceName) {
-                            createVdbModel( svcSourceName, connectionName, translatorName, jndiName );
+                            createVdbModel( svcSourceName, connectionName, translatorName, jndiName, importerProperties );
                         }
                     },
                     function (resp) {
@@ -125,10 +136,10 @@
         /**
          * Create a Model and ModelSource within the VDB, then deploy it
          */
-        function createVdbModel( svcSourceName, connectionName, translatorName, jndiName ) {
+        function createVdbModel( svcSourceName, connectionName, translatorName, jndiName, importerProperties ) {
             // Creates the Model within the VDB, then add the ModelSource to the Model
             try {
-                RepoRestService.createVdbModel( svcSourceName, connectionName, true ).then(
+                RepoRestService.createVdbModel( svcSourceName, connectionName, true, importerProperties ).then(
                     function (theModel) {
                         if(theModel.keng__id === connectionName) {
                             createVdbModelSource( svcSourceName, connectionName, connectionName, translatorName, jndiName );
@@ -237,6 +248,19 @@
         }
 
         /**
+         * handles filter checkbox change
+         */
+        vm.filterCheckboxChanged = function() {
+            // requests the filter component to refresh
+            if(vm.filterSchema) {
+                $rootScope.$broadcast("resetJdbcFilters");
+            } else {
+                // Deselecting the filter checkbox resets the filters
+                ConnectionSelectionService.resetFilterProperties();
+            }
+        };
+
+        /**
          * handles translator change
          */
         vm.translatorChanged = function() {
@@ -273,8 +297,9 @@
             var connectionName = vm.selectedConnection.keng__id;
             var jndiName = vm.selectedConnection.dv__jndiName;
             var translatorName = vm.selectedTranslator.keng__id;
+            var importerProperties = ConnectionSelectionService.selectedConnectionFilterProperties();
 
-            createAndDeploySvcSourceVdb( vm.svcSourceName, vm.svcSourceDescription, connectionName, jndiName, translatorName );
+            createAndDeploySvcSourceVdb( vm.svcSourceName, vm.svcSourceDescription, connectionName, jndiName, translatorName, importerProperties );
         };
     }
 

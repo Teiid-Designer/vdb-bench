@@ -10,7 +10,7 @@
           <h4 translate="svcsource-new.instructionsMsg"></h4>
           <div class="col-md-5">
               <h4><strong translate="svcsource-new.Connections"></strong></h4>
-              <connection-list></connection-list>
+              <connection-list hide-resource-adapters=true></connection-list>
           </div>
           <div class="col-md-5" ng-show="vm.showTranslator">
               <h4><strong translate="svcsource-new.Translator"></strong></h4>
@@ -19,6 +19,19 @@
                       ng-change="vm.translatorChanged()">
                   <option value="" translate="svcsource-new.chooseTranslator"></option>
               </select>
+          </div>
+
+          <!--  Filter Checkbox -->
+          <div class="col-md-12" ng-show="vm.selectedJdbcConnection !== null && vm.selectedTranslator !== null">
+              <form>
+                  <input type="checkbox" ng-model="vm.filterSchema" ng-true-value=true ng-false-value=false ng-change="vm.filterCheckboxChanged()">
+                  <h4 style="display:inline"><strong translate="svcsource-new.filterConnection"></strong></h4><h4>
+              </form>
+          </div>
+
+          <!--  JDBC Filter Options -->
+          <div class="col-md-12" ng-show="vm.filterSchema">
+              <jdbc-filter-options></jdbc-filter-options>
           </div>
 
           <div class="col-md-12" ng-show="vm.showNameAndDescription">
@@ -42,10 +55,9 @@
                   </div>
               </form>
           </div>
-          <div class="col-md-12">
+          <div>
               <p></p>
           </div>
-
           <div class="col-md-12">
               <input type="submit" class="btn btn-primary" value="{{:: 'svcsource-new.Save' | translate}}" ng-click="vm.onCreateSvcSourceClicked()"
                                    ng-disabled="vm.canCreateSvcSource() !== true || vmmain.selectedPage.id !== 'svcsource-new'"/>

@@ -28,6 +28,7 @@
         svcSrc.editSourceConnectionNameSelection = null;
         svcSrc.editSourceConnectionJndiSelection = null;
         svcSrc.editSourceTranslatorNameSelection = null;
+        svcSrc.editSourceInfo = [];
 
         /*
          * Service instance to be returned
@@ -262,45 +263,18 @@
         };
 
         /*
-         * Set the selected connection name for the editor
+         * Set info about the service source being edited.
+         * [connectionName :
          */
-        service.setEditSourceConnectionNameSelection = function(connectionName) {
-            svcSrc.editSourceConnectionNameSelection = connectionName;
+        service.setEditSourceInfo = function(sourceInfo) {
+            svcSrc.editSourceInfo = sourceInfo;
         };
 
         /*
-         * Returns the selected connection name for the editor
+         * Returns the info about the service source being edited.
          */
-        service.getEditSourceConnectionNameSelection = function() {
-            return svcSrc.editSourceConnectionNameSelection;
-        };
-
-        /*
-         * Set the selected connection jndi for the editor
-         */
-        service.setEditSourceConnectionJndiSelection = function(connectionJndi) {
-            svcSrc.editSourceConnectionJndiSelection = connectionJndi;
-        };
-
-        /*
-         * Returns the selected connection jndi for the editor
-         */
-        service.getEditSourceConnectionJndiSelection = function() {
-            return svcSrc.editSourceConnectionJndiSelection;
-        };
-
-        /*
-         * Set the selected translator name for the editor
-         */
-        service.setEditSourceTranslatorNameSelection = function(translatorName) {
-            svcSrc.editSourceTranslatorNameSelection = translatorName;
-        };
-
-        /*
-         * Returns the selected translator name for the editor
-         */
-        service.getEditSourceTranslatorNameSelection = function() {
-            return svcSrc.editSourceTranslatorNameSelection;
+        service.getEditSourceInfo = function() {
+            return svcSrc.editSourceInfo;
         };
 
         /*

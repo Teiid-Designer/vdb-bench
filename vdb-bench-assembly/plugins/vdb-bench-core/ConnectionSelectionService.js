@@ -23,6 +23,7 @@
         conn.deploymentConnectionName = null;
         conn.deploymentSuccess = false;
         conn.deploymentMessage = null;
+        conn.filterProperties = [];
 
         /*
          * Service instance to be returned
@@ -62,7 +63,7 @@
             }
 
             // Removes any outdated selection
-            service.selectConnection(null);
+            service.selectConnection(null, true);
         }
 
         function sortByKey(array, key) {
@@ -127,6 +128,20 @@
         };
 
         /*
+         * Get the connection with the requested name
+         */
+        service.getConnection = function(connName) {
+            var result = null;
+            for (var i = 0; i < conn.connections.length; ++i) {
+                if(conn.connections[i].keng__id === connName) {
+                    result = conn.connections[i];
+                    break;
+                }
+            }
+            return result;
+        };
+
+        /*
          * Get the connection statue
          */
         service.getConnectionState = function(connection) {
@@ -136,14 +151,16 @@
         /*
          * Select the given connection
          */
-        service.selectConnection = function(connection) {
+        service.selectConnection = function(connection, broadcast) {
             //
             // Set the selected connection
             //
             conn.connection = connection;
 
             // Useful for broadcasting the selected connection has been updated
-            $rootScope.$broadcast("selectedConnectionChanged", conn.connection);
+            if(broadcast) {
+                $rootScope.$broadcast("selectedConnectionChanged");
+            }
         };
 
         /*
@@ -151,6 +168,39 @@
          */
         service.selectedConnection = function() {
             return conn.connection;
+        };
+
+        /*
+         * Resets the filter properties to defaults
+         */
+        service.resetFilterProperties = function() {
+            conn.filterProperties = [{ "name": "importer.TableTypes",
+                                       "value": "TABLE"},
+                                     { "name": "importer.UseFullSchemaName",
+                                       "value": "false"},
+                                     { "name": "importer.UseQualifiedName",
+                                       "value": "false"},
+                                     { "name": "importer.UseCatalogName",
+                                       "value": "false"}];
+        };
+
+        /*
+         * Adds the specified filter property
+         */
+        service.addFilterProperty = function(propName, propValue) {
+            if(angular.isDefined(propValue) && propValue!==null && propValue.length>0 ) {
+                conn.filterProperties.push({ 
+                    "name" : propName,
+                    "value": propValue
+                });
+            }
+        };
+
+        /*
+         * return selected connection filter properties
+         */
+        service.selectedConnectionFilterProperties = function() {
+            return conn.filterProperties;
         };
 
         /*

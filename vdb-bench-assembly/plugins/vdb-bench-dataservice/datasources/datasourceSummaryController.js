@@ -9,10 +9,12 @@
         .controller('DatasourceSummaryController', DatasourceSummaryController);
 
     DatasourceSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 
-                                           'SvcSourceSelectionService', 'TranslatorSelectionService', 'DownloadService', 'pfViewUtils'];
+                                           'SvcSourceSelectionService', 'TranslatorSelectionService', 
+                                           'ConnectionSelectionService', 'DownloadService', 'pfViewUtils'];
 
     function DatasourceSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, 
-                                          SvcSourceSelectionService, TranslatorSelectionService, DownloadService, pfViewUtils) {
+                                          SvcSourceSelectionService, TranslatorSelectionService, 
+                                          ConnectionSelectionService, DownloadService, pfViewUtils) {
         var vm = this;
 
         vm.srcLoading = SvcSourceSelectionService.isLoading();
@@ -346,17 +348,39 @@
          * Handle edit ServiceSource click
          */
         var editSvcSourceClicked = function( ) {
-            // Get the connectionName and TranslatorName for the selected source,
+            // Builds the name value pairs of info needed for the edit page.
+            var editInfo = [];
+            
+        	// Get the connectionName and TranslatorName for the selected source,
             // then transfer to the edit page.
         	
             var successCallback = function(model) {
                 // Update the connection name for the source being edited
-                SvcSourceSelectionService.setEditSourceConnectionNameSelection(model.keng__id);
+                //SvcSourceSelectionService.setEditSourceConnectionNameSelection(model.keng__id);
+                editInfo.push({ 
+                    "name" : "connectionName",
+                    "value": model.keng__id
+                });
+                // If model has filter properties, include them
+                ConnectionSelectionService.resetFilterProperties();
+                if(angular.isDefined(model.keng__properties)) {
+                    for(var key in model.keng__properties) {
+                        var propName = model.keng__properties[key].name;
+                        var propValue = model.keng__properties[key].value;
+                        if( propName==='importer.catalog' || propName==='importer.schemaPattern' || propName==='importer.tableNamePattern') {
+                            ConnectionSelectionService.addFilterProperty(propName,propValue);
+                        }
+                    }
+                }
                 
                 var modelSourceSuccessCallback = function(modelSource) {
                     TranslatorSelectionService.selectTranslatorName(modelSource.vdb__sourceTranslator);
-                    SvcSourceSelectionService.setEditSourceConnectionJndiSelection(modelSource.vdb__sourceJndiName);
-
+                    //SvcSourceSelectionService.setEditSourceConnectionJndiSelection(modelSource.vdb__sourceJndiName);
+                    editInfo.push({ 
+                        "name" : "sourceJndiName",
+                        "value": modelSource.vdb__sourceJndiName
+                    });
+                    SvcSourceSelectionService.setEditSourceInfo(editInfo);
                     //
                     // Broadcast the pageChange
                     $rootScope.$broadcast("dataServicePageChanged", 'svcsource-edit');

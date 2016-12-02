@@ -42,7 +42,30 @@
             "teiid" : "plugins/vdb-bench-core/content/img/Teiid_dv_logos_70x40.png",
             "ws" : "plugins/vdb-bench-core/content/img/WebService_dv_logos_70x40.png"
         };
-        
+
+        var raTranslators = ["simpledb", 
+                             "accumulo", 
+                             "solr",
+                             "cassandra",
+                             "file",
+                             "google-spreadsheet",
+                             "infinispan-cache-dsl",
+                             "infinispan-cache",
+                             "jpa2",
+                             "ldap",
+                             "loopback",
+                             "excel",
+                             "mongodb",
+                             "map-cache",
+                             "odata",
+                             "odata4",
+                             "olap",
+                             "salesforce",
+                             "salesforce-34",
+                             "ws",
+                             "sap-gateway",
+                             "sap-nw-gateway"];
+
         /*
          * Service instance to be returned
          */
@@ -167,9 +190,20 @@
 
         /*
          * Get the translators
+         * includeRA : 'true' to include ResourceAdapter translators, 'false' to exclude.
          */
-        service.getTranslators = function() {
-            return tran.translators;
+        service.getTranslators = function(includeRA) {
+            if(includeRA) {
+                return tran.translators;
+            }
+            // JDBC only
+            var transJdbcOnly = [];
+            for( var i = 0; i < tran.translators.length; i++) {
+                if( raTranslators.indexOf(tran.translators[i].keng__id) < 0 ) {
+                    transJdbcOnly.push(tran.translators[i]);
+                }
+            }
+            return transJdbcOnly;
         };
 
         /*

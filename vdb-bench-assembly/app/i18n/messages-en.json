@@ -35,6 +35,7 @@
         "PasswordLabel" : "Password:",
         "Remove" : "Remove",
         "Save" : "Save",
+        "Schemas" : "Schemas",
         "Search" : "Search",
         "Source" : "Source",
         "Sources" : "Sources",
@@ -318,6 +319,14 @@
     	"inlineFramesNotSupportedMsg" : "Sorry your browser doesn't support inline frames."
     },
 
+    "jdbcFilterOptions" : {
+        "noContent" : "No Content",
+        "notJdbcMsg" : "'{{connName}}' is not a JDBC Connection",
+        "noTables" : "No Tables",
+        "optionMsg" : "Filter options for connection '{{connName}}'",
+        "tableFetchNoConnectionErrorMsg" : "Error fetching tables - null connection"
+    },
+
     "modelTableList" : {
         "connectionFailedErrorMsg" : "Failed to get connection: \n{{error}}",
         "getTablesErrorMsg" : "Failed to get Tables. \n{{errorMsg}}"
@@ -347,6 +356,7 @@
         "Cancel" : "@:shared.Cancel",
         "Connections" : "@:shared.Connections",
         "Description" : "@:shared.Description",
+        "filterConnection" : "Filter Connection",
         "instructionsMsg" : "Reconfigure an existing Source:",
         "Loading" : "@:shared.loadingProgressMsg",
         "Name" : "@:shared.Name",
@@ -363,6 +373,7 @@
         "chooseTranslator" : "-- choose translator --",
         "Connections" : "@:shared.Connections",
         "Description" : "@:shared.Description",
+        "filterConnection" : "Filter Connection",
         "instructionsMsg" : "Start configuring a new Source by selecting one of your available Connection definitions.",
         "Loading" : "@:shared.loadingProgressMsg",
         "nameDescriptionInstructionsMsg" : "Choose a name (and optional description) for your Source",
@@ -381,7 +392,8 @@
         "sourceUpdateFailedMsg" : "Failed to update the source.",
         "sourceDeployFailedMsg" : "Failed to deploy the source.",
         "sourceModelCreateFailedMsg" : "Failed to create the source model.",
-        "sourceModelConnectionCreateFailedMsg" : "Failed to create the source model connection."
+        "sourceModelConnectionCreateFailedMsg" : "Failed to create the source model connection.",
+        "sourceModelConnectionUpdateFailedMsg" : "Failed to update the source model connection."
     },
 
     "svcSourceNewController" : {

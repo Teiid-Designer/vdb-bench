@@ -348,6 +348,48 @@
         };
 
         /**
+         * Service: return the list of table names for the jdbc connection
+         */
+        service.getJdbcConnectionTables = function (catalogFilter, schemaFilter, tableFilter, connectionName) {
+            var url = REST_URI.TEIID + REST_URI.DATA_SOURCES + REST_URI.TABLES;
+
+            var catFilter = "";
+            var schFilter = "";
+            var tblFilter = "%";
+            if(catalogFilter !== null) {
+                catFilter = catalogFilter;
+            }
+            if(schemaFilter !== null) {
+                schFilter = schemaFilter;
+            }
+            if(tableFilter !== null) {
+                tblFilter = tableFilter;
+            }
+            var jdbcTableAttributes = {
+                dataSourceName: connectionName,    
+                catalogFilter: catFilter,
+                schemaFilter: schFilter,
+                tableFilter: tblFilter
+            };
+
+            return getRestService().then(function (restService) {
+                return restService.all(url).post(jdbcTableAttributes);
+            });
+
+        };
+
+        /**
+         * Service: return the catalog and schema info for the jdbc connection
+         */
+        service.getJdbcConnectionCatalogSchemaInfo = function (connectionName) {
+            var url = REST_URI.TEIID + REST_URI.DATA_SOURCES + SYNTAX.FORWARD_SLASH + connectionName + REST_URI.JDBC_CATALOG_SCHEMA;
+
+            return getRestService().then(function (restService) {
+                return restService.one(url).get();
+            });
+        };
+
+        /**
          * Service: sync workspace VDBs from server
          * Returns: promise object for the vdb collection
          */
@@ -432,7 +474,7 @@
         /**
          * Service: create a new VDB in the repository
          */
-        service.createVdbModel = function (vdbName, modelName, isSource) {
+        service.createVdbModel = function (vdbName, modelName, isSource, importerProperties) {
             if (!vdbName || !modelName) {
                 throw new RestServiceException("VDB name or model name is not defined");
             }
@@ -447,19 +489,41 @@
                 
                 
                 // Adds importer properties for service sources
-                if (isSource)  {
-                    payload.keng__properties = [{ "name": "importer.TableTypes",
-                                                  "value": "TABLE"},
-                                                { "name": "importer.UseFullSchemaName",
-                                                  "value": "false"},
-                                                { "name": "importer.UseQualifiedName",
-                                                  "value": "false"},
-                                                { "name": "importer.UseCatalogName",
-                                                  "value": "false"}];
+                if (isSource && angular.isDefined(importerProperties))  {
+                    payload.keng__properties = importerProperties;
                 }
 
-                var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + SYNTAX.FORWARD_SLASH + REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName;
+                var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + 
+                          SYNTAX.FORWARD_SLASH + REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName;
                 return restService.all(uri).post(payload);
+            });
+        };
+
+        /**
+         * Service: create a new VDB in the repository
+         */
+        service.updateVdbModel = function (vdbName, modelName, isSource, importerProperties) {
+            if (!vdbName || !modelName) {
+                throw new RestServiceException("VDB name or model name is not defined");
+            }
+
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "keng__id": modelName,
+                    "keng__dataPath": getUserWorkspacePath()+"/"+vdbName+"/"+modelName,
+                    "keng__kType": "Model",
+                    "mmcore__modelType": "PHYSICAL"
+                };
+                
+                
+                // Adds importer properties for service sources
+                if ( isSource && angular.isDefined(importerProperties) && importerProperties.length > 0 )  {
+                    payload.keng__properties = importerProperties;
+                }
+
+                var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + 
+                          SYNTAX.FORWARD_SLASH + REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName;
+                return restService.all(uri).customPUT(payload);
             });
         };
 

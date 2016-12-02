@@ -59,6 +59,7 @@
             TRANSLATORS: '/VdbTranslators',
             TABLES: '/Tables',
             COLUMNS: '/Columns',
+            JDBC_CATALOG_SCHEMA: '/JdbcCatalogSchema',
             SERVICE_VDB_FOR_SINGLE_TABLE: 'ServiceVdbForSingleTable',
             SERVICE_VIEW_TABLES: 'serviceViewTables',
             SOURCE_VDB_MATCHES: 'sourceVdbMatches',
