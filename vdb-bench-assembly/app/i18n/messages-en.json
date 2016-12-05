@@ -37,8 +37,8 @@
         "Save" : "Save",
         "Schemas" : "Schemas",
         "Search" : "Search",
-        "Source" : "Source",
-        "Sources" : "Sources",
+        "Source" : "Data Source",
+        "Sources" : "Data Sources",
         "Tables" : "Tables",
         "Test" : "Test",
         "TestWhat" : "Test {{what}}",
@@ -57,7 +57,7 @@
     },
 
     "dataservice-edit" : {
-        "instructionsMsg" : "Change the definition of your Data Service by choosing a different source and table"
+        "instructionsMsg" : "Change the definition of your Data Service by choosing a different data source and table"
     },
 
     "dataservice-export" : {
@@ -82,15 +82,15 @@
     },
 
     "dataservice-new" : {
-        "configureSourceMsg" : "Before you can create a new Data Service, you will need to configure a source. To configure a Source, click ",
+        "configureSourceMsg" : "Before you can create a new Data Service, you will need to configure a data source. To configure a data source, click ",
         "inputFieldsHelpMsg" : "Choose a name (and optional description) for your Data Service",
-        "instructionsMsg" : "A Data Service can be composed of one or more of your available sources. Start creating a Data Service by selecting a source, then select one of it's source tables. If you don't see your desired source, click "
+        "instructionsMsg" : "A Data Service can be composed of one or more of your available data sources. Start creating a Data Service by selecting a data source, then select one of it's tables. If you don't see your desired data source, click "
     },
 
     "dataservice-summary" : {
         "connectionsNumberToolTip" : "The number of native data connections, eg. JDBC databases, utilised by this dataservice",
-        "createDataServiceMsg" : "A Data Service is created using one or more Sources. To create your first Data Service, click ",
-        "createSourceMsg" : "A Data Service is created using one or more Sources. To create your first Source, click ",
+        "createDataServiceMsg" : "A Data Service is created using one or more Data Sources. To create your first Data Service, click ",
+        "createSourceMsg" : "A Data Service is created using one or more Data Sources. To create your first Data Source, click ",
         "importDataServiceMsg" : "You can also import an existing Data Service. To import a Data Service, click ",
         "serviceVdbToolTip" : "The name of the service VDB of this dataservice",
         "welcomeMsg" : "Welcome to the <strong>Data Services Builder</strong>!"
@@ -153,7 +153,7 @@
     },
 
     "dsPageService" : {
-        "configureSoureTitle" : "Configure Source",
+        "configureSourceTitle" : "Configure Data Source",
         "homeTitle" : "@:shared.Dashboard",
         "testDataServiceTitle" : "Test Data Service"
     },
@@ -207,7 +207,7 @@
             "top1000" : "top 1000",
             "top10000" : "top 10000"
         },
-        "configureSoureTitle" : "Configure Source",
+        "configureSourceTitle" : "Configure Data Source",
         "homeTitle" : "@:shared.Dashboard",
         "testDataServiceTitle" : "Test Data Service"
     },
@@ -215,8 +215,8 @@
     "datasource-summary" : {
         "welcomeMsg" : "Welcome to the <strong>Data Services Builder</strong>!",
         "Loading" : "@:shared.loadingProgressMsg",
-        "noSourcesInstructionsMsg" : "Currently, there are no Sources configured.  To get started, click ",
-        "sourceSchema" : "Source Schema"
+        "noSourcesInstructionsMsg" : "Currently, there are no data sources configured.  To get started, click ",
+        "sourceSchema" : "Data Source Schema"
     },
     
     "datasourceSummaryController" : {
@@ -228,13 +228,13 @@
         "actionNameImport" : "@:shared.Import",
         "actionNameNew" : "@:shared.New",
         "actionNameRefresh" : "Refresh",
-        "actionTitleCopy" : "Copy the Source",
-        "actionTitleDelete" : "Delete the Source",
+        "actionTitleCopy" : "Copy the Data Source",
+        "actionTitleDelete" : "Delete the Data Source",
         "actionTitleDisplayDdl" : "Show / Hide the DDL window",
-        "actionTitleEdit" : "Edit the Source",
-        "actionTitleExport" : "Export the Source",
-        "actionTitleImport" : "Import a Source",
-        "actionTitleNew" : "Create a Source",
+        "actionTitleEdit" : "Edit the Data Source",
+        "actionTitleExport" : "Export the Data Source",
+        "actionTitleImport" : "Import a Data Source",
+        "actionTitleNew" : "Create a Data Source",
         "actionTitleRefresh" : "Refresh the Table",
         "gettingDdlMsg" : "Fetching DDL...",
         "getDdlFailedMsg" : "Failed to get the DDL.",
@@ -347,7 +347,7 @@
     "svcsource-clone" : {
         "Cancel" : "@:shared.Cancel",
         "Create" : "@:shared.Create",
-        "instructionsMsg" : "Enter a name for the new source",
+        "instructionsMsg" : "Enter a name for the new data source",
         "Loading" : "@:shared.loadingProgressMsg",
         "Name" : "@:shared.Name"
     },
@@ -357,7 +357,7 @@
         "Connections" : "@:shared.Connections",
         "Description" : "@:shared.Description",
         "filterConnection" : "Filter Connection",
-        "instructionsMsg" : "Reconfigure an existing Source:",
+        "instructionsMsg" : "Reconfigure an existing Data Source:",
         "Loading" : "@:shared.loadingProgressMsg",
         "Name" : "@:shared.Name",
         "Save" : "@:shared.Save",
@@ -374,23 +374,23 @@
         "Connections" : "@:shared.Connections",
         "Description" : "@:shared.Description",
         "filterConnection" : "Filter Connection",
-        "instructionsMsg" : "Start configuring a new Source by selecting one of your available Connection definitions.",
+        "instructionsMsg" : "Start configuring a new Data Source by selecting one of your available Connection definitions.",
         "Loading" : "@:shared.loadingProgressMsg",
-        "nameDescriptionInstructionsMsg" : "Choose a name (and optional description) for your Source",
+        "nameDescriptionInstructionsMsg" : "Choose a name (and optional description) for your Data Source",
         "Name" : "@:shared.Name",
         "Save" : "@:shared.Save",
         "Translator" : "@:shared.Translator"
     },
 
     "svcSourceCloneController" : {
-        "copyFailedMsg" : "Failed to copy the source.",
-        "deployFailedMsg" : "Failed to deploy the source."
+        "copyFailedMsg" : "Failed to copy the data source.",
+        "deployFailedMsg" : "Failed to deploy the data source."
     },
 
     "svcSourceEditController" : {
         "getTranslatorsFailedMsg" : "Failed attempting to fetch translator.",
-        "sourceUpdateFailedMsg" : "Failed to update the source.",
-        "sourceDeployFailedMsg" : "Failed to deploy the source.",
+        "sourceUpdateFailedMsg" : "Failed to update the data source.",
+        "sourceDeployFailedMsg" : "Failed to deploy the data source.",
         "sourceModelCreateFailedMsg" : "Failed to create the source model.",
         "sourceModelConnectionCreateFailedMsg" : "Failed to create the source model connection.",
         "sourceModelConnectionUpdateFailedMsg" : "Failed to update the source model connection."
@@ -398,9 +398,9 @@
 
     "svcSourceNewController" : {
         "getTranslatorsFailedMsg" : "Failed attempting to fetch translator.",
-        "sourceCreateFailedMsg" : "Failed to create the source.",
-        "sourceDeployFailedMsg" : "Failed to deploy the source.",
-        "sourceModelCreateFailedMsg" : "Failed to create the source model.",
+        "sourceCreateFailedMsg" : "Failed to create the data source.",
+        "sourceDeployFailedMsg" : "Failed to deploy the data source.",
+        "sourceModelCreateFailedMsg" : "Failed to create the data source model.",
         "sourceModelConnectionCreateFailedMsg" : "Failed to create the source model connection."
     },
     
