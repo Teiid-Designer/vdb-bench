@@ -5,6 +5,7 @@
         "BrowseMsg" : "Browse...",
         "Cancel" : "Cancel",
         "changedConnectionFailedMsg" : "Failed to get connection: \n{{errorMsg}}",
+        "Close" : "Close",
         "Connection" : "Connection",
         "Connections" : "Connections",
         "Copy" : "Copy",
@@ -311,6 +312,10 @@
 
     "git-preferences-config" : {
         "tabTitle" : "Git Repository Configurations"
+    },
+    
+    "HelpService" : {
+    	"inlineFramesNotSupportedMsg" : "Sorry your browser doesn't support inline frames."
     },
 
     "modelTableList" : {

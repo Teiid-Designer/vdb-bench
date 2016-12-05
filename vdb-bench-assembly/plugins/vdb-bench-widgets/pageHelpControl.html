@@ -1,0 +1,10 @@
+<a class="page-help-icon pficon-help" href="" ng-click="vm.togglePageHelp()">
+    <div pageslide ps-open="vm.showPageHelp" height="80vh" ps-size="40%" ps-key-listener="true">
+        <div style="padding:20px">
+            <iframe width="100%" height="600" ng-src="{{vm.getHelpPageUrl()}}">
+            	{{ 'HelpService.inlineFramesNotSupportedMsg' | translate }}
+            </iframe>
+            <button class="btn" ng-click="vm.togglePageHelp()" translate="shared.Close" />
+        </div>
+    </div>
+</a>

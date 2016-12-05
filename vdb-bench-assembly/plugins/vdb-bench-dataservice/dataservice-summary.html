@@ -43,8 +43,14 @@
     </div>
 
     <div id="ds-summary-table" class="col-md-10 row">
-        <div class="row col-md-10" ng-show="vm.dsLoading==true || vm.sourcesLoading==true || vm.hasServices==true">
-            <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
+        <div class="row col-md-12" ng-show="vm.dsLoading==true || vm.sourcesLoading==true || vm.hasServices==true">
+            <div class="page-header">
+                <h1>
+                    <span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span>
+                    {{vmmain.selectedPage.title}}
+                    <page-help-control help-id="dataservice-summary" />
+                </h1>
+            </div>
         </div>
         <div pf-toolbar id="dataserviceToolbar" config="vm.toolbarConfig" ng-show="vm.dsLoading==true || vm.sourcesLoading==true || vm.hasServices==true"></div>
 

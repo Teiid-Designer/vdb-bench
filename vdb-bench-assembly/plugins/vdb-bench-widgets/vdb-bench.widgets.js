@@ -17,6 +17,7 @@
         'prettyXml',
         'ngFileSaver',
         'ui.grid',
+        'pageslide-directive',
 
         /*
          * Everybody has access to these.
