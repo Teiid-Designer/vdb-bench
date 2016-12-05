@@ -15,9 +15,11 @@
     function ConnectionList(config, syntax) {
         var directive = {
             restrict: 'E',
-            scope: {},
+            scope: true,
             bindToController: {
-                selection : '@'
+                selection : '@',
+                hideJdbc : '=',
+                hideResourceAdapters : '='
             },
             controller: ConnectionListController,
             controllerAs: 'vm',
@@ -44,7 +46,7 @@
             vm.connectionsLoading = loading;
             if(vm.connectionsLoading === false) {
                 vm.allItems = ConnectionSelectionService.getConnections();
-                vm.items = vm.allItems;
+                vm.items = filterItems(vm.allItems);
             }
         });
 
@@ -64,6 +66,29 @@
             vm.listConfig.selectedItems = selItems;
         }
         
+        function filterItems(all) {
+            // Determine from supplied 'hide' attributes which types to include
+            var showJdbc = true;
+            var showResourceAdapters = true;
+            if(angular.isDefined(vm.hideJdbc) && vm.hideJdbc===true) {
+                showJdbc = false;
+            }
+            if(angular.isDefined(vm.hideResourceAdapters) && vm.hideResourceAdapters===true) {
+                showResourceAdapters = false;
+            }
+            
+            var filteredItems = [];
+            if(angular.isDefined(all) && all!==null) {
+                for(var i = 0; i < all.length; ++i) {
+                    if( all[i].dv__type===true && showJdbc ) {
+                        filteredItems.push(all[i]);
+                    } else if( all[i].dv__type===false && showResourceAdapters ) {
+                        filteredItems.push(all[i]);
+                    }
+                }
+            }
+            return filteredItems;
+        }
         /**
          * Access to the collection of filtered connections
          */
@@ -84,9 +109,9 @@
         var handleSelect = function (item, e) {
             var itemsSelected = vm.listConfig.selectedItems;
             if(itemsSelected.length === 0) {
-                ConnectionSelectionService.selectConnection(null);
+                ConnectionSelectionService.selectConnection(null, true);
             } else {
-                ConnectionSelectionService.selectConnection(item);
+                ConnectionSelectionService.selectConnection(item, true);
             }
         };  
                 
@@ -107,7 +132,7 @@
          */
         vm.refresh = function() {
             vm.allItems = ConnectionSelectionService.getConnections();
-            vm.items = vm.allItems;
+            vm.items = filterItems(vm.allItems);
             
             // Set the selection (if specified)
             var selItems = [];
@@ -123,7 +148,7 @@
             }
             if(selItems.length==1) {
                 vm.listConfig.selectedItems = selItems;
-                ConnectionSelectionService.selectConnection(selItems[0]);
+                ConnectionSelectionService.selectConnection(selItems[0], true);
             }
         };
 

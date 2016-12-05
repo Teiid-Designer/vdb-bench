@@ -5,6 +5,14 @@
     </div>
     
     <div class="pick-list-container">
+        <!-- Spinner when loading -->
+        <div ng-show="vm.connectionsLoading==true">
+            <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+        </div>
+        <!-- No Content Message -->
+        <div ng-show="vm.connectionsLoading==false && vm.items.length == 0">
+            <h4>No Connections</h4>
+        </div>
         <div class="pick-list-results">
             <div id="connectionList-table-row" class="list-view-container" ng-show="vm.connectionsLoading==false">
                 <div pf-list-view config="vm.listConfig" items="vm.items">

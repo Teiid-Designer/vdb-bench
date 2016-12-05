@@ -57,6 +57,10 @@
                                                             ConnectionSelectionService, SvcSourceSelectionService, DSPageService) {
         var vm = this;
 
+        vm.dataserviceNav = "";
+        vm.datasourceNav = "";
+        vm.homeNav = "";
+
         /*
          * When a data service is currently being deployed
          */
@@ -84,8 +88,33 @@
         };
 
         vm.selectPage = function(pageId) {
+            if(pageId === DSPageService.SERVICESOURCE_NEW_PAGE) {
+                ConnectionSelectionService.resetFilterProperties();
+            }
             vm.selectedPage = DSPageService.page(pageId);
+            setNavActiveState(vm.selectedPage);
         };
+
+        function setNavActiveState(page) {
+            vm.dataserviceNav = "";
+            vm.datasourceNav = "";
+            vm.homeNav = "";
+            var activeNav = "";
+            // No parent
+            if(page.parent===null) {
+                activeNav = page.id;
+            // Parent defines active nav
+            } else {
+                activeNav = page.parent;
+            }
+            if(activeNav === 'dataservice-summary') {
+                vm.dataserviceNav = "active";
+            } else if(activeNav === 'datasource-summary') {
+                vm.datasourceNav = "active";
+            } else if(activeNav === 'dataservice-home') {
+                vm.homeNav = "active";
+            }
+        }
 
         vm.selectedPageCrumbs = function() {
             return DSPageService.pageCrumbs(vm.selectedPage);

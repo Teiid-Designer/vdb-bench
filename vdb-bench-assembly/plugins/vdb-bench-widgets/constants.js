@@ -55,5 +55,17 @@
             TYPE_AHEAD: 'typeahead',
             CONTROLS: 'controls',
             TABS: 'tabs'
+        })
+        .constant('JDBC_FILTER', {
+            KEY_CATALOG: 'importer.catalog',
+            KEY_SCHEMA_PATTERN: 'importer.schemaPattern',
+            KEY_TABLE_NAME_PATTERN: 'importer.tableNamePattern',
+            BLANK: '',
+            CATALOG: 'Catalog',
+            SCHEMA: 'Schema',
+            TABLE: 'Table',
+            USER_NAME: 'user-name',
+            WILD_CARD: '%'
         });
+
 })();

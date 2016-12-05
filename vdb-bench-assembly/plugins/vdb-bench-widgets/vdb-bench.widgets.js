@@ -18,6 +18,7 @@
         'ngFileSaver',
         'ui.grid',
         'pageslide-directive',
+        'treeControl',
 
         /*
          * Everybody has access to these.

@@ -235,7 +235,7 @@
          * Handle listView and cardView selection
          */
         var handleSelect = function (item, e) {
-            ConnectionSelectionService.selectConnection(item);
+            ConnectionSelectionService.selectConnection(item, true);
             
             // Actions disabled unless one is selected
             var itemsSelected = vm.listConfig.selectedItems;

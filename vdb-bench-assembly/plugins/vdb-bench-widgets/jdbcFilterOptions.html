@@ -1,0 +1,105 @@
+<div>
+    <!--  Selection is not JDBC -->
+    <div class="row" ng-show="vm.jdbcConnectionSelected==false">
+        <div class="col-md-12" >
+            <h4 translate="jdbcFilterOptions.notJdbcMsg" translate-values="{connName: vm.selectedConn.keng__id}"></h4>
+        </div>
+    </div>
+    
+    <!--  Filter Option Controls -->
+    <div id="connection-msg" ng-show="vm.jdbcConnectionSelected==true">
+        <!-- Message -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3 translate="jdbcFilterOptions.optionMsg" translate-values="{connName: vm.selectedConn.keng__id}"></h3>
+            </div>
+        </div>
+        <!--  -->
+        <!--  -->
+        <!-- Options resetting -->
+        <div class="row" ng-show="vm.optionsResetting==true">
+            <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+        </div>
+        <!--  -->
+        <!--  -->
+        <!-- Section titles -->
+        <div class="row" ng-show="vm.optionsResetting==false">
+            <div class="col-md-5" ng-show="vm.supportsCatalogOrSchema">
+                <h3 translate="shared.Schemas"></h3>
+            </div>
+            <div class="col-md-5">
+                <!-- Table Filter -->
+                <h3 class="col-md-3 pull-left" translate="shared.Tables"></h3>
+                <form>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <input type="text" ng-model="vm.tableFilter" ng-init="vm.tableFilter" class="form-control">
+                        </div>
+                    </div>
+                </form>
+                <div class="col-md-1 pull-right">
+                    <button id="btn-refresh-tables" class="btn btn-xs fa fa-refresh" ng-click="vm.tableFilterRefresh()"></button>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+        <!--  -->
+        <!--  -->
+        <div class="row" ng-show="vm.optionsResetting==false">
+            <!-- Catalog-Schema Tree Control -->
+            <div class="tree-control-container col-md-5" ng-show="vm.supportsCatalogOrSchema">
+                <!-- Spinner when loading -->
+                <div ng-show="vm.treeLoading==true">
+                    <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+                </div>
+                <!-- No Content Message -->
+                <div ng-show="vm.treeLoading==false && vm.treedata.length == 0 && !vm.hasTreeFetchError">
+                    <h4 translate="jdbcFilterOptions.noContent"></h4>
+                </div>
+                <!-- Fetch Content Error Message -->
+                <div ng-show="vm.treeLoading==false && vm.hasTreeFetchError">
+                    <h4>{{vm.treeFetchErrorMsg}}</h4>
+                </div>
+                <div ng-show="vm.treeLoading==false">
+                    <!-- tree control for catalog and schema -->
+                    <div treecontrol="" class="tree-classic tree-control-results" tree-model="vm.treedata" expanded-nodes="vm.initialExpandedNodes" selected-node="vm.initialNodeSelection" on-selection="vm.setTreeSelection(node,selected)">
+                        {{node.name}}
+                    </div>
+                </div>
+            </div>
+            <!--  -->
+            <!--  -->
+            <!-- Table display area -->
+            <div class="col-md-5">
+                <!-- The table name pick list -->
+                <div class="pick-list-container">
+                    <!-- spinner while updating -->
+                    <div id="tableList-updating" ng-show="vm.tablesLoading==true" class="col-md-10 row">
+                        <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+                        <span class="sr-only" translate="shared.loadingProgressMsg"></span>
+                    </div>
+                    <!-- No Tables Message -->
+                   <div id="tableList-updating" ng-show="vm.tablesLoading==false && vm.tables.length == 0 && !vm.hasTableFetchError" class="col-md-10 row">
+                        <h4 translate="jdbcFilterOptions.noTables"></h4>
+                    </div>
+                    <!-- Fetch Table Error Message -->
+                    <div id="tableList-updating" ng-show="vm.tablesLoading==false && vm.hasTableFetchError" class="col-md-10 row">
+                        <h4>{{vm.tableFetchErrorMsg}}</h4>
+                    </div>
+                    <!--  Results -->
+                    <div class="pick-list-results">
+                        <div id="tableNameList-table-row" class="list-view-container" ng-show="vm.tablesLoading==false && vm.tables.length>0 && !vm.hasTableFetchError">
+                            <div pf-list-view config="vm.listConfig" items="vm.tables">
+                                <div class="list-view-pf-description">
+                                    <div class="list-group-item-heading">
+                                    {{item}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

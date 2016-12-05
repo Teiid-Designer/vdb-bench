@@ -9,37 +9,60 @@
         <div class="col-md-11">
             <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
             <h4 translate="svcsource-edit.instructionsMsg"></h4>
-            <form class="form-horizontal">
-                <div class="col-md-5">
-                    <h4><strong translate="svcsource-edit.Connections"></strong></h4>
-                    <connection-list selection="{{vm.initialConnectionName}}"></connection-list>
-                </div>
-                <div class="col-md-5">
-                    <h4><strong translate="svcsource-edit.Translator"></strong></h4>
-                    <img src="{{vm.selectedTranslatorImage}}" width="42" height="24"/>
-                    <select id="translators" ng-model="vm.selectedTranslator" ng-options="trans as trans.keng__id for trans in vm.allTranslators"
-                                             ng-change="vm.translatorChanged()">
-                        <option value="">-- choose translator --</option>
-                    </select>
-                </div>
-                <div class="col-md-12"></div>
-                <div class="form-group" style="margin-top: 20px">
-                    <label class="col-md-2 control-label" for="textInput" translate="svcsource-edit.Name"></label>
-                    <div class="col-md-6">
-                        <input type="text" readonly="readonly" ng-model="vm.svcSourceName" ng-init="vm.svcSourceName=vmmain.selectedServiceSource().keng__id" class="form-control">
+            <div class="col-md-5">
+                <h4><strong translate="svcsource-edit.Connections"></strong></h4>
+                <connection-list selection="{{vm.initialConnectionName}}" hide-resource-adapters=true></connection-list>
+            </div>
+            <div class="col-md-5">
+                <h4><strong translate="svcsource-edit.Translator"></strong></h4>
+                <img src="{{vm.selectedTranslatorImage}}" width="42" height="24"/>
+                <select id="translators" ng-model="vm.selectedTranslator" ng-options="trans as trans.keng__id for trans in vm.allTranslators"
+                                         ng-change="vm.translatorChanged()">
+                    <option value="">-- choose translator --</option>
+                </select>
+            </div>
+
+            <!--  Filter Checkbox -->
+            <div class="col-md-12" ng-show="vm.selectedJdbcConnection !== null && vm.selectedTranslator !== null">
+                <form>
+                    <input type="checkbox" ng-model="vm.filterSchema" ng-true-value=true ng-false-value=false ng-change="vm.filterCheckboxChanged()">
+                    <h4 style="display:inline"><strong translate="svcsource-edit.filterConnection"></strong></h4><h4>
+                </form>
+            </div>
+
+            <!--  JDBC Filter Options -->
+            <div class="col-md-12" ng-show="vm.filterSchema">
+                <jdbc-filter-options></jdbc-filter-options>
+            </div>
+
+            <div class="col-md-12">
+                <p></p>
+                <h4 translate="svcsource-new.nameDescriptionInstructionsMsg"></h4>
+                <p></p>
+                <form class="form-horizontal">
+                    <div class="form-group" style="margin-top: 20px">
+                        <label class="col-md-2 control-label" for="textInput" translate="svcsource-edit.Name"></label>
+                        <div class="col-md-6">
+                            <input type="text" readonly="readonly" ng-model="vm.svcSourceName" ng-init="vm.svcSourceName=vmmain.selectedServiceSource().keng__id" class="form-control">
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="textInput" translate="svcsource-edit.Description"></label>
-                    <div class="col-md-6">
-                        <input type="text" ng-model="vm.svcSourceDescription" ng-init="vm.svcSourceDescription=vmmain.selectedServiceSource().vdb__description" class="form-control">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="textInput" translate="svcsource-edit.Description"></label>
+                        <div class="col-md-6">
+                            <input type="text" ng-model="vm.svcSourceDescription" ng-init="vm.svcSourceDescription=vmmain.selectedServiceSource().vdb__description" class="form-control">
+                        </div>
                     </div>
-                </div>
-            </form>
-            <input type="submit" class="btn btn-primary" value="{{:: 'svcsource-edit.Save' | translate}}" ng-click="vm.onEditSvcSourceClicked()"
-                                              ng-disabled="vm.canUpdateSvcSource() !== true || vmmain.selectedPage.id !== 'svcsource-edit'"/>
-            <input type="button" class="btn btn-default" value="{{:: 'svcsource-edit.Cancel' | translate}}" ng-click="vmmain.selectPage('datasource-summary')"
-                                              ng-disabled="vmmain.selectedPage.id !== 'svcsource-edit'"/>
+                </form>
+            </div>
+            <div>
+                <p></p>
+            </div>
+            <div class="col-md-12">
+                <input type="submit" class="btn btn-primary" value="{{:: 'svcsource-edit.Save' | translate}}" ng-click="vm.onEditSvcSourceClicked()"
+                                                  ng-disabled="vm.canUpdateSvcSource() !== true || vmmain.selectedPage.id !== 'svcsource-edit'"/>
+                <input type="button" class="btn btn-default" value="{{:: 'svcsource-edit.Cancel' | translate}}" ng-click="vmmain.selectPage('datasource-summary')"
+                                                  ng-disabled="vmmain.selectedPage.id !== 'svcsource-edit'"/>
+            </div>
         </div>
       </div>
     </div>
