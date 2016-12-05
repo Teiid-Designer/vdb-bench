@@ -14,13 +14,14 @@
         .module(pluginName)
         .factory('HelpService', HelpService);
 
-    HelpService.$inject = ['$translate', 'SYNTAX'];
+    HelpService.$inject = ['SYNTAX'];
 
-    function HelpService($translate, SYNTAX) {
+    function HelpService(SYNTAX) {
         /*
          * Service instance to be returned
          */
         var service = {
+            'dataservice-summary': "https://www.redhat.com",
             'ds-test-endpoint-search': "'<p>This url is formed using the odata specification. It can be copied into a new browser window to return the results in xml format.</p><p>Click the Search button to display the results in a formatted table.</p>'",
             'ds-test-select': "'<p>Choose the view from which results should be sought.</p><p>Select a limit to curtail the number of results returned</p>'",
             'ds-test-columns': "Select the columns to be included in the results.",
@@ -38,10 +39,10 @@
         };
 
         /*
-         * Obtain the <div> for the help page for the specified translation identifier.
+         * Obtain the help page for the specified page identifier.
          */
-        service.pageHelpFor = function( translationId ) {
-            return $translate.instant( translationId );
+        service.getHelpPageUrl = function( pageId ) {
+        	return service[ pageId ];
         };
 
         return service;

@@ -25,9 +25,9 @@
         return directive;
     }
 
-    PageHelpController.$inject = [ 'HelpService' ];
+    PageHelpController.$inject = [ '$sce', 'HelpService' ];
 
-    function PageHelpController( helpService ) {
+    function PageHelpController( $sce, helpService ) {
         var vm = this;
 
         // flag to show/hide page help
@@ -37,8 +37,8 @@
         	vm.showPageHelp = !vm.showPageHelp;
         };
         
-        vm.getPageHelp = function() {
-            return helpService.pageHelpFor( vm.helpId );
+        vm.getHelpPageUrl = function() {
+            return  $sce.trustAsResourceUrl( helpService.getHelpPageUrl( vm.helpId ) );
         };
     }
 })();

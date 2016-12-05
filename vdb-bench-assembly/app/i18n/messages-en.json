@@ -92,10 +92,7 @@
         "createSourceMsg" : "A Data Service is created using one or more Sources. To create your first Source, click ",
         "importDataServiceMsg" : "You can also import an existing Data Service. To import a Data Service, click ",
         "serviceVdbToolTip" : "The name of the service VDB of this dataservice",
-        "welcomeMsg" : "Welcome to the <strong>Data Services Builder</strong>!",
-        "help" : {
-            "page" : "<div><h1><span class=\"fa fa-table\">Data Service Summary</h1><p>Help goes here ...</p></div>"
-        }
+        "welcomeMsg" : "Welcome to the <strong>Data Services Builder</strong>!"
     },
 
     "dataservice-test" : {
@@ -315,6 +312,10 @@
 
     "git-preferences-config" : {
         "tabTitle" : "Git Repository Configurations"
+    },
+    
+    "HelpService" : {
+    	"inlineFramesNotSupportedMsg" : "Sorry your browser doesn't support inline frames."
     },
 
     "modelTableList" : {
