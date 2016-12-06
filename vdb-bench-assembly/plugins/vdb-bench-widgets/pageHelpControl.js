@@ -38,7 +38,11 @@
         };
         
         vm.getHelpPageUrl = function() {
-            return  $sce.trustAsResourceUrl( helpService.getHelpPageUrl( vm.helpId ) );
-        };
+            if ( vm.showPageHelp ) {
+                    return  $sce.trustAsResourceUrl( helpService.getHelpPageUrl( vm.helpId ) );
+            }
+            
+            return "";
+    };
     }
 })();
