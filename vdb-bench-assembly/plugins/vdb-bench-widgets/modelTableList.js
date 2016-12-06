@@ -9,7 +9,7 @@
         .directive('modelTableList', ModelTableList);
 
     ModelTableList.$inject = ['CONFIG', 'SYNTAX'];
-    ModelTableListController.$inject = ['$scope', '$rootScope', 'RepoRestService', 'REST_URI', 'SYNTAX', 
+    ModelTableListController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 
                                         'SvcSourceSelectionService', 'TableSelectionService', 'pfViewUtils'];
 
     function ModelTableList(config, syntax) {
@@ -29,7 +29,7 @@
         return directive;
     }
 
-    function ModelTableListController($scope, $rootScope, RepoRestService, REST_URI, SYNTAX, 
+    function ModelTableListController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, 
                                       SvcSourceSelectionService, TableSelectionService, pfViewUtils) {
         var vm = this;
 
