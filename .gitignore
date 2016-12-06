@@ -22,3 +22,4 @@ hawtio-config
 .tscache
 node/
 bower_components/
+vdb-bench-doc/WebContent/META-INF/MANIFEST.MF
