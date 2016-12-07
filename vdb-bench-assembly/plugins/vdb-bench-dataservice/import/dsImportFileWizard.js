@@ -38,7 +38,7 @@
          */
         vm.onImportDone = function(result) {
             // Reinitialise the list of dataservices
-            DSSelectionService.refresh();
+            DSSelectionService.refresh(null);
         };
     }
 })();

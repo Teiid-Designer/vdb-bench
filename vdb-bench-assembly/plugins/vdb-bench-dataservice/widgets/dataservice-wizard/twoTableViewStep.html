@@ -1,0 +1,74 @@
+<div pf-wizard-step
+        step-title="{{vm.stepTitle}}"
+        wz-disabled="{{!vm.wizardActive}}"
+        step-id="wizard-join-definition"
+        allow-click-nav="false"
+        wz-disabled="false"
+        on-show="vm.joinDefinitionStepShown()"
+        next-enabled = "vm.nextEnablement"
+        prev-enabled = "true"
+        ok-to-nav-away="true">
+    <h3><i>{{vm.instructionMessage}}</i></h3>
+    <div class="col-md-5">
+        <h3><strong>{{vm.selectedSources[0]}}.{{vm.selectedTables[0]}}</strong></h3>
+        <div class="column-list-container">
+            <div class="column-list-results">
+                <div id="viewColumnList-row" class="list-view-container">
+                    <div pf-list-view config="vm.listConfig" items="vm.lhSourceItems">
+                        <div class="list-view-pf-description">
+                            <div class="list-group-item-heading">
+                            {{item.keng__id}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-1">
+         <h3><strong translate="twoTableViewStep.joinType" /></h3>
+         <img title="{{vm.joinToolTipInner}}" ng-class="vm.joinType == 'INNER' ? 'join-button-down' : 'join-button-up'" 
+              ng-click="vm.selectJoinType('INNER')" src="plugins/vdb-bench-dataservice/content/img/JoinInner.png" />
+         <img title="{{vm.joinToolTipLeftOuter}}" ng-class="vm.joinType == 'LEFT_OUTER' ? 'join-button-down' : 'join-button-up'" 
+              ng-click="vm.selectJoinType('LEFT_OUTER')" src="plugins/vdb-bench-dataservice/content/img/JoinLeftOuter.png" />
+         <img title="{{vm.joinToolTipRightOuter}}" ng-class="vm.joinType == 'RIGHT_OUTER' ? 'join-button-down' : 'join-button-up'" 
+              ng-click="vm.selectJoinType('RIGHT_OUTER')" src="plugins/vdb-bench-dataservice/content/img/JoinRightOuter.png" />
+         <img title="{{vm.joinToolTipFullOuter}}" ng-class="vm.joinType == 'FULL_OUTER' ? 'join-button-down' : 'join-button-up'" 
+              ng-click="vm.selectJoinType('FULL_OUTER')" src="plugins/vdb-bench-dataservice/content/img/JoinFullOuter.png" />
+    </div>
+    <div class="col-md-5">
+        <h3><strong>{{vm.selectedSources[1]}}.{{vm.selectedTables[1]}}</strong></h3>
+        <div class="column-list-container">
+            <div class="column-list-results">
+                <div id="viewColumnList-row" class="list-view-container">
+                    <div pf-list-view config="vm.listConfig" items="vm.rhSourceItems">
+                        <div class="list-view-pf-description">
+                            <div class="list-group-item-heading">
+                            {{item.keng__id}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <h3><strong translate="twoTableViewStep.joinCriteria" /></h3>
+    </div>
+    <div class="col-md-5">
+        <select id="lhCriteriaCol" ng-model="vm.lhCriteriaCol" ng-options="lhCol as lhCol.keng__id for lhCol in vm.lhSourceItems" 
+                                   ng-change="vm.lhCriteriaColumnChanged()">
+            <option value="" translate="twoTableViewStep.chooseCriteriaCol"></option>
+        </select>
+    </div>
+    <div class="col-md-1">
+        <strong translate="twoTableViewStep.equalsCriteria" />
+    </div>
+    <div class="col-md-5">
+        <select id="rhCriteriaCol" ng-model="vm.rhCriteriaCol" ng-options="rhCol as rhCol.keng__id for rhCol in vm.rhSourceItems" 
+                                   ng-change="vm.rhCriteriaColumnChanged()">
+            <option value="" translate="twoTableViewStep.chooseCriteriaCol"></option>
+        </select>
+    </div>
+    
+</div>

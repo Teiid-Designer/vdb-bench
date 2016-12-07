@@ -27,9 +27,7 @@
                 RepoRestService.cloneDataService( dataserviceName, newDataserviceName ).then(
                     function () {
                         // Reinitialise the list of data services
-                        DSSelectionService.refresh();
-                         // Broadcast the pageChange
-                        $rootScope.$broadcast("dataServicePageChanged", 'dataservice-summary');
+                        DSSelectionService.refresh('dataservice-summary');
                     },
                     function (response) {
                 	   throw RepoRestService.newRestException($translate.instant('dsCloneController.cloneFailedMsg', 
