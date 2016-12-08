@@ -40,6 +40,11 @@
 			<artifactId>vdb-bench-war</artifactId>
 			<type>war</type>
 		</dependency>
+		<dependency>
+			<groupId>org.teiid</groupId>
+			<artifactId>vdb-bench-doc</artifactId>
+			<type>war</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -63,6 +68,12 @@
 							<artifactId>vdb-bench-war</artifactId>
 							<contextRoot>ds-builder</contextRoot>
 							<bundleFileName>ds-builder.war</bundleFileName>
+						</webModule>
+                                                <webModule>
+							<groupId>org.teiid</groupId>
+							<artifactId>vdb-bench-doc</artifactId>
+							<contextRoot>ds-builder-help</contextRoot>
+							<bundleFileName>ds-builder-help.war</bundleFileName>
 						</webModule>
 					</modules>
 				</configuration>
