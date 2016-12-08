@@ -1,8 +1,14 @@
 <div class="container-fluid" ng-controller="DSImportExportController as vm">
+    <div class="row">
+        <page-help-control 
+            icon="pficon-import"
+            title="{{:: 'dataservice-import.wizardTitle' | translate}}" 
+            help-id="dataservice-import" />
+    </div>
 
     <div class="row">
         <div class="wizard-pf-container">
-            <div pf-wizard title="{{:: 'dataservice-import.wizardTitle' | translate}}"
+            <div pf-wizard title=""
                     on-finish="vmmain.selectPage('dataservice-summary',null)"
                     on-cancel="vmmain.selectPage('dataservice-summary',null)"
                     back-callback="vm.backCallback"

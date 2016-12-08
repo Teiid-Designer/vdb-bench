@@ -9,7 +9,7 @@
         .directive('sqlControl', SQLControl);
 
     SQLControl.$inject = ['CONFIG', 'SYNTAX'];
-    SQLController.$inject = ['$scope', 'SYNTAX', 'RepoRestService', '$window', 'HelpService'];
+    SQLController.$inject = ['$scope', 'SYNTAX', 'RepoRestService', '$window'];
 
     function SQLControl(config, syntax) {
         var directive = {
@@ -31,7 +31,7 @@
         return directive;
     }
 
-    function SQLController($scope, SYNTAX, RepoRestService, $window, HelpService) {
+    function SQLController($scope, SYNTAX, RepoRestService, $window) {
         var vm = this;
 
         vm.showProgress = function(display) {
@@ -119,13 +119,6 @@
                     vm.errorMsg = RepoRestService.responseMessage(response);
                     vm.showResultsTable = false;
                 });
-        };
-
-        /**
-         * Handler for fetching help content for the given context
-         */
-        vm.help = function (context) {
-            return HelpService.help(context);
         };
     }
 })();

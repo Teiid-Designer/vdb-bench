@@ -15,6 +15,8 @@
             replace: true, // replaces the <page-help-control> tag with the template
             scope: {},
             bindToController: {
+                icon: '@',
+                title: '@',
                 helpId: '@'
             },
             controller: PageHelpController,
@@ -38,11 +40,11 @@
         };
         
         vm.getHelpPageUrl = function() {
-            if ( vm.showPageHelp ) {
-                    return  $sce.trustAsResourceUrl( helpService.getHelpPageUrl( vm.helpId ) );
-            }
-            
-            return "";
-    };
+        	if ( vm.showPageHelp ) {
+                return  $sce.trustAsResourceUrl( helpService.getHelpPageUrl( vm.helpId ) );
+        	}
+        	
+        	return "";
+        };
     }
 })();

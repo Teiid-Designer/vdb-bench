@@ -3,65 +3,70 @@
     <!-- Content shown if No Sources yet -->
     <div id="dataservice-new-nosources" ng-show="vm.hasSources==false" class="col-md-10 row">
         <div class="row">
-            <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
-            <p>
+            <div class="row col-md-12">
+                <page-help-control 
+                    icon="{{vmmain.selectedPage.icon}}" 
+                    title="{{vmmain.selectedPage.title}}" 
+                    help-id="dataservice-new" />
+            </div>
+            <div>
                 <span translate="dataservice-new.configureSourceMsg" />
                     <a href ng-click="vmmain.selectPage('svcsource-new')">
                     <span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}">
                 </span>
                 <span>{{vmmain.page('svcsource-new').title}}</span></a>
-            </p>
+            </div>
         </div>
     </div>
     
-    <div id="dataservice-new-controls" ng-show="vm.hasSources==true" class="col-md-10 row">
-        <div class="col-sm-9 row">
-            <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
-            <h4>
-                <span translate="dataservice-new.instructionsMsg" />
-                    <a href ng-click="vmmain.selectPage('svcsource-new')">
-                    <span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}">
-                </span>
-                <span>{{vmmain.page('svcsource-new').title}}</span></a>
-            </h4>
-            <div class="col-md-5">
-                <h4><strong translate="shared.Sources"></strong></h4>
-                <service-source-list></service-source-list>
-            </div>
-            <div class="col-md-5">
-                <h4><strong translate="shared.Tables"></strong></h4>
-                <model-table-list></model-table-list>
-            </div>
-            <div class="col-md-12" ng-show="vm.showNameAndDescription">
-                <p></p>
-                <h4 translate="dataservice-new.inputFieldsHelpMsg"></h4>
-                <p></p>
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-md-2 control-label" for="textInput" translate="shared.Name"></label>
-                        <div class="col-md-6">
-                          <input type="text" ng-model="vm.serviceName" class="form-control">
-                        </div>
-                        <div class="col-md-4"></div>
+    <div id="dataservice-new-controls" ng-show="vm.hasSources==true" class="row">
+        <div class="row">
+            <page-help-control 
+                icon="{{vmmain.selectedPage.icon}}" 
+                title="{{vmmain.selectedPage.title}}" 
+                help-id="dataservice-new" />
+        </div>
+        <h4>
+            <span translate="dataservice-new.instructionsMsg" />
+                <a href ng-click="vmmain.selectPage('svcsource-new')">
+                <span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}">
+            </span>
+            <span>{{vmmain.page('svcsource-new').title}}</span></a>
+        </h4>
+        <div class="col-md-6">
+            <h4><strong translate="shared.Sources"></strong></h4>
+            <service-source-list></service-source-list>
+        </div>
+        <div class="col-md-6">
+            <h4><strong translate="shared.Tables"></strong></h4>
+            <model-table-list></model-table-list>
+        </div>
+        <div class="col-md-12" ng-show="vm.showNameAndDescription">
+            <p></p>
+            <h4 translate="dataservice-new.inputFieldsHelpMsg"></h4>
+            <p></p>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="textInput" translate="shared.Name"></label>
+                    <div class="col-md-6">
+                      <input type="text" ng-model="vm.serviceName" class="form-control">
                     </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label" for="textInput" translate="shared.Description"></label>
-                        <div class="col-md-6">
-                          <input type="text" ng-model="vm.serviceDescription" class="form-control">
-                        </div>
-                        <div class="col-md-4"></div>
+                    <div class="col-md-4"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="textInput" translate="shared.Description"></label>
+                    <div class="col-md-6">
+                      <input type="text" ng-model="vm.serviceDescription" class="form-control">
                     </div>
-                </form>
-            </div>
-            <div class="col-md-12">
-                <p></p>
-            </div>
-            <div class="col-md-12">
-                <input type="submit" class="btn btn-primary" value="{{:: 'shared.Create' | translate}}" ng-click="vm.onCreateDataServiceClicked()"
-                                          ng-disabled="vm.canCreateDataService() !== true || vmmain.selectedPage.id !== 'dataservice-new'"/>
-                <input type="button" class="btn btn-default" value="{{:: 'shared.Cancel' | translate}}" ng-click="vmmain.selectPage('dataservice-summary')"
-                                          ng-disabled="vmmain.selectedPage.id !== 'dataservice-new'"/>
-            </div>
+                    <div class="col-md-4"></div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-12">
+            <input type="submit" class="btn btn-primary" value="{{:: 'shared.Create' | translate}}" ng-click="vm.onCreateDataServiceClicked()"
+                                      ng-disabled="vm.canCreateDataService() !== true || vmmain.selectedPage.id !== 'dataservice-new'"/>
+            <input type="button" class="btn btn-default" value="{{:: 'shared.Cancel' | translate}}" ng-click="vmmain.selectPage('dataservice-summary')"
+                                      ng-disabled="vmmain.selectedPage.id !== 'dataservice-new'"/>
         </div>
     </div>
 

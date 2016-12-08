@@ -1,10 +1,15 @@
 <div id="svcsource-summary-container" class="container-fluid" ng-controller="DatasourceSummaryController as vm">
     
     <!-- Content shown if No Sources yet -->
-    <div id="svcsource-summary-nosources" ng-show="vm.srcLoading==false && vm.hasSources==false" class="col-md-10 row">
+    <div id="svcsource-summary-nosources" ng-show="vm.srcLoading==false && vm.hasSources==false" class="col-md-12 row">
         <div class="row">
             <h2 ng-bind-html=":: 'datasource-summary.welcomeMsg' | translate"></h2>
-            <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
+            <div class="row col-md-12">
+                <page-help-control 
+                    icon="{{vmmain.selectedPage.icon}}" 
+                    title="{{vmmain.selectedPage.title}}" 
+                    help-id="datasource-summary" />
+            </div>
             <p>
                 <span translate="datasource-summary.noSourcesInstructionsMsg" />
                 <a href ng-click="vmmain.selectPage('svcsource-new')">
@@ -15,11 +20,13 @@
         </div>
     </div>
 
-    <div id="svcsource-summary-table" class="col-md-10 row">
-        <div class="row" ng-show="vm.srcLoading==true || vm.hasSources==true">
-            <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
-        </div>
-
+    <div class="col-md-12 row" ng-show="vm.srcLoading==true || vm.hasSources==true">
+        <page-help-control 
+            icon="{{vmmain.selectedPage.icon}}" 
+            title="{{vmmain.selectedPage.title}}" 
+            help-id="datasource-summary" />
+    </div>
+    <div id="svcsource-summary-table" class="col-md-12 row">
         <div pf-toolbar id="svcsourceToolbar" config="vm.toolbarConfig" ng-show="vm.srcLoading==true || vm.hasSources==true"></div>
 
         <div id="svcsource-summary-updating" ng-show="vm.srcLoading==true">

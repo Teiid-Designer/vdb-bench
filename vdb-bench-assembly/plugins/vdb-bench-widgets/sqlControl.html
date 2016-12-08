@@ -2,7 +2,7 @@
     <div class="col-sm-5">
         <div class=sql-control-control-title translate="sqlControl.instructionMsg" />
         <label class="help-label sql-control-query-help">
-            <span class="fa fa-info-circle" uib-tooltip-html="{{vm.help('ds-test-sql-search')}}"
+            <span class="fa fa-info-circle" uib-tooltip-html="{{:: 'sqlControl.help.sqlSearch' | translate}}"
                         tooltip-class="custom-tooltip"></span>
         </label>
         <div class="sql-control-controls-query">
@@ -47,7 +47,7 @@
 
     <div class="col-sm-1" ng-show="! vm.errorMsg && vm.showResultsTable == true">
         <label class="help-label">
-            <span class="fa fa-info-circle" uib-tooltip-html="{{vm.help('ds-test-results-table')}}"
+            <span class="fa fa-info-circle" uib-tooltip-html="{{:: 'sqlControl.help.resultsTable' | translate}}"
                   tooltip-class="custom-tooltip"></span>
         </label>
     </div>
