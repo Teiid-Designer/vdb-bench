@@ -10,9 +10,9 @@
         .module(pluginName)
         .controller('DSTestController', DSTestController);
 
-    DSTestController.$inject = ['$scope', '$translate', 'CONFIG', 'SYNTAX', 'RepoSelectionService', 'DSSelectionService', 'RepoRestService', 'HelpService', '$interval'];
+    DSTestController.$inject = ['$scope', '$translate', 'CONFIG', 'SYNTAX', 'RepoSelectionService', 'DSSelectionService', 'RepoRestService', '$interval'];
 
-    function DSTestController($scope, $translate, CONFIG, SYNTAX, RepoSelectionService, DSSelectionService, RepoRestService, HelpService, $interval) {
+    function DSTestController($scope, $translate, CONFIG, SYNTAX, RepoSelectionService, DSSelectionService, RepoRestService, $interval) {
         var vm = this;
 
         var EQUALS = $translate.instant('dsTestController.condition.equals');
@@ -806,13 +806,6 @@
                 // Essential to stop the accordion closing
                 event.stopPropagation();
             }
-        };
-
-        /**
-         * Handler for fetching help content for the given context
-         */
-        vm.help = function (context) {
-            return HelpService.help(context);
         };
     }
 

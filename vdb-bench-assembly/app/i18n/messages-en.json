@@ -4,7 +4,7 @@
         "Add" : "Add",
         "BrowseMsg" : "Browse...",
         "Cancel" : "Cancel",
-        "changedConnectionFailedMsg" : "Failed to get connection: \n{{errorMsg}}",
+        "changedConnectionFailedMsg" : "Failed to get connection: {{errorMsg}}",
         "Close" : "Close",
         "Connection" : "Connection",
         "Connections" : "Connections",
@@ -69,6 +69,7 @@
     "dataservice-import" : {
         "importTypeStepTitle" : "Import Source",
         "instructionsMsg" : "Select the source of the data service",
+        "sourceStepTitle" : "Select Source",
         "wizardTitle" : "Import Data Service"
     },
 
@@ -129,11 +130,11 @@
     },
 
     "dsCloneController" : {
-        "cloneFailedMsg" : "Failed to clone the data service. \n{{response}}"
+        "cloneFailedMsg" : "Failed to clone the data service: {{response}}"
     },
 
     "dsEditController" : {
-        "saveFailedMsg" : "Failed to update the data service. \n{{response}}"
+        "saveFailedMsg" : "Failed to update the data service: {{response}}"
     },
     
     "dsExportGitWizard" : {
@@ -148,8 +149,8 @@
     },
 
     "dsNewController" : {
-        "createFailedMsg" : "Failed to create the data service. \n{{response}}",
-        "saveFailedMsg" : "Failed to update the data service. \n{{response}}"
+        "createFailedMsg" : "Failed to create the data service: {{response}}",
+        "saveFailedMsg" : "Failed to update the data service: {{response}}"
     },
 
     "dsPageService" : {
@@ -159,10 +160,10 @@
     },
 
     "dsSummaryController" : {
-        "deleteFailedMsg" : "Failed to remove the data service. \n{{response}}",
-        "deployFailedMsg" : "Failed to deploy the data service. \n{{response}}",
-        "findSourceVdbsFailedMsg" : "Failed to find source VDBs. \n{{response}}",
-        "findViewTablesFailedMsg" : "Failed to find view tables. \n{{response}}",
+        "deleteFailedMsg" : "Failed to remove the data service: {{response}}",
+        "deployFailedMsg" : "Failed to deploy the data service: {{response}}",
+        "findSourceVdbsFailedMsg" : "Failed to find source VDBs: {{response}}",
+        "findViewTablesFailedMsg" : "Failed to find view tables: {{response}}",
         "descriptionFilterPlaceholder" : "Filter by Description...",
         "nameFilterPlaceholder" : "Filter by Name..."
     },
@@ -328,8 +329,8 @@
     },
 
     "modelTableList" : {
-        "connectionFailedErrorMsg" : "Failed to get connection: \n{{error}}",
-        "getTablesErrorMsg" : "Failed to get Tables. \n{{errorMsg}}"
+        "connectionFailedErrorMsg" : "Failed to get connection: {{error}}",
+        "getTablesErrorMsg" : "Failed to get Tables: {{errorMsg}}"
     },
     
     "sqlControl" : {
@@ -340,7 +341,9 @@
         "StartingRecordIndex" : "Starting Record Index",
         "help" : {
             "recordLimit" : "Limits the number of records returned from the query (-1 for no limit)",
-            "recordOffset" : "Sets the index of the first record returned (0 for no offset)"
+            "recordOffset" : "Sets the index of the first record returned (0 for no offset)",
+            "resultsTable" : "'<p>Use the column headers to sort the results or filter them by entering values.</p><p>Results are paginated in blocks of 25 and can be scrolled through with the controls at the foot of the table.</p>'",
+            "sqlSearch" : "'<p>Use the teiid dialect of SQL to construct a query that interrogates the data service for data results.</p><p>Use the record limit to limit the number of results returned.</p><p>Set the starting record index to fetch a subset of results starting at the given row index.</p>'"
         }
     },
 
@@ -375,7 +378,6 @@
         "Description" : "@:shared.Description",
         "filterConnection" : "Filter Connection",
         "instructionsMsg" : "Start configuring a new Data Source by selecting one of your available Connection definitions.",
-        "Loading" : "@:shared.loadingProgressMsg",
         "nameDescriptionInstructionsMsg" : "Choose a name (and optional description) for your Data Source",
         "Name" : "@:shared.Name",
         "Save" : "@:shared.Save",

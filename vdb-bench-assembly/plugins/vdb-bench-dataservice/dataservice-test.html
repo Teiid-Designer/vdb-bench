@@ -9,12 +9,11 @@
         <span class="sr-only"></span>{{:: 'shared.loadingProgressMsg' | translate}}
     </div>
 
-    <div ng-show="vm.dsDeploymentInProgress==false" class="row">
-        <div class="col-sm-12">
-            <div id="ds-test-header">
-                <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}} '{{vmmain.selectedDataservice().keng__id}}'</span></h2>
-            </div>
-        </div>
+    <div ng-show="vm.dsDeploymentInProgress==false" class="col-md-12 row">
+        <page-help-control 
+            icon="{{vmmain.selectedPage.icon}}" 
+            title="{{vmmain.selectedPage.title}} '{{vmmain.selectedDataservice().keng__id}}'" 
+            help-id="dataservice-test" />
     </div>
 
     <div ng-show="vm.dsDeploymentInProgress==false && vm.dsDeploymentSuccess==false" class="row">

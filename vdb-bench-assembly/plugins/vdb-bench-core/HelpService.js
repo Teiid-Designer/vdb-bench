@@ -17,32 +17,46 @@
     HelpService.$inject = ['SYNTAX'];
 
     function HelpService(SYNTAX) {
+        var HELP_PAGE_DIR = "../../ds-builder-help/";
+        var PAGE_NOT_FOUND = "page-not-found";
+    	
         /*
          * Service instance to be returned
          */
         var service = {
-            'dataservice-summary': "../../ds-builder-help/dataservices-summary-help.html",
-            'ds-test-endpoint-search': "'<p>This url is formed using the odata specification. It can be copied into a new browser window to return the results in xml format.</p><p>Click the Search button to display the results in a formatted table.</p>'",
-            'ds-test-select': "'<p>Choose the view from which results should be sought.</p><p>Select a limit to curtail the number of results returned</p>'",
-            'ds-test-columns': "Select the columns to be included in the results.",
-            'ds-test-where': "'<p>Create where clauses for filtering the results based on the values in each tuple.</p><p>Use the + button to add new where clauses (clauses are and-ed together) and remove them with the - buttons.</p>'",
-            'ds-test-order-by': "Sort the results by column in ascending or descending order",
-            'ds-test-results-table': "'<p>Use the column headers to sort the results or filter them by entering values.</p><p>Results are paginated in blocks of 25 and can be scrolled through with the controls at the foot of the table.</p>'",
-            'ds-test-sql-search': "'<p>Use the teiid dialect of SQL to construct a query that interrogates the data service for data results.</p><p>Use the record limit to limit the number of results returned.</p><p>Set the starting record index to fetch a subset of results starting at the given row index.</p>'"
-        };
-
-        service.help = function(context) {
-            if (_.isEmpty(context))
-                return SYNTAX.EMPTY_STRING;
-
-            return service[context];
+            PAGE_NOT_FOUND : "help-page-not-found.html",
+        	'connection-clone': "connection-clone-help.html",
+        	'connection-new': "connection-new-help.html",
+        	'dataservice-clone': "dataservices-clone-help.html",
+        	'dataservice-edit': "dataservices-edit-help.html",
+        	'dataservice-home': "dataservices-home-help.html",
+        	'dataservice-import': "dataservices-import-help.html",
+        	'dataservice-main': "dataservices-main-help.html",
+        	'dataservice-new': "dataservices-new-help.html",
+        	'dataservice-summary': "dataservices-summary-help.html",
+        	'dataservice-test': "dataservices-test-help.html",
+        	'datasource-summary': "datasource-summary-help.html",
+        	'svcsource-clone': "svcsource-clone-help.html",
+        	'svcsource-edit': "svcsource-edit-help.html",
+        	'svcsource-import': "svcsource-import-help.html",
+        	'svcsource-new': "svcsource-new-help.html",
         };
 
         /*
          * Obtain the help page for the specified page identifier.
          */
         service.getHelpPageUrl = function( pageId ) {
-        	return service[ pageId ];
+            if ( _.isEmpty( pageId ) ) {
+                return service.getHelpPageUrl( PAGE_NOT_FOUND );
+            }
+
+            var htmlFileName = service[ pageId ];
+
+            if ( _.isEmpty( htmlFileName ) ) {
+                return service.getHelpPageUrl( PAGE_NOT_FOUND );
+            }
+            
+            return ( HELP_PAGE_DIR + htmlFileName );
         };
 
         return service;

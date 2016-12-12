@@ -4,16 +4,19 @@
         <span class="sr-only" translate="svcsource-edit.Loading"></span>
     </div>
     
-    <div id="svcsource-edit-controls" ng-show="vm.transLoading==false && vm.updateAndDeployInProgress==false" class="col-md-10 row">
-      <div class="row">
-        <div class="col-md-11">
-            <h2><span class="fa fa-fw {{vmmain.selectedPage.icon}}"></span><span>{{vmmain.selectedPage.title}}</span></h2>
+    <div id="svcsource-edit-controls" ng-show="vm.transLoading==false && vm.updateAndDeployInProgress==false" class="row">
+          <div class="row col-md-12">
+            <page-help-control 
+              icon="{{vmmain.selectedPage.icon}}" 
+              title="{{vmmain.selectedPage.title}}" 
+              help-id="svcsource-edit" />
+          </div>
             <h4 translate="svcsource-edit.instructionsMsg"></h4>
-            <div class="col-md-5">
+            <div class="col-md-8">
                 <h4><strong translate="svcsource-edit.Connections"></strong></h4>
                 <connection-list selection="{{vm.initialConnectionName}}" hide-resource-adapters=true></connection-list>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <h4><strong translate="svcsource-edit.Translator"></strong></h4>
                 <img src="{{vm.selectedTranslatorImage}}" width="42" height="24"/>
                 <select id="translators" ng-model="vm.selectedTranslator" ng-options="trans as trans.keng__id for trans in vm.allTranslators"
@@ -64,7 +67,5 @@
                                                   ng-disabled="vmmain.selectedPage.id !== 'svcsource-edit'"/>
             </div>
         </div>
-      </div>
-    </div>
 
 </div>
