@@ -17,7 +17,9 @@
             bindToController: {
                 icon: '@',
                 title: '@',
-                helpId: '@'
+                helpId: '@',
+                containerId: '@'
+
             },
             controller: PageHelpController,
             controllerAs: 'vm',

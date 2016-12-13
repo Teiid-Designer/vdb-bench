@@ -1,21 +1,24 @@
-<div class="container-fluid" ng-controller="DSCloneController as vm">
-    <div class="row">
-        <page-help-control 
-            icon="{{vmmain.selectedPage.icon}}" 
-            title="{{vmmain.selectedPage.title}} '{{vmmain.selectedDataservice().keng__id}}'" 
-            help-id="dataservice-clone" />
-    </div>
-    <h2 translate="dataservice-clone.instructionsMsg"></h2>
-    <form class="row form-horizontal">
-        <div class="form-group">
-            <label class="col-md-1 control-label" for="textInput" translate="dataservice-clone.Name"></label>
-            <div class="col-md-6">
-                <input type="text" ng-model="nameVar" class="form-control" />
-            </div>
-        </div>
-    </form>
-    <div class="row">
-        <button class="btn btn-primary" ng-click="vm.onCloneDataServiceClicked(vmmain.selectedDataservice().keng__id, nameVar)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-clone'}" translate="dataservice-clone.Create"></button>
-        <button class="btn btn-default" ng-click="vmmain.selectPage('dataservice-summary')" ng-class="{active:vmmain.selectedPage.id == 'dataservice-clone'}" translate="dataservice-clone.Cancel"></button>
-    </div>
+<div id="outer" class="outer-wrapper">
+	<div id="dataservice-clone-container" class="container-fluid" ng-controller="DSCloneController as vm">
+	    <div class="row">
+	        <page-help-control 
+	            icon="{{vmmain.selectedPage.icon}}" 
+	            title="{{vmmain.selectedPage.title}} '{{vmmain.selectedDataservice().keng__id}}'" 
+	            help-id="dataservice-clone"
+	            container-id="outer" />
+	    </div>
+	    <h2 translate="dataservice-clone.instructionsMsg"></h2>
+	    <form class="row form-horizontal">
+	        <div class="form-group">
+	            <label class="col-md-1 control-label" for="textInput" translate="dataservice-clone.Name"></label>
+	            <div class="col-md-6">
+	                <input type="text" ng-model="nameVar" class="form-control" />
+	            </div>
+	        </div>
+	    </form>
+	    <div class="row">
+	        <button class="btn btn-primary" ng-click="vm.onCloneDataServiceClicked(vmmain.selectedDataservice().keng__id, nameVar)" ng-class="{active:vmmain.selectedPage.id == 'dataservice-clone'}" translate="dataservice-clone.Create"></button>
+	        <button class="btn btn-default" ng-click="vmmain.selectPage('dataservice-summary')" ng-class="{active:vmmain.selectedPage.id == 'dataservice-clone'}" translate="dataservice-clone.Cancel"></button>
+	    </div>
+	</div>
 </div>
