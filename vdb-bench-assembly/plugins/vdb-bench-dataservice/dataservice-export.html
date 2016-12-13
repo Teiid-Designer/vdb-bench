@@ -1,46 +1,49 @@
-<div class="container-fluid" ng-controller="DSImportExportController as vm">
-    <div class="row">
-        <page-help-control 
-            icon="pficon-import"
-            title="{{:: 'dataservice-export.wizardTitle' | translate}}" 
-            help-id="dataservice-export" />
-    </div>
-
-    <div class="row">
-        <div class="wizard-pf-container">
-            <div pf-wizard title=""
-                    on-finish="vmmain.selectPage('dataservice-summary',null)"
-                    on-cancel="vmmain.selectPage('dataservice-summary',null)"
-                    back-callback="vm.backCallback"
-                    next-title="vm.nextButtonTitle"
-                    embed-in-page="true"
-                    content-height="'30em'">
-
-                <!--
-                    -- Export Type Step
-                    -->
-                <div pf-wizard-step step-title="{{:: 'dataservice-export.exportTypeStepTitle' | translate}}"
-                        step-id="export-type">
-                    <h1 translate="dataservice-export.instructionsMsg"></h1>
-
-                    <form class="ds-import-export-storage-types-form">
-                        <div ng-repeat="storageType in vm.storageTypes">
-                            <label>
-                                <input type="radio" ng-model="vm.storageType" ng-value="storageType" ng-init="$index==0?(vm.storageType=storageType):''">
-                                <!-- set the default value to be first in list -->
-                                {{storageType.name}} - {{storageType.description}}
-                            </label>
-                            <br/>
-                        </div>
-                    </form>
-
-                </div>
-
-                <!-- directive includes the file wizard steps -->
-                <ds-export-file-wizard wizard-active="vm.fileWizard"></ds-export-file-wizard>
-                <!-- directive includes the git wizard steps -->
-                <ds-export-git-wizard wizard-active="vm.gitWizard"></ds-export-git-wizard>
-            </div>
-        </div>
-    </div>
+<div id="outer" class="outer-wrapper">
+	<div div="dataservice-export-container" class="container-fluid" ng-controller="DSImportExportController as vm">
+	    <div class="row">
+	        <page-help-control 
+	            icon="pficon-import"
+	            title="{{:: 'dataservice-export.wizardTitle' | translate}}" 
+	            help-id="dataservice-export" 
+	            container-id="outer"/>
+	    </div>
+	
+	    <div class="row">
+	        <div class="wizard-pf-container">
+	            <div pf-wizard title=""
+	                    on-finish="vmmain.selectPage('dataservice-summary',null)"
+	                    on-cancel="vmmain.selectPage('dataservice-summary',null)"
+	                    back-callback="vm.backCallback"
+	                    next-title="vm.nextButtonTitle"
+	                    embed-in-page="true"
+	                    content-height="'30em'">
+	
+	                <!--
+	                    -- Export Type Step
+	                    -->
+	                <div pf-wizard-step step-title="{{:: 'dataservice-export.exportTypeStepTitle' | translate}}"
+	                        step-id="export-type">
+	                    <h1 translate="dataservice-export.instructionsMsg"></h1>
+	
+	                    <form class="ds-import-export-storage-types-form">
+	                        <div ng-repeat="storageType in vm.storageTypes">
+	                            <label>
+	                                <input type="radio" ng-model="vm.storageType" ng-value="storageType" ng-init="$index==0?(vm.storageType=storageType):''">
+	                                <!-- set the default value to be first in list -->
+	                                {{storageType.name}} - {{storageType.description}}
+	                            </label>
+	                            <br/>
+	                        </div>
+	                    </form>
+	
+	                </div>
+	
+	                <!-- directive includes the file wizard steps -->
+	                <ds-export-file-wizard wizard-active="vm.fileWizard"></ds-export-file-wizard>
+	                <!-- directive includes the git wizard steps -->
+	                <ds-export-git-wizard wizard-active="vm.gitWizard"></ds-export-git-wizard>
+	            </div>
+	        </div>
+	    </div>
+	</div>
 </div>

@@ -1,112 +1,117 @@
-<div id="ds-summary-container" class="container-fluid" ng-controller="DSSummaryController as vm">
-
-    <!-- Content shown if No Sources or DataServices yet -->
-    <div id="dataservice-summary-nosources" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasSources==false && vm.hasServices==false" class="col-md-10 row">
-        <div class="row">
-            <h2 ng-bind-html=":: 'dataservice-summary.welcomeMsg' | translate"></h2>
-            <div>
-                <page-help-control
-                    icon="{{vmmain.selectedPage.icon}}" 
-                    title="{{vmmain.selectedPage.title}}" 
-                    help-id="dataservice-summary" />
-            </div>
-            <p>
-                <span translate="dataservice-summary.createSourceMsg" />
-                <a href ng-click="vmmain.selectPage('svcsource-new')">
-                    <span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span>
-                    <span>{{vmmain.page('svcsource-new').title}}</span>
-                </a>
-                <br/>
-                <span translate="dataservice-summary.importDataServiceMsg" />
-                <a href ng-click="vmmain.selectPage('dataservice-import')">
-                    <span class="fa fa-fw {{vmmain.page('dataservice-import').icon}}"></span>
-                    <span>{{vmmain.page('dataservice-import').title}}</span>
-                </a>
-            </p>
-        </div>
-    </div>
-
-    <!-- Content shown if No DataServices yet -->
-    <div id="dataservice-summary-noservices" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasSources==true && vm.hasServices==false" class="col-md-12 row">
-        <div class="row">
-            <h2 ng-bind-html=":: 'dataservice-summary.welcomeMsg' | translate"></h2>
-            <div>
-                <page-help-control
-                    icon="{{vmmain.selectedPage.icon}}" 
-                    title="{{vmmain.selectedPage.title}}" 
-                    help-id="dataservice-summary" />
-            </div>
-            <p>
-                <span translate="dataservice-summary.createDataServiceMsg" />
-                <a href ng-click="vmmain.selectPage('dataservice-new')">
-                    <span class="fa fa-fw {{vmmain.page('dataservice-new').icon}}"></span>
-                    <span>{{vmmain.page('dataservice-new').title}}</span>
-                </a>
-               <br>
-               <span translate="dataservice-summary.importDataServiceMsg" />
-               <a href ng-click="vmmain.selectPage('dataservice-import')">
-                   <span class="fa fa-fw {{vmmain.page('dataservice-import').icon}}"></span>
-                   <span>{{vmmain.page('dataservice-import').title}}</span>
-               </a>
-            </p>
-        </div>
-    </div>
-
-    <div id="ds-summary-table" class="col-md-10 row">
-        <div class="row col-md-12" ng-show="vm.dsLoading==true || vm.sourcesLoading==true || vm.hasServices==true">
-            <page-help-control
-                icon="{{vmmain.selectedPage.icon}}" 
-                title="{{vmmain.selectedPage.title}}" 
-                help-id="dataservice-summary" />
-        </div>
-        <div pf-toolbar id="dataserviceToolbar" config="vm.toolbarConfig" ng-show="vm.dsLoading==true || vm.sourcesLoading==true || vm.hasServices==true"></div>
-
-        <div id="dataservice-summary-updating" ng-show="vm.dsLoading==true || vm.sourcesLoading==true" class="col-md-10 row">
-            <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-            <span class="sr-only"></span>{{:: 'shared.loadingProgressMsg' | translate}}
-        </div>
-
-        <div class="ds-summary-results-container" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasServices==true">
-            <div class="ds-summary-results">
-                <div class="col-md-12 list-view-container" ng-if="vm.viewType == 'listView'">
-                    <div pf-list-view config="vm.listConfig" items="vm.getDataServices()" menu-actions="vm.menuActions">
-                        <div class="list-view-pf-left">
-                            <span class="fa fa-table list-view-pf-icon-sm"></span>
-                        </div>
-                        <div class="list-view-pf-body">
-                            <div class="list-view-pf-description display-block">
-                                <div class="list-group-item-heading no-float">
-                                    <a>{{item.keng__id}}</a>
-                                </div>
-                                <div class="list-group-item-text no-float">
-                                    {{item.tko__description}}
-                                </div>
-                            </div>
-                            <div class="list-view-pf-additional-info">
-                                <!-- TODO - consider what else to include here, preferably the service sources available -->
-
-                                <div class="list-view-pf-additional-info-item" uib-tooltip="{{:: 'dataservice-summary.connectionsNumberToolTip' | translate}}">
-                                    <span class="fa fa-cog"></span>
-                                    <strong>{{item.connections}}</strong>
-                                    <span>{{item.connections === 1 ? 'shared.Connection' : 'shared.Connections' | translate}}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> <!-- ds-summary-results -->
-<!-- 
-        <div class="col-md-12 card-view-container" ng-if="vm.viewType == 'cardView'">
-           <div pf-card-view config="vm.listConfig" items="vm.getDataServices()">
-             <div class="col-md-12">
-               <span>{{item.keng__id}}</span>
-             </div>
-             <div class="col-md-12">
-               <span>{{item.tko__description}}</span>
-             </div>
-           </div>
-        </div>
--->
-    </div>
+<div id="outer" class="outer-wrapper">
+	<div id="ds-summary-container" class="container-fluid" ng-controller="DSSummaryController as vm">
+	
+	    <!-- Content shown if No Sources or DataServices yet -->
+	    <div id="dataservice-summary-nosources" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasSources==false && vm.hasServices==false" class="col-md-10 row">
+	        <div class="row">
+	            <h2 ng-bind-html=":: 'dataservice-summary.welcomeMsg' | translate"></h2>
+	            <div>
+	                <page-help-control
+	                    icon="{{vmmain.selectedPage.icon}}" 
+	                    title="{{vmmain.selectedPage.title}}" 
+	                    help-id="dataservice-summary"
+	                    container-id="outer" />
+	            </div>
+	            <p>
+	                <span translate="dataservice-summary.createSourceMsg" />
+	                <a href ng-click="vmmain.selectPage('svcsource-new')">
+	                    <span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span>
+	                    <span>{{vmmain.page('svcsource-new').title}}</span>
+	                </a>
+	                <br/>
+	                <span translate="dataservice-summary.importDataServiceMsg" />
+	                <a href ng-click="vmmain.selectPage('dataservice-import')">
+	                    <span class="fa fa-fw {{vmmain.page('dataservice-import').icon}}"></span>
+	                    <span>{{vmmain.page('dataservice-import').title}}</span>
+	                </a>
+	            </p>
+	        </div>
+	    </div>
+	
+	    <!-- Content shown if No DataServices yet -->
+	    <div id="dataservice-summary-noservices" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasSources==true && vm.hasServices==false" class="col-md-12 row">
+	        <div class="row">
+	            <h2 ng-bind-html=":: 'dataservice-summary.welcomeMsg' | translate"></h2>
+	            <div>
+	                <page-help-control
+	                    icon="{{vmmain.selectedPage.icon}}" 
+	                    title="{{vmmain.selectedPage.title}}" 
+	                    help-id="dataservice-summary"
+	                    container-id="outer" />
+	            </div>
+	            <p>
+	                <span translate="dataservice-summary.createDataServiceMsg" />
+	                <a href ng-click="vmmain.selectPage('dataservice-new')">
+	                    <span class="fa fa-fw {{vmmain.page('dataservice-new').icon}}"></span>
+	                    <span>{{vmmain.page('dataservice-new').title}}</span>
+	                </a>
+	               <br>
+	               <span translate="dataservice-summary.importDataServiceMsg" />
+	               <a href ng-click="vmmain.selectPage('dataservice-import')">
+	                   <span class="fa fa-fw {{vmmain.page('dataservice-import').icon}}"></span>
+	                   <span>{{vmmain.page('dataservice-import').title}}</span>
+	               </a>
+	            </p>
+	        </div>
+	    </div>
+	
+	    <div id="ds-summary-table" class="col-md-10 row">
+	        <div class="row col-md-12" ng-show="vm.dsLoading==true || vm.sourcesLoading==true || vm.hasServices==true">
+	            <page-help-control
+	                icon="{{vmmain.selectedPage.icon}}" 
+	                title="{{vmmain.selectedPage.title}}" 
+	                help-id="dataservice-summary"
+	                container-id="outer" />
+	        </div>
+	        <div pf-toolbar id="dataserviceToolbar" config="vm.toolbarConfig" ng-show="vm.dsLoading==true || vm.sourcesLoading==true || vm.hasServices==true"></div>
+	
+	        <div id="dataservice-summary-updating" ng-show="vm.dsLoading==true || vm.sourcesLoading==true" class="col-md-10 row">
+	            <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+	            <span class="sr-only"></span>{{:: 'shared.loadingProgressMsg' | translate}}
+	        </div>
+	
+	        <div class="ds-summary-results-container" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasServices==true">
+	            <div class="ds-summary-results">
+	                <div class="col-md-12 list-view-container" ng-if="vm.viewType == 'listView'">
+	                    <div pf-list-view config="vm.listConfig" items="vm.getDataServices()" menu-actions="vm.menuActions">
+	                        <div class="list-view-pf-left">
+	                            <span class="fa fa-table list-view-pf-icon-sm"></span>
+	                        </div>
+	                        <div class="list-view-pf-body">
+	                            <div class="list-view-pf-description display-block">
+	                                <div class="list-group-item-heading no-float">
+	                                    <a>{{item.keng__id}}</a>
+	                                </div>
+	                                <div class="list-group-item-text no-float">
+	                                    {{item.tko__description}}
+	                                </div>
+	                            </div>
+	                            <div class="list-view-pf-additional-info">
+	                                <!-- TODO - consider what else to include here, preferably the service sources available -->
+	
+	                                <div class="list-view-pf-additional-info-item" uib-tooltip="{{:: 'dataservice-summary.connectionsNumberToolTip' | translate}}">
+	                                    <span class="fa fa-cog"></span>
+	                                    <strong>{{item.connections}}</strong>
+	                                    <span>{{item.connections === 1 ? 'shared.Connection' : 'shared.Connections' | translate}}</span>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div> <!-- ds-summary-results -->
+	<!-- 
+	        <div class="col-md-12 card-view-container" ng-if="vm.viewType == 'cardView'">
+	           <div pf-card-view config="vm.listConfig" items="vm.getDataServices()">
+	             <div class="col-md-12">
+	               <span>{{item.keng__id}}</span>
+	             </div>
+	             <div class="col-md-12">
+	               <span>{{item.tko__description}}</span>
+	             </div>
+	           </div>
+	        </div>
+	-->
+	    </div>
+	</div>
 </div>
