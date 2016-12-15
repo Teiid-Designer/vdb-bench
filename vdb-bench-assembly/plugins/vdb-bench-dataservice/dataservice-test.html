@@ -127,15 +127,17 @@
 	                            <div class="odata-control-panel-title" translate="dataservice-test.Where"></div>
 	                            <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
 	                            <div class="pull-left" uib-dropdown>
-	                                <button type="button" class="glyphicon glyphicon-plus odata-form-where-add-btn"
-	                                                uib-dropdown-toggle ng-click="vm.onAddWhereClicked($event)">
-	                                </button>
-	                                <label class="help-label">
+	                              	<label class="help-label">
 	                                        <span class="fa fa-info-circle" uib-tooltip-html="{{ 'dataservice-test.help.where' | translate }}"
 	                                                  tooltip-class="custom-tooltip"></span>
 	                                        <span>&nbsp;</span>
 	                                </label>
 	                            </div>
+	                            <div class="pull-right" uib-dropdown>
+	                                <button type="button" class="glyphicon glyphicon-plus odata-form-where-add-btn"
+	                                                uib-dropdown-toggle ng-click="vm.onAddWhereClicked($event)">
+	                                </button>
+		                        </div> 
 	                        </uib-accordion-heading>
 	                        <form name="odata-exp-where" role="form">
 	                            <div class="form-group odata-exp-where-group" ng-repeat="where in vm.odata.where">
@@ -145,6 +147,7 @@
 	                                        <ui-select-choices repeat="column in vm.odata.columns()">
 	                                            <div ng-bind-html="column.name | highlight: $select.search"></div>
 	                                        </ui-select-choices>
+	                                        <span>&nbsp;</span>
 	                                    </ui-select>
 	                                </div>
 	                                <div class="col-xs-4 odata-exp-where-group-row" ng-show="! where.error">
