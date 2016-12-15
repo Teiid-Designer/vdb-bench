@@ -1,0 +1,36 @@
+<div class="about-widget">
+    <uib-progressbar class="progress-striped active" value="dynamic" type="info" ng-show="vm.client.loading || vm.repo.loading"></uib-progressbar>
+
+    <p ng-show="! vm.client.loading && ! vm.repo.loading && vm.hasError()">
+        Status Errors:
+        <br/>
+        '{{vm.client.error}}'
+        <br/>
+        '{{vm.repo.error}}'
+    </p>
+
+    <div ng-show="! vm.client.loading && ! vm.repo.loading && ! vm.hasError()">
+        <div class="about-widget-web-client">
+            <h4>Web Client</h4>
+            <div class="about-widget-left">Name:</div>
+            <div class="about-widget-right">{{vm.client.name}}</div>
+
+            <div class="about-widget-left">Title:</div>
+            <div class="about-widget-right">{{vm.client.title}}</div>
+
+            <div class="about-widget-left">Version:</div>
+            <div class="about-widget-right">{{vm.client.version}}</div>
+        </div>
+        <div class="about-widget-repository">
+            <h4>Repository</h4>
+            <div class="about-widget-left">Name:</div>
+            <div class="about-widget-right">{{vm.repo.name}}</div>
+
+            <div class="about-widget-left">Title:</div>
+            <div class="about-widget-right">{{vm.repo.title}}</div>
+
+            <div class="about-widget-left">Version:</div>
+            <div class="about-widget-right">{{vm.repo.version}}</div>
+        </div>
+    </div>
+</div>

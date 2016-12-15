@@ -8,6 +8,7 @@
         'adf',
         'adf.structures.base',
         'adf.widget.ds-welcome',
+        'adf.widget.app-about',
         'adf.widget.ds-dataservices',
         'adf.widget.ds-svcsources',
         'adf.widget.teiid-connected',

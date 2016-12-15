@@ -177,6 +177,15 @@
         }
 
         /**
+         * Service: get the about information of the application
+         */
+        service.getAbout = function() {
+            return getRestService().then(function (restService) {
+                return restService.one(REST_URI.SERVICE + REST_URI.ABOUT).get();
+            });
+        };
+
+        /**
          * Service: Simple connection test.
          */
         service.odataGet = function(url) {
