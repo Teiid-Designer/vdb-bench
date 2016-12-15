@@ -33,6 +33,8 @@
         	'dataservice-import': "dataservices-import-help.html",
         	'dataservice-main': "dataservices-main-help.html",
         	'dataservice-new': "dataservices-new-help.html",
+        	'dataservice-summary-empty': "dataservices-summary-empty-help.html",
+        	'dataservice-summary-no-service': "dataservices-summary-no-service-help.html",
         	'dataservice-summary': "dataservices-summary-help.html",
         	'dataservice-test': "dataservices-test-help.html",
         	'datasource-summary': "datasource-summary-help.html",

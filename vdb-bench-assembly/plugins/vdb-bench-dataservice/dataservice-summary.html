@@ -2,14 +2,14 @@
 	<div id="ds-summary-container" class="container-fluid" ng-controller="DSSummaryController as vm">
 	
 	    <!-- Content shown if No Sources or DataServices yet -->
-	    <div id="dataservice-summary-nosources" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasSources==false && vm.hasServices==false" class="col-md-10 row">
+	    <div id="dataservice-summary-nosources" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasSources==false && vm.hasServices==false" class="col-md-12 row">
 	        <div class="row">
 	            <h2 ng-bind-html=":: 'dataservice-summary.welcomeMsg' | translate"></h2>
 	            <div>
 	                <page-help-control
 	                    icon="{{vmmain.selectedPage.icon}}" 
 	                    title="{{vmmain.selectedPage.title}}" 
-	                    help-id="dataservice-summary"
+	                    help-id="dataservice-summary-empty"
 	                    container-id="outer" />
 	            </div>
 	            <p>
@@ -36,7 +36,7 @@
 	                <page-help-control
 	                    icon="{{vmmain.selectedPage.icon}}" 
 	                    title="{{vmmain.selectedPage.title}}" 
-	                    help-id="dataservice-summary"
+	                    help-id="dataservice-summary-no-service"
 	                    container-id="outer" />
 	            </div>
 	            <p>
