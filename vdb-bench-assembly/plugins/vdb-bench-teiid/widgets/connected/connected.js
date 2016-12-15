@@ -15,7 +15,7 @@
     function config(dashboardProvider, config, syntax) {
         dashboardProvider
             .widget('teiid-connected', {
-                title: 'Teiid Connection',
+                title: 'Teiid Status',
                 description: 'Displays the connected status of the local Teiid Instance',
                 templateUrl: config.pluginDir + syntax.FORWARD_SLASH +
                                     pluginDirName + syntax.FORWARD_SLASH +
@@ -34,11 +34,18 @@
         vm.connected = {};
         vm.available = {};
 
-        function setVersion(version) {
+        function setClientVersion(version) {
             if (version)
                 vm.clientVersion = version;
             else
                 vm.clientVersion = 'Not Found';
+        }
+
+        function setRuntimeVersion(version) {
+            if (version)
+                vm.runtimeVersion = version;
+            else
+                vm.runtimeVersion = 'Not Found';
         }
 
         function setUrl(url) {
@@ -60,9 +67,11 @@
 
         function setConnected(connected) {
             if (connected) {
+                vm.connected.status = true;
                 vm.connected.text = "Connected";
                 vm.connected.styleClass = "teiid-dashboard-widgets-connected-ok";
             } else {
+                vm.connected.status = false;
                 vm.connected.text = "Unconnected";
                 vm.connected.styleClass = "teiid-dashboard-widgets-connected-bad";
             }
@@ -77,7 +86,8 @@
                 RepoRestService.getTeiidStatus().then(
                     function (teiidStatus) {
                         setError(null);
-                        setVersion(teiidStatus.tko__version);
+                        setClientVersion(teiidStatus.builtVersion);
+                        setRuntimeVersion(teiidStatus.tko__version);
                         setUrl(teiidStatus.connectionUrl);
                         setConnected(teiidStatus.connected);
                         setAvailable(teiidStatus.instanceAvailable);
@@ -86,7 +96,8 @@
                     },
                     function (response) {
                         // Some kind of error has occurred
-                        setVersion(null);
+                        setClientVersion(null);
+                        setRuntimeVersion(null);
                         setUrl(null);
                         setConnected(false);
                         setAvailable(false);
@@ -95,7 +106,8 @@
                         vm.loading = false;
                     });
             } catch (error) {
-                setVersion(null);
+                setClientVersion(null);
+                setRuntimeVersion(null);
                 setUrl(null);
                 setConnected(false);
                 setAvailable(false);

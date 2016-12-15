@@ -8,9 +8,6 @@
         <div class="teiid-dashboard-widgets-connected-left">Client Version:</div>
         <div class="teiid-dashboard-widgets-connected-right">{{vm.clientVersion}}</div>
 
-        <div class="teiid-dashboard-widgets-connected-left">Connection Url:</div>
-        <div class="teiid-dashboard-widgets-connected-right" uib-tooltip="{{vm.url}}">{{vm.url}}</div>
-
         <div class="teiid-dashboard-widgets-connected-left">Client Available:</div>
         <div class="teiid-dashboard-widgets-connected-right">
             <div ng-class="vm.available.styleClass">{{vm.available.text}}</div>
@@ -20,5 +17,12 @@
         <div class="teiid-dashboard-widgets-connected-right">
             <div ng-class="vm.connected.styleClass">{{vm.connected.text}}</div>
         </div>
+
+        <div class="teiid-dashboard-widgets-connected-left" ng-show="vm.connected">Runtime Version:</div>
+        <div class="teiid-dashboard-widgets-connected-right" ng-show="vm.connected">{{vm.runtimeVersion}}</div>
+
+        <div class="teiid-dashboard-widgets-connected-left">Connection Url:</div>
+        <div class="teiid-dashboard-widgets-connected-right" uib-tooltip="{{vm.url}}">{{vm.url}}</div>
+
     </div>
 </div>

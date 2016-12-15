@@ -1,80 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <parent>
-    <groupId>org.teiid</groupId>
-    <artifactId>vdb-bench</artifactId>
-    <version>0.1-SNAPSHOT</version>
-  </parent>
+	<parent>
+		<groupId>org.teiid</groupId>
+		<artifactId>vdb-bench</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
 
-  <modelVersion>4.0.0</modelVersion>
-  <artifactId>vdb-bench-assembly</artifactId>
-  <name>${project.artifactId}</name>
-  <description>ds-builder :: ${project.artifactId}</description>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>vdb-bench-assembly</artifactId>
+	<name>${project.artifactId}</name>
+	<description>ds-builder :: ${project.artifactId}</description>
 
-  <properties>
-    <frontend-maven-plugin-version>0.0.23</frontend-maven-plugin-version>
-  </properties>
+	<properties>
+		<frontend-maven-plugin-version>0.0.23</frontend-maven-plugin-version>
+		<app.web.name>ds-builder</app.web.name>
+		<app.web.title>Data Services Builder</app.web.title>
+		<app.web.version>${project.version}</app.web.version>
+	</properties>
 
-  <build>
-    <plugins>
+	<build>
 
-      <plugin>
-        <groupId>com.github.eirslett</groupId>
-        <artifactId>frontend-maven-plugin</artifactId>
-        <version>${frontend-maven-plugin-version}</version>
-        <executions>
-          <execution>
-            <id>install node and npm</id>
-            <goals>
-              <goal>install-node-and-npm</goal>
-            </goals>
-            <phase>generate-resources</phase>
-            <configuration>
-              <nodeVersion>v0.12.2</nodeVersion>
-              <npmVersion>2.7.4</npmVersion>
-            </configuration>
-          </execution>
-          <execution>
-            <id>npm install</id>
-            <goals>
-              <goal>npm</goal>
-            </goals>
-            <configuration>
-              <arguments>install</arguments>
-            </configuration>
-          </execution>
-          <execution>
-            <id>gulp build</id>
-            <goals>
-              <goal>gulp</goal>
-            </goals>
-            <configuration>
-              <arguments>mvn</arguments>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>libs</directory>
-            </fileset>
-            <fileset>
-              <directory>node_modules</directory>
-            </fileset>
-            <fileset>
-              <directory>node</directory>
-            </fileset>
-            <fileset>
-              <directory>etc</directory>
-            </fileset>
-          </filesets>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+		<plugins>
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>${frontend-maven-plugin-version}</version>
+				<executions>
+					<execution>
+						<id>install node and npm</id>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<phase>generate-resources</phase>
+						<configuration>
+							<nodeVersion>v0.12.2</nodeVersion>
+							<npmVersion>2.7.4</npmVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm install</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>gulp build</id>
+						<goals>
+							<goal>gulp</goal>
+						</goals>
+						<configuration>
+							<arguments>mvn</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/site/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}</directory>
+									<filtering>true</filtering>
+									<includes>
+										<include>**/about.xml</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>libs</directory>
+						</fileset>
+						<fileset>
+							<directory>node_modules</directory>
+						</fileset>
+						<fileset>
+							<directory>node</directory>
+						</fileset>
+						<fileset>
+							<directory>etc</directory>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

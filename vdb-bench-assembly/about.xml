@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<about>
+    <name>${app.web.name}</name>
+    <title>${app.web.title}</title>
+    <version>${app.web.version}</version>
+</about>

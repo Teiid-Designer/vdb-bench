@@ -8,6 +8,39 @@ var App;
 
     App._module = angular.module(App.pluginName, ['vdb-bench.core', 'pascalprecht.translate']);
 
+    App._module.factory('AboutService', AboutService);
+    AboutService.$inject = ['$http', '$location'];
+    function AboutService($http, $location) {
+        /*
+         * Service instance to be returned
+         */
+        var service = {};
+
+        service.getAbout = function() {
+            var baseUrl = $location.protocol() + '://' + $location.host() + ':' + $location.port() + '/';
+
+            var absUrl = $location.absUrl();
+            var url = absUrl.replace(baseUrl, "");
+            var firstSlash = url.indexOf('/');
+            var context;
+            if (firstSlash >= 0)
+                context = url.substring(0, firstSlash);
+            else
+                context = url;
+
+            url = baseUrl + context + '/about.xml';
+            return $http.get(url)
+                    .then(function (response) {
+                        return response.data;
+                    }, function (response) {
+                        console.log(response);
+                        return response;
+                    });
+        };
+
+        return service;
+    }
+
     App._module.factory('CredentialService', CredentialService);
     CredentialService.$inject = ['localStorage', '$window'];
     function CredentialService(localStorage, $window) {

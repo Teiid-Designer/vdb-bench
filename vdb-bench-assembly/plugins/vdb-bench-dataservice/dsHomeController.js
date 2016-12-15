@@ -27,6 +27,13 @@
                             modalSize: 'lg',
                             type: "ds-welcome"
                         }]
+                    }, {
+                        styleClass: "col-md-3",
+                        widgets: [{
+                            fullScreen: false,
+                            modalSize: 'lg',
+                            type: "app-about"
+                        }]
                     }]
                 }, {
                     columns: [{
