@@ -13,10 +13,11 @@
 
     RepoRestService.$inject = ['CONFIG', 'SYNTAX', 'REST_URI', 'VDB_SCHEMA',
                                              'VDB_KEYS', 'RepoSelectionService', 'Restangular',
-                                             '$http', '$q', '$base64', 'CredentialService', '$interval'];
+                                             '$http', '$q', '$base64', 'CredentialService', '$interval',
+                                             '$location'];
 
     function RepoRestService(CONFIG, SYNTAX, REST_URI, VDB_SCHEMA, VDB_KEYS, RepoSelectionService,
-                                            Restangular, $http, $q, $base64, CredentialService, $interval) {
+                                            Restangular, $http, $q, $base64, CredentialService, $interval, $location) {
 
         /*
          * Service instance to be returned
@@ -27,7 +28,7 @@
         service.cachedServices = {};
 
         function url(repo) {
-            return CONFIG.restScheme +
+            return CONFIG.rest.protocol +
                         SYNTAX.COLON + SYNTAX.FORWARD_SLASH + SYNTAX.FORWARD_SLASH +
                         repo.host + SYNTAX.COLON + repo.port + repo.baseUrl;
         }

@@ -10,10 +10,18 @@
         .module(pluginName)
         .controller('DSTestController', DSTestController);
 
-    DSTestController.$inject = ['$scope', '$translate', 'CONFIG', 'SYNTAX', 'RepoSelectionService', 'DSSelectionService', 'RepoRestService', '$interval'];
+    DSTestController.$inject = ['$scope', '$translate', 'CONFIG', 'SYNTAX', 'RepoSelectionService', 'DSSelectionService',
+                                                'RepoRestService', 'DSPageService', '$interval'];
 
-    function DSTestController($scope, $translate, CONFIG, SYNTAX, RepoSelectionService, DSSelectionService, RepoRestService, $interval) {
+    function DSTestController($scope, $translate, CONFIG, SYNTAX, RepoSelectionService, DSSelectionService,
+                                                RepoRestService, DSPageService, $interval) {
         var vm = this;
+
+        /*
+         * Set a custom title to the page including the data service's id
+         */
+        var page = DSPageService.page(DSPageService.TEST_DATASERVICE_PAGE);
+        DSPageService.setCustomTitle(page.id, page.title + " '" + DSSelectionService.selectedDataService().keng__id + "'");
 
         var EQUALS = $translate.instant('dsTestController.condition.equals');
         var NOT_EQUALS = $translate.instant('dsTestController.condition.notEquals');

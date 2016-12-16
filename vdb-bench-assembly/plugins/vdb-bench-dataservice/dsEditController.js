@@ -9,12 +9,18 @@
         .controller('DSEditController', DSEditController);
 
     DSEditController.$inject = ['$scope', '$rootScope', '$document', '$translate', 'REST_URI', 'SYNTAX', 'RepoRestService', 'DSSelectionService', 
-                                'SvcSourceSelectionService', 'TableSelectionService'];
+                                'SvcSourceSelectionService', 'TableSelectionService', 'DSPageService'];
 
     function DSEditController($scope, $rootScope, $document, $translate, REST_URI, SYNTAX, RepoRestService, DSSelectionService, 
-                               SvcSourceSelectionService, TableSelectionService) {
+                               SvcSourceSelectionService, TableSelectionService, DSPageService) {
         var vm = this;
         
+        /*
+         * Set a custom title to the page including the data service's id
+         */
+        var page = DSPageService.page(DSPageService.EDIT_DATASERVICE_PAGE);
+        DSPageService.setCustomTitle(page.id, page.title + " '" + DSSelectionService.selectedDataService().keng__id + "'");
+
         vm.svcSourcesLoading = SvcSourceSelectionService.isLoading();
         vm.svcSources = SvcSourceSelectionService.getServiceSources();
         vm.initialSourceName = null;

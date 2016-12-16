@@ -6,15 +6,17 @@
 
         // Global configuration properties
         .constant('CONFIG', {
-            appTitle: 'Vdb-Bench',
-            version: '0.0.1',
-            restScheme: 'https', // The protocol used to serve the REST API
-            restPort: 8443, // The port used to serve the REST API
-            baseRestUrl: '/vdb-builder/v1',
-            baseUrl: '/vdb-bench',
             pluginDir: 'plugins',
             contentDir: 'content',
-            imagesDir: 'img'
+            imagesDir: 'img',
+            rest: {
+                protocol: 'https',
+                port: 8443,
+                baseUrl: '/vdb-builder/v1'
+            },
+            help: {
+                baseUrl: '/ds-builder-help'
+            }
         })
 
         .constant('SYNTAX', {

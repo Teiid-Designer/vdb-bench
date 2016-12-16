@@ -2,13 +2,6 @@
 	<div id="dataservice-edit-container" class="container-fluid" ng-controller="DSEditController as vm">
 	
 	    <div id="dsEdit-edit-controls" ng-show="vm.svcSourcesLoading==false" class="row">
-	        <div class="row col-md-12">
-	            <page-help-control 
-	                icon="{{vmmain.selectedPage.icon}}" 
-	                title="{{vmmain.selectedPage.title}} '{{vmmain.selectedDataservice().keng__id}}'" 
-	                help-id="dataservice-edit"
-	                container-id="outer" />
-	        </div>
 	        <h3 translate="dataservice-edit.instructionsMsg"></h3>
 	        <form name="dsForm" class="form-horizontal">
 	            <div class="col-md-6">

@@ -4,13 +4,6 @@
 	    <!-- Content shown if No Sources yet -->
 	    <div id="dataservice-new-nosources" ng-show="vm.hasSources==false" class="col-md-10 row">
 	        <div class="row">
-	            <div class="row col-md-12">
-	                <page-help-control 
-	                    icon="{{vmmain.selectedPage.icon}}" 
-	                    title="{{vmmain.selectedPage.title}}" 
-	                    help-id="dataservice-new"
-	                    container-id="outer" />
-	            </div>
 	            <div>
 	                <span translate="dataservice-new.configureSourceMsg" />
 	                    <a href ng-click="vmmain.selectPage('svcsource-new')">
@@ -22,13 +15,6 @@
 	    </div>
 	    
 	    <div id="dataservice-new-controls" ng-show="vm.hasSources==true" class="row">
-	        <div class="row">
-	            <page-help-control 
-	                icon="{{vmmain.selectedPage.icon}}" 
-	                title="{{vmmain.selectedPage.title}}" 
-	                help-id="dataservice-new"
-	                container-id="outer" />
-	        </div>
 	        <h4>
 	            <span translate="dataservice-new.instructionsMsg" />
 	                <a href ng-click="vmmain.selectPage('svcsource-new')">

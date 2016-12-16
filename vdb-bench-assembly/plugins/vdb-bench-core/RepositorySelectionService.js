@@ -12,15 +12,15 @@
         .module('vdb-bench.core')
         .factory('RepoSelectionService', RepoSelectionService);
 
-    RepoSelectionService.$inject = ['CONFIG', '$rootScope', 'StorageService'];
+    RepoSelectionService.$inject = ['CONFIG', '$rootScope', 'StorageService', '$location'];
 
-    function RepoSelectionService(config, $rootScope, StorageService) {
+    function RepoSelectionService(config, $rootScope, StorageService, $location) {
 
         var defaultWorkspace = {
             name: 'default',
-            host: 'localhost',
-            port: config.restPort,
-            baseUrl: config.baseRestUrl
+            host: $location.host(),
+            port: config.rest.port,
+            baseUrl: config.rest.baseUrl
         };
 
         var repos;
@@ -164,9 +164,9 @@
                 if (!exists)
                     newRepo = {
                         name: testName,
-                        host: 'localhost',
-                        port: 8080,
-                        baseUrl: config.baseUrl
+                        host: defaultWorkspace.host,
+                        port: defaultWorkspace.port,
+                        baseUrl: defaultWorkspace.baseUrl
                     };
                 else
                     index++;

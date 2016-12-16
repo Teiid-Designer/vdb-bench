@@ -159,7 +159,10 @@ gulp.task('connect', ['watch'], function () {
         staticAssets: [{
             path: '/ds-builder',
             dir: '.'
-    }],
+        }, {
+            path: '/ds-builder-help',
+            dir: '../vdb-bench-doc/target' // For this to resolve the vdb-bench-doc project should be compiled first
+        }],
         liveReload: {
             enabled: false
         }

@@ -1,11 +1,5 @@
 <div id="outer" class="outer-wrapper">
 	<div id="svcsource-import-container" class="container-fluid" ng-controller="SvcSourceImportController as vm">
-	    <div class="row col-md-12">
-	        <page-help-control icon="{{vmmain.selectedPage.icon}}" 
-	                           title="{{vmmain.selectedPage.title}}" 
-	                           help-id="svcsource-import"
-	                           container-id="outer" />
-	    </div>
 	    <h3>&nbsp;&nbsp;{{:: 'svcsource-import.instructionsMsg' | translate}}</h3>
 	    <!-- Show the import dialog when importing -->
 	    <div ng-init="vm.onImportSvcSourceClicked()" ng-show="!vm.init && vm.showImport">
