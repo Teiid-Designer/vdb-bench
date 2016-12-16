@@ -2,6 +2,7 @@
 
     "shared" : {
         "Add" : "Add",
+        "Back" : "<<",
         "BrowseMsg" : "Browse...",
         "Cancel" : "Cancel",
         "changedConnectionFailedMsg" : "Failed to get connection: {{errorMsg}}",
@@ -23,6 +24,7 @@
         "Export" : "Export",
         "ExportWhat" : "Export {{what}}",
         "Finish" : "Finish",
+        "Forward" : ">>",
         "Import" : "Import",
         "ImportWhat" : "Import {{what}}",
         "loadingProgressMsg" : "Loading...",
