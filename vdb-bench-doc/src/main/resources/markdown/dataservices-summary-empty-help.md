@@ -1,6 +1,4 @@
->>> ### Data Services Summary Page
-
-
+<p style="text-align: center;font-weight: bold;font-size: 22">Data Services Summary Page</p>
 
 When there are no data services and no data sources available in your workspace, here are the actions you can take:
 
