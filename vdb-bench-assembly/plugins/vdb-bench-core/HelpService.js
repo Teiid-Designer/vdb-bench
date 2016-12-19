@@ -31,6 +31,7 @@
         	'dataservice-home': "dataservices-home-help.html",
         	'dataservice-import': "dataservices-import-help.html",
         	'dataservice-main': "dataservices-main-help.html",
+            'dataservice-new-no-sources': "dataservices-new-no-sources-help.html",
         	'dataservice-new': "dataservices-new-help.html",
         	'dataservice-summary-empty': "dataservices-summary-empty-help.html",
         	'dataservice-summary-no-service': "dataservices-summary-no-service-help.html",
