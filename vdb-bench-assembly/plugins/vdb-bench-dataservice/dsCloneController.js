@@ -8,10 +8,16 @@
         .module(pluginName)
         .controller('DSCloneController', DSCloneController);
 
-    DSCloneController.$inject = ['$rootScope', '$translate', 'RepoRestService', 'DSSelectionService'];
+    DSCloneController.$inject = ['$rootScope', '$translate', 'RepoRestService', 'DSSelectionService', 'DSPageService'];
 
-    function DSCloneController($rootScope, $translate, RepoRestService, DSSelectionService) {
+    function DSCloneController($rootScope, $translate, RepoRestService, DSSelectionService, DSPageService) {
         var vm = this;
+
+        /*
+         * Set a custom title to the page including the data service's id
+         */
+        var page = DSPageService.page(DSPageService.CLONE_DATASERVICE_PAGE);
+        DSPageService.setCustomTitle(page.id, page.title + " '" + DSSelectionService.selectedDataService().keng__id + "'");
 
         /**
          * Event handler for clicking the clone button

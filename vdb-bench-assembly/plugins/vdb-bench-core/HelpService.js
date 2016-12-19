@@ -14,12 +14,11 @@
         .module(pluginName)
         .factory('HelpService', HelpService);
 
-    HelpService.$inject = ['SYNTAX'];
+    HelpService.$inject = ['SYNTAX', 'CONFIG', 'RepoSelectionService', '$location'];
 
-    function HelpService(SYNTAX) {
-        var HELP_PAGE_DIR = "../../ds-builder-help/";
-        var PAGE_NOT_FOUND = "page-not-found";
-    	
+    function HelpService(SYNTAX, CONFIG, RepoSelectionService, $location) {
+        var PAGE_NOT_FOUND = "PAGE_NOT_FOUND";
+
         /*
          * Service instance to be returned
          */
@@ -44,6 +43,32 @@
         	'svcsource-new': "svcsource-new-help.html",
         };
 
+        service.defaultHostUrl = function() {
+            var protocol = $location.protocol();
+            var host = $location.host();
+            var port = $location.port();
+            var baseUrl = CONFIG.help.baseUrl;
+
+             return protocol +
+                SYNTAX.COLON + SYNTAX.FORWARD_SLASH + SYNTAX.FORWARD_SLASH +
+                host + SYNTAX.COLON + port + baseUrl;
+        };
+
+        function init() {
+            service.setHostUrl(service.defaultHostUrl());
+        }
+
+        /**
+         * Allow the base url of the host hosting the help files
+         * to be changed if required.
+         */
+        service.setHostUrl = function(url) {
+            if (! url.endsWith(SYNTAX.FORWARD_SLASH))
+                url = url + SYNTAX.FORWARD_SLASH;
+
+            service.hostUrl = url;
+        };
+
         /*
          * Obtain the help page for the specified page identifier.
          */
@@ -57,9 +82,11 @@
             if ( _.isEmpty( htmlFileName ) ) {
                 return service.getHelpPageUrl( PAGE_NOT_FOUND );
             }
-            
-            return ( HELP_PAGE_DIR + htmlFileName );
+
+            return ( service.hostUrl + htmlFileName );
         };
+
+        init();
 
         return service;
     }

@@ -10,14 +10,6 @@
 	        <span class="sr-only"></span>{{:: 'shared.loadingProgressMsg' | translate}}
 	    </div>
 	
-	    <div ng-show="vm.dsDeploymentInProgress==false" class="col-md-12 row">
-	        <page-help-control 
-	            icon="{{vmmain.selectedPage.icon}}" 
-	            title="{{vmmain.selectedPage.title}} '{{vmmain.selectedDataservice().keng__id}}'" 
-	            help-id="dataservice-test"
-	            container-id="dataservice-test-container" />
-	    </div>
-	
 	    <div ng-show="vm.dsDeploymentInProgress==false && vm.dsDeploymentSuccess==false" class="row">
 	        <div class="col-sm-12">
 	            <h3 translate="dataservice-test.failedDeploymentMsg"></h3>

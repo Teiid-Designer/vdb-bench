@@ -8,11 +8,17 @@
         .module(pluginName)
         .controller('SvcSourceCloneController', SvcSourceCloneController);
 
-    SvcSourceCloneController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'SvcSourceSelectionService'];
+    SvcSourceCloneController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'SvcSourceSelectionService', 'DSPageService'];
 
-    function SvcSourceCloneController($scope, $rootScope, $translate, RepoRestService, SvcSourceSelectionService) {
+    function SvcSourceCloneController($scope, $rootScope, $translate, RepoRestService, SvcSourceSelectionService, DSPageService) {
         var vm = this;
         vm.cloneVdbInProgress = false;
+
+        /*
+         * Set a custom title to the page including the service source's id
+         */
+        var page = DSPageService.page(DSPageService.CLONE_DATASERVICE_PAGE);
+        DSPageService.setCustomTitle(page.id, page.title + " '" + SvcSourceSelectionService.selectedServiceSource().keng__id + "'");
 
         /*
          * When loading finishes on copy / deploy

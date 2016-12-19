@@ -1,14 +1,6 @@
 <div id="outer" class="outer-wrapper">
 	<div div="dataservice-export-container" class="container-fluid" ng-controller="DSImportExportController as vm">
 	    <div class="row">
-	        <page-help-control 
-	            icon="pficon-import"
-	            title="{{:: 'dataservice-export.wizardTitle' | translate}}" 
-	            help-id="dataservice-export" 
-	            container-id="outer"/>
-	    </div>
-	
-	    <div class="row">
 	        <div class="wizard-pf-container">
 	            <div pf-wizard title=""
 	                    on-finish="vmmain.selectPage('dataservice-summary',null)"

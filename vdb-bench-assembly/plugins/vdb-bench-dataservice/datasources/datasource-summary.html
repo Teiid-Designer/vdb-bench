@@ -5,13 +5,6 @@
 	    <div id="svcsource-summary-nosources" ng-show="vm.srcLoading==false && vm.hasSources==false" class="col-md-12 row">
 	        <div class="row">
 	            <h2 ng-bind-html=":: 'datasource-summary.welcomeMsg' | translate"></h2>
-	            <div class="row col-md-12">
-	                <page-help-control 
-	                    icon="{{vmmain.selectedPage.icon}}" 
-	                    title="{{vmmain.selectedPage.title}}" 
-	                    help-id="datasource-summary"
-	                    container-id="outer" />
-	            </div>
 	            <p>
 	                <span translate="datasource-summary.noSourcesInstructionsMsg" />
 	                <a href ng-click="vmmain.selectPage('svcsource-new')">
@@ -21,14 +14,7 @@
 	            </p>
 	        </div> 
 	    </div>
-	
-	    <div class="col-md-12 row" ng-show="vm.srcLoading==true || vm.hasSources==true">
-	        <page-help-control 
-	            icon="{{vmmain.selectedPage.icon}}" 
-	            title="{{vmmain.selectedPage.title}}" 
-	            help-id="datasource-summary"
-	            container-id="outer" />
-	    </div>
+
 	    <div id="svcsource-summary-table" class="col-md-12 row">
 	        <div pf-toolbar id="svcsourceToolbar" config="vm.toolbarConfig" ng-show="vm.srcLoading==true || vm.hasSources==true"></div>
 	

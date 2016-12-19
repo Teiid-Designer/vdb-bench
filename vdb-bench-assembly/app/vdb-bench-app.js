@@ -33,7 +33,6 @@ var App;
                     .then(function (response) {
                         return response.data;
                     }, function (response) {
-                        console.log(response);
                         return response;
                     });
         };

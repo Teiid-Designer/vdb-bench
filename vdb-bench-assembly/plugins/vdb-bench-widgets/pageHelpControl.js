@@ -15,11 +15,8 @@
             replace: true, // replaces the <page-help-control> tag with the template
             scope: {},
             bindToController: {
-                icon: '@',
-                title: '@',
                 helpId: '@',
                 containerId: '@'
-
             },
             controller: PageHelpController,
             controllerAs: 'vm',
@@ -39,14 +36,11 @@
 
         vm.togglePageHelp = function() {
         	vm.showPageHelp = !vm.showPageHelp;
-        };
-        
-        vm.getHelpPageUrl = function() {
-        	if ( vm.showPageHelp ) {
-                return  $sce.trustAsResourceUrl( helpService.getHelpPageUrl( vm.helpId ) );
-        	}
-        	
-        	return "";
+            if ( vm.showPageHelp )
+                vm.helpPageUrl = $sce.trustAsResourceUrl( helpService.getHelpPageUrl( vm.helpId ) );
+//                vm.helpPageUrl = $sce.trustAsResourceUrl('http://www.phantomjinx.co.uk');
+        	else
+                vm.helpPageUrl = '';
         };
     }
 })();

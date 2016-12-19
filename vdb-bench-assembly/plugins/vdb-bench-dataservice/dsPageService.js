@@ -90,7 +90,9 @@
         pages[service.DS_HOME_PAGE] = {
             id: service.DS_HOME_PAGE,
             title: $translate.instant('dsPageService.homeTitle'),
+            showTitle: false,
             icon: 'fa-dashboard',
+            helpId: service.DS_HOME_PAGE,
             parent: null,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
@@ -100,6 +102,7 @@
             id: service.DATASERVICE_SUMMARY_PAGE,
             title: $translate.instant('shared.WhatSummary', {what: $translate.instant('shared.DataService')}),
             icon: 'fa-table',
+            helpId: service.DATASERVICE_SUMMARY_PAGE,
             parent: null,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
@@ -109,6 +112,7 @@
             id: service.NEW_DATASERVICE_PAGE,
             title: $translate.instant('shared.NewWhat', {what: $translate.instant('shared.DataService')}),
             icon: 'fa-plus',
+            helpId: service.NEW_DATASERVICE_PAGE,
             parent: service.DATASERVICE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
@@ -117,7 +121,9 @@
         pages[service.IMPORT_DATASERVICE_PAGE] = {
             id: service.IMPORT_DATASERVICE_PAGE,
             title: $translate.instant('shared.ImportWhat', {what: $translate.instant('shared.DataService')}),
+            showTitle: false,
             icon: 'pficon-import',
+            helpId: service.IMPORT_DATASERVICE_PAGE,
             parent: service.DATASERVICE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
@@ -126,7 +132,9 @@
         pages[service.EXPORT_DATASERVICE_PAGE] = {
             id: service.EXPORT_DATASERVICE_PAGE,
             title: $translate.instant('shared.ExportWhat', {what: $translate.instant('shared.DataService')}),
+            showTitle: false,
             icon: 'pficon-export',
+            helpId: service.EXPORT_DATASERVICE_PAGE,
             parent: service.DATASERVICE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
@@ -136,6 +144,7 @@
             id: service.EDIT_DATASERVICE_PAGE,
             title: $translate.instant('shared.EditWhat', {what: $translate.instant('shared.DataService')}),
             icon: 'pficon-edit',
+            helpId: service.EDIT_DATASERVICE_PAGE,
             parent: service.DATASERVICE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
@@ -145,6 +154,7 @@
             id: service.CLONE_DATASERVICE_PAGE,
             title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.DataService')}),
             icon: 'fa-copy',
+            helpId: service.CLONE_DATASERVICE_PAGE,
             parent: service.DATASERVICE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
@@ -154,6 +164,7 @@
             id: service.TEST_DATASERVICE_PAGE,
             title: $translate.instant('dsPageService.testDataServiceTitle'),
             icon: 'pficon-running',
+            helpId: service.TEST_DATASERVICE_PAGE,
             parent: service.DATASERVICE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
@@ -162,6 +173,7 @@
         pages[service.CONNECTION_SUMMARY_PAGE] = {
             id: service.CONNECTION_SUMMARY_PAGE,
             title: $translate.instant('shared.WhatSummary', {what: $translate.instant('shared.Connection')}),
+            helpId: service.CONNECTION_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
                             'connections' + syntax.FORWARD_SLASH +
@@ -170,6 +182,7 @@
         pages[service.NEW_CONNECTION_PAGE] = {
             id: service.NEW_CONNECTION_PAGE,
             title: $translate.instant('shared.NewWhat', {what: $translate.instant('shared.Connection')}),
+            helpId: service.NEW_CONNECTION_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
                             'connections' + syntax.FORWARD_SLASH +
@@ -186,6 +199,7 @@
         pages[service.EDIT_CONNECTION_PAGE] = {
             id: service.EDIT_CONNECTION_PAGE,
             title: $translate.instant('shared.EditWhat', {what: $translate.instant('shared.Connection')}),
+            helpId: service.EDIT_CONNECTION_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
                             'connections' + syntax.FORWARD_SLASH +
@@ -194,6 +208,7 @@
         pages[service.CLONE_CONNECTION_PAGE] = {
             id: service.CLONE_CONNECTION_PAGE,
             title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.Connection')}),
+            helpId: service.CLONE_CONNECTION_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
                             'connections' + syntax.FORWARD_SLASH +
@@ -203,6 +218,7 @@
             id: service.SERVICESOURCE_SUMMARY_PAGE,
             title: $translate.instant('shared.WhatSummary', {what: $translate.instant('shared.Source')}),
             icon: 'fa-database',
+            helpId: service.SERVICESOURCE_SUMMARY_PAGE,
             parent: null,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
@@ -213,6 +229,7 @@
             id: service.SERVICESOURCE_NEW_PAGE,
             title: $translate.instant('dsPageService.configureSourceTitle'),
             icon: 'pficon-settings',
+            helpId: service.SERVICESOURCE_NEW_PAGE,
             parent: service.SERVICESOURCE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
@@ -223,6 +240,7 @@
             id: service.SERVICESOURCE_EDIT_PAGE,
             title: $translate.instant('shared.EditWhat', {what: $translate.instant('shared.Source')}),
             icon: 'pficon-edit',
+            helpId: service.SERVICESOURCE_EDIT_PAGE,
             parent: service.SERVICESOURCE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
@@ -233,6 +251,7 @@
             id: service.SERVICESOURCE_CLONE_PAGE,
             title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.Source')}),
             icon: 'fa-copy',
+            helpId: service.SERVICESOURCE_CLONE_PAGE,
             parent: service.SERVICESOURCE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
@@ -243,6 +262,7 @@
             id: service.SERVICESOURCE_IMPORT_PAGE,
             title: $translate.instant('shared.ImportWhat', {what: $translate.instant('shared.Source')}),
             icon: 'pficon-import',
+            helpId: service.SERVICESOURCE_IMPORT_PAGE,
             parent: service.SERVICESOURCE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
@@ -252,6 +272,7 @@
         pages[service.IMPORT_DRIVER_PAGE] = {
             id: service.IMPORT_DRIVER_PAGE,
             title: $translate.instant('shared.ImportWhat', {what: $translate.instant('shared.Driver')}),
+            helpId: service.IMPORT_DRIVER_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
                             'connections' + syntax.FORWARD_SLASH +
@@ -296,6 +317,36 @@
             }
 
             return crumbs;
+        };
+
+        service.setCustomTitle = function(pageId, title) {
+           var page = service.page(pageId);
+            if (_.isEmpty(page))
+                return;
+
+            if (title === null || _.isEmpty(title)) {
+                delete page.customTitle;
+                return;
+            }
+
+            page.customTitle = title;
+        };
+
+        /**
+         * Adds custom helpId should a different id be required
+         * rather than the standard page version
+         */
+        service.setCustomHelpId = function(pageId, helpId) {
+           var page = service.page(pageId);
+            if (_.isEmpty(page))
+                return;
+
+            if (helpId === null || _.isEmpty(helpId)) {
+                delete page.customHelpId;
+                return;
+            }
+
+            page.customHelpId = helpId;
         };
 
         return service;

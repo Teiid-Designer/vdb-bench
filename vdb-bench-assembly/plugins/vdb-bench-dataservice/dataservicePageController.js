@@ -92,6 +92,9 @@
                 ConnectionSelectionService.resetFilterProperties();
             }
             vm.selectedPage = DSPageService.page(pageId);
+            DSPageService.setCustomTitle(pageId, null);
+            DSPageService.setCustomHelpId(pageId, null);
+
             setNavActiveState(vm.selectedPage);
         };
 
@@ -131,7 +134,20 @@
             if (_.isEmpty(vm.selectedPage))
                 return '';
 
+            if (vm.selectedPage.customTitle)
+                return vm.selectedPage.customTitle;
+
             return vm.selectedPage.title;
+        };
+
+        vm.selectedPageHelpId = function() {
+            if (_.isEmpty(vm.selectedPage))
+                return '';
+
+            if (vm.selectedPage.customHelpId)
+                return vm.selectedPage.customHelpId;
+
+            return vm.selectedPage.helpId;
         };
 
         /*

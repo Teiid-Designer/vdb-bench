@@ -5,13 +5,6 @@
 	    <div id="dataservice-summary-nosources" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasSources==false && vm.hasServices==false" class="col-md-12 row">
 	        <div class="row">
 	            <h2 ng-bind-html=":: 'dataservice-summary.welcomeMsg' | translate"></h2>
-	            <div>
-	                <page-help-control
-	                    icon="{{vmmain.selectedPage.icon}}" 
-	                    title="{{vmmain.selectedPage.title}}" 
-	                    help-id="dataservice-summary-empty"
-	                    container-id="outer" />
-	            </div>
 	            <p>
 	                <span translate="dataservice-summary.createSourceMsg" />
 	                <a href ng-click="vmmain.selectPage('svcsource-new')">
@@ -32,13 +25,6 @@
 	    <div id="dataservice-summary-noservices" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasSources==true && vm.hasServices==false" class="col-md-12 row">
 	        <div class="row">
 	            <h2 ng-bind-html=":: 'dataservice-summary.welcomeMsg' | translate"></h2>
-	            <div>
-	                <page-help-control
-	                    icon="{{vmmain.selectedPage.icon}}" 
-	                    title="{{vmmain.selectedPage.title}}" 
-	                    help-id="dataservice-summary-no-service"
-	                    container-id="outer" />
-	            </div>
 	            <p>
 	                <span translate="dataservice-summary.createDataServiceMsg" />
 	                <a href ng-click="vmmain.selectPage('dataservice-new')">
@@ -56,13 +42,6 @@
 	    </div>
 	
 	    <div id="ds-summary-table" class="col-md-10 row">
-	        <div class="row col-md-12" ng-show="vm.dsLoading==true || vm.sourcesLoading==true || vm.hasServices==true">
-	            <page-help-control
-	                icon="{{vmmain.selectedPage.icon}}" 
-	                title="{{vmmain.selectedPage.title}}" 
-	                help-id="dataservice-summary"
-	                container-id="outer" />
-	        </div>
 	        <div pf-toolbar id="dataserviceToolbar" config="vm.toolbarConfig" ng-show="vm.dsLoading==true || vm.sourcesLoading==true || vm.hasServices==true"></div>
 	
 	        <div id="dataservice-summary-updating" ng-show="vm.dsLoading==true || vm.sourcesLoading==true" class="col-md-10 row">

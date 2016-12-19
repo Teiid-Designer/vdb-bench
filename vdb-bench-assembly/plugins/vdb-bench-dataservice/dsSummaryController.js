@@ -8,9 +8,11 @@
         .module(pluginName)
         .controller('DSSummaryController', DSSummaryController);
 
-    DSSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSSelectionService', 'SvcSourceSelectionService', 'DownloadService', 'pfViewUtils'];
+    DSSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSSelectionService',
+                                                        'SvcSourceSelectionService', 'DownloadService', 'pfViewUtils', 'DSPageService'];
 
-    function DSSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, DSSelectionService, SvcSourceSelectionService, DownloadService, pfViewUtils) {
+    function DSSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, DSSelectionService,
+                                                        SvcSourceSelectionService, DownloadService, pfViewUtils, DSPageService) {
         var vm = this;
 
         vm.dsLoading = DSSelectionService.isLoading();
@@ -22,6 +24,17 @@
         vm.allItems = DSSelectionService.getDataServices();
         vm.items = vm.allItems;
 
+        function setHelpId() {
+            var page = DSPageService.page(DSPageService.DATASERVICE_SUMMARY_PAGE);
+
+            if (! vm.hasServices && ! vm.hasSources)
+                DSPageService.setCustomHelpId(page.id, "dataservice-summary-empty");
+            else if (! vm.hasServices && vm.hasSources)
+                DSPageService.setCustomHelpId(page.id, "dataservice-summary-no-service");
+            else
+                DSPageService.setCustomHelpId(page.id, null);
+        }
+
         /*
          * When the data services have been loaded
          */
@@ -32,6 +45,8 @@
            } else {
                 vm.hasServices = false;
            }
+
+            setHelpId();
         });
         
         /*
@@ -44,6 +59,8 @@
             } else {
                 vm.hasSources = false;
             }
+
+            setHelpId();
         });
 
         /**
