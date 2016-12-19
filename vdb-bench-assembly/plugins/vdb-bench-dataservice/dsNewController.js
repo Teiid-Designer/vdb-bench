@@ -9,10 +9,10 @@
         .controller('DSNewController', DSNewController);
 
     DSNewController.$inject = ['$scope', '$rootScope', '$translate', 'REST_URI', 'SYNTAX', 'RepoRestService', 'DSSelectionService', 
-                               'SvcSourceSelectionService', 'TableSelectionService'];
+                               'SvcSourceSelectionService', 'TableSelectionService', 'DSPageService'];
 
     function DSNewController($scope, $rootScope, $translate, REST_URI, SYNTAX, RepoRestService, DSSelectionService, 
-                             SvcSourceSelectionService, TableSelectionService) {
+                             SvcSourceSelectionService, TableSelectionService, DSPageService) {
         var vm = this;
         
         vm.svcSourcesLoading = SvcSourceSelectionService.isLoading();
@@ -25,6 +25,11 @@
         SvcSourceSelectionService.selectServiceSource(null);
         TableSelectionService.selectTable(null);
         
+        if ( !vm.hasSources ) {
+            var page = DSPageService.page( DSPageService.NEW_DATASERVICE_PAGE );
+            DSPageService.setCustomHelpId( page.id, "dataservice-new-no-sources");
+        }
+
         /*
          * When the selected service source changed
          */
