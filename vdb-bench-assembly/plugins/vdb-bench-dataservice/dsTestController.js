@@ -11,10 +11,10 @@
         .controller('DSTestController', DSTestController);
 
     DSTestController.$inject = ['$scope', '$translate', 'CONFIG', 'SYNTAX', 'RepoSelectionService', 'DSSelectionService',
-                                                'RepoRestService', 'DSPageService', '$interval'];
+                                                'RepoRestService', 'DSPageService', '$interval', '$filter', '$timeout'];
 
     function DSTestController($scope, $translate, CONFIG, SYNTAX, RepoSelectionService, DSSelectionService,
-                                                RepoRestService, DSPageService, $interval) {
+                                                RepoRestService, DSPageService, $interval, $filter, $timeout) {
         var vm = this;
 
         /*
@@ -116,6 +116,34 @@
                 return [];
 
             return vm.odata.entity.columns;
+        };
+
+        /**
+         * Options for the codemirror editor used for previewing raw results
+         */
+        vm.odata.rawResultsOptions = {
+            lineWrapping: true,
+            lineNumbers: true,
+            readOnly: 'nocursor',
+            autoRefresh: true,
+            mode: {
+                name: "javascript",
+                json: true
+            }
+        };
+
+        vm.rawEditorLoaded = function(_editor) {
+            _editor.setSize(null, "70vh");
+
+            //
+            // Due to the nested nature of the codemirror
+            // instance in the tabs, it doesnt refresh unless
+            // a key is pressed. This forces a refresh after
+            // a second.
+            //
+            $timeout(function () {
+                _editor.refresh();
+            }, 1000);
         };
 
         /**
@@ -245,7 +273,7 @@
                     //
                     clause = 'tolower' + OBKT + column.name + CBKT +
                                   SPACE + 'ne' + SPACE +
-                                  'tolower' + OBKT + QUOTE + value + QUOTE + CBKT;    
+                                  'tolower' + OBKT + QUOTE + value + QUOTE + CBKT;
                 } else if (condition === STARTS_WITH) {
                     //
                     // startswith(Description, 'value')
@@ -527,6 +555,7 @@
             if (vm.linkGatherer)
                 $interval.cancel(vm.linkGatherer);
 
+            vm.rawResults = null;
             vm.searchMsg = null;
             vm.searchInProgress = true;
             vm.showResultsTable = false;
@@ -534,6 +563,7 @@
             RepoRestService.odataGet(url).then(
                 function(response) {
                     vm.showResultsTable = false;
+                    vm.rawResults = null;
 
                     vm.resultGridOptions.columnDefs = [];
                     vm.resultGridOptions.data = [];
@@ -553,7 +583,7 @@
 
                     if (response.data.count) {
                         //
-                        // Handles the count function by returning a 
+                        // Handles the count function by returning a
                         //
                         vm.searchMsg = $translate.instant('dsTestController.resultCountMsg', {count: response.data.count});
                         return;
@@ -584,6 +614,7 @@
                         }
 
                         vm.resultGridOptions.data = response.data.value;
+                        vm.rawResults = $filter('json')(response.data.value, 2);
                         vm.showResultsTable = true;
                     }
                 }
@@ -602,7 +633,7 @@
             function populate(response) {
                 if (response.status !== 200) {
                     row[columnName] = $translate.instant('dsTestController.searchErrorColumnName');
-                    console.warn($translate.instant('dsTestController.searchErrorConsoleMsg', 
+                    console.warn($translate.instant('dsTestController.searchErrorConsoleMsg',
                     		                        {link: value, responseError: response.error}));
                     return;
                 }
@@ -666,7 +697,7 @@
             var vdbName = DSSelectionService.selectedDataServiceVdbName();
             var vdbVersion = DSSelectionService.selectedDataServiceVdbVersion();
             var modelName = DSSelectionService.selectedDataServiceViewModel();
-            
+
             if (vdbName === SYNTAX.UNKNOWN || vdbVersion === SYNTAX.UNKNOWN || modelName === SYNTAX.UNKNOWN)
                 return null;
 
@@ -746,7 +777,7 @@
         vm.whereConditions = function(where) {
             if (_.isEmpty(where) || _.isEmpty(where.column))
                 return [];
-            
+
             var index = _.indexOf(vm.odata.queryableTypes, where.column.type);
             if (index < 0)
                 return [];
