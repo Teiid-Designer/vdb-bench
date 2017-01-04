@@ -38,10 +38,12 @@
         	'dataservice-summary': "dataservices-summary-help.html",
         	'dataservice-test': "dataservices-test-help.html",
         	'datasource-summary': "datasource-summary-help.html",
+        	'git-preferences': "git-settings-help.html",
         	'svcsource-clone': "svcsource-clone-help.html",
         	'svcsource-edit': "svcsource-edit-help.html",
         	'svcsource-import': "svcsource-import-help.html",
         	'svcsource-new': "svcsource-new-help.html",
+        	'teiid-preferences': "teiid-settings-help.html"
         };
 
         service.defaultHostUrl = function() {
