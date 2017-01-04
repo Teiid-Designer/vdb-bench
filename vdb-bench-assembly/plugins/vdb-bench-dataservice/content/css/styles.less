@@ -416,7 +416,7 @@
     margin-top: 0.5em;
 }
 
-#deployed-test-search-tabs .tab-content {
+#deployed-test-search-tabs > div > .tab-content {
     height: 100vh;
     background-color: white;
 }
@@ -511,9 +511,30 @@
     font-weight: bold;
 }
 
+#odata-results-table {
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 2em;
+    position: relative; // So the help div uses this as the parent container
+}
+
+#odata-results-raw {
+    height: 80vh;
+}
+
+#odata-results-raw .CodeMirror {
+    height: 70vh;
+}
+
+#odata-results-table-help,
+#odata-results-raw-help {
+    float: left;
+    margin-right: 1em;
+}
+
 .odata-results-table-grid {
     height: 80vh;
-    width: 55vw;
+    width: 58vw;
 }
 
 #odata-results-msg,

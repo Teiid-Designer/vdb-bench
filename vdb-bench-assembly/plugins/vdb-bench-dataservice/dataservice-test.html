@@ -1,33 +1,33 @@
 <div id="outer" class="outer-wrapper">
 	<div id="dataservice-test-container" class="container-fluid" ng-controller="DSTestController as vm">
-	
+
 	    <!--
-	        -- Deployment
-	        -->
+	      -- Deployment
+	      -->
 	    <!-- Show spinner while deploying -->
 	    <div id="deployment-spinner" ng-show="vm.dsDeploymentInProgress==true" class="col-md-10 row">
 	        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
 	        <span class="sr-only"></span>{{:: 'shared.loadingProgressMsg' | translate}}
 	    </div>
-	
+
 	    <div ng-show="vm.dsDeploymentInProgress==false && vm.dsDeploymentSuccess==false" class="row">
 	        <div class="col-sm-12">
 	            <h3 translate="dataservice-test.failedDeploymentMsg"></h3>
 	            <h4>&nbsp;&nbsp;'{{vm.dsDeploymentMessage}}'</h4>
 	        </div>
 	    </div>
-	
+
 	    <div id="deployed-test-search-tabs" ng-show="vm.dsDeploymentInProgress==false && vm.dsDeploymentSuccess==true">
 	        <uib-tabset>
 	        <uib-tab heading="{{:: 'dataservice-test.OData' | translate}}" ng-click="vm.onTabSelected('Standard')">
-	
+
 	            <!--
 	                -- OData Querying
 	                -->
 	            <div id="odata-endpoint-url" class="row col-sm-8" ng-show="vm.hasOdataAttributes() == true" ng-cloak>
 	                <input type="text" readonly="true" value="{{vm.endPointUrl()}}" class="col-sm-12">
 	            </div>
-	
+
 	            <div id="odata-query-button" class="row col-sm-1" ng-show="vm.hasOdataAttributes() == true" ng-cloak>
 	                <button class="btn btn-primary" type="button" class="col-sm-11" title="Search"
 	                            ng-click="vm.onSearchEndPoint()" ng-disabled="! vm.canQuery()" translate="dataservice-test.runQueryAction">
@@ -35,10 +35,10 @@
 	                </button>
 	                <label class="help-label" class="col-sm-1">
 	                    <span class="fa fa-info-circle" uib-tooltip-html="{{ 'dataservice-test.help.endpointSearch' | translate }}"
-	                          tooltip-class="custom-tooltip"></span>
+	                          tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
 	                </label>
 	            </div>
-	
+
 	            <div id="odata-control-panel" class="col-sm-4" ng-show="vm.hasOdataAttributes() == true" ng-cloak>
 	                <uib-accordion close-others="false">
 	                    <!-- -->
@@ -53,7 +53,7 @@
 	                            <div class="pull-left" uib-dropdown>
 	                             <label class="help-label">
 	                                        <span class="fa fa-info-circle" uib-tooltip-html="{{ 'dataservice-test.help.select' | translate }}"
-	                                                  tooltip-class="custom-tooltip"></span>
+	                                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
 	                                         <span>&nbsp;</span>
 	                             </label>
 	                            </div>
@@ -68,7 +68,7 @@
 	                                        </ui-select-choices>
 	                                    </ui-select>
 	                                </div>
-	
+
 	                                <div class="col-xs-5">
 	                                    <ui-select ng-model="vm.odata.limit" theme="bootstrap" title=":: dataservice-test.selectResultLimitMsg | translate">
 	                                        <ui-select-match placeholder="{{:: 'dataservice-test.resultLimitPlaceholder' | translate}}">{{$select.selected}}</ui-select-match>
@@ -92,7 +92,7 @@
 	                            <div class="pull-left" uib-dropdown>
 	                                <label class="help-label">
 	                                        <span class="fa fa-info-circle" uib-tooltip="{{ 'dataservice-test.help.columns' | translate }}"
-	                                                  tooltip-class="custom-tooltip"></span>
+	                                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
 	                                        <span>&nbsp;</span>
 	                                </label>
 	                            </div>
@@ -121,7 +121,7 @@
 	                            <div class="pull-left" uib-dropdown>
 	                              	<label class="help-label">
 	                                        <span class="fa fa-info-circle" uib-tooltip-html="{{ 'dataservice-test.help.where' | translate }}"
-	                                                  tooltip-class="custom-tooltip"></span>
+	                                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
 	                                        <span>&nbsp;</span>
 	                                </label>
 	                            </div>
@@ -129,7 +129,7 @@
 	                                <button type="button" class="glyphicon glyphicon-plus odata-form-where-add-btn"
 	                                                uib-dropdown-toggle ng-click="vm.onAddWhereClicked($event)">
 	                                </button>
-		                        </div> 
+		                        </div>
 	                        </uib-accordion-heading>
 	                        <form name="odata-exp-where" role="form">
 	                            <div class="form-group odata-exp-where-group" ng-repeat="where in vm.odata.where">
@@ -158,12 +158,12 @@
 	                                        <span class="glyphicon glyphicon-minus"></span>
 	                                    </button>
 	                                </div>
-	
+
 	                                <div class="odata-exp-where-error-msg">
 	                                    {{where.error}}
 	                                </div>
 	                            </div>
-	
+
 	                        </form>
 	                    </uib-accordion-group>
 	                    <!-- -->
@@ -178,7 +178,7 @@
 	                            <div class="pull-left" uib-dropdown>
 	                                <label class="help-label">
 	                                        <span class="fa fa-info-circle" uib-tooltip="{{ 'dataservice-test.help.orderBy' | translate }}"
-	                                                  tooltip-class="custom-tooltip"></span>
+	                                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
 	                                        <span>&nbsp;</span>
 	                                </label>
 	                            </div>
@@ -210,34 +210,55 @@
 	                    </uib-accordion-group>
 	                </uib-accordion>
 	            </div>
-	
-	            <div id="odata-results-table" class="col-sm-7" ng-show="vm.hasOdataAttributes() == true && vm.showResultsTable == true" ng-cloak>
-	                <div ui-grid="vm.resultGridOptions" ui-grid-pagination class="odata-results-table-grid"></div>
-	            </div>
-	
-	            <div id="odata-results-table-help" class="col-sm-1" ng-show="vm.hasOdataAttributes() == true && vm.showResultsTable == true" ng-cloak>
-	                <label class="help-label">
-	                    <span class="fa fa-info-circle" uib-tooltip-html="{{ 'dataservice-test.help.table' | translate }}"
-	                                tooltip-class="custom-tooltip"></span>
-	                </label>
-	            </div>
-	
+
+                <uib-tabset class="col-sm-8" ng-show="vm.hasOdataAttributes() == true && vm.showResultsTable == true" ng-cloak>
+                    <uib-tab>
+                        <uib-tab-heading>
+                            <div id="odata-results-table">
+                                <label class="help-label">
+                                    <span class="fa fa-info-circle" uib-tooltip-html="{{:: 'dataservice-test.help.resultsTable' | translate }}"
+                                        tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                                </label>
+                            </div>
+                            <span>Tabular</span>
+                        </uib-tab-heading>
+                        <div id="odata-results-table">
+                            <div ui-grid="vm.resultGridOptions" ui-grid-pagination class="odata-results-table-grid"></div>
+                        </div>
+                    </uib-tab>
+                    <uib-tab>
+                        <uib-tab-heading>
+                            <div id="odata-results-raw">
+                                <label class="help-label">
+                                    <span class="fa fa-info-circle" uib-tooltip-html="{{:: 'dataservice-test.help.resultsRaw' | translate }}"
+                                        tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                                </label>
+                            </div>
+                            <span>Raw</span>
+                        </uib-tab-heading>
+                        <div id="odata-results-raw" ui-codemirror="{ onLoad : vm.odata.rawEditorLoaded }"
+                                ng-model="vm.rawResults"
+                                ui-codemirror-opts="vm.odata.rawResultsOptions">
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+
 	            <div id="odata-results-msg" class="col-sm-8" ng-show="vm.hasOdataAttributes() == true && vm.searchMsg != null" ng-cloak>
 	                <h3>{{vm.searchMsg}}</h3>
 	            </div>
-	
+
 	            <!-- Show spinner while searching -->
 	            <div id="odata-search-progress-spinner" class="col-md-8" ng-show="vm.searchInProgress==true">
 	                <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
 	                <span class="sr-only">Searching...</span>
 	            </div>
-	
+
 	            <div id="odata-metadata-fetch-failure" class="col-sm-12"
 	                    ng-show="vm.dsDeploymentInProgress == false && vm.hasOdataAttributes() == false && vm.odate.metadataFailure == true" ng-cloak>
 	                <h3>Failed to get the odata metadata for the deployed artifact.</h3>
 	            </div>
 	        </uib-tab>
-	
+
 	        <uib-tab heading="{{:: 'dataservice-test.SQL' | translate}}" ng-click="vm.onTabSelected('Advanced')">
 	            <!--
 	                -- JDBC Querying

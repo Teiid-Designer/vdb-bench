@@ -127,6 +127,7 @@
            "where" : "'<p>Create where clauses for filtering the results based on the values in each tuple.</p><p>Use the + button to add new where clauses (clauses are and-ed together) and remove them with the - buttons.</p>'",
            "orderBy" : "Sort the results by column in ascending or descending order.",
            "resultsTable" : "'<p>Use the column headers to sort the results or filter them by entering values.</p><p>Results are paginated in blocks of 25 and can be scrolled through with the controls at the foot of the table.</p>'",
+           "resultsRaw" : "'<p>The raw data as returned from the odata teiid service in json format.</p>'",
  		   "sqlSearch" : "'<p>Use the Teiid dialect of SQL to construct a query that interrogates the data service for data results.</p><p>Use the record limit to limit the number of results returned.</p><p>Set the starting record index to fetch a subset of results starting at the given row index.</p>'"
         }
     },

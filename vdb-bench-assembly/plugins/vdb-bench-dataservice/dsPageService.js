@@ -123,7 +123,6 @@
             title: $translate.instant('shared.ImportWhat', {what: $translate.instant('shared.DataService')}),
             showTitle: false,
             icon: 'pficon-import',
-            helpId: service.IMPORT_DATASERVICE_PAGE,
             parent: service.DATASERVICE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +

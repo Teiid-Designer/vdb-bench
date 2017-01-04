@@ -11,9 +11,9 @@
         .module(pluginName)
         .controller('DSImportExportController', DSImportExportController);
 
-    DSImportExportController.$inject = ['$translate', 'CONFIG', 'SYNTAX', 'RepoRestService', '$scope'];
+    DSImportExportController.$inject = ['$translate', 'CONFIG', 'SYNTAX', 'RepoRestService', '$scope', 'DSPageService'];
 
-    function DSImportExportController($translate, config, syntax, RepoRestService, $scope) {
+    function DSImportExportController($translate, config, syntax, RepoRestService, $scope, DSPageService) {
         var vm = this;
 
         vm.storageTypes = {};
@@ -32,6 +32,12 @@
                 vm.nextButtonTitle = $translate.instant('shared.Next');
             }
         });
+        
+        var updatePageHelpId = function() {
+            var suffix = vm.storageType.name;
+            var page = DSPageService.page( DSPageService.IMPORT_DATASERVICE_PAGE );
+            DSPageService.setCustomHelpId( page.id, "dataservice-import-" + suffix );
+        }
 
         vm.storageTypeSet = function() {
             if (angular.isUndefined(vm.storageType))
@@ -43,6 +49,9 @@
 
         $scope.$watch('vm.storageType', function(value) {
             vm.storageTypeSet();
+
+            // update page help ID when storage type changes
+            updatePageHelpId()
         });
 
         function init() {

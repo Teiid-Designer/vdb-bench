@@ -2,4 +2,3 @@
 
 The **Git Repository Configurations** page allows you to specify information for importing and exporting workspaces to and from a git repository.
 
-More to come once I understand how this really works.

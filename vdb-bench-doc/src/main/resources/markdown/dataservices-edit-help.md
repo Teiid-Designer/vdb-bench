@@ -12,6 +12,6 @@ Then select the data source's table from the **Tables** list that provides the d
 
 You may also just want to select a different table without changing the data source.
 
-Click ![Save image](images/SaveIcon.png "Save Data Service") to make the changes to the data service. This will take you back to the [Data Service Summary](dataservices-summary-help.html) page.
+Click ![Save image](images/SaveButton.png "Save Data Service") to make the changes to the data service. This will take you back to the [Data Service Summary](dataservices-summary-help.html) page.
 
 Of course, you can hit the ![Cancel button](images/CancelButton.png "Cancel Edit Data Service") button if you change your mind and no longer wish to modify the data service. Canceling takes you back to the [Data Service Summary](dataservices-summary-help.html) page.
