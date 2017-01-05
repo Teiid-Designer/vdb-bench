@@ -12,7 +12,7 @@ Once you select the import source type, click ![Image of the next button](images
 
 Since you've selected to perform a file import, the rest of this help page will talk about that type of import.
 
-#### <a name="fileSystemImport">Import From File System</a> 
+#### Import From File System 
 
 When importing from the file system, the wizard allows you to import one or more data service archive (*.zip) files. Step 2 when importing a file looks like this:
 
@@ -22,7 +22,7 @@ When importing from the file system, the wizard allows you to import one or more
 
 <br />
 
-Click ![Image of the browse button](images/BrowseButton.png "Browse") to display the file chooser dialog and select the file you want to import. After the file chooser closes there will be an indication if the import was successful (![Image of import success message](images/ImportSuccess.png "Import success")) or not (![Image of the import failed message](images/ImportFailed.png "Import failed")). Two reasons a file import might fail is (1) the file has an invalid file type, or (2) the file is a malformed archive file.
+Click ![Image of the browse button](images/BrowseButton.png "Browse") to display the file chooser dialog and select the file you want to import. After the file chooser closes there will be an indication if the import was successful (![Image of import success message](images/ImportExportSuccess.png "Import success")) or not (![Image of the import failed message](images/ImportExportFailed.png "Import failed")). Two reasons a file import might fail is (1) the file has an invalid file type, or (2) the file is a malformed archive file.
 
 _Note: Data service files must have a '.zip' extension._
 

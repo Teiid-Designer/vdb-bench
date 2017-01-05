@@ -33,10 +33,17 @@
             }
         });
         
+        // since this controller is for both import and export set both when storage type changes
         var updatePageHelpId = function() {
             var suffix = vm.storageType.name;
-            var page = DSPageService.page( DSPageService.IMPORT_DATASERVICE_PAGE );
-            DSPageService.setCustomHelpId( page.id, "dataservice-import-" + suffix );
+
+            // set import page help ID
+            var importPage = DSPageService.page( DSPageService.IMPORT_DATASERVICE_PAGE );
+            DSPageService.setCustomHelpId( importPage.id, "dataservice-import-" + suffix );
+
+            // set export page help ID
+            var exportPage = DSPageService.page( DSPageService.EXPORT_DATASERVICE_PAGE );
+            DSPageService.setCustomHelpId( exportPage.id, "dataservice-export-" + suffix );
         }
 
         vm.storageTypeSet = function() {
