@@ -214,12 +214,14 @@
                 <uib-tabset class="col-sm-8" ng-show="vm.hasOdataAttributes() == true && vm.showResultsTable == true" ng-cloak>
                     <uib-tab>
                         <uib-tab-heading>
+                            <!-- 
                             <div id="odata-results-table">
                                 <label class="help-label">
                                     <span class="fa fa-info-circle" uib-tooltip-html="{{:: 'dataservice-test.help.resultsTable' | translate }}"
                                         tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
                                 </label>
                             </div>
+                            -->
                             <span>Tabular</span>
                         </uib-tab-heading>
                         <div id="odata-results-table">
@@ -228,12 +230,14 @@
                     </uib-tab>
                     <uib-tab>
                         <uib-tab-heading>
+                            <!-- 
                             <div id="odata-results-raw">
                                 <label class="help-label">
                                     <span class="fa fa-info-circle" uib-tooltip-html="{{:: 'dataservice-test.help.resultsRaw' | translate }}"
                                         tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
                                 </label>
                             </div>
+                            -->
                             <span>Raw</span>
                         </uib-tab-heading>
                         <div id="odata-results-raw" ui-codemirror="{ onLoad : vm.odata.rawEditorLoaded }"
