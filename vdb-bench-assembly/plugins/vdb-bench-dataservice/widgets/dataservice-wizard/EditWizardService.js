@@ -160,8 +160,13 @@
          * Add a source table
          */
         service.addSourceTable = function(source, sourceTable) {
-            wiz.sources.push(source);
-            wiz.sourceTables.push(sourceTable);
+            if( wiz.sourceTables.length===0 ) {
+                wiz.sources.push(source);
+                wiz.sourceTables.push(sourceTable);
+            } else if ( wiz.sourceTables.length===1 && ( source !== wiz.sources[0] || sourceTable !== wiz.sourceTables[0] ) ) {
+                wiz.sources.push(source);
+                wiz.sourceTables.push(sourceTable);
+            }
         };
 
         /*

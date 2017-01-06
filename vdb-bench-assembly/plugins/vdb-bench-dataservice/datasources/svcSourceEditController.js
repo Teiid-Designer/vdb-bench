@@ -244,7 +244,8 @@
                             },
                             function (response) {
                                 var sourceUpdateFailedMsg = $translate.instant('svcSourceEditController.sourceUpdateFailedMsg');
-                                throw RepoRestService.newRestException(sourceUpdateFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                                alert(sourceUpdateFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                                SvcSourceSelectionService.refresh('datasource-summary');
                             });
                 // Connection was not changed, we can update the existing VdbModel and VdbModelSource
                 } else {
@@ -254,7 +255,8 @@
                             },
                             function (response) {
                                 var sourceUpdateFailedMsg = $translate.instant('svcSourceEditController.sourceUpdateFailedMsg');
-                                throw RepoRestService.newRestException(sourceUpdateFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                                alert(sourceUpdateFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                                SvcSourceSelectionService.refresh('datasource-summary');
                             });
                 }
             } catch (error) {} finally {
@@ -274,12 +276,14 @@
                     function (resp) {
                         SvcSourceSelectionService.setLoading(false);
                         var sourceUpdateFailedMsg = $translate.instant('svcSourceEditController.sourceUpdateFailedMsg');
-                        throw RepoRestService.newRestException(sourceUpdateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
+                        alert(sourceUpdateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
+                        SvcSourceSelectionService.refresh('datasource-summary');
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
                 var sourceUpdateFailedMsg = $translate.instant('svcSourceEditController.sourceUpdateFailedMsg');
-                throw RepoRestService.newRestException(sourceUpdateFailedMsg + "\n" + error);
+                alert(sourceUpdateFailedMsg + "\n" + error);
+                SvcSourceSelectionService.refresh('datasource-summary');
             }
         }
 
@@ -316,12 +320,14 @@
                         SvcSourceSelectionService.setDeploying(false, vdbName, false, RepoRestService.responseMessage(response));
                         SvcSourceSelectionService.setLoading(false);
                         var sourceDeployFailedMsg = $translate.instant('svcSourceEditController.sourceDeployFailedMsg');
-                        throw RepoRestService.newRestException(sourceDeployFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                        alert(sourceDeployFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                        SvcSourceSelectionService.refresh('datasource-summary');
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
                 var sourceDeployFailedMsg = $translate.instant('svcSourceEditController.sourceDeployFailedMsg');
-                throw RepoRestService.newRestException(sourceDeployFailedMsg + "\n" + error);
+                alert(sourceDeployFailedMsg + "\n" + error);
+                SvcSourceSelectionService.refresh('datasource-summary');
             }
         }
         
@@ -340,12 +346,14 @@
                     function (resp) {
                         SvcSourceSelectionService.setLoading(false);
                         var sourceModelCreateFailedMsg = $translate.instant('svcSourceEditController.sourceModelCreateFailedMsg');
-                        throw RepoRestService.newRestException(sourceModelCreateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
+                        alert(sourceModelCreateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
+                        SvcSourceSelectionService.refresh('datasource-summary');
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
                 var sourceModelCreateFailedMsg = $translate.instant('svcSourceEditController.sourceModelCreateFailedMsg');
-                throw RepoRestService.newRestException(sourceModelCreateFailedMsg + "\n" + error);
+                alert(sourceModelCreateFailedMsg + "\n" + error);
+                SvcSourceSelectionService.refresh('datasource-summary');
             }
         }
 
@@ -362,12 +370,14 @@
                     function (resp) {
                         SvcSourceSelectionService.setLoading(false);
                         var sourceModelConnectionCreateFailedMsg = $translate.instant('svcSourceEditController.sourceModelConnectionCreateFailedMsg');
-                        throw RepoRestService.newRestException(sourceModelConnectionCreateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
+                        alert(sourceModelConnectionCreateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
+                        SvcSourceSelectionService.refresh('datasource-summary');
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
                 var sourceModelConnectionCreateFailedMsg = $translate.instant('svcSourceEditController.sourceModelConnectionCreateFailedMsg');
-                throw RepoRestService.newRestException(sourceModelConnectionCreateFailedMsg + "\n" + error);
+                alert(sourceModelConnectionCreateFailedMsg + "\n" + error);
+                SvcSourceSelectionService.refresh('datasource-summary');
             }
         }
 
@@ -384,12 +394,14 @@
                     function (resp) {
                         SvcSourceSelectionService.setLoading(false);
                         var sourceUpdateFailedMsg = $translate.instant('svcSourceEditController.sourceModelConnectionUpdateFailedMsg');
-                        throw RepoRestService.newRestException(sourceUpdateFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                        alert(sourceUpdateFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                        SvcSourceSelectionService.refresh('datasource-summary');
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
                 var sourceUpdateFailedMsg = $translate.instant('svcSourceEditController.sourceModelConnectionUpdateFailedMsg');
-                throw RepoRestService.newRestException(sourceUpdateFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                alert(sourceUpdateFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                SvcSourceSelectionService.refresh('datasource-summary');
             }
         }
 
