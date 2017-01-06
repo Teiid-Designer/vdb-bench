@@ -8,11 +8,11 @@
         .module(pluginName)
         .controller('DSSummaryController', DSSummaryController);
 
-    DSSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSSelectionService',
-                                                        'SvcSourceSelectionService', 'DownloadService', 'pfViewUtils', 'DSPageService'];
+    DSSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSPageService',
+                                   'EditWizardService', 'DSSelectionService', 'SvcSourceSelectionService', 'DownloadService', 'pfViewUtils'];
 
-    function DSSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, DSSelectionService,
-                                                        SvcSourceSelectionService, DownloadService, pfViewUtils, DSPageService) {
+    function DSSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, DSPageService,
+                                 EditWizardService, DSSelectionService, SvcSourceSelectionService, DownloadService, pfViewUtils) {
         var vm = this;
 
         vm.dsLoading = DSSelectionService.isLoading();
@@ -217,7 +217,7 @@
                 RepoRestService.deleteDataService( selDSName ).then(
                     function () {
                         // Refresh the list of data services
-                        DSSelectionService.refresh();
+                        DSSelectionService.refresh(null);
                     },
                     function (response) {
                         throw RepoRestService.newRestException($translate.instant('dsSummaryController.deleteFailedMsg', 
@@ -300,58 +300,9 @@
          * Handle edit dataservice click
          */
         var editDataServiceClicked = function( ) {
-            // Updates the selections first
-            var selDSName = DSSelectionService.selectedDataService().keng__id;
-            updateServiceEditSelections(selDSName);
+            EditWizardService.init(DSSelectionService.selectedDataService(), 'dataservice-edit');
         };
 
-        /**
-         * Initialize the source and table selections for the dataservice
-         */
-        function updateServiceEditSelections ( dataServiceName ) {
-            // Gets the teiid model schema.  If successful, create a temp model using the schema
-            try {
-                RepoRestService.getWkspSourceVdbsForDataService( dataServiceName ).then(
-                    function ( result ) {
-                        var vdbsLength = result.length;
-                        for (var i = 0; i < vdbsLength; i++) {
-                            var srcName = result[i].keng__id;
-                            DSSelectionService.setEditSourceSelection(srcName);
-                        }
-                        initTableSelections( dataServiceName );
-                    },
-                    function (response) {
-                        throw RepoRestService.newRestException($translate.instant('dsSummaryController.findSourceVdbsFailedMsg', 
-                                                                                  {response: RepoRestService.responseMessage(response)}));
-                    });
-            } catch (error) {
-            } finally {
-            }
-        }
-
-        /**
-         * Initialize the source and table selections for the dataservice
-         */
-        function initTableSelections ( dataServiceName ) {
-            // Gets the teiid model schema.  If successful, create a temp model using the schema
-            try {
-                RepoRestService.getTableNamesForDataService( dataServiceName ).then(
-                    function ( result ) {
-                        var tableName = result.Information.SourceTable1;
-                        DSSelectionService.setEditSourceTableSelection(tableName);
-                        
-                        // Start refresh of Service Sources, changing to edit page
-                        SvcSourceSelectionService.refresh('dataservice-edit');
-                    },
-                    function (response) {
-                        throw RepoRestService.newRestException($translate.instant('dsSummaryController.findViewTablesFailedMsg', 
-                                                                                  {response: RepoRestService.responseMessage(response)}));
-                    });
-            } catch (error) {
-            } finally {
-            }
-        }
-        
         /*
          * Edit a dataservice
          */

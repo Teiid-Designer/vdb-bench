@@ -1,0 +1,110 @@
+<div>
+    <div class="wizard-pf-container">
+        <div pf-wizard 
+                on-finish="vm.finishPressed()"
+                on-cancel="vm.cancelPressed()"
+                back-callback="vm.backCallback"
+                next-callback="vm.nextCallback"
+                next-title="vm.nextButtonTitle"
+                hide-indicators="false"
+                embed-in-page="true" 
+                content-height="'435px'">
+
+            <div pf-wizard-step
+                    step-title="{{vm.stepTitle}}"
+                    step-id="wizard-select-tables"
+                    allow-click-nav="true"
+                    wz-disabled="false"
+                    next-enabled = "vm.nextEnablement"
+                    prev-enabled = "false"
+                    ok-to-nav-away="true">
+
+                <h3><i>{{vm.instructionMessage}}</i></h3>
+                <div class="col-md-12">
+                    <form class="form-horizontal" >
+                        <div class="form-group">
+                            <label class="col-md-1 control-label" for="textInput" translate="shared.Name"></label>
+                            <div class="col-md-7">
+                                <input type="text" ng-readonly="vm.isEditing()" ng-model="vm.serviceName" ng-init="vm.serviceName" ng-change="vm.serviceNameChanged()" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-1 control-label" for="textInput" translate="shared.Description"></label>
+                            <div class="col-md-7">
+                                <input type="text" ng-model="vm.serviceDescription" ng-init="vm.serviceDescription" ng-change="vm.serviceDescriptionChanged()" class="form-control">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-4">
+                    <h3><strong translate="dataserviceEditWizard.dataSources" /></h3>
+                </div>
+                <div class="col-md-6">
+                    <h3><strong translate="dataserviceEditWizard.selectedTables" /></h3>
+                </div>
+                <div class="col-md-2">
+                </div>
+                <!-- Source-Table Tree Control -->
+                <div class="tree-control-container col-md-4">
+                    <!-- Spinner when loading -->
+                    <div ng-show="vm.treeLoading==true">
+                        <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+                    </div>
+                    <!-- No Content Message -->
+                    <div ng-show="vm.treeLoading==false && vm.treedata.length == 0 && !vm.hasTreeFetchError">
+                        <h4 translate="dataserviceEditWizard.noTreeContent"></h4>
+                    </div>
+                    <!-- Fetch Content Error Message -->
+                    <div ng-show="vm.treeLoading==false && vm.hasTreeFetchError">
+                        <h4>{{vm.treeFetchErrorMsg}}</h4>
+                    </div>
+                    <div ng-show="vm.treeLoading==false">
+                        <!-- tree control for catalog and schema -->
+                        <treecontrol class="tree-light tree-control-results" 
+                             tree-model="vm.treedata" 
+                             selected-node="vm.initialTreeNodeSelection" 
+                             on-selection="vm.treeSelectionChanged(node,selected,$parentNode)" 
+                             expanded-nodes="vm.initialTreeExpandedNodes" 
+                             on-node-toggle="vm.treeExpansionChanged(node,expanded)">
+                             <span ng-switch="" on="node.type">
+                                 <span ng-switch-when="source" class="fa fa-database" aria-hidden="true"></span>
+                                 <span ng-switch-when="table" class="fa fa-table" aria-hidden="true"></span>
+                                 <span ng-switch-when="loading" class="fa fa-spinner fa-spin" aria-hidden="true"></span>
+                             </span>
+                            {{node.name}}
+                        </treecontrol>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="table-selection-container">
+                        <div class="col-md-1 pull-right">
+                            <button id="btn-remove-table1-selection" class="btn btn-xs pficon pficon-close" ng-click="vm.removeTable1Selection()"></button>
+                        </div>
+                        <h4><strong>{{vm.selectedSources[0]}}</strong></h4>
+                        <h3>&nbsp;&nbsp;{{vm.selectedTables[0]}}</h4>
+                    </div>
+                    <div class="table-selection-container">
+                        <div class="col-md-1 pull-right">
+                            <button id="btn-remove-table2-selection" class="btn btn-xs pficon pficon-close" ng-click="vm.removeTable2Selection()"></button>
+                        </div>
+                        <h4><strong>{{vm.selectedSources[1]}}</strong></h4>
+                        <h3>&nbsp;&nbsp;{{vm.selectedTables[1]}}</h4>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <form ng-show="vm.selectedTables.length==1">
+                        <input type="checkbox" ng-model="vm.includeAllColumns" ng-true-value=true ng-false-value=false ng-change="vm.includeAllColumnsCheckboxChanged()">
+                        <h4 style="display:inline"><strong>Include All Columns</strong></h4><h4>
+                    </form>
+                </div>
+            </div>
+
+            <!-- directive includes the single table step -->
+            <single-table-view-step wizard-active="vm.selectedTables.length<2 && vm.includeAllColumns===false"></single-table-view-step>
+
+            <!-- directive includes the two table join steop -->
+            <two-table-view-step wizard-active="vm.selectedTables.length==2"></two-table-view-step>
+
+        </div>
+    </div>
+</div>

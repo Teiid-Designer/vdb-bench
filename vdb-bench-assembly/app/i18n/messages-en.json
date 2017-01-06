@@ -87,7 +87,8 @@
     "dataservice-new" : {
         "configureSourceMsg" : "Before you can create a new Data Service, you will need to configure a data source. To configure a data source, click ",
         "inputFieldsHelpMsg" : "Choose a name (and optional description) for your Data Service",
-        "instructionsMsg" : "A Data Service can be composed of one or more of your available data sources. Start creating a Data Service by selecting a data source, then select one of it's tables. If you don't see your desired data source, click "
+        "instructionsMsg" : "A Data Service can be composed of one or more of your available data sources. If you don't see your desired data source, click ",
+        "multiTableCheckbox" : "Join multiple tables"
     },
 
     "dataservice-summary" : {
@@ -132,6 +133,12 @@
         }
     },
 
+    "dataserviceEditWizard" : {
+        "getVdbModelsFailedMsg" : "Failed to get Vdb models",
+        "updateVdbFromDdlFailedMsg" : "Failed to construct temp Vdb from DDL",
+        "getVdbModelTablesFailedMsg" : "Failed to get Vdb model tables"
+    },
+    
     "dsCloneController" : {
         "cloneFailedMsg" : "Failed to clone the data service: {{response}}"
     },
@@ -423,6 +430,41 @@
         "StatusErrorLabel" : "Status Error:",
         "TestAdminConnection" : "Test Admin Connection",
         "TestJdbcConnection" : "Test JDBC Connection"
+    },
+
+    "dataserviceEditWizard" : {
+        "stepTitle" : "Choose Data Sources",
+        "dataSources" : "Data Sources",
+        "selectedTables" : "Selected Tables",
+        "enterNameInstructionMsg" : "Enter a name for your data service",
+        "clickSourceTableInstructionMsg" : "Click on a source table to add it to your selections",
+        "clickFinishInstructionMsg" : "Click Finish to create the data service",
+        "clickNextSingleTableInstructionMsg" : "Click Next to select columns for the data service",
+        "clickNextTwoTablesInstructionMsg" : "Click Next to define the join for the data service"
+    },
+
+    "singleTableViewStep" : {
+        "stepTitle" : "View Definition",
+        "clickFinishInstructionMsg" : "Click Finish to create the data service",
+        "selectOneOrMoreColumnsInstructionMsg" : "Select one or more columns for your Data Service view"
+    },
+
+    "twoTableViewStep" : {
+        "stepTitle" : "Join Definition",
+        "joinType" : "Join Type",
+        "joinCriteria" : "Join Criteria",
+        "equalsCriteria" : "equals",
+        "chooseCriteriaCol" : "-- choose criteria column --",
+        "joinToolTipInner" : "Inner Join",
+        "joinToolTipLeftOuter" : "Left Outer Join",
+        "joinToolTipRightOuter" : "Right Outer Join",
+        "joinToolTipFullOuter" : "Full OUter Join",
+        "clickFinishInstructionMsg" : "Click Finish to create the data service",
+        "selectColumnsForLeftTableInstructionMsg" : "Select one or more columns from the left source",
+        "selectColumnsForRightTableInstructionMsg" : "Select one or more columns from the right source",
+        "selectJoinTypeInstructionMsg" : "Select a join type",
+        "selectLeftTableCriteriaColumnInstructionMsg" : "Select a column for the left table criteria",
+        "selectRightTableCriteriaColumnInstructionMsg" : "Select a column for the right table criteria"
     }
 
 }

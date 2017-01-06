@@ -130,7 +130,7 @@
                         setResponse(importStatus.success ? 'OK': 'Failed');
 
                         // Reinitialise the list of dataservices
-                        DSSelectionService.refresh();
+                        DSSelectionService.refresh(null);
                     },
                     function (response) {
                         // Some kind of error has occurred
@@ -139,7 +139,7 @@
                         setResponse('Failed');
 
                         // Reinitialise the list of dataservices
-                        DSSelectionService.refresh();
+                        DSSelectionService.refresh(null);
                     });
             } catch (error) {
                 vm.showProgress(false);

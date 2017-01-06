@@ -37,7 +37,7 @@
             var suffix = vm.storageType.name;
             var page = DSPageService.page( DSPageService.IMPORT_DATASERVICE_PAGE );
             DSPageService.setCustomHelpId( page.id, "dataservice-import-" + suffix );
-        }
+        };
 
         vm.storageTypeSet = function() {
             if (angular.isUndefined(vm.storageType))
@@ -51,7 +51,7 @@
             vm.storageTypeSet();
 
             // update page help ID when storage type changes
-            updatePageHelpId()
+            updatePageHelpId();
         });
 
         function init() {

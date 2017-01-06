@@ -1,0 +1,27 @@
+<div pf-wizard-step
+        step-title="{{vm.stepTitle}}"
+        wz-disabled="{{!vm.wizardActive}}"
+        step-id="wizard-view-definition"
+        allow-click-nav="false"
+        wz-disabled="false"
+        on-show="vm.viewDefinitionStepShown()"
+        next-enabled = "vm.nextEnablement"
+        prev-enabled = "true"
+        ok-to-nav-away="true">
+    <h3><i>{{vm.instructionMessage}}</i></h3>
+    <div class="col-md-5">
+        <div class="column-list-container">
+            <div class="column-list-results">
+                <div id="viewColumnList-row" class="list-view-container">
+                    <div pf-list-view config="vm.listConfig" items="vm.items">
+                        <div class="list-view-pf-description">
+                            <div class="list-group-item-heading">
+                            {{item.keng__id}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
