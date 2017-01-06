@@ -489,12 +489,6 @@
         vm.actionsConfig = {
           primaryActions: [
             {
-              name: $translate.instant('datasourceSummaryController.actionNameRefresh'),
-              title: $translate.instant('datasourceSummaryController.actionTitleRefresh'),
-              actionFn: refreshClicked,
-              isDisabled: false
-            },
-            {
               name: $translate.instant('datasourceSummaryController.actionNameNew'),
               title: $translate.instant('datasourceSummaryController.actionTitleNew'),
               actionFn: newSvcSourceClicked,
@@ -507,43 +501,61 @@
               isDisabled: true
             },
             {
-              name: $translate.instant('datasourceSummaryController.actionNameDelete'),
-              title: $translate.instant('datasourceSummaryController.actionTitleDelete'),
-              actionFn: deleteSvcSourceClicked,
-              isDisabled: true
-            }
-          ],
-          moreActions: [
-            {
-              name: $translate.instant('datasourceSummaryController.actionNameExport'),
-              title: $translate.instant('datasourceSummaryController.actionTitleExport'),
-              actionFn: exportSvcSourceClicked,
-              isDisabled: true
-            },
-            {
               name: $translate.instant('datasourceSummaryController.actionNameCopy'),
               title: $translate.instant('datasourceSummaryController.actionTitleCopy'),
               actionFn: cloneSvcSourceClicked,
               isDisabled: true
             },
             {
-              isSeparator: true
-            },
-            {
-              name: $translate.instant('datasourceSummaryController.actionNameImport'),
-              title: $translate.instant('datasourceSummaryController.actionTitleImport'),
-              actionFn: importSvcSourceClicked,
-              isDisabled: false
-            },
-            {
-              isSeparator: true
+              name: $translate.instant('datasourceSummaryController.actionNameDelete'),
+              title: $translate.instant('datasourceSummaryController.actionTitleDelete'),
+              actionFn: deleteSvcSourceClicked,
+              isDisabled: true
             },
             {
               name: $translate.instant('datasourceSummaryController.actionNameDisplayDdl'),
               title: $translate.instant('datasourceSummaryController.actionTitleDisplayDdl'),
               actionFn: showHideDDLClicked,
               isDisabled: false
+            },
+            {
+              name: $translate.instant('datasourceSummaryController.actionNameRefresh'),
+              title: $translate.instant('datasourceSummaryController.actionTitleRefresh'),
+              actionFn: refreshClicked,
+              isDisabled: false
             }
+          ],
+          moreActions: [
+//            {
+//              name: $translate.instant('datasourceSummaryController.actionNameExport'),
+//              title: $translate.instant('datasourceSummaryController.actionTitleExport'),
+//              actionFn: exportSvcSourceClicked,
+//              isDisabled: true
+//            },
+//            {
+//              name: $translate.instant('datasourceSummaryController.actionNameCopy'),
+//              title: $translate.instant('datasourceSummaryController.actionTitleCopy'),
+//              actionFn: cloneSvcSourceClicked,
+//              isDisabled: true
+//            },
+//            {
+//              isSeparator: true
+//            },
+//            {
+//              name: $translate.instant('datasourceSummaryController.actionNameImport'),
+//              title: $translate.instant('datasourceSummaryController.actionTitleImport'),
+//              actionFn: importSvcSourceClicked,
+//              isDisabled: false
+//            },
+//            {
+//              isSeparator: true
+//            },
+//            {
+//              name: $translate.instant('datasourceSummaryController.actionNameDisplayDdl'),
+//              title: $translate.instant('datasourceSummaryController.actionTitleDisplayDdl'),
+//              actionFn: showHideDDLClicked,
+//              isDisabled: false
+//            }
           ],
           actionsInclude: true
         };

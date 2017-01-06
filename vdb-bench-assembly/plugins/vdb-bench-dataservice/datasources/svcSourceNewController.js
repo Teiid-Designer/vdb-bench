@@ -124,12 +124,14 @@
                     function (resp) {
                         SvcSourceSelectionService.setLoading(false);
                         var sourceCreateFailedMsg = $translate.instant('svcSourceNewController.sourceCreateFailedMsg');
-                        throw RepoRestService.newRestException(sourceCreateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
+                        alert(sourceCreateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
+                        SvcSourceSelectionService.refresh('datasource-summary');
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
                 var sourceCreateFailedMsg = $translate.instant('svcSourceNewController.sourceCreateFailedMsg');
-                throw RepoRestService.newRestException(sourceCreateFailedMsg + "\n" + error);
+                alert(sourceCreateFailedMsg + "\n" + error);
+                SvcSourceSelectionService.refresh('datasource-summary');
             }
         }
 
@@ -148,12 +150,14 @@
                     function (resp) {
                         SvcSourceSelectionService.setLoading(false);
                         var sourceModelCreateFailedMsg = $translate.instant('svcSourceNewController.sourceModelCreateFailedMsg');
-                        throw RepoRestService.newRestException(sourceModelCreateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
+                        alert(sourceModelCreateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
+                        SvcSourceSelectionService.refresh('datasource-summary');
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
                 var sourceModelCreateFailedMsg = $translate.instant('svcSourceNewController.sourceModelCreateFailedMsg');
-                throw RepoRestService.newRestException(sourceModelCreateFailedMsg + "\n" + error);
+                alert(sourceModelCreateFailedMsg + "\n" + error);
+                SvcSourceSelectionService.refresh('datasource-summary');
             }
         }
 
@@ -170,12 +174,14 @@
                     function (resp) {
                         SvcSourceSelectionService.setLoading(false);
                         var sourceModelConnectionCreateFailedMsg = $translate.instant('svcSourceNewController.sourceModelConnectionCreateFailedMsg');
-                        throw RepoRestService.newRestException(sourceModelConnectionCreateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
+                        alert(sourceModelConnectionCreateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
+                        SvcSourceSelectionService.refresh('datasource-summary');
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
                 var sourceModelConnectionCreateFailedMsg = $translate.instant('svcSourceNewController.sourceModelConnectionCreateFailedMsg');
-                throw RepoRestService.newRestException(sourceModelConnectionCreateFailedMsg + "\n" + error);
+                alert(sourceModelConnectionCreateFailedMsg + "\n" + error);
+                SvcSourceSelectionService.refresh('datasource-summary');
             }
         }
 
@@ -210,18 +216,21 @@
                             RepoRestService.pollForActiveVdb(vdbName, successCallback, failCallback);
                         } else {
                             SvcSourceSelectionService.setDeploying(false, vdbName, false, result.Information.ErrorMessage1);
+                            SvcSourceSelectionService.refresh('dataservice-summary');
                         }
                    },
                     function (response) {
                         SvcSourceSelectionService.setDeploying(false, vdbName, false, RepoRestService.responseMessage(response));
                         SvcSourceSelectionService.setLoading(false);
                         var sourceDeployFailedMsg = $translate.instant('svcSourceNewController.sourceDeployFailedMsg');
-                        throw RepoRestService.newRestException(sourceDeployFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                        alert(sourceDeployFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                        SvcSourceSelectionService.refresh('datasource-summary');
                     });
             } catch (error) {
                 SvcSourceSelectionService.setLoading(false);
                 var sourceDeployFailedMsg = $translate.instant('svcSourceNewController.sourceDeployFailedMsg');
-                throw RepoRestService.newRestException(sourceDeployFailedMsg + "\n" + error);
+                alert(sourceDeployFailedMsg + "\n" + error);
+                SvcSourceSelectionService.refresh('datasource-summary');
             }
         }
 

@@ -421,9 +421,9 @@
               isDisabled: true
             },
             {
-              name: $translate.instant('shared.Test'),
-              title: $translate.instant('shared.TestWhat', {what: $translate.instant('shared.DataService')}),
-              actionFn: deployDataServiceClicked,
+              name: $translate.instant('shared.Copy'),
+              title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.DataService')}),
+              actionFn: cloneDataServiceClicked,
               isDisabled: true
             },
             {
@@ -431,30 +431,42 @@
               title: $translate.instant('shared.DeleteWhat', {what: $translate.instant('shared.DataService')}),
               actionFn: deleteDataServiceClicked,
               isDisabled: true
-            }
-          ],
-          moreActions: [
+            },
+            {
+              name: $translate.instant('shared.Test'),
+              title: $translate.instant('shared.TestWhat', {what: $translate.instant('shared.DataService')}),
+              actionFn: deployDataServiceClicked,
+              isDisabled: true
+            },
             {
               name: $translate.instant('shared.Export'),
               title: $translate.instant('shared.ExportWhat', {what: $translate.instant('shared.DataService')}),
               actionFn: exportDataServiceClicked,
               isDisabled: true
-            },
-            {
-              name: $translate.instant('shared.Copy'),
-              title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.DataService')}),
-              actionFn: cloneDataServiceClicked,
-              isDisabled: true
-            },
-            {
-              isSeparator: true
-            },
-            {
-              name: $translate.instant('shared.Import'),
-              title: $translate.instant('shared.ImportWhat', {what: $translate.instant('shared.DataService')}),
-              actionFn: importDataServiceClicked,
-              isDisabled: false
             }
+          ],
+          moreActions: [
+//            {
+//              name: $translate.instant('shared.Export'),
+//              title: $translate.instant('shared.ExportWhat', {what: $translate.instant('shared.DataService')}),
+//              actionFn: exportDataServiceClicked,
+//              isDisabled: true
+//            },
+//            {
+//              name: $translate.instant('shared.Copy'),
+//              title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.DataService')}),
+//              actionFn: cloneDataServiceClicked,
+//              isDisabled: true
+//            },
+//            {
+//              isSeparator: true
+//            },
+//            {
+//              name: $translate.instant('shared.Import'),
+//              title: $translate.instant('shared.ImportWhat', {what: $translate.instant('shared.DataService')}),
+//              actionFn: importDataServiceClicked,
+//              isDisabled: false
+//            }
           ],
           actionsInclude: true
         };

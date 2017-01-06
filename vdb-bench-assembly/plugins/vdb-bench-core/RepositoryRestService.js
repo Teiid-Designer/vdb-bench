@@ -1077,6 +1077,11 @@
                                 successCallback();
                                 $interval.cancel(promise);
                                 return;
+                            } else if (vdb.failed) {
+                                if (failCallback) {
+                                    failCallback("Failed");
+                                }
+                                $interval.cancel(promise);
                             }
                         }
                     },
