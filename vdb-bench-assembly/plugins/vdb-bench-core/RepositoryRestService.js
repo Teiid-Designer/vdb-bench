@@ -915,8 +915,8 @@
          * Service: update an existing dataservice in the repository
          */
         service.updateDataService = function (dataserviceName, dataserviceDescription) {
-            if (!dataserviceName || !dataserviceDescription) {
-                throw new RestServiceException("Data service name or description for update are not defined");
+            if (!dataserviceName) {
+                throw new RestServiceException("Data service name for update is not defined");
             }
             
             return getRestService().then(function (restService) {
@@ -933,21 +933,64 @@
 
         /**
          * Service: Sets the DataService's service VDB using a single table source.
-         * update an existing dataservice in the repository
+         * update an existing dataservice in the repository.
+         * If null columnNames is provided - means "include all columns"
          */
-        service.setDataServiceVdbForSingleTable = function (dataserviceName, viewTablePath, modelSourcePath) {
-            if (!dataserviceName || !viewTablePath || !modelSourcePath) {
+        service.setDataServiceVdbForSingleTable = function (dataserviceName, tablePath, modelSourcePath, columnNames) {
+            if (!dataserviceName || !tablePath || !modelSourcePath) {
                 throw RestServiceException("Data service update inputs are not defined");
             }
             
             return getRestService().then(function (restService) {
                 var payload = {
                     "dataserviceName": dataserviceName,
-                    "viewTablePath": getUserWorkspacePath()+"/"+viewTablePath,
+                    "tablePath": getUserWorkspacePath()+"/"+tablePath,
                     "modelSourcePath": getUserWorkspacePath()+"/"+modelSourcePath
                 };
+                // Adds requested column names if provided
+                if ( angular.isDefined(columnNames) && columnNames.length > 0 )  {
+                    payload.columnNames = columnNames;
+                }
 
                 return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + REST_URI.SERVICE_VDB_FOR_SINGLE_TABLE).post(payload);
+            });
+        };
+
+        /**
+         * Service: Sets the DataService's service VDB using join tables
+         * update an existing dataservice in the repository.
+         * If null columnNames is provided - means "include all columns"
+         */
+        service.setDataServiceVdbForJoinTables = function (dataserviceName, tablePath, modelSourcePath, columnNames,
+                                                                            rhTablePath, rhModelSourcePath, rhColumnNames, 
+                                                                            joinType, lhJoinColumnName, rhJoinColumnName) {
+            if (!dataserviceName || !tablePath || !modelSourcePath || 
+                                    !rhTablePath || !rhModelSourcePath || 
+                                    !joinType || !lhJoinColumnName || !rhJoinColumnName ) {
+                throw RestServiceException("Data service update inputs are not defined");
+            }
+            
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "dataserviceName": dataserviceName,
+                    "tablePath": getUserWorkspacePath()+"/"+tablePath,
+                    "modelSourcePath": getUserWorkspacePath()+"/"+modelSourcePath,
+                    "rhTablePath": getUserWorkspacePath()+"/"+rhTablePath,
+                    "rhModelSourcePath": getUserWorkspacePath()+"/"+rhModelSourcePath,
+                    "joinType": joinType,
+                    "lhJoinColumn": lhJoinColumnName,
+                    "rhJoinColumn": rhJoinColumnName
+                };
+                // Adds requested column names if provided
+                if ( angular.isDefined(columnNames) && columnNames.length > 0 )  {
+                    payload.columnNames = columnNames;
+                }
+                // Adds requested rh column names if provided
+                if ( angular.isDefined(rhColumnNames) && rhColumnNames.length > 0 )  {
+                    payload.rhColumnNames = rhColumnNames;
+                }
+
+                return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + REST_URI.SERVICE_VDB_FOR_JOIN_TABLES).post(payload);
             });
         };
 
@@ -980,15 +1023,15 @@
         };
 
         /**
-         * Service: Gets the service view tableNames for a DataService's view.
+         * Service: Gets info for a DataService's view.
          */
-        service.getTableNamesForDataService = function (dataserviceName) {
+        service.getViewInfoForDataService = function (dataserviceName) {
             return getRestService().then(function (restService) {
                 if (!dataserviceName) {
                     throw RestServiceException("Data service name is not defined");
                 }
 
-                var uri = REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + dataserviceName + SYNTAX.FORWARD_SLASH + REST_URI.SERVICE_VIEW_TABLES;
+                var uri = REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + dataserviceName + SYNTAX.FORWARD_SLASH + REST_URI.SERVICE_VIEW_INFO;
                 return restService.one(uri).get();
             });
         };
@@ -1034,6 +1077,11 @@
                                 successCallback();
                                 $interval.cancel(promise);
                                 return;
+                            } else if (vdb.failed) {
+                                if (failCallback) {
+                                    failCallback("Failed");
+                                }
+                                $interval.cancel(promise);
                             }
                         }
                     },

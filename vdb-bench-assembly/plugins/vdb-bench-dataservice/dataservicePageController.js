@@ -11,7 +11,7 @@
 
     BodyClickDirective.$inject = ['$parse', '$document'];
     DataServicePageController.$inject = ['$scope', 'SYNTAX', 'CONFIG', 'RepoRestService', 'DSSelectionService',
-                                                            'ConnectionSelectionService', 'SvcSourceSelectionService', 'DSPageService'];
+                                         'EditWizardService', 'ConnectionSelectionService', 'SvcSourceSelectionService', 'DSPageService'];
 
     /**
      * Designed to bind a click handler to body element which,
@@ -54,7 +54,7 @@
     }
     
     function DataServicePageController($scope, syntax, config, RepoRestService, DSSelectionService,
-                                                            ConnectionSelectionService, SvcSourceSelectionService, DSPageService) {
+                                       EditWizardService, ConnectionSelectionService, SvcSourceSelectionService, DSPageService) {
         var vm = this;
 
         vm.dataserviceNav = "";
@@ -90,6 +90,8 @@
         vm.selectPage = function(pageId) {
             if(pageId === DSPageService.SERVICESOURCE_NEW_PAGE) {
                 ConnectionSelectionService.resetFilterProperties();
+            } else if(pageId == DSPageService.NEW_DATASERVICE_PAGE) {
+                EditWizardService.init(null,null);
             }
             vm.selectedPage = DSPageService.page(pageId);
             DSPageService.setCustomTitle(pageId, null);

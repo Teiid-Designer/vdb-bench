@@ -2,35 +2,16 @@
 	<div id="dataservice-edit-container" class="container-fluid" ng-controller="DSEditController as vm">
 	
 	    <div id="dsEdit-edit-controls" ng-show="vm.svcSourcesLoading==false" class="row">
-	        <h3 translate="dataservice-edit.instructionsMsg"></h3>
-	        <form name="dsForm" class="form-horizontal">
-	            <div class="col-md-6">
-	                <h4><strong translate="shared.Sources"></strong></h4>
-	                <service-source-list selection="{{vm.initialSourceName}}"></service-source-list>
-	            </div>
-	            <div class="col-md-6">
-	                <h4><strong translate="shared.Tables"></strong></h4>
-	                <model-table-list selection="{{vm.initialSourceTableName}}"></model-table-list>
-	            </div>
-	            <div class="form-group">
-	                <label class="col-md-2 control-label" style="margin-top: 20px" for="textInput" translate="shared.Name"></label>
-	                <div class="col-md-6" style="margin-top: 20px" >
-	                  <input type="text" readonly="readonly" ng-model="vm.serviceName" ng-init="vm.serviceName=vmmain.selectedDataservice().keng__id" class="form-control">
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label class="col-md-2 control-label" for="textInput" translate="shared.Description"></label>
-	                <div class="col-md-6">
-	                  <input type="text" ng-model="vm.serviceDescription" ng-init="vm.serviceDescription=vmmain.selectedDataservice().tko__description" class="form-control">
-	                </div>
-	            </div>
-	        </form>
-	        <div>
-	            <input type="submit" class="btn btn-primary" value="{{:: 'shared.Save' | translate}}" ng-click="vm.onSaveDataServiceClicked()"
-	                                      ng-disabled="vm.canSaveDataService() !== true || vmmain.selectedPage.id !== 'dataservice-edit'"/>
-	            <input type="button" class="btn btn-default" value="{{:: 'shared.Cancel' | translate}}" ng-click="vmmain.selectPage('dataservice-summary')"
-	                                      ng-disabled="vmmain.selectedPage.id !== 'dataservice-edit'"/>
+	        <div class="row col-md-12">
+	            <page-help-control 
+	                icon="{{vmmain.selectedPage.icon}}" 
+	                title="{{vmmain.selectedPage.title}} '{{vmmain.selectedDataservice().keng__id}}'" 
+	                help-id="dataservice-edit"
+	                container-id="outer" />
 	        </div>
+            <div id="dataservice-edit-wizard" class="row col-md-12">
+                <dataservice-edit-wizard></dataservice-edit-wizard>
+            </div>
 	    </div>
 	</div>
 </div>

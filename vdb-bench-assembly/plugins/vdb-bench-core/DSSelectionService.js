@@ -41,7 +41,7 @@
         /**
          * Fetch the data services for the repository
          */
-        function initDataServices() {
+        function initDataServices(pageId) {
             setLoading(true);
 
             try {
@@ -49,6 +49,10 @@
                     function (newDataServices) {
                         RepoRestService.copy(newDataServices, ds.dataservices);
                         setLoading(false);
+                        if(pageId) {
+                            // Broadcast the pageChange
+                            $rootScope.$broadcast("dataServicePageChanged", pageId);
+                        }
                     },
                     function (response) {
                         // Some kind of error has occurred
@@ -225,14 +229,14 @@
         };
         
         /*
-         * Refresh the collection of data services
+         * Refresh the collection of data services.  If a pageId is supplied, the redirect is broadcast
          */
-        service.refresh = function() {
-            initDataServices();
+        service.refresh = function(pageId) {
+            initDataServices(pageId);
         };
 
         // Initialise dataservice collection on loading
-        service.refresh();
+        service.refresh(null);
 
         return service;
     }

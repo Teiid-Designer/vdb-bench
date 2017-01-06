@@ -44,7 +44,7 @@
             // set export page help ID
             var exportPage = DSPageService.page( DSPageService.EXPORT_DATASERVICE_PAGE );
             DSPageService.setCustomHelpId( exportPage.id, "dataservice-export-" + suffix );
-        }
+        };
 
         vm.storageTypeSet = function() {
             if (angular.isUndefined(vm.storageType))
@@ -58,7 +58,7 @@
             vm.storageTypeSet();
 
             // update page help ID when storage type changes
-            updatePageHelpId()
+            updatePageHelpId();
         });
 
         function init() {

@@ -47,6 +47,13 @@
             TEMP: 'temp'
         })
 
+        .constant('JOIN', {
+            INNER: 'INNER',
+            FULL_OUTER: 'FULL_OUTER',
+            LEFT_OUTER: 'LEFT_OUTER',
+            RIGHT_OUTER: 'RIGHT_OUTER'
+        })
+
         .constant('REST_URI', {
             BASE_URL: '/v1',
             WORKSPACE: '/workspace',
@@ -63,7 +70,8 @@
             COLUMNS: '/Columns',
             JDBC_CATALOG_SCHEMA: '/JdbcCatalogSchema',
             SERVICE_VDB_FOR_SINGLE_TABLE: 'ServiceVdbForSingleTable',
-            SERVICE_VIEW_TABLES: 'serviceViewTables',
+            SERVICE_VDB_FOR_JOIN_TABLES: 'ServiceVdbForJoinTables',
+            SERVICE_VIEW_INFO: 'serviceViewInfo',
             SOURCE_VDB_MATCHES: 'sourceVdbMatches',
             MODEL_FROM_TEIID_DDL: 'ModelFromTeiidDdl',
             DATA_SERVICES_CLONE: '/dataservices/clone',
