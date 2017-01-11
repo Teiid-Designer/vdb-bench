@@ -11,6 +11,10 @@
     <h3><i>{{vm.instructionMessage}}</i></h3>
     <div class="col-md-5">
         <h3><strong>{{vm.selectedSources[0]}}.{{vm.selectedTables[0]}}</strong></h3>
+        <div>
+            <input type="button" class="btn btn-xs btn-default" value="{{:: 'shared.CheckAll' | translate}}" ng-click="vm.selectAllLeftColumns()" ng-disabled="!vm.selectAllLeftColumnsEnabled" />
+            <input type="button" class="btn btn-xs btn-default" value="{{:: 'shared.UncheckAll' | translate}}" ng-click="vm.deselectAllLeftColumns()" ng-disabled="!vm.deselectAllLeftColumnsEnabled" />
+        </div>
         <div class="column-list-container">
             <div class="column-list-results">
                 <div id="viewColumnList-row" class="list-view-container">
@@ -38,6 +42,10 @@
     </div>
     <div class="col-md-5">
         <h3><strong>{{vm.selectedSources[1]}}.{{vm.selectedTables[1]}}</strong></h3>
+        <div>
+            <input type="button" class="btn btn-xs btn-default" value="{{:: 'shared.CheckAll' | translate}}" ng-click="vm.selectAllRightColumns()" ng-disabled="!vm.selectAllRightColumnsEnabled" />
+            <input type="button" class="btn btn-xs btn-default" value="{{:: 'shared.UncheckAll' | translate}}" ng-click="vm.deselectAllRightColumns()" ng-disabled="!vm.deselectAllRightColumnsEnabled" />
+        </div>
         <div class="column-list-container">
             <div class="column-list-results">
                 <div id="viewColumnList-row" class="list-view-container">

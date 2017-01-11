@@ -294,20 +294,21 @@
         function initSourceTableTree( ) {
             // All Available sources
             var serviceSources = SvcSourceSelectionService.getServiceSources();
-            var hasSources = serviceSources.length>0;
+            var activeSources = getActiveSources(serviceSources);
+            var hasActiveSources = activeSources.length>0;
 
             // Initial Source and Table selections
             vm.selectedSources = EditWizardService.sources();
             vm.selectedTables = EditWizardService.sourceTables();
 
             vm.intialTreeExpandedNodes = [];
-            if(!hasSources) {
+            if(!hasActiveSources) {
                 vm.treedata = [];
             } else {
                 var treeInfo = [];
-                for ( var i = 0; i < serviceSources.length; ++i) {
+                for ( var i = 0; i < activeSources.length; ++i) {
                     var sourceNode = {
-                        name : serviceSources[i].keng__id,
+                        name : activeSources[i].keng__id,
                         children : [{name : "", type : "loading", children : []}]
                     };
                     treeInfo.push(sourceNode);
@@ -320,6 +321,22 @@
             }
         }
 
+        function getActiveSources(datasources) {
+            var activeSources = [];
+            for( var i = 0; i < datasources.length; ++i) {
+                if(angular.isDefined(datasources[i].keng__properties)) {
+                    for(var key in datasources[i].keng__properties) {
+                        var propName = datasources[i].keng__properties[key].name;
+                        var propValue = datasources[i].keng__properties[key].value;
+                        if(propName==='dsbTeiidStatus' && propValue==='Active') {
+                            activeSources.push(datasources[i]);
+                        }
+                    }
+                }
+            }
+            return activeSources;
+        }
+        
         /**
          * Initialize the tree selections
          */

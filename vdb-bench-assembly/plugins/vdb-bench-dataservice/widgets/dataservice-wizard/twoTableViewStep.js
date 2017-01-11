@@ -45,6 +45,10 @@
         vm.joinToolTipLeftOuter = $translate.instant('twoTableViewStep.joinToolTipLeftOuter');
         vm.joinToolTipRightOuter = $translate.instant('twoTableViewStep.joinToolTipRightOuter');
         vm.joinToolTipFullOuter = $translate.instant('twoTableViewStep.joinToolTipFullOuter');
+        vm.selectAllLeftColumnsEnabled = true;
+        vm.deselectAllLeftColumnsEnabled = true;
+        vm.selectAllRightColumnsEnabled = true;
+        vm.deselectAllRightColumnsEnabled = true;
 
         /*
          * Join Definition step shown
@@ -82,33 +86,85 @@
             EditWizardService.setSource2CriteriaColumn(vm.rhCriteriaCol);
         };
 
-        /*
-         * Determine if left table has any selected columns
-         */
-        function lhHasSelectedColumns() {
-            var hasSelected = false;
-            for( var i = 0; i < vm.lhSourceItems.length; i++ ) {
-                if(vm.lhSourceItems[i].selected) {
-                    hasSelected = true;
-                    break;
-                }
-            }
-            return hasSelected;
-        }
+       vm.selectAllLeftColumns = function() {
+           for( var i = 0; i < vm.lhSourceItems.length; i++ ) {
+               vm.lhSourceItems[i].selected = true;
+           }
+       };
+
+       vm.deselectAllLeftColumns = function() {
+           for( var i = 0; i < vm.lhSourceItems.length; i++ ) {
+               vm.lhSourceItems[i].selected = false;
+           }
+       };
+
+       vm.selectAllRightColumns = function() {
+           for( var i = 0; i < vm.rhSourceItems.length; i++ ) {
+               vm.rhSourceItems[i].selected = true;
+           }
+       };
+
+       vm.deselectAllRightColumns = function() {
+           for( var i = 0; i < vm.rhSourceItems.length; i++ ) {
+               vm.rhSourceItems[i].selected = false;
+           }
+       };
 
        /*
-        * Determine if right table has any selected columns
+        * Determine if all left columns selected
         */
-       function rhHasSelectedColumns() {
-            var hasSelected = false;
-            for( var i = 0; i < vm.rhSourceItems.length; i++ ) {
-                if(vm.rhSourceItems[i].selected) {
-                    hasSelected = true;
-                    break;
-                }
-            }
-            return hasSelected;
-        }
+       function hasAllLeftColumnsSelected() {
+           var allSelected = true;
+           for( var i = 0; i < vm.lhSourceItems.length; i++ ) {
+               if(!vm.lhSourceItems[i].selected) {
+                   allSelected = false;
+                   break;
+               }
+           }
+           return allSelected;
+       }
+
+       /*
+        * Determine if all left columns deselected
+        */
+       function hasAllLeftColumnsDeselected() {
+           var allDeselected = true;
+           for( var i = 0; i < vm.lhSourceItems.length; i++ ) {
+               if(vm.lhSourceItems[i].selected) {
+               	allDeselected = false;
+                   break;
+               }
+           }
+           return allDeselected;
+       }
+
+       /*
+        * Determine if all right columns selected
+        */
+       function hasAllRightColumnsSelected() {
+           var allSelected = true;
+           for( var i = 0; i < vm.rhSourceItems.length; i++ ) {
+               if(!vm.rhSourceItems[i].selected) {
+                   allSelected = false;
+                   break;
+               }
+           }
+           return allSelected;
+       }
+
+       /*
+        * Determine if all right columns deselected
+        */
+       function hasAllRightColumnsDeselected() {
+           var allDeselected = true;
+           for( var i = 0; i < vm.rhSourceItems.length; i++ ) {
+               if(vm.rhSourceItems[i].selected) {
+               	allDeselected = false;
+                   break;
+               }
+           }
+           return allDeselected;
+       }
 
        /*
         * Determine if valid join type is selected
@@ -126,10 +182,32 @@
          * Update next enablement
          */
         function updateNextEnablement() {
-            if(!lhHasSelectedColumns()) {
+            if(hasAllLeftColumnsSelected()) {
+                vm.selectAllLeftColumnsEnabled = false;
+                vm.deselectAllLeftColumnsEnabled = true;
+            } else if(hasAllLeftColumnsDeselected()) {
+                vm.selectAllLeftColumnsEnabled = true;
+                vm.deselectAllLeftColumnsEnabled = false;
+            } else {
+                vm.selectAllLeftColumnsEnabled = true;
+                vm.deselectAllLeftColumnsEnabled = true;
+            }
+            
+            if(hasAllRightColumnsSelected()) {
+                vm.selectAllRightColumnsEnabled = false;
+                vm.deselectAllRightColumnsEnabled = true;
+            } else if(hasAllRightColumnsDeselected()) {
+                vm.selectAllRightColumnsEnabled = true;
+                vm.deselectAllRightColumnsEnabled = false;
+            } else {
+                vm.selectAllRightColumnsEnabled = true;
+                vm.deselectAllRightColumnsEnabled = true;
+            }
+            
+            if(hasAllLeftColumnsDeselected()) {
                 vm.nextEnablement = false;
                 vm.instructionMessage = $translate.instant('twoTableViewStep.selectColumnsForLeftTableInstructionMsg');
-            } else if(!rhHasSelectedColumns()){
+            } else if(hasAllRightColumnsDeselected()){
                 vm.nextEnablement = false;
                 vm.instructionMessage = $translate.instant('twoTableViewStep.selectColumnsForRightTableInstructionMsg');
             } else if( !joinValid() ){

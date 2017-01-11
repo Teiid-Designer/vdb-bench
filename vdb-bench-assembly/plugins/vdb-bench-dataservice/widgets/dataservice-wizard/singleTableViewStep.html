@@ -10,6 +10,10 @@
         ok-to-nav-away="true">
     <h3><i>{{vm.instructionMessage}}</i></h3>
     <div class="col-md-5">
+        <div>
+            <input type="button" class="btn btn-xs btn-default" value="{{:: 'shared.CheckAll' | translate}}" ng-click="vm.selectAllColumns()" ng-disabled="!vm.selectAllColumnsEnabled" />
+            <input type="button" class="btn btn-xs btn-default" value="{{:: 'shared.UncheckAll' | translate}}" ng-click="vm.deselectAllColumns()" ng-disabled="!vm.deselectAllColumnsEnabled" />
+        </div>
         <div class="column-list-container">
             <div class="column-list-results">
                 <div id="viewColumnList-row" class="list-view-container">

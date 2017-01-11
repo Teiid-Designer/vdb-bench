@@ -236,6 +236,7 @@
                 for(var i=0; i<wiz.src1AvailableColumns.length; i++) {
                     wiz.src1AvailableColumns[i].selected = true;
                 }
+                wiz.includeAllSource1Columns = true;
             } else {
                 for(var iCol=0; iCol<wiz.src1SelectedColumnNames.length; iCol++) {
                     // Find and set the available column selected
@@ -244,7 +245,13 @@
                             wiz.src1AvailableColumns[j].selected = true;
                         }
                     }
-                } 
+                }
+                // Set 'includeAll' state based on selected columns.
+                if(service.source1AllColumnsSelected()) {
+                    wiz.includeAllSource1Columns = true;
+                }  else {
+                    wiz.includeAllSource1Columns = false;
+                }
             }
 
             // refresh the source 1 criteria column
