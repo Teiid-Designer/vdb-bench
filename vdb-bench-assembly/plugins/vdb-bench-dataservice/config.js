@@ -48,6 +48,14 @@
                         }
                     )
                    .build());
+
+        //
+        // Removes the built-in hawtio preference tabs
+        //
+        if (preferencesRegistry.tabs) {
+            delete preferencesRegistry.tabs['Console Logging'];
+            delete preferencesRegistry.tabs.Reset;
+        }
     }
 
     hawtioPluginLoader.addModule(pluginName);
