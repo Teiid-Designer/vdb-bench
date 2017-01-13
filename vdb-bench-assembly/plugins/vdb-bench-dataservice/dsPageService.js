@@ -22,6 +22,7 @@
          */
         var service = {
             DS_HOME_PAGE: 'dataservice-home',
+            DS_PREFERENCE_PAGE: 'ds-preference-page',
             DATASERVICE_SUMMARY_PAGE: 'dataservice-summary',
             NEW_DATASERVICE_PAGE: 'dataservice-new',
             IMPORT_DATASERVICE_PAGE: 'dataservice-import',
@@ -51,13 +52,14 @@
          */
         $rootScope.$on('$translateChangeSuccess', function () {
             pages[service.DS_HOME_PAGE].title = $translate.instant('dsPageService.homeTitle');
-            pages[service.DATASERVICE_SUMMARY_PAGE].title = $translate.instant('shared.WhatSummary', 
+            pages[service.DS_PREFERENCE_PAGE].title = $translate.instant('dsPageService.preferencesTitle');
+            pages[service.DATASERVICE_SUMMARY_PAGE].title = $translate.instant('shared.WhatSummary',
                                                                                {what: $translate.instant('shared.DataService')});
             pages[service.NEW_DATASERVICE_PAGE].title = $translate.instant('shared.NewWhat',
                                                                            {what: $translate.instant('shared.DataService')});
             pages[service.IMPORT_DATASERVICE_PAGE].title = $translate.instant('shared.ImportWhat',
                                                                               {what: $translate.instant('shared.DataService')});
-            pages[service.EXPORT_DATASERVICE_PAGE].title = $translate.instant('shared.ExportWhat', 
+            pages[service.EXPORT_DATASERVICE_PAGE].title = $translate.instant('shared.ExportWhat',
                                                                               {what: $translate.instant('shared.DataService')});
             pages[service.EDIT_DATASERVICE_PAGE].title = $translate.instant('shared.EditWhat',
                                                                             {what: $translate.instant('shared.DataService')});
@@ -97,6 +99,17 @@
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
                             service.DS_HOME_PAGE + syntax.DOT + syntax.HTML
+        };
+        pages[service.DS_PREFERENCE_PAGE] = {
+            id: service.DS_PREFERENCE_PAGE,
+            title: $translate.instant('dsPageService.preferencesTitle'),
+            showTitle: false,
+            icon: 'pficon-settings',
+            helpId: service.DS_PREFERENCE_PAGE,
+            parent: null,
+            template: config.pluginDir + syntax.FORWARD_SLASH +
+                            pluginDirName + syntax.FORWARD_SLASH +
+                            service.DS_PREFERENCE_PAGE + syntax.DOT + syntax.HTML
         };
         pages[service.DATASERVICE_SUMMARY_PAGE] = {
             id: service.DATASERVICE_SUMMARY_PAGE,

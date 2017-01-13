@@ -56,6 +56,12 @@
             delete preferencesRegistry.tabs['Console Logging'];
             delete preferencesRegistry.tabs.Reset;
         }
+
+        //
+        // Removes the html for rendering the preferences link in the user menu
+        // Not required since we have a page preferences of our own
+        //
+        $templateCache.put("plugins/preferences/html/menuItem.html","");
     }
 
     hawtioPluginLoader.addModule(pluginName);

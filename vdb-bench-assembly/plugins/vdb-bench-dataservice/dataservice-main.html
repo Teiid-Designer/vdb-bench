@@ -18,7 +18,14 @@
 
         <!-- page content -->
         <div id="dataservice-page-content-outer">
-            <div>
+
+            <div ng-show="! vmmain.isPreferencePage()">
+                <div class="pref-page-icon-container">
+                    <a class="pref-page-icon pficon-settings" href="" ng-click="vmmain.openPreferences()"></a>
+                </div>
+            </div>
+
+            <div ng-show="! vmmain.isPreferencePage()">
                 <page-help-control
 	                help-id="{{vmmain.selectedPageHelpId()}}"
 	                container-id="dataservice-page-content-outer" />
