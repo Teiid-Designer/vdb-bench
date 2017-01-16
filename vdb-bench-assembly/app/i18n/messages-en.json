@@ -28,7 +28,6 @@
         "Forward" : ">>",
         "Import" : "Import",
         "ImportWhat" : "Import {{what}}",
-        "loadingProgressMsg" : "Loading...",
         "Name" : "Name",
         "NameLabel" : "Name:",
         "New" : "New",
@@ -136,9 +135,17 @@
     },
 
     "dataserviceEditWizard" : {
+        "clickFinishInstructionMsg" : "Click Finish to create the data service",
+        "clickNextSingleTableInstructionMsg" : "Click Next to select columns for the data service",
+        "clickNextTwoTablesInstructionMsg" : "Click Next to define the join for the data service",
+        "clickSourceTableInstructionMsg" : "Click on a source table to add it to your selections",
+        "dataSources" : "Data Sources",
+        "enterNameInstructionMsg" : "Enter a name for your data service",
         "getVdbModelsFailedMsg" : "Failed to get Vdb models",
-        "updateVdbFromDdlFailedMsg" : "Failed to construct temp Vdb from DDL",
-        "getVdbModelTablesFailedMsg" : "Failed to get Vdb model tables"
+        "getVdbModelTablesFailedMsg" : "Failed to get Vdb model tables",
+        "selectedTables" : "Selected Tables",
+        "stepTitle" : "Choose Data Sources",
+        "updateVdbFromDdlFailedMsg" : "Failed to construct temp Vdb from DDL"
     },
     
     "dsCloneController" : {
@@ -227,7 +234,6 @@
 
     "datasource-summary" : {
         "welcomeMsg" : "Welcome to the <strong>Data Services Builder</strong>!",
-        "Loading" : "@:shared.loadingProgressMsg",
         "noSourcesInstructionsMsg" : "Currently, there are no data sources configured.  To get started, click ",
         "sourceSchema" : "Data Source Schema"
     },
@@ -349,7 +355,6 @@
         "controlFailedMsg" : "Encountered query error: {{errorMsg}}",
         "instructionMsg" : "Enter query text then click Search",
         "RecordLimit" : "Record Limit",
-        "searchingProgressMsg" : "Searching...",
         "StartingRecordIndex" : "Starting Record Index",
         "help" : {
             "recordLimit" : "Limits the number of records returned from the query (-1 for no limit)",
@@ -363,7 +368,6 @@
         "Cancel" : "@:shared.Cancel",
         "Create" : "@:shared.Create",
         "instructionsMsg" : "Enter a name for the new data source",
-        "Loading" : "@:shared.loadingProgressMsg",
         "Name" : "@:shared.Name"
     },
 
@@ -373,7 +377,6 @@
         "Description" : "@:shared.Description",
         "filterConnection" : "Filter Connection",
         "instructionsMsg" : "Reconfigure an existing Data Source:",
-        "Loading" : "@:shared.loadingProgressMsg",
         "Name" : "@:shared.Name",
         "Save" : "@:shared.Save",
         "Translator" : "@:shared.Translator"
@@ -432,17 +435,6 @@
         "StatusErrorLabel" : "Status Error:",
         "TestAdminConnection" : "Test Admin Connection",
         "TestJdbcConnection" : "Test JDBC Connection"
-    },
-
-    "dataserviceEditWizard" : {
-        "stepTitle" : "Choose Data Sources",
-        "dataSources" : "Data Sources",
-        "selectedTables" : "Selected Tables",
-        "enterNameInstructionMsg" : "Enter a name for your data service",
-        "clickSourceTableInstructionMsg" : "Click on a source table to add it to your selections",
-        "clickFinishInstructionMsg" : "Click Finish to create the data service",
-        "clickNextSingleTableInstructionMsg" : "Click Next to select columns for the data service",
-        "clickNextTwoTablesInstructionMsg" : "Click Next to define the join for the data service"
     },
 
     "singleTableViewStep" : {

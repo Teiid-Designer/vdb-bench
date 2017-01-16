@@ -18,7 +18,7 @@
         <!--  -->
         <!-- Options resetting -->
         <div class="row" ng-show="vm.optionsResetting==true">
-            <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+            <div class="spinner spinner-lg" />
         </div>
         <!--  -->
         <!--  -->
@@ -50,7 +50,7 @@
             <div class="tree-control-container col-md-5" ng-show="vm.supportsCatalogOrSchema">
                 <!-- Spinner when loading -->
                 <div ng-show="vm.treeLoading==true">
-                    <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+                    <div class="spinner spinner-lg" />
                 </div>
                 <!-- No Content Message -->
                 <div ng-show="vm.treeLoading==false && vm.treedata.length == 0 && !vm.hasTreeFetchError">
@@ -75,8 +75,7 @@
                 <div class="pick-list-container">
                     <!-- spinner while updating -->
                     <div id="tableList-updating" ng-show="vm.tablesLoading==true" class="col-md-10 row">
-                        <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
-                        <span class="sr-only" translate="shared.loadingProgressMsg"></span>
+                        <div class="spinner spinner-lg" />
                     </div>
                     <!-- No Tables Message -->
                    <div id="tableList-updating" ng-show="vm.tablesLoading==false && vm.tables.length == 0 && !vm.hasTableFetchError" class="col-md-10 row">

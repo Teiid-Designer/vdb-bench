@@ -45,8 +45,7 @@
 	        <div pf-toolbar id="dataserviceToolbar" config="vm.toolbarConfig" ng-show="vm.dsLoading==true || vm.sourcesLoading==true || vm.hasServices==true"></div>
 	
 	        <div id="dataservice-summary-updating" ng-show="vm.dsLoading==true || vm.sourcesLoading==true" class="col-md-10 row">
-	            <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-	            <span class="sr-only"></span>{{:: 'shared.loadingProgressMsg' | translate}}
+                <div class="spinner spinner-lg" />
 	        </div>
 	
 	        <div class="ds-summary-results-container" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasServices==true">
