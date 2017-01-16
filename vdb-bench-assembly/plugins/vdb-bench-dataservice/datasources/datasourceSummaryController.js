@@ -249,18 +249,12 @@
           appliedFilters: [],
           onFilterChange: filterChange
         };
-     
-        var viewSelected = function(viewId) {
-          vm.viewType = viewId;
-        };
-     
+
         vm.viewsConfig = {
-          views: [pfViewUtils.getListView()], // Only using list view for the moment
-          onViewSelect: viewSelected
+          currentView: pfViewUtils.getListView().id
         };
-        vm.viewsConfig.currentView = vm.viewsConfig.views[0].id;
         vm.viewType = vm.viewsConfig.currentView;
-     
+
         var compareFn = function(item1, item2) {
           var compValue = 0;
           if (vm.sortConfig.currentField.id === 'name') {
