@@ -48,7 +48,7 @@
                 <div class="tree-control-container col-md-4">
                     <!-- Spinner when loading -->
                     <div ng-show="vm.treeLoading==true">
-                        <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+                        <div class="spinner spinner-lg" />
                     </div>
                     <!-- No Content Message -->
                     <div ng-show="vm.treeLoading==false && vm.treedata.length == 0 && !vm.hasTreeFetchError">
@@ -69,7 +69,7 @@
                              <span ng-switch="" on="node.type">
                                  <span ng-switch-when="source" class="fa fa-database" aria-hidden="true"></span>
                                  <span ng-switch-when="table" class="fa fa-table" aria-hidden="true"></span>
-                                 <span ng-switch-when="loading" class="fa fa-spinner fa-spin" aria-hidden="true"></span>
+                                 <span ng-switch-when="loading" class="spinner spinner-lg" aria-hidden="true"></span>
                              </span>
                             {{node.name}}
                         </treecontrol>

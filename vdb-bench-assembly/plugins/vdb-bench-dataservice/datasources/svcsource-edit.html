@@ -1,8 +1,7 @@
 <div id="outer" class="outer-wrapper">
 	<div id="svcsource-edit-container" class="container-fluid" ng-controller="SvcSourceEditController as vm">
 	    <div id="svcsource-edit-updating" ng-show="vm.transLoading==true || vm.updateAndDeployInProgress==true" class="col-md-10 row">
-	        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-	        <span class="sr-only" translate="svcsource-edit.Loading"></span>
+            <div class="spinner spinner-lg" />
 	    </div>
 	    
 	    <div id="svcsource-edit-controls" ng-show="vm.transLoading==false && vm.updateAndDeployInProgress==false" class="row">
