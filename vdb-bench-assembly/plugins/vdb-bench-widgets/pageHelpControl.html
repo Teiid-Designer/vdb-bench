@@ -1,11 +1,11 @@
 <div class="page-help-icon-container">
         <a class="page-help-icon pficon-help" href="" ng-click="vm.togglePageHelp()">
-            <div pageslide ps-open="vm.showPageHelp" ps-size="40%" ps-key-listener="true" ps-container="{{ vm.containerId }}">
+            <div class="page-help-page-slide-container" pageslide ps-open="vm.showPageHelp" ps-size="40%" ps-key-listener="true" ps-container="{{ vm.containerId }}">
                 <div class="page-help-slide-container">
                     <iframe id="help-iframe" frameborder="1" scrolling="yes" width="100%" height="600" ng-src="{{vm.helpPageUrl}}" frameborder="5" >
             	        {{ 'HelpService.inlineFramesNotSupportedMsg' | translate }}
                     </iframe>
-                    <div class="row">
+                    <div class="row page-help-buttons">
 	                    <button class="btn" translate="shared.Back"  onClick="window.parent.history.back();return true;" />
 	                    <button class="btn" translate="shared.Forward"  onClick="window.parent.history.forward();return true;" />
 	                    <button class="btn" ng-click="vm.togglePageHelp()" translate="shared.Close" />
