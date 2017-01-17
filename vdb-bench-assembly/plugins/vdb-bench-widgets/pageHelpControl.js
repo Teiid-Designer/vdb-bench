@@ -38,7 +38,6 @@
         	vm.showPageHelp = !vm.showPageHelp;
             if ( vm.showPageHelp )
                 vm.helpPageUrl = $sce.trustAsResourceUrl( helpService.getHelpPageUrl( vm.helpId ) );
-//                vm.helpPageUrl = $sce.trustAsResourceUrl('http://www.phantomjinx.co.uk');
         	else
                 vm.helpPageUrl = '';
         };

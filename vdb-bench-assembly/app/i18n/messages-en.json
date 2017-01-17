@@ -175,7 +175,8 @@
     "dsPageService" : {
         "configureSourceTitle" : "Configure Data Source",
         "homeTitle" : "@:shared.Dashboard",
-        "testDataServiceTitle" : "Test Data Service"
+        "testDataServiceTitle" : "Test Data Service",
+        "preferencesTitle" : "Preferences"
     },
 
     "dsSummaryController" : {

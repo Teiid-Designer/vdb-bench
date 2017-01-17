@@ -157,6 +157,7 @@
         // Event handler for clicking the add button
         vm.onAddClicked = function () {
             newRepository();
+            vm.saveRepositories();
         };
 
         // Event handler for clicking the remove button
@@ -164,13 +165,19 @@
             if (!vm.selected)
                 return;
 
-            vm.repositories.pop(vm.selected);
+            var index = vm.repositories.indexOf(vm.selected);
+            if (index === -1)
+                return;
+
+            vm.repositories.splice(index, 1);
 
             // Set the selected to the first in the collection
             if (vm.repoCount())
                 vm.setSelected(vm.repositories[0]);
             else
                 vm.setSelected(null);
+
+            vm.saveRepositories();
         };
 
         /**
@@ -261,6 +268,7 @@
          */
         vm.onAllowHostsChange = function(event) {
             readerExtractContent(event, 'repo-known-hosts-property');
+            vm.saveRepositories();
         };
 
         /**
@@ -270,6 +278,7 @@
          */
         vm.onPrivateKeyChange = function(event) {
             readerExtractContent(event, 'repo-private-key-property');
+            vm.saveRepositories();
         };
 
         /**
@@ -282,10 +291,12 @@
 
             if (angular.isUndefined(value) || value.length === 0) {
                 delete vm.selected.parameters['repo-password-property'];
+                vm.saveRepositories();
                 return;
             }
 
             vm.selected.parameters['repo-password-property'] = $base64.encode(value);
+            vm.saveRepositories();
         });
 
         /**
@@ -298,10 +309,12 @@
 
             if (angular.isUndefined(value) || value.length === 0) {
                 delete vm.selected.parameters['repo-passphrase-property'];
+                vm.saveRepositories();
                 return;
             }
 
             vm.selected.parameters['repo-passphrase-property'] = $base64.encode(value);
+            vm.saveRepositories();
         });
 
         initRepositories();

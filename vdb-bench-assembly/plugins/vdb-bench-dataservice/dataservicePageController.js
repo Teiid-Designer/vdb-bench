@@ -93,6 +93,8 @@
             } else if(pageId == DSPageService.NEW_DATASERVICE_PAGE) {
                 EditWizardService.init(null,null);
             }
+
+            vm.prevPageId = vm.selectedPageId();
             vm.selectedPage = DSPageService.page(pageId);
             DSPageService.setCustomTitle(pageId, null);
             DSPageService.setCustomHelpId(pageId, null);
@@ -130,6 +132,20 @@
                 return '';
 
             return vm.selectedPage.id;
+        };
+
+        vm.previousPageId = function() {
+            if (_.isEmpty(vm.prevPageId))
+                return '';
+
+            return vm.prevPageId;
+        };
+
+        vm.isPreferencePage = function() {
+            if (_.isEmpty(vm.selectedPage))
+                return false;
+
+            return vm.selectedPageId() === DSPageService.DS_PREFERENCE_PAGE;
         };
 
         vm.selectedPageTitle = function() {
@@ -179,6 +195,13 @@
         vm.getConnectionState = function (conn) {
             return ConnectionSelectionService.getConnectionState(conn);
         };
+
+        /*
+         * Navigate to the preferences page
+         */
+         vm.openPreferences = function () {
+             vm.selectPage(DSPageService.DS_PREFERENCE_PAGE);
+         };
 
         vm.selectPage(DSPageService.DATASERVICE_SUMMARY_PAGE);
     }

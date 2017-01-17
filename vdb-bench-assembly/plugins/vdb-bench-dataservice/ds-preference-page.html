@@ -1,0 +1,25 @@
+<div id="outer" class="outer-wrapper" ng-controller="DSPrefController as vm">
+    <div id="ds-pref-container" class="container-fluid">
+        <div class="row">
+            <div class="col-sm-8 col-md-9 col-sm-push-4 col-md-push-3">
+                <h2 class="ds-page-title" ng-show="vm.hasPanel()">
+                    <span class="{{vmmain.selectedPage.icon}}"></span>
+                    <span class="ds-pref-title">{{vm.pref}}</span>
+                </h2>
+                <div ng-include="vm.getPrefs(vm.pref)"></div>
+            </div>
+            <div class="col-sm-4 col-md-3 col-sm-pull-8 col-md-pull-9 sidebar-pf sidebar-pf-left">
+                <div class="nav-category">
+                    <ul class="ds-pref-category nav nav-pills nav-stacked">
+                        <li ng-repeat="name in vm.names" ng-class="vm.active(name)">
+                            <a href="" ng-click="vm.setPanel(name)">{{name}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <div id="ds-pref-exit">
+                    <button class="btn btn-default btn-primary" ng-click="vm.exitPreferences()">Return</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
