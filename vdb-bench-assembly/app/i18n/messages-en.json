@@ -251,6 +251,7 @@
         "actionNameDisplayDdl" : "Display DDL",
         "actionNameEdit" : "@:shared.Edit",
         "actionNameExport" : "@:shared.Export",
+        "actionNameHideDdl" : "Hide DDL",
         "actionNameImport" : "@:shared.Import",
         "actionNameNew" : "@:shared.New",
         "actionNameRefresh" : "Refresh",

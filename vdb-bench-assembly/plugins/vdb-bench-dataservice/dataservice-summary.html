@@ -51,8 +51,10 @@
 	        <div class="ds-summary-results-container" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasServices==true">
 	            <div class="ds-summary-results">
 	                <div class="col-md-12 list-view-container" ng-if="vm.viewType == 'listView'">
-                        <!--  <div pf-list-view config="vm.listConfig" items="vm.getDataServices()" menu-actions="vm.menuActions"> -->
-                        <div pf-list-view config="vm.listConfig" items="vm.getDataServices()">
+                        <div pf-list-view config="vm.listConfig" 
+                             items="vm.getDataServices()"
+                             action-buttons="vm.actionButtons"
+                             menu-actions="vm.menuActions">
 	                        <div class="list-view-pf-left">
 	                            <span class="fa fa-table list-view-pf-icon-sm"></span>
 	                        </div>

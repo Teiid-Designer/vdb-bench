@@ -407,36 +407,6 @@
               title: $translate.instant('shared.NewWhat', {what: $translate.instant('shared.DataService')}),
               actionFn: newDataServiceClicked,
               isDisabled: false
-            },
-            {
-              name: $translate.instant('shared.Edit'),
-              title: $translate.instant('shared.EditWhat', {what: $translate.instant('shared.DataService')}),
-              actionFn: editDataServiceClicked,
-              isDisabled: true
-            },
-            {
-              name: $translate.instant('shared.Copy'),
-              title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.DataService')}),
-              actionFn: cloneDataServiceClicked,
-              isDisabled: true
-            },
-            {
-              name: $translate.instant('shared.Delete'),
-              title: $translate.instant('shared.DeleteWhat', {what: $translate.instant('shared.DataService')}),
-              actionFn: deleteDataServiceClicked,
-              isDisabled: true
-            },
-            {
-              name: $translate.instant('shared.Test'),
-              title: $translate.instant('shared.TestWhat', {what: $translate.instant('shared.DataService')}),
-              actionFn: deployDataServiceClicked,
-              isDisabled: true
-            },
-            {
-              name: $translate.instant('shared.Export'),
-              title: $translate.instant('shared.ExportWhat', {what: $translate.instant('shared.DataService')}),
-              actionFn: exportDataServiceClicked,
-              isDisabled: true
             }
           ],
           moreActions: [
@@ -465,21 +435,25 @@
           actionsInclude: true
         };
 
-        vm.menuActions = [
+        vm.actionButtons = [
             {
                 name: $translate.instant('shared.Edit'),
                 title: $translate.instant('shared.EditWhat', {what: $translate.instant('shared.DataService')}),
-                actionFn: editDataServiceMenuAction
-            },
+                actionFn: editDataServiceMenuAction,
+                include: false
+            }
+        ];
+
+        vm.menuActions = [
             {
                 name: $translate.instant('shared.Test'),
                 title: $translate.instant('shared.TestWhat', {what: $translate.instant('shared.DataService')}),
                 actionFn: deployDataServiceMenuAction
             },
             {
-                name: $translate.instant('shared.Delete'),
-                title: $translate.instant('shared.DeleteWhat', {what: $translate.instant('shared.DataService')}),
-                actionFn: deleteDataServiceMenuAction
+                name: $translate.instant('shared.Copy'),
+                title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.DataService')}),
+                actionFn: cloneDataServiceMenuAction
             },
             {
                 name: $translate.instant('shared.Export'),
@@ -487,9 +461,9 @@
                 actionFn: exportDataServiceMenuAction
             },
             {
-                name: $translate.instant('shared.Copy'),
-                title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.DataService')}),
-                actionFn: cloneDataServiceMenuAction
+                name: $translate.instant('shared.Delete'),
+                title: $translate.instant('shared.DeleteWhat', {what: $translate.instant('shared.DataService')}),
+                actionFn: deleteDataServiceMenuAction
             }
           ];
 

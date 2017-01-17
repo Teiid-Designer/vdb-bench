@@ -25,8 +25,10 @@
 	        <div class="svcsource-summary-results-container" ng-show="vm.srcLoading==false && vm.hasSources==true">
 	            <div class="svcsource-summary-results">
 	                <div class="col-md-12 list-view-container" ng-if="vm.viewType == 'listView'">
-                        <!--  <div pf-list-view config="vm.listConfig" items="vm.getServiceSources()" menu-actions="vm.menuActions"> -->
-                        <div pf-list-view config="vm.listConfig" items="vm.getServiceSources()">
+                        <div pf-list-view config="vm.listConfig" 
+                             items="vm.getServiceSources()"
+                             action-buttons="vm.actionButtons"
+                             menu-actions="vm.menuActions">
 	                        <div class="list-view-pf-left">
 	                            <span class="fa fa-database list-view-pf-icon-sm"></span>
 	                        </div>
@@ -69,7 +71,7 @@
 	            <div class="svcsource-summary-results-ddl" ng-show="vm.srcLoading==false && vm.getServiceSources().length>0 && vm.displayDdl==true">
 	                <div class="svcsource-summary-results-ddl-titlebar">
 	                    <h5 class="svcsource-summary-results-ddl-titlebar-title" translate="datasource-summary.sourceSchema"></h5>
-	                    <h5 class="svcsource-summary-results-ddl-titlebar-close" ng-click="vm.displayDdl = false">X</h5>
+	                    <h5 class="svcsource-summary-results-ddl-titlebar-close" ng-click="vm.hideDdl()">X</h5>
 	                </div>
 	                <div ui-codemirror="{ onLoad : vm.ddlEditorLoaded }" ng-model="vm.selectedSourceDDL" ui-codemirror-opts="vm.ddlEditorOptions">
 	                </div>
