@@ -47,14 +47,13 @@
 	                    <!-- -->
 	                    <uib-accordion-group heading=":: dataservice-test.Select | translate" ng-init="selectIsOpen = true" is-open="selectIsOpen">
 	                        <uib-accordion-heading>
-	                            <div class="odata-control-panel-title" translate="dataservice-test.Select"></div>
+	                            <div class="pull-left odata-control-panel-title" translate="dataservice-test.Select"></div>
 	                            <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
-	                            <div class="pull-left" uib-dropdown>
-	                             <label class="help-label">
-	                                        <span class="fa fa-info-circle" uib-tooltip-html="{{ 'dataservice-test.help.select' | translate }}"
-	                                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
-	                                         <span>&nbsp;</span>
-	                             </label>
+	                            <div class="pull-left odata-control-panel-title-help" uib-dropdown>
+                                    <label class="help-label">
+	                                    <span class="fa fa-info-circle" uib-tooltip-html="{{ 'dataservice-test.help.select' | translate }}"
+	                                              tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                                    </label>
 	                            </div>
 	                        </uib-accordion-heading>
 	                        <form name="odata-exp-select" role="form">
@@ -86,13 +85,12 @@
 	                    <!-- -->
 	                    <uib-accordion-group heading=":: dataservice-test.Columns | translate">
 	                        <uib-accordion-heading>
-	                            <div class="odata-control-panel-title" translate="dataservice-test.Columns"></div>
+	                            <div class="pull-left odata-control-panel-title" translate="dataservice-test.Columns"></div>
 	                            <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
-	                            <div class="pull-left" uib-dropdown>
+	                            <div class="pull-left odata-control-panel-title-help" uib-dropdown>
 	                                <label class="help-label">
 	                                        <span class="fa fa-info-circle" uib-tooltip="{{ 'dataservice-test.help.columns' | translate }}"
 	                                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
-	                                        <span>&nbsp;</span>
 	                                </label>
 	                            </div>
 	                        </uib-accordion-heading>
@@ -115,20 +113,14 @@
 	                    <!-- -->
 	                    <uib-accordion-group heading=":: dataservice-test.Where | translate" is-open="vm.odata.hasWhere">
 	                        <uib-accordion-heading>
-	                            <div class="odata-control-panel-title" translate="dataservice-test.Where"></div>
+	                            <div class="pull-left odata-control-panel-title" translate="dataservice-test.Where"></div>
 	                            <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
-	                            <div class="pull-left" uib-dropdown>
+	                            <div class="pull-left odata-control-panel-title-help" uib-dropdown>
 	                              	<label class="help-label">
 	                                        <span class="fa fa-info-circle" uib-tooltip-html="{{ 'dataservice-test.help.where' | translate }}"
 	                                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
-	                                        <span>&nbsp;</span>
 	                                </label>
 	                            </div>
-	                            <div class="pull-right" uib-dropdown>
-	                                <button type="button" class="glyphicon glyphicon-plus odata-form-where-add-btn"
-	                                                uib-dropdown-toggle ng-click="vm.onAddWhereClicked($event)">
-	                                </button>
-		                        </div>
 	                        </uib-accordion-heading>
 	                        <form name="odata-exp-where" role="form">
 	                            <div class="form-group odata-exp-where-group" ng-repeat="where in vm.odata.where">
@@ -138,7 +130,6 @@
 	                                        <ui-select-choices repeat="column in vm.odata.columns()">
 	                                            <div ng-bind-html="column.name | highlight: $select.search"></div>
 	                                        </ui-select-choices>
-	                                        <span>&nbsp;</span>
 	                                    </ui-select>
 	                                </div>
 	                                <div class="col-xs-4 odata-exp-where-group-row" ng-show="! where.error">
@@ -175,13 +166,12 @@
 	                    <!-- -->
 	                    <uib-accordion-group heading="Order by">
 	                        <uib-accordion-heading>
-	                            <div class="odata-control-panel-title">Order by</div>
+	                            <div class="pull-left odata-control-panel-title">Order by</div>
 	                            <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
-	                            <div class="pull-left" uib-dropdown>
+	                            <div class="pull-left odata-control-panel-title-help" uib-dropdown>
 	                                <label class="help-label">
 	                                        <span class="fa fa-info-circle" uib-tooltip="{{ 'dataservice-test.help.orderBy' | translate }}"
 	                                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
-	                                        <span>&nbsp;</span>
 	                                </label>
 	                            </div>
 	                        </uib-accordion-heading>
