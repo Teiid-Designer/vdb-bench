@@ -53,8 +53,7 @@
         $rootScope.$on('$translateChangeSuccess', function () {
             pages[service.DS_HOME_PAGE].title = $translate.instant('dsPageService.homeTitle');
             pages[service.DS_PREFERENCE_PAGE].title = $translate.instant('dsPageService.preferencesTitle');
-            pages[service.DATASERVICE_SUMMARY_PAGE].title = $translate.instant('shared.WhatSummary',
-                                                                               {what: $translate.instant('shared.DataService')});
+            pages[service.DATASERVICE_SUMMARY_PAGE].title = $translate.instant('shared.DataServices');
             pages[service.NEW_DATASERVICE_PAGE].title = $translate.instant('shared.NewWhat',
                                                                            {what: $translate.instant('shared.DataService')});
             pages[service.IMPORT_DATASERVICE_PAGE].title = $translate.instant('shared.ImportWhat',
@@ -66,8 +65,7 @@
             pages[service.CLONE_DATASERVICE_PAGE].title = $translate.instant('shared.CopyWhat',
                                                                              {what: $translate.instant('shared.DataService')});
             pages[service.TEST_DATASERVICE_PAGE].title = $translate.instant('dsPageService.testDataServiceTitle');
-            pages[service.CONNECTION_SUMMARY_PAGE].title = $translate.instant('shared.WhatSummary',
-                                                                              {what: $translate.instant('shared.Connection')});
+            pages[service.CONNECTION_SUMMARY_PAGE].title = $translate.instant('shared.Connections');
             pages[service.NEW_CONNECTION_PAGE].title = $translate.instant('shared.NewWhat',
                                                                           {what: $translate.instant('shared.Connection')});
             pages[service.IMPORT_CONNECTION_PAGE].title = $translate.instant('shared.ImportWhat',
@@ -76,8 +74,7 @@
                                                                            {what: $translate.instant('shared.Connection')});
             pages[service.CLONE_CONNECTION_PAGE].title = $translate.instant('shared.CopyWhat',
                                                                             {what: $translate.instant('shared.Connection')});
-            pages[service.SERVICESOURCE_SUMMARY_PAGE].title = $translate.instant('shared.WhatSummary',
-                                                                                 {what: $translate.instant('shared.Source')});
+            pages[service.SERVICESOURCE_SUMMARY_PAGE].title = $translate.instant('shared.Sources');
             pages[service.SERVICESOURCE_NEW_PAGE].title = $translate.instant('dsPageService.configureSourceTitle');
             pages[service.SERVICESOURCE_EDIT_PAGE].title = $translate.instant('shared.EditWhat',
                                                                               {what: $translate.instant('shared.Source')});
@@ -113,7 +110,7 @@
         };
         pages[service.DATASERVICE_SUMMARY_PAGE] = {
             id: service.DATASERVICE_SUMMARY_PAGE,
-            title: $translate.instant('shared.WhatSummary', {what: $translate.instant('shared.DataService')}),
+            title: $translate.instant('shared.DataServices'),
             icon: 'fa-table',
             helpId: service.DATASERVICE_SUMMARY_PAGE,
             parent: null,
@@ -184,7 +181,7 @@
         };
         pages[service.CONNECTION_SUMMARY_PAGE] = {
             id: service.CONNECTION_SUMMARY_PAGE,
-            title: $translate.instant('shared.WhatSummary', {what: $translate.instant('shared.Connection')}),
+            title: $translate.instant('shared.Connections'),
             helpId: service.CONNECTION_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
@@ -228,7 +225,7 @@
         };
         pages[service.SERVICESOURCE_SUMMARY_PAGE] = {
             id: service.SERVICESOURCE_SUMMARY_PAGE,
-            title: $translate.instant('shared.WhatSummary', {what: $translate.instant('shared.Source')}),
+            title: $translate.instant('shared.Sources'),
             icon: 'fa-database',
             helpId: service.SERVICESOURCE_SUMMARY_PAGE,
             parent: null,
