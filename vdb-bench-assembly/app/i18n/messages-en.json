@@ -28,12 +28,14 @@
         "Forward" : ">>",
         "Import" : "Import",
         "ImportWhat" : "Import {{what}}",
+        "Login" : "Login",
         "Name" : "Name",
         "NameLabel" : "Name:",
         "New" : "New",
         "NewWhat" : "New {{what}}",
         "Next" : "Next",
         "NotAvailable" : "Not Available",
+        "Password" : "Password",
         "PasswordLabel" : "Password:",
         "Remove" : "Remove",
         "Save" : "Save",
@@ -46,9 +48,9 @@
         "TestWhat" : "Test {{what}}",
         "Translator" : "Translator",
         "UncheckAll" : "Uncheck All",
+        "Username" : "Username",
         "UserNameLabel" : "User Name:",
         "userNamePlaceholder" : "Enter the user name",
-        "WhatSummary" : "{{what}} Summary",
         "Workspace" : "Workspace"
     },
 
@@ -350,6 +352,12 @@
     "modelTableList" : {
         "connectionFailedErrorMsg" : "Failed to get connection: {{error}}",
         "getTablesErrorMsg" : "Failed to get Tables: {{errorMsg}}"
+    },
+    
+    "loginPage" : {
+        "rememberCredentials" : "Remember Credentials",
+        "welcomeTitle" : "Welcome to Data Services Builder",
+        "welcomeDescription" : "A tool for creating, managing and deploying simple data services."
     },
     
     "sqlControl" : {
