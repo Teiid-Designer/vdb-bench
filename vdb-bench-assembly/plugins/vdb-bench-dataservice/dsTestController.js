@@ -837,8 +837,14 @@
                     return element === where;
                 });
 
-                if (vm.odata.where.length === 0)
-                    vm.odata.hasWhere = false;
+                if (vm.odata.where.length === 0) {
+                    //
+                    // Always keep 1 empty clause so preserve buttons
+                    //
+                    var newWhere = {};
+                    vm.odata.where.push(newWhere);
+                }
+
             } catch (error) {
                 // nothing to do
             } finally {

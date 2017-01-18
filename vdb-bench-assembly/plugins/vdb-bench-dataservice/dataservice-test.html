@@ -152,11 +152,14 @@
 	                                <div class="col-xs-3 odata-exp-where-group-row" ng-show="! where.error">
 	                                    <input type="text" class="odata-form-control" ng-model="where.value" name="value" placeholder="{{:: 'dataservice-test.valuePlaceholder' | translate}}" />
 	                                </div>
-	                                <div class="col-xs-1 odata-exp-where-group-row">
+	                                <div id="odata-exp-where-group-buttons" class="col-xs-1 odata-exp-where-group-row">
 	                                    <button type="button" class="odata-form-where-remove-btn" ng-click="vm.onRemoveWhereClicked($event, where)">
 	                                        <span class="glyphicon glyphicon-minus"></span>
 	                                    </button>
-	                                </div>
+    	                                <button type="button" class="odata-form-where-add-btn" ng-click="vm.onAddWhereClicked($event)">
+                                            <span class="glyphicon glyphicon-plus"></span>
+    	                                </button>
+    		                        </div>
 
 	                                <div class="odata-exp-where-error-msg">
 	                                    {{where.error}}
