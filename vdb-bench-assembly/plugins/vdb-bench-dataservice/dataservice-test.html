@@ -148,10 +148,10 @@
 	                                    <button type="button" class="odata-form-where-remove-btn" ng-click="vm.onRemoveWhereClicked($event, where)">
 	                                        <span class="glyphicon glyphicon-minus"></span>
 	                                    </button>
-    	                                <button type="button" class="odata-form-where-add-btn" ng-click="vm.onAddWhereClicked($event)">
+                                        <button type="button" class="odata-form-where-add-btn" ng-click="vm.onAddWhereClicked($event)">
                                             <span class="glyphicon glyphicon-plus"></span>
-    	                                </button>
-    		                        </div>
+                                        </button>
+                                    </div>
 
 	                                <div class="odata-exp-where-error-msg">
 	                                    {{where.error}}
@@ -204,25 +204,26 @@
 	                </uib-accordion>
 	            </div>
 
-                <uib-tabset class="col-sm-8" ng-show="vm.hasOdataAttributes() == true && vm.showResultsTable == true" ng-cloak>
-                    <uib-tab>
-                        <uib-tab-heading>
-                            <span>Tabular</span>
-                        </uib-tab-heading>
-                        <div id="odata-results-table">
-                            <div ui-grid="vm.resultGridOptions" ui-grid-pagination class="odata-results-table-grid"></div>
-                        </div>
-                    </uib-tab>
-                    <uib-tab>
-                        <uib-tab-heading>
-                            <span>Raw</span>
-                        </uib-tab-heading>
-                        <div id="odata-results-raw" ui-codemirror="{ onLoad : vm.odata.rawEditorLoaded }"
-                                ng-model="vm.rawResults"
-                                ui-codemirror-opts="vm.odata.rawResultsOptions">
-                        </div>
-                    </uib-tab>
-                </uib-tabset>
+                <div class="col-sm-8" ng-show="vm.hasOdataAttributes() == true && vm.showResultsTable == true" ng-cloak>
+                    <div id="odata-results-type">
+                        <label class="radio-inline">
+                            <input type="radio" name="odata-results-type-tabular" value="Tabular"
+                                    ng-model="vm.resultsType">
+                                    {{:: 'dataservice-test.resultsTabular' | translate}}
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="odata-results-type-raw" value="Raw"
+                                    ng-model="vm.resultsType">
+                                    {{:: 'dataservice-test.resultsRaw' | translate}}
+                        </label>
+                    </div>
+                    <div id="odata-results-table" ng-show="vm.resultsType == 'Tabular'">
+                        <div ui-grid="vm.resultGridOptions" ui-grid-pagination class="odata-results-table-grid"></div>
+                    </div>
+                    <div id="odata-results-raw" ng-show="vm.resultsType =='Raw'" ui-codemirror="{ onLoad : vm.odata.rawEditorLoaded }"
+                            ng-model="vm.rawResults" ui-codemirror-opts="vm.odata.rawResultsOptions">
+                    </div>
+                </div>
 
 	            <div id="odata-results-msg" class="col-sm-8" ng-show="vm.hasOdataAttributes() == true && vm.searchMsg != null" ng-cloak>
 	                <h3>{{vm.searchMsg}}</h3>

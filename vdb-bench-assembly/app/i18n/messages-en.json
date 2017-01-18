@@ -115,6 +115,8 @@
         "OData" : "OData",
         "ODataEndpoint" : "OData Endpoint: ",
         "resultLimitPlaceholder" : "Select result limit...",
+        "resultsTabular": "Tabular",
+        "resultsRaw": "Raw",
         "runQueryAction" : "Submit",
         "Select" : "Select",
         "selectResultLimitMsg" : "Select the number of results to be initially returned",
