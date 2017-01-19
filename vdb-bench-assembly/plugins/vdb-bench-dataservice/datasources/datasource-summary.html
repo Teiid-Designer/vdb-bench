@@ -37,12 +37,17 @@
 	                        </div>
 	                        <div class="list-view-pf-body">
 	                            <div class="list-view-pf-description display-block">
-	                                <div class="list-group-item-heading no-float">
+	                                <div class="list-group-item-heading">
 	                                    {{item.keng__id}}
 	                                </div>
-	                                <div class="list-group-item-text no-float">
-	                                    {{item.vdb__description}}
-	                                </div>
+                                    <div ng-if="item.vdb__description">
+                                        <div class="list-group-item-text" ng-if="item.vdb__description.length > 100">
+                                            {{item.vdb__description | limitTo : 100 : 0}} ...
+                                        </div>
+                                        <div class="list-group-item-text" ng-if="item.vdb__description.length <= 100">
+                                            {{item.vdb__description}}
+                                        </div>
+                                    </div>
 	                            </div>
 	                            <div class="list-view-pf-additional-info">
 	                                <div class="list-view-pf-additional-info-item" data-toggle="tooltip" data-placement="right" title="{{ttip.value}}" ng-repeat="ttip in item.keng__properties" ng-show="ttip.name=='dsbTeiidStatusMessage'"> 
@@ -57,7 +62,7 @@
 	                                </div>
 	
 	                                <div class="list-view-pf-additional-info-item" data-toggle="tooltip" data-placement="right" title="The connection for this source" >
-	                                    <span class="fa fa-cog"></span>
+	                                    <span class="fa fa-exchange"></span>
 	                                    <span ng-repeat="prop in item.keng__properties" ng-show="prop.name=='dsbSourceConnection'">
 	                                        {{prop.value}}
 	                                    </span>
