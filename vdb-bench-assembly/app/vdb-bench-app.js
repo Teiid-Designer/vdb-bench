@@ -285,6 +285,7 @@ var App;
         var vm = this;
 
         vm.loginError = '';
+        vm.userPwdForgotten = false;
 
         vm.entity = {
             username: '',
@@ -306,7 +307,7 @@ var App;
         };
 
         var onLoginFailure = function() {
-            vm.loginError = "Access Denied";
+            vm.loginError = "Access Failure.<br>Either the username/password are incorrect or the repository cannot be contacted.";
         };
 
         vm.doLogin = function () {
@@ -315,6 +316,10 @@ var App;
             }
 
             AuthService.login(vm.entity.username, vm.entity.password, vm.rememberMe, onLoginSuccessful, onLoginFailure);
+        };
+
+        vm.showForgottenUserPwd = function() {
+            vm.userPwdForgotten = !vm.userPwdForgotten;
         };
     }
 })(App || (App = {}));

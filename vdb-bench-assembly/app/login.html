@@ -39,8 +39,11 @@
                             <div class="col-xs-4 col-sm-4 col-md-4 submit">
                                 <button type="submit" class="btn btn-primary btn-lg" tabindex="4">Login</button>
                             </div>
-                            <div id="vdb-login-error">
-                                <p>{{vm.loginError}}</p>
+                            <div class="col-xs-12 col-sm-offset-2 col-sm-10 col-md-offset-2 col-md-10">
+                                Forgot <a ng-click="vm.showForgottenUserPwd()">username</a> or <a ng-click="vm.showForgottenUserPwd()">password</a>?
+                            </div>
+                            <div id="vdb-login-error" class="col-xs-6 col-sm-offset-6 col-sm-6 col-md-offset-6 col-md-6">
+                                <p ng-bind-html="vm.loginError"></p>
                             </div>
                         </div>
                     </form>
@@ -51,6 +54,12 @@
                         <strong>Welcome to Data Services Builder</strong> A tool for editing, managing and testing simple data services targeted for accessing your data via the Teiid runtime framework.
                         The DSB utilizes an editing framework wrapped around a local embedded ModeShape repository.
                         This repository provides the backbone for managing consistent import/export of runtime resources and content validation.
+                    </p>
+                </div>
+                <div class="col-sm-5 col-md-5 col-lg-5 user-pwd-forgotten" ng-show="vm.userPwdForgotten">
+                    <p>
+                        Connection to the repository is a pre-requisite to accessing this application. For successful connections, the username and
+                        password must be configured on the host server.
                     </p>
                 </div>
                 <!--/.col-*-->
