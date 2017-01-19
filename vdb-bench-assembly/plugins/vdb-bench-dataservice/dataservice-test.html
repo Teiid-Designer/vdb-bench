@@ -24,7 +24,12 @@
 	                -- OData Querying
 	                -->
 	            <div id="odata-endpoint-url" class="row col-sm-8" ng-show="vm.hasOdataAttributes() == true" ng-cloak>
-	                <input type="text" readonly="true" value="{{vm.endPointUrl()}}" class="col-sm-12">
+	                <label class="control-label col-sm-1" for="test-page-url-path" translate="dataservice-test.urlPath"></label>
+                    <label class="help-label col-sm-1">
+                        <span class="fa fa-info-circle" uib-tooltip-html="{{ 'dataservice-test.help.endpointSubmit' | translate }}"
+                              tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                    </label>
+	                <input id="test-page-url-path" type="text" readonly="true" value="{{vm.endPointUrl()}}" class="col-sm-11">
 	            </div>
 
 	            <div id="odata-query-button" class="row col-sm-1" ng-show="vm.hasOdataAttributes() == true" ng-cloak>
@@ -32,10 +37,6 @@
 	                            ng-click="vm.onSearchEndPoint()" ng-disabled="! vm.canQuery()" translate="dataservice-test.runQueryAction">
 	                    <span class="fa fa-fw fa-search"></span>
 	                </button>
-	                <label class="help-label" class="col-sm-1">
-	                    <span class="fa fa-info-circle" uib-tooltip-html="{{ 'dataservice-test.help.endpointSearch' | translate }}"
-	                          tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
-	                </label>
 	            </div>
 
 	            <div id="odata-control-panel" class="col-sm-4" ng-show="vm.hasOdataAttributes() == true" ng-cloak>
@@ -47,14 +48,13 @@
 	                    <!-- -->
 	                    <uib-accordion-group heading=":: dataservice-test.Select | translate" ng-init="selectIsOpen = true" is-open="selectIsOpen">
 	                        <uib-accordion-heading>
-	                            <div class="odata-control-panel-title" translate="dataservice-test.Select"></div>
+	                            <div class="pull-left odata-control-panel-title" translate="dataservice-test.Select"></div>
 	                            <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
-	                            <div class="pull-left" uib-dropdown>
-	                             <label class="help-label">
-	                                        <span class="fa fa-info-circle" uib-tooltip-html="{{ 'dataservice-test.help.select' | translate }}"
-	                                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
-	                                         <span>&nbsp;</span>
-	                             </label>
+	                            <div class="pull-left odata-control-panel-title-help" uib-dropdown>
+                                    <label class="help-label">
+	                                    <span class="fa fa-info-circle" uib-tooltip-html="{{ 'dataservice-test.help.select' | translate }}"
+	                                              tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                                    </label>
 	                            </div>
 	                        </uib-accordion-heading>
 	                        <form name="odata-exp-select" role="form">
@@ -86,13 +86,12 @@
 	                    <!-- -->
 	                    <uib-accordion-group heading=":: dataservice-test.Columns | translate">
 	                        <uib-accordion-heading>
-	                            <div class="odata-control-panel-title" translate="dataservice-test.Columns"></div>
+	                            <div class="pull-left odata-control-panel-title" translate="dataservice-test.Columns"></div>
 	                            <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
-	                            <div class="pull-left" uib-dropdown>
+	                            <div class="pull-left odata-control-panel-title-help" uib-dropdown>
 	                                <label class="help-label">
 	                                        <span class="fa fa-info-circle" uib-tooltip="{{ 'dataservice-test.help.columns' | translate }}"
 	                                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
-	                                        <span>&nbsp;</span>
 	                                </label>
 	                            </div>
 	                        </uib-accordion-heading>
@@ -115,20 +114,14 @@
 	                    <!-- -->
 	                    <uib-accordion-group heading=":: dataservice-test.Where | translate" is-open="vm.odata.hasWhere">
 	                        <uib-accordion-heading>
-	                            <div class="odata-control-panel-title" translate="dataservice-test.Where"></div>
+	                            <div class="pull-left odata-control-panel-title" translate="dataservice-test.Where"></div>
 	                            <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
-	                            <div class="pull-left" uib-dropdown>
+	                            <div class="pull-left odata-control-panel-title-help" uib-dropdown>
 	                              	<label class="help-label">
 	                                        <span class="fa fa-info-circle" uib-tooltip-html="{{ 'dataservice-test.help.where' | translate }}"
 	                                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
-	                                        <span>&nbsp;</span>
 	                                </label>
 	                            </div>
-	                            <div class="pull-right" uib-dropdown>
-	                                <button type="button" class="glyphicon glyphicon-plus odata-form-where-add-btn"
-	                                                uib-dropdown-toggle ng-click="vm.onAddWhereClicked($event)">
-	                                </button>
-		                        </div>
 	                        </uib-accordion-heading>
 	                        <form name="odata-exp-where" role="form">
 	                            <div class="form-group odata-exp-where-group" ng-repeat="where in vm.odata.where">
@@ -138,7 +131,6 @@
 	                                        <ui-select-choices repeat="column in vm.odata.columns()">
 	                                            <div ng-bind-html="column.name | highlight: $select.search"></div>
 	                                        </ui-select-choices>
-	                                        <span>&nbsp;</span>
 	                                    </ui-select>
 	                                </div>
 	                                <div class="col-xs-4 odata-exp-where-group-row" ng-show="! where.error">
@@ -152,11 +144,14 @@
 	                                <div class="col-xs-3 odata-exp-where-group-row" ng-show="! where.error">
 	                                    <input type="text" class="odata-form-control" ng-model="where.value" name="value" placeholder="{{:: 'dataservice-test.valuePlaceholder' | translate}}" />
 	                                </div>
-	                                <div class="col-xs-1 odata-exp-where-group-row">
+	                                <div id="odata-exp-where-group-buttons" class="col-xs-1 odata-exp-where-group-row">
 	                                    <button type="button" class="odata-form-where-remove-btn" ng-click="vm.onRemoveWhereClicked($event, where)">
 	                                        <span class="glyphicon glyphicon-minus"></span>
 	                                    </button>
-	                                </div>
+                                        <button type="button" class="odata-form-where-add-btn" ng-click="vm.onAddWhereClicked($event)">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </div>
 
 	                                <div class="odata-exp-where-error-msg">
 	                                    {{where.error}}
@@ -172,13 +167,12 @@
 	                    <!-- -->
 	                    <uib-accordion-group heading="Order by">
 	                        <uib-accordion-heading>
-	                            <div class="odata-control-panel-title">Order by</div>
+	                            <div class="pull-left odata-control-panel-title">Order by</div>
 	                            <!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
-	                            <div class="pull-left" uib-dropdown>
+	                            <div class="pull-left odata-control-panel-title-help" uib-dropdown>
 	                                <label class="help-label">
 	                                        <span class="fa fa-info-circle" uib-tooltip="{{ 'dataservice-test.help.orderBy' | translate }}"
 	                                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
-	                                        <span>&nbsp;</span>
 	                                </label>
 	                            </div>
 	                        </uib-accordion-heading>
@@ -210,41 +204,26 @@
 	                </uib-accordion>
 	            </div>
 
-                <uib-tabset class="col-sm-8" ng-show="vm.hasOdataAttributes() == true && vm.showResultsTable == true" ng-cloak>
-                    <uib-tab>
-                        <uib-tab-heading>
-                            <!-- 
-                            <div id="odata-results-table">
-                                <label class="help-label">
-                                    <span class="fa fa-info-circle" uib-tooltip-html="{{:: 'dataservice-test.help.resultsTable' | translate }}"
-                                        tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
-                                </label>
-                            </div>
-                            -->
-                            <span>Tabular</span>
-                        </uib-tab-heading>
-                        <div id="odata-results-table">
-                            <div ui-grid="vm.resultGridOptions" ui-grid-pagination class="odata-results-table-grid"></div>
-                        </div>
-                    </uib-tab>
-                    <uib-tab>
-                        <uib-tab-heading>
-                            <!-- 
-                            <div id="odata-results-raw">
-                                <label class="help-label">
-                                    <span class="fa fa-info-circle" uib-tooltip-html="{{:: 'dataservice-test.help.resultsRaw' | translate }}"
-                                        tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
-                                </label>
-                            </div>
-                            -->
-                            <span>Raw</span>
-                        </uib-tab-heading>
-                        <div id="odata-results-raw" ui-codemirror="{ onLoad : vm.odata.rawEditorLoaded }"
-                                ng-model="vm.rawResults"
-                                ui-codemirror-opts="vm.odata.rawResultsOptions">
-                        </div>
-                    </uib-tab>
-                </uib-tabset>
+                <div class="col-sm-8" ng-show="vm.hasOdataAttributes() == true && vm.showResultsTable == true" ng-cloak>
+                    <div id="odata-results-type">
+                        <label class="radio-inline">
+                            <input type="radio" name="odata-results-type-tabular" value="Tabular"
+                                    ng-model="vm.resultsType">
+                                    {{:: 'dataservice-test.resultsTabular' | translate}}
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="odata-results-type-raw" value="Raw"
+                                    ng-model="vm.resultsType">
+                                    {{:: 'dataservice-test.resultsRaw' | translate}}
+                        </label>
+                    </div>
+                    <div id="odata-results-table" ng-show="vm.resultsType == 'Tabular'">
+                        <div ui-grid="vm.resultGridOptions" ui-grid-pagination class="odata-results-table-grid"></div>
+                    </div>
+                    <div id="odata-results-raw" ng-show="vm.resultsType =='Raw'" ui-codemirror="{ onLoad : vm.odata.rawEditorLoaded }"
+                            ng-model="vm.rawResults" ui-codemirror-opts="vm.odata.rawResultsOptions">
+                    </div>
+                </div>
 
 	            <div id="odata-results-msg" class="col-sm-8" ng-show="vm.hasOdataAttributes() == true && vm.searchMsg != null" ng-cloak>
 	                <h3>{{vm.searchMsg}}</h3>

@@ -1,13 +1,13 @@
-<div class="row">
-    <div class="col-sm-5">
-        <div class=sql-control-control-title translate="sqlControl.instructionMsg" />
+<div class="row sql-control">
+    <div class="col-sm-4">
+        <div class=sql-control-control-title translate="sqlControl.instructionMsg"></div>
         <label class="help-label sql-control-query-help">
             <span class="fa fa-info-circle" uib-tooltip-html="{{:: 'sqlControl.help.sqlSearch' | translate}}"
-                        tooltip-class="custom-tooltip"></span>
+                        tooltip-class="custom-tooltip" tooltip-placement="left-top"></span>
         </label>
         <div class="sql-control-controls-query">
             <button class="btn btn-primary" ng-click="vm.query()">
-                <span class="fa fa-fw fa-search"></span>{{:: 'shared.Search' | translate}}
+                <span class="fa fa-fw fa-search"></span>{{:: 'shared.Submit' | translate}}
             </button>
         </div>
 
@@ -30,8 +30,9 @@
                        uib-tooltip="{{:: 'sqlControl.help.recordOffset' | translate}}"/>
             </div>
         </div>
+    </div>
 
-    <div id="sql-control-failure" class="col-sm-7" ng-show="vm.errorMsg"
+    <div id="sql-control-failure" class="col-sm-8" ng-show="vm.errorMsg"
          translate="sqlControl.controlFailedMsg" translate-values="{errorMsg: vm.errorMsg}">
     </div>
 
@@ -40,14 +41,14 @@
         <div class="spinner spinner-lg" />
     </div>
 
-    <div class="col-sm-6" ng-show="! vm.errorMsg && vm.showResultsTable == true">
+    <div class="col-sm-8 sql-control-table" ng-show="! vm.errorMsg && vm.showResultsTable == true">
         <div ui-grid="vm.gridOptions" ui-grid-pagination class="sql-control-query-grid"></div>
-    </div>
 
-    <div class="col-sm-1" ng-show="! vm.errorMsg && vm.showResultsTable == true">
-        <label class="help-label">
-            <span class="fa fa-info-circle" uib-tooltip-html="{{:: 'sqlControl.help.resultsTable' | translate}}"
-                  tooltip-class="custom-tooltip"></span>
-        </label>
+        <div class="sql-control-table-help" ng-show="! vm.errorMsg && vm.showResultsTable == true">
+            <label class="help-label">
+                <span class="fa fa-info-circle" uib-tooltip-html="{{:: 'sqlControl.help.resultsTable' | translate}}"
+                      tooltip-class="custom-tooltip" tooltip-placement="left-top"></span>
+            </label>
+        </div>
     </div>
 </div>

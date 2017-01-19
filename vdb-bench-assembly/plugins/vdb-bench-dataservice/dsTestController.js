@@ -61,15 +61,7 @@
         vm.dsDeploymentSuccess = false;
         vm.dsDeploymentMessage = null;
         vm.searchInProgress = false;
-
-        /**
-         * When the preview tab is selected, fetch the selected vdb xml
-         * and display it in the code mirror editor
-         */
-        vm.onTabSelected = function (tabId) {
-            // Stash the tab id
-            vm.visibleTabId = tabId;
-        };
+        vm.resultsType = 'Tabular';
 
         vm.odata = {
             metadata: '',
@@ -132,7 +124,10 @@
             }
         };
 
-        vm.rawEditorLoaded = function(_editor) {
+        vm.odata.rawEditorLoaded = function(_editor) {
+            if (! _editor)
+                return;
+
             _editor.setSize(null, "70vh");
 
             //
@@ -837,8 +832,14 @@
                     return element === where;
                 });
 
-                if (vm.odata.where.length === 0)
-                    vm.odata.hasWhere = false;
+                if (vm.odata.where.length === 0) {
+                    //
+                    // Always keep 1 empty clause so preserve buttons
+                    //
+                    var newWhere = {};
+                    vm.odata.where.push(newWhere);
+                }
+
             } catch (error) {
                 // nothing to do
             } finally {
