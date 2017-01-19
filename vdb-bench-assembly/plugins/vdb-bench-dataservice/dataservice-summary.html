@@ -2,24 +2,35 @@
 	<div id="ds-summary-container" class="container-fluid" ng-controller="DSSummaryController as vm">
 	
 	    <!-- Content shown if No Sources or DataServices yet -->
-	    <div id="dataservice-summary-nosources" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasSources==false && vm.hasServices==false" class="col-md-12 row">
-	        <div class="row">
-	            <h2 ng-bind-html=":: 'dataservice-summary.welcomeMsg' | translate"></h2>
-	            <p>
-	                <span translate="dataservice-summary.createSourceMsg" />
-	                <a href ng-click="vmmain.selectPage('svcsource-new')">
-	                    <span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span>
-	                    <span>{{vmmain.page('svcsource-new').title}}</span>
-	                </a>
-	                <br/>
-	                <span translate="dataservice-summary.importDataServiceMsg" />
-	                <a href ng-click="vmmain.selectPage('dataservice-import')">
-	                    <span class="fa fa-fw {{vmmain.page('dataservice-import').icon}}"></span>
-	                    <span>{{vmmain.page('dataservice-import').title}}</span>
-	                </a>
-	            </p>
-	        </div>
-	    </div>
+        <div class="blank-slate-pf" 
+             id="dataservice-summary-nosources" 
+             ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasSources==false && vm.hasServices==false">
+            <div class="blank-slate-pf-icon">
+                <span class="pficon pficon pficon-add-circle-o"></span>
+            </div>
+            <h1 ng-bind-html=":: 'dataservice-summary.welcomeMsg' | translate" />
+            <h2 ng-bind=":: 'dataservice-summary.noSourcesOrDataServicesExist' | translate"></h2>
+            <p>
+                <span translate="dataservice-summary.noSourcesMsg" />
+            </p>
+            <p>
+                <span translate="dataservice-summary.noDataServiceImportMsg" />
+            </p>
+            <div class="blank-slate-pf-main-action">
+                <button class="btn btn-primary btn-lg" 
+                        ng-click="vmmain.selectPage('svcsource-new')">
+                    <span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span>
+                    <span>{{vmmain.page('svcsource-new').title}}</span>
+                </button>
+            </div>
+            <div class="blank-slate-pf-secondary-action">
+                <button class="btn btn-default btn-lg" 
+                        ng-click="vmmain.selectPage('dataservice-import')">
+                    <span class="fa fa-fw {{vmmain.page('dataservice-import').icon}}"></span>
+                    <span>{{vmmain.page('dataservice-import').title}}</span>
+                </button>
+            </div>
+        </div>
 	
 	    <!-- Content shown if No DataServices yet -->
 	    <div id="dataservice-summary-noservices" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasSources==true && vm.hasServices==false" class="col-md-12 row">

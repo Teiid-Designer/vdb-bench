@@ -343,10 +343,10 @@
         /**
          * Handle import dataservice click
          */
-        var importDataServiceClicked = function( ) {
-            // Broadcast the pageChange
-            $rootScope.$broadcast("dataServicePageChanged", 'dataservice-import');
-        };
+//        var importDataServiceClicked = function( ) {
+//            // Broadcast the pageChange
+//            $rootScope.$broadcast("dataServicePageChanged", 'dataservice-import');
+//        };
 
         /**
          * Handle export dataservice click
@@ -410,21 +410,6 @@
             }
           ],
           moreActions: [
-//            {
-//              name: $translate.instant('shared.Export'),
-//              title: $translate.instant('shared.ExportWhat', {what: $translate.instant('shared.DataService')}),
-//              actionFn: exportDataServiceClicked,
-//              isDisabled: true
-//            },
-//            {
-//              name: $translate.instant('shared.Copy'),
-//              title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.DataService')}),
-//              actionFn: cloneDataServiceClicked,
-//              isDisabled: true
-//            },
-//            {
-//              isSeparator: true
-//            },
 //            {
 //              name: $translate.instant('shared.Import'),
 //              title: $translate.instant('shared.ImportWhat', {what: $translate.instant('shared.DataService')}),
