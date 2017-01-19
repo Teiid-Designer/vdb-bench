@@ -4,7 +4,7 @@
     <p ng-show="! vm.loading && vm.error">Status Error:<br/>'{{vm.error}}'</p>
 
     <div ng-show="! vm.loading && ! vm.error">
-        Number of dataservices: <span style="color: blue;">{{vm.total}}</span>
+        Number of Data Services: <span style="color: blue;">{{vm.total}}</span>
 
         <div class="ds-dashboard-widgets-dataservices-list-tr-names-container" ng-show="vm.total > 0">
             <div class="ds-dashboard-widgets-dataservices-list-tr-names">
@@ -20,11 +20,11 @@
         <div id="ds-dashboard-widgets-dataservices-footer" class="card-pf-footer">
             <p>
                 <a ng-click="vm.selectPage('dataservice-summary')">
-                    <span class="fa fa-fw {{vm.page('dataservice-summary').icon}}"></span><span>List All</span>
+                    <span class="fa fa-fw {{vm.page('dataservice-summary').icon}}"></span><span>Go to Summary</span>
                 </a>
                 <span></span>
                 <a ng-click="vm.selectPage('dataservice-new')" class="pull-right">
-                    <span class="fa fa-fw {{vm.page('dataservice-new').icon}}"></span><span>Create</span>
+                    <span class="fa fa-fw {{vm.page('dataservice-new').icon}}"></span><span>New Data Service</span>
                 </a>
             </p>
         </div>

@@ -17,8 +17,8 @@
     function config(dashboardProvider, config, syntax) {
         dashboardProvider
             .widget('ds-dataservices', {
-                title: 'Workspace Dataservices',
-                description: 'Displays the current data services in the workspace',
+                title: 'Data Services',
+                description: 'Displays the current Data Services',
                 templateUrl: config.pluginDir + syntax.FORWARD_SLASH +
                                     pluginDirName + syntax.FORWARD_SLASH +
                                     'dataservices.html',
