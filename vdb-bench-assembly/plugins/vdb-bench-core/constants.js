@@ -71,6 +71,8 @@
             JDBC_CATALOG_SCHEMA: '/JdbcCatalogSchema',
             SERVICE_VDB_FOR_SINGLE_TABLE: 'ServiceVdbForSingleTable',
             SERVICE_VDB_FOR_JOIN_TABLES: 'ServiceVdbForJoinTables',
+            SERVICE_VIEW_DDL_FOR_SINGLE_TABLE: 'ServiceViewDdlForSingleTable',
+            SERVICE_VIEW_DDL_FOR_JOIN_TABLES: 'ServiceViewDdlForJoinTables',
             SERVICE_VIEW_INFO: 'serviceViewInfo',
             SOURCE_VDB_MATCHES: 'sourceVdbMatches',
             MODEL_FROM_TEIID_DDL: 'ModelFromTeiidDdl',

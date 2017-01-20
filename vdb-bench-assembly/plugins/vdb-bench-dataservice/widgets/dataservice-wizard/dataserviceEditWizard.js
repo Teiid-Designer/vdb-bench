@@ -9,7 +9,7 @@
         .directive('dataserviceEditWizard', DataserviceEditWizard);
 
     DataserviceEditWizard.$inject = ['CONFIG', 'SYNTAX'];
-    DataserviceEditWizardController.$inject = ['$scope', '$rootScope', '$document', '$translate', 
+    DataserviceEditWizardController.$inject = ['$scope', '$rootScope', '$document', '$translate',
                                                'RepoRestService', 'EditWizardService', 'DSSelectionService', 'SvcSourceSelectionService', 'REST_URI', 'SYNTAX'];
 
     function DataserviceEditWizard(config, syntax) {
@@ -26,7 +26,7 @@
         return directive;
     }
 
-    function DataserviceEditWizardController($scope, $rootScope, $document, $translate, 
+    function DataserviceEditWizardController($scope, $rootScope, $document, $translate,
                                              RepoRestService, EditWizardService, DSSelectionService, SvcSourceSelectionService, REST_URI, SYNTAX) {
         var vm = this;
         vm.stepTitle = $translate.instant('dataserviceEditWizard.stepTitle');
@@ -73,7 +73,6 @@
             // Determine editing or creating new.
             if(EditWizardService.serviceName().length>0) {
                 EditWizardService.setEditing(true);
-                //vm.selectedTable = EditWizardService.sourceTables()[0];
             } else {
                 EditWizardService.setEditing(false);
             }
@@ -610,7 +609,7 @@
                     }
                     
                     try {
-                        RepoRestService.setDataServiceVdbForSingleTable( dataserviceName, relativeTablePath, relativeModelSourcePath, columnNames ).then(
+                        RepoRestService.setDataServiceVdbForSingleTable( dataserviceName, relativeModelSourcePath, null, relativeTablePath, columnNames ).then(
                             function () {
                                 // Reinitialise the list of data services
                                 DSSelectionService.refresh('dataservice-summary');
@@ -665,8 +664,9 @@
                     var joinType = EditWizardService.joinType();
                     
                     try {
-                        RepoRestService.setDataServiceVdbForJoinTables( dataserviceName, lhRelativeTablePath, lhRelativeModelSourcePath, lhColumnNames,
-                                                                                         rhRelativeTablePath, rhRelativeModelSourcePath, rhColumnNames, 
+                        RepoRestService.setDataServiceVdbForJoinTables( dataserviceName, lhRelativeModelSourcePath, rhRelativeModelSourcePath, null,
+                                                                                         lhRelativeTablePath, lhColumnNames,
+                                                                                         rhRelativeTablePath, rhColumnNames, 
                                                                                          joinType, lhJoinColumnName, rhJoinColumnName).then(
                             function () {
                                 // Reinitialise the list of data services

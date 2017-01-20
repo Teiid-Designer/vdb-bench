@@ -934,21 +934,26 @@
         /**
          * Service: Sets the DataService's service VDB using a single table source.
          * update an existing dataservice in the repository.
-         * If null columnNames is provided - means "include all columns"
+         * - If non-null viewDDL is supplied, it is used to define the view (overrides other provided args)
+         * - null or empty columnNames means "include all columns"
          */
-        service.setDataServiceVdbForSingleTable = function (dataserviceName, tablePath, modelSourcePath, columnNames) {
-            if (!dataserviceName || !tablePath || !modelSourcePath) {
+        service.setDataServiceVdbForSingleTable = function (dataserviceName, modelSourcePath, viewDdl, tablePath, columnNames) {
+            if (!dataserviceName || !modelSourcePath || !tablePath) {
                 throw RestServiceException("Data service update inputs are not defined");
             }
             
             return getRestService().then(function (restService) {
                 var payload = {
                     "dataserviceName": dataserviceName,
-                    "tablePath": getUserWorkspacePath()+"/"+tablePath,
-                    "modelSourcePath": getUserWorkspacePath()+"/"+modelSourcePath
+                    "modelSourcePath": getUserWorkspacePath()+"/"+modelSourcePath,
+                    "tablePath": getUserWorkspacePath()+"/"+tablePath
                 };
+                // Adds requested viewDdl if provided
+                if ( viewDdl && viewDdl.length>0 )  {
+                    payload.viewDdl = viewDdl;
+                }
                 // Adds requested column names if provided
-                if ( angular.isDefined(columnNames) && columnNames.length > 0 )  {
+                if ( columnNames && columnNames.length > 0 )  {
                     payload.columnNames = columnNames;
                 }
 
@@ -959,28 +964,104 @@
         /**
          * Service: Sets the DataService's service VDB using join tables
          * update an existing dataservice in the repository.
-         * If null columnNames is provided - means "include all columns"
+         * If non-null viewDdl is provided - it is used to set the view (overrides other supplied parameters)
+         * If null or empty columnNames are provided - means "include all columns"
          */
-        service.setDataServiceVdbForJoinTables = function (dataserviceName, tablePath, modelSourcePath, columnNames,
-                                                                            rhTablePath, rhModelSourcePath, rhColumnNames, 
+        service.setDataServiceVdbForJoinTables = function (dataserviceName, modelSourcePath, rhModelSourcePath, viewDdl,
+                                                                            tablePath, columnNames,
+                                                                            rhTablePath, rhColumnNames, 
                                                                             joinType, lhJoinColumnName, rhJoinColumnName) {
-            if (!dataserviceName || !tablePath || !modelSourcePath || 
-                                    !rhTablePath || !rhModelSourcePath || 
-                                    !joinType || !lhJoinColumnName || !rhJoinColumnName ) {
+            if (!dataserviceName || !modelSourcePath || !rhModelSourcePath || !tablePath || !rhTablePath) {
                 throw RestServiceException("Data service update inputs are not defined");
             }
             
             return getRestService().then(function (restService) {
                 var payload = {
                     "dataserviceName": dataserviceName,
-                    "tablePath": getUserWorkspacePath()+"/"+tablePath,
                     "modelSourcePath": getUserWorkspacePath()+"/"+modelSourcePath,
-                    "rhTablePath": getUserWorkspacePath()+"/"+rhTablePath,
                     "rhModelSourcePath": getUserWorkspacePath()+"/"+rhModelSourcePath,
-                    "joinType": joinType,
-                    "lhJoinColumn": lhJoinColumnName,
-                    "rhJoinColumn": rhJoinColumnName
+                    "tablePath": getUserWorkspacePath()+"/"+tablePath,
+                    "rhTablePath": getUserWorkspacePath()+"/"+rhTablePath
                 };
+                // Adds requested viewDdl if provided
+                if ( viewDdl && viewDdl.length > 0 )  {
+                    payload.viewDdl = viewDdl;
+                }
+                // Adds requested column names if provided
+                if ( columnNames && columnNames.length > 0 )  {
+                    payload.columnNames = columnNames;
+                }
+                // Adds requested rh column names if provided
+                if ( rhColumnNames && rhColumnNames.length > 0 )  {
+                    payload.rhColumnNames = rhColumnNames;
+                }
+                // Adds requested joinType if provided
+                if ( joinType && joinType.length > 0 )  {
+                    payload.joinType = joinType;
+                }
+                // Adds requested lhJoinColumn if provided
+                if ( lhJoinColumnName && lhJoinColumnName.length > 0 )  {
+                    payload.lhJoinColumn = lhJoinColumnName;
+                }
+                // Adds requested rhJoinColumn if provided
+                if ( rhJoinColumnName && rhJoinColumnName.length > 0 )  {
+                    payload.rhJoinColumn = rhJoinColumnName;
+                }
+
+                return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + REST_URI.SERVICE_VDB_FOR_JOIN_TABLES).post(payload);
+            });
+        };
+
+        /**
+         * Service: Get the DataService View DDL based on the provided info.
+         */
+        service.getDataServiceViewDdlForSingleTable = function (dataserviceName, tablePath, columnNames) {
+            if (!dataserviceName || !tablePath ) {
+                throw RestServiceException("get View DDL inputs are not sufficiently defined");
+            }
+            
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "dataserviceName": dataserviceName,
+                    "tablePath": getUserWorkspacePath()+"/"+tablePath
+                };
+                // Adds requested column names if provided
+                if ( columnNames && columnNames.length > 0 )  {
+                    payload.columnNames = columnNames;
+                }
+
+                return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + REST_URI.SERVICE_VIEW_DDL_FOR_SINGLE_TABLE).post(payload);
+            });
+        };
+
+        /**
+         * Service: Get the DataService View DDL based on the provided info.
+         */
+        service.getDataServiceViewDdlForJoinTables = function (dataserviceName, tablePath, columnNames,
+                                                                                rhTablePath, rhColumnNames, 
+                                                                                joinType, lhJoinColumnName, rhJoinColumnName) {
+            if (!dataserviceName || !tablePath || !rhTablePath ) {
+                throw RestServiceException("get View DDL inputs are not sufficiently defined");
+            }
+            
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "dataserviceName": dataserviceName,
+                    "tablePath": getUserWorkspacePath()+"/"+tablePath,
+                    "rhTablePath": getUserWorkspacePath()+"/"+rhTablePath
+                };
+                // Adds joinType if provided
+                if ( angular.isDefined(joinType) && joinType!==null )  {
+                    payload.joinType = joinType;
+                }
+                // Adds lhJoinColumn if provided
+                if ( angular.isDefined(lhJoinColumnName) && lhJoinColumnName!==null )  {
+                    payload.lhJoinColumn = lhJoinColumnName;
+                }
+                // Adds rhJoinColumn if provided
+                if ( angular.isDefined(rhJoinColumnName) && rhJoinColumnName!==null )  {
+                    payload.rhJoinColumn = rhJoinColumnName;
+                }
                 // Adds requested column names if provided
                 if ( angular.isDefined(columnNames) && columnNames.length > 0 )  {
                     payload.columnNames = columnNames;
@@ -990,7 +1071,7 @@
                     payload.rhColumnNames = rhColumnNames;
                 }
 
-                return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + REST_URI.SERVICE_VDB_FOR_JOIN_TABLES).post(payload);
+                return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + REST_URI.SERVICE_VIEW_DDL_FOR_JOIN_TABLES).post(payload);
             });
         };
 
