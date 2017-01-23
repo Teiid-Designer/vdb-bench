@@ -17,8 +17,8 @@
     function config(dashboardProvider, config, syntax) {
         dashboardProvider
             .widget('ds-svcsources', {
-                title: 'Workspace Sources',
-                description: 'Displays the current sources in the workspace',
+                title: 'Data Sources',
+                description: 'Displays the current Data Sources',
                 templateUrl: config.pluginDir + syntax.FORWARD_SLASH +
                                     pluginDirName + syntax.FORWARD_SLASH +
                                     'svcsources.html',
