@@ -345,9 +345,9 @@
             // Builds the name value pairs of info needed for the edit page.
             var editInfo = [];
             
-        	// Get the connectionName and TranslatorName for the selected source,
+            // Get the connectionName and TranslatorName for the selected source,
             // then transfer to the edit page.
-        	
+            
             var successCallback = function(model) {
                 // Update the connection name for the source being edited
                 //SvcSourceSelectionService.setEditSourceConnectionNameSelection(model.keng__id);
@@ -388,7 +388,7 @@
 
             var failureCallback = function(errorMsg) {
                 var getModelSourceConnectionFailedMsg = $translate.instant('datasourceSummaryController.getModelSourceConnectionFailedMsg');
-            	alert(getModelSourceConnectionFailedMsg + "\n" + errorMsg);
+                alert(getModelSourceConnectionFailedMsg + "\n" + errorMsg);
             };
 
             SvcSourceSelectionService.selectedServiceSourceModel(successCallback, failureCallback);
@@ -449,17 +449,37 @@
         /**
          * Handle import ServiceSource click
          */
-        var importSvcSourceClicked = function( ) {
-            // Broadcast the pageChange
-            $rootScope.$broadcast("dataServicePageChanged", 'svcsource-import');
+//        var importSvcSourceClicked = function( ) {
+//            // Broadcast the pageChange
+//            $rootScope.$broadcast("dataServicePageChanged", 'svcsource-import');
+//        };
+
+        /**
+         * Closes the DDL frame.
+         */
+        vm.hideDdl = function() {
+            if ( vm.displayDdl ) {
+                vm.displayDdl = false;
+                vm.menuActions[ 0 ].name = $translate.instant('datasourceSummaryController.actionNameDisplayDdl');
+            }
         };
 
         /**
          * Toggle the displaying of the DDL window
          */
-        var showHideDDLClicked = function() {
+        var showHideDDLClicked = function( action, item ) {
+            SvcSourceSelectionService.selectServiceSource( item );
             vm.displayDdl = ! vm.displayDdl;
             setDDL();
+
+            if ( vm.displayDdl ) {
+                vm.menuActions[ 0 ].name = $translate.instant('datasourceSummaryController.actionNameHideDdl');
+            } else {
+                vm.menuActions[ 0 ].name = $translate.instant('datasourceSummaryController.actionNameDisplayDdl');
+            }
+
+            // select the row whose show/hide DDL menu item was selected
+            vm.listConfig.selectedItems = [ item ];
         };
 
         /** 
@@ -489,30 +509,6 @@
               isDisabled: false
             },
             {
-              name: $translate.instant('datasourceSummaryController.actionNameEdit'),
-              title: $translate.instant('datasourceSummaryController.actionTitleEdit'),
-              actionFn: editSvcSourceClicked,
-              isDisabled: true
-            },
-            {
-              name: $translate.instant('datasourceSummaryController.actionNameCopy'),
-              title: $translate.instant('datasourceSummaryController.actionTitleCopy'),
-              actionFn: cloneSvcSourceClicked,
-              isDisabled: true
-            },
-            {
-              name: $translate.instant('datasourceSummaryController.actionNameDelete'),
-              title: $translate.instant('datasourceSummaryController.actionTitleDelete'),
-              actionFn: deleteSvcSourceClicked,
-              isDisabled: true
-            },
-            {
-              name: $translate.instant('datasourceSummaryController.actionNameDisplayDdl'),
-              title: $translate.instant('datasourceSummaryController.actionTitleDisplayDdl'),
-              actionFn: showHideDDLClicked,
-              isDisabled: false
-            },
-            {
               name: $translate.instant('datasourceSummaryController.actionNameRefresh'),
               title: $translate.instant('datasourceSummaryController.actionTitleRefresh'),
               actionFn: refreshClicked,
@@ -521,49 +517,34 @@
           ],
           moreActions: [
 //            {
-//              name: $translate.instant('datasourceSummaryController.actionNameExport'),
-//              title: $translate.instant('datasourceSummaryController.actionTitleExport'),
-//              actionFn: exportSvcSourceClicked,
-//              isDisabled: true
-//            },
-//            {
-//              name: $translate.instant('datasourceSummaryController.actionNameCopy'),
-//              title: $translate.instant('datasourceSummaryController.actionTitleCopy'),
-//              actionFn: cloneSvcSourceClicked,
-//              isDisabled: true
-//            },
-//            {
-//              isSeparator: true
-//            },
-//            {
 //              name: $translate.instant('datasourceSummaryController.actionNameImport'),
 //              title: $translate.instant('datasourceSummaryController.actionTitleImport'),
 //              actionFn: importSvcSourceClicked,
 //              isDisabled: false
 //            },
-//            {
-//              isSeparator: true
-//            },
-//            {
-//              name: $translate.instant('datasourceSummaryController.actionNameDisplayDdl'),
-//              title: $translate.instant('datasourceSummaryController.actionTitleDisplayDdl'),
-//              actionFn: showHideDDLClicked,
-//              isDisabled: false
-//            }
           ],
           actionsInclude: true
         };
 
-        vm.menuActions = [
+        vm.actionButtons = [
             {
                 name: $translate.instant('datasourceSummaryController.actionNameEdit'),
                 title: $translate.instant('datasourceSummaryController.actionTitleEdit'),
-                actionFn: editSvcSourceMenuAction
+                actionFn: editSvcSourceMenuAction,
+                include: false
+            }
+        ];
+
+        vm.menuActions = [
+            {
+                name: $translate.instant('datasourceSummaryController.actionNameDisplayDdl'),
+                title: $translate.instant('datasourceSummaryController.actionTitleDisplayDdl'),
+                actionFn: showHideDDLClicked
             },
             {
-                name: $translate.instant('datasourceSummaryController.actionNameDelete'),
-                title: $translate.instant('datasourceSummaryController.actionTitleDelete'),
-                actionFn: deleteSvcSourceMenuAction
+                name: $translate.instant('datasourceSummaryController.actionNameCopy'),
+                title: $translate.instant('datasourceSummaryController.actionTitleCopy'),
+                actionFn: cloneSvcSourceMenuAction
             },
             {
                 name: $translate.instant('datasourceSummaryController.actionNameExport'),
@@ -571,9 +552,9 @@
                 actionFn: exportSvcSourceMenuAction
             },
             {
-                name: $translate.instant('datasourceSummaryController.actionNameCopy'),
-                title: $translate.instant('datasourceSummaryController.actionTitleCopy'),
-                actionFn: cloneSvcSourceMenuAction
+                name: $translate.instant('datasourceSummaryController.actionNameDelete'),
+                title: $translate.instant('datasourceSummaryController.actionTitleDelete'),
+                actionFn: deleteSvcSourceMenuAction
             }
           ];
 

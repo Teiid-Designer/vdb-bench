@@ -23,15 +23,21 @@
                 <div class="col-md-12">
                     <form class="form-horizontal" >
                         <div class="form-group">
-                            <label class="col-md-1 control-label" for="textInput" translate="shared.Name"></label>
-                            <div class="col-md-7">
+                            <label class="col-md-2 control-label" for="textInput" translate="shared.Name"></label>
+                            <div class="col-md-9">
                                 <input type="text" ng-readonly="vm.isEditing()" ng-model="vm.serviceName" ng-init="vm.serviceName" ng-change="vm.serviceNameChanged()" class="form-control">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-1 control-label" for="textInput" translate="shared.Description"></label>
-                            <div class="col-md-7">
-                                <input type="text" ng-model="vm.serviceDescription" ng-init="vm.serviceDescription" ng-change="vm.serviceDescriptionChanged()" class="form-control">
+                            <label class="col-md-2 control-label" for="textInput" translate="shared.Description"></label>
+                            <div class="col-md-9">
+                                <textarea rows="3"
+                                          maxlength="256"
+                                          ng-model="vm.serviceDescription" 
+                                          ng-init="vm.serviceDescription" 
+                                          ng-change="vm.serviceDescriptionChanged()" 
+                                          class="form-control">
+                                </textarea>
                             </div>
                         </div>
                     </form>

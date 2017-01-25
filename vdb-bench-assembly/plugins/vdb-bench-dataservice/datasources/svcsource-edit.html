@@ -46,7 +46,12 @@
 	                    <div class="form-group">
 	                        <label class="col-md-2 control-label" for="textInput" translate="svcsource-edit.Description"></label>
 	                        <div class="col-md-6">
-	                            <input type="text" ng-model="vm.svcSourceDescription" ng-init="vm.svcSourceDescription=vmmain.selectedServiceSource().vdb__description" class="form-control">
+                                <textarea rows="3"
+                                          maxlength="256"
+                                          ng-model="vm.svcSourceDescription" 
+                                          ng-init="vm.svcSourceDescription=vmmain.selectedServiceSource().vdb__description" 
+                                          class="form-control">
+                                </textarea>
 	                        </div>
 	                    </div>
 	                </form>

@@ -100,6 +100,9 @@
         "createDataServiceMsg" : "A Data Service is created using one or more Data Sources. To create your first Data Service, click ",
         "createSourceMsg" : "A Data Service is created using one or more Data Sources. To create your first Data Source, click ",
         "importDataServiceMsg" : "You can also import an existing Data Service. To import a Data Service, click ",
+        "noDataServiceImportMsg" : "You can also import an existing Data Service. To import an existing Data Service, click <strong>Import Data Service</strong> below.",
+        "noSourcesOrDataServicesExist" : "No Data Sources or Data Services Found",
+        "noSourcesMsg" : "In order to create a data service you need a data source. To get started, click <strong>Configure Data Source</strong> below to create your first data source.",
         "serviceVdbToolTip" : "The name of the service VDB of this dataservice",
         "welcomeMsg" : "Welcome to the <strong>Data Services Builder</strong>!"
     },
@@ -240,8 +243,9 @@
     },
 
     "datasource-summary" : {
-        "welcomeMsg" : "Welcome to the <strong>Data Services Builder</strong>!",
-        "noSourcesInstructionsMsg" : "Currently, there are no data sources configured.  To get started, click ",
+        "welcomeMsg" : "Currently, there are no data sources configured. In order to create a data service you must create a data source.",
+        "noSourcesExist" : "No Data Sources Found",
+        "noSourcesInstructionsMsg" : "To get started, click <strong>Configure Data Source</strong> below to create your first data source.",
         "sourceSchema" : "Data Source Schema"
     },
     
@@ -251,6 +255,7 @@
         "actionNameDisplayDdl" : "Display DDL",
         "actionNameEdit" : "@:shared.Edit",
         "actionNameExport" : "@:shared.Export",
+        "actionNameHideDdl" : "Hide DDL",
         "actionNameImport" : "@:shared.Import",
         "actionNameNew" : "@:shared.New",
         "actionNameRefresh" : "Refresh",
