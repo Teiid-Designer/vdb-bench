@@ -33,6 +33,7 @@
 
         // flag to show/hide page help
         vm.showPageHelp = false;
+        vm.sliderWidth = '60%';
 
         vm.togglePageHelp = function() {
         	vm.showPageHelp = !vm.showPageHelp;
