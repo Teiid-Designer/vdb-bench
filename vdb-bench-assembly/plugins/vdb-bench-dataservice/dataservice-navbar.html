@@ -23,7 +23,7 @@
             <h3 translate="shared.DataServices"></h3>
             <p class="description" translate="dataservice-navbar.dataServiceActionsMsg"></p>
             <h4 class="heading" translate="dataservice-navbar.DataServiceActions"></h4>
-            <div ng-repeat="page in vmmain.pages(['dataservice-summary', 'dataservice-new', 'dataservice-import'])">
+            <div ng-repeat="page in vmmain.pages(['dataservice-summary', 'dataservice-new'])">
                 <div class="action">
                     <a ng-click="vmmain.selectPage(page.id)"><span class="fa fa-fw {{page.icon}}"></span><span>{{page.title}}</span></a>
                 </div>
@@ -33,7 +33,7 @@
             <h3 translate="shared.Sources"></h3>
             <p class="description" translate="dataservice-navbar.sourceActionsMsg"></p>
             <h4 class="heading" translate="dataservice-navbar.SourceActions"></h4>
-            <div ng-repeat="page in vmmain.pages(['datasource-summary', 'svcsource-new', 'svcsource-import'])">
+            <div ng-repeat="page in vmmain.pages(['datasource-summary', 'svcsource-new'])">
                 <div class="action">
                     <a ng-click="vmmain.selectPage(page.id)"><span class="fa fa-fw {{page.icon}}"></span><span>{{page.title}}</span></a>
                 </div>

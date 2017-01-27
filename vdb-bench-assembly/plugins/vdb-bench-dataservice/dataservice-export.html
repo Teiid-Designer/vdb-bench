@@ -2,19 +2,21 @@
 	<div div="dataservice-export-container" class="container-fluid" ng-controller="DSImportExportController as vm">
 	    <div class="row">
 	        <div class="wizard-pf-container">
-	            <div pf-wizard title=""
+	            <div pf-wizard title="{{:: 'dataservice-export.wizardTitle' | translate}}"
 	                    on-finish="vmmain.selectPage('dataservice-summary',null)"
 	                    on-cancel="vmmain.selectPage('dataservice-summary',null)"
 	                    back-callback="vm.backCallback"
 	                    next-title="vm.nextButtonTitle"
 	                    embed-in-page="true"
-	                    content-height="'30em'">
+	                    content-height="'400px'">
 	
 	                <!--
 	                    -- Export Type Step
 	                    -->
 	                <div pf-wizard-step step-title="{{:: 'dataservice-export.exportTypeStepTitle' | translate}}"
-	                        step-id="export-type">
+	                     step-id="export-type"
+	                     wz-disabled="{{ vm.storageTypes.length < 2 }}"
+	                     ng-show="{{ vm.storageTypes.length > 1 }}">
 	                    <h1 translate="dataservice-export.instructionsMsg"></h1>
 	
 	                    <form class="ds-import-export-storage-types-form">
@@ -30,8 +32,6 @@
 	
 	                </div>
 	
-	                <!-- directive includes the file wizard steps -->
-	                <ds-export-file-wizard wizard-active="vm.fileWizard"></ds-export-file-wizard>
 	                <!-- directive includes the git wizard steps -->
 	                <ds-export-git-wizard wizard-active="vm.gitWizard"></ds-export-git-wizard>
 	            </div>

@@ -262,13 +262,24 @@
 
 .ds-summary-results .list-group-item:hover,
 .svcsource-summary-results .list-group-item:hover {
-    background-color: #bbbbbb;
+    background-color: #def3ff;
 }
 
 .ds-summary-results .list-group-item.active,
 .svcsource-summary-results .list-group-item.active {
     background-color: #b3e3ff;
+    color: white;
     border-color: transparent;
+}
+
+.svcsource-summary-results .list-group-item.hover > .list-view-pf-additional-info-item {
+    background-color: #b3e3ff;
+    color: white;
+    border-color: transparent;
+}
+
+.svcsource-summary-results > .list-group-item.active > .list-view-pf-additional-info-item {
+    background-color: #def3ff;
 }
 
 .ds-summary-results .list-view-pf-main-info,
@@ -375,7 +386,7 @@
 .wizard-pf-container {
     background: white;
     position: relative;
-    width: 75%;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
 }

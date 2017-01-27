@@ -58,8 +58,7 @@
                                                                            {what: $translate.instant('shared.DataService')});
             pages[service.IMPORT_DATASERVICE_PAGE].title = $translate.instant('shared.ImportWhat',
                                                                               {what: $translate.instant('shared.DataService')});
-            pages[service.EXPORT_DATASERVICE_PAGE].title = $translate.instant('shared.ExportWhat',
-                                                                              {what: $translate.instant('shared.DataService')});
+            pages[service.EXPORT_DATASERVICE_PAGE].title = $translate.instant('shared.Export');
             pages[service.EDIT_DATASERVICE_PAGE].title = $translate.instant('shared.EditWhat',
                                                                             {what: $translate.instant('shared.DataService')});
             pages[service.CLONE_DATASERVICE_PAGE].title = $translate.instant('shared.CopyWhat',
@@ -140,8 +139,8 @@
         };
         pages[service.EXPORT_DATASERVICE_PAGE] = {
             id: service.EXPORT_DATASERVICE_PAGE,
-            title: $translate.instant('shared.ExportWhat', {what: $translate.instant('shared.DataService')}),
-            showTitle: false,
+            title: $translate.instant('shared.Export'),
+            showTitle: true,
             icon: 'pficon-export',
             helpId: service.EXPORT_DATASERVICE_PAGE,
             parent: service.DATASERVICE_SUMMARY_PAGE,

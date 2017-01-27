@@ -5,7 +5,8 @@
         step-title="Repository Properties"
         step-id="export-to-git-credentials"
         wz-disabled="{{!vm.wizardActive}}"
-        ok-to-nav-away="vm.validateCredentials">
+        next-enabled="vm.validateCredentials()"
+        ok-to-nav-away="vm.validateCredentials()">
     <h1>Enter the details for the destination git repository</h1>
 
     <git-credentials-control show-name="false"

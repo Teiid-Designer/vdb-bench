@@ -333,6 +333,21 @@
         };
 
         /**
+         * Handle download data service menu item selected.
+         */
+        var downloadDataServiceMenuAction = function( action, item ) {
+            DSSelectionService.selectDataService( item );
+            var dataService = item;
+
+            try {
+                DownloadService.download( dataService );
+            } catch ( error ) {
+                
+            } finally {
+            }
+        };
+
+        /**
          * Handle new dataservice click
          */
         var newDataServiceClicked = function( ) {
@@ -426,23 +441,28 @@
                 title: $translate.instant('shared.EditWhat', {what: $translate.instant('shared.DataService')}),
                 actionFn: editDataServiceMenuAction,
                 include: false
-            }
-        ];
-
-        vm.menuActions = [
+            },
             {
                 name: $translate.instant('shared.Test'),
                 title: $translate.instant('shared.TestWhat', {what: $translate.instant('shared.DataService')}),
                 actionFn: deployDataServiceMenuAction
             },
+        ];
+
+        vm.menuActions = [
             {
                 name: $translate.instant('shared.Copy'),
                 title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.DataService')}),
                 actionFn: cloneDataServiceMenuAction
             },
             {
-                name: $translate.instant('shared.Export'),
-                title: $translate.instant('shared.ExportWhat', {what: $translate.instant('shared.DataService')}),
+                name: $translate.instant( 'shared.Download' ),
+                title: $translate.instant( 'shared.Download' ),
+                actionFn: downloadDataServiceMenuAction
+            },
+            {
+                name: $translate.instant('dataservice-summary.GitExport'),
+                title: $translate.instant('dataservice-summary.GitExport'),
                 actionFn: exportDataServiceMenuAction
             },
             {
