@@ -3,19 +3,19 @@
 	
 	    <!-- Content shown if No Sources or DataServices yet -->
         <div class="blank-slate-pf" 
-             id="dataservice-summary-nosources" 
+             id="dataservice-summary-nosources-noservices" 
              ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasSources==false && vm.hasServices==false">
             <div class="blank-slate-pf-icon">
-                <span class="pficon pficon pficon-add-circle-o"></span>
+                <span class="fa fa-table"></span>
             </div>
             <h1 ng-bind-html=":: 'dataservice-summary.welcomeMsg' | translate" />
-            <h2 ng-bind=":: 'dataservice-summary.noSourcesOrDataServicesExist' | translate"></h2>
+            <h2 ng-bind-html=":: 'dataservice-summary.noSourcesOrDataServicesExist' | translate"></h2>
             <p>
                 <span translate="dataservice-summary.noSourcesMsg" />
             </p>
-            <p>
+<!--            <p>
                 <span translate="dataservice-summary.noDataServiceImportMsg" />
-            </p>
+            </p>-->
             <div class="blank-slate-pf-main-action">
                 <button class="btn btn-primary btn-lg" 
                         ng-click="vmmain.selectPage('svcsource-new')">
@@ -23,37 +23,48 @@
                     <span>{{vmmain.page('svcsource-new').title}}</span>
                 </button>
             </div>
-            <div class="blank-slate-pf-secondary-action">
+<!--            <div class="blank-slate-pf-secondary-action">
                 <button class="btn btn-default btn-lg" 
                         ng-click="vmmain.selectPage('dataservice-import')">
                     <span class="fa fa-fw {{vmmain.page('dataservice-import').icon}}"></span>
                     <span>{{vmmain.page('dataservice-import').title}}</span>
                 </button>
-            </div>
+            </div>-->
         </div>
 	
 	    <!-- Content shown if No DataServices yet -->
-	    <div id="dataservice-summary-noservices" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasSources==true && vm.hasServices==false" class="col-md-12 row">
-	        <div class="row">
-	            <h2 ng-bind-html=":: 'dataservice-summary.welcomeMsg' | translate"></h2>
-	            <p>
-	                <span translate="dataservice-summary.createDataServiceMsg" />
-	                <a href ng-click="vmmain.selectPage('dataservice-new')">
-	                    <span class="fa fa-fw {{vmmain.page('dataservice-new').icon}}"></span>
-	                    <span>{{vmmain.page('dataservice-new').title}}</span>
-	                </a>
-	               <br>
-	               <span translate="dataservice-summary.importDataServiceMsg" />
-	               <a href ng-click="vmmain.selectPage('dataservice-import')">
-	                   <span class="fa fa-fw {{vmmain.page('dataservice-import').icon}}"></span>
-	                   <span>{{vmmain.page('dataservice-import').title}}</span>
-	               </a>
-	            </p>
-	        </div>
-	    </div>
+        <div class="blank-slate-pf" 
+             id="dataservice-summary-noservices" 
+             ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasSources==true && vm.hasServices==false">
+            <div class="blank-slate-pf-icon">
+                <span class="fa fa-table"></span>
+            </div>
+            <h1 ng-bind-html=":: 'dataservice-summary.welcomeMsg' | translate" />
+            <h2 ng-bind-html=":: 'dataservice-summary.noDataServicesExist' | translate"></h2>
+            <p>
+                <span translate="dataservice-summary.createDataServiceMsg" />
+            </p>
+<!--            <p>
+                <span translate="dataservice-summary.noDataServiceImportMsg" />
+            </p>-->
+            <div class="blank-slate-pf-main-action">
+                <button class="btn btn-primary btn-lg" 
+                        ng-click="vmmain.selectPage('dataservice-new')">
+                    <span class="fa fa-fw {{vmmain.page('dataservice-new').icon}}"></span>
+                    <span>{{vmmain.page('dataservice-new').title}}</span>
+                </button>
+            </div>
+<!--            <div class="blank-slate-pf-secondary-action">
+                <button class="btn btn-default btn-lg" 
+                        ng-click="vmmain.selectPage('dataservice-import')">
+                    <span class="fa fa-fw {{vmmain.page('dataservice-import').icon}}"></span>
+                    <span>{{vmmain.page('dataservice-import').title}}</span>
+                </button>
+            </div>-->
+        </div>
 	
 	    <div id="ds-summary-table" class="col-md-10 row">
-	        <div pf-toolbar id="dataserviceToolbar" config="vm.toolbarConfig" ng-show="vm.dsLoading==true || vm.sourcesLoading==true || vm.hasServices==true"></div>
+	        <div pf-toolbar id="dataserviceToolbar" config="vm.toolbarConfig" ng-show="vm.hasServices==true"></div>
 	
 	        <div id="dataservice-summary-updating" ng-show="vm.dsLoading==true || vm.sourcesLoading==true" class="col-md-10 row">
                 <div class="spinner spinner-lg" />
@@ -72,7 +83,7 @@
 	                        <div class="list-view-pf-body">
 	                            <div class="list-view-pf-description display-block">
 	                                <div class="list-group-item-heading">
-	                                    <a>{{item.keng__id}}</a>
+	                                    {{item.keng__id}}
 	                                </div>
                                     <div ng-if="item.tko__description">
                                         <div class="list-group-item-text" ng-if="item.tko__description.length > 100">

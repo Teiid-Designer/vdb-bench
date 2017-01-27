@@ -18,7 +18,6 @@
 
         vm.storageTypes = {};
         vm.storageType = {};
-        vm.fileWizard = false;
         vm.gitWizard = false;
 
         vm.backCallback = function (step) {
@@ -50,7 +49,6 @@
             if (angular.isUndefined(vm.storageType))
                 vm.storageType = {};
 
-            vm.fileWizard = vm.storageType.name === 'file' ? true : false;
             vm.gitWizard = vm.storageType.name === 'git' ? true : false;
         };
 
@@ -65,7 +63,11 @@
             try {
                  RepoRestService.availableStorageTypes().then(
                 function (storageTypes) {
-                    vm.storageTypes = storageTypes;
+                    // remove 'file' storage type as it is not part of export wizard and
+                    // currently data service import is not allowed
+                    vm.storageTypes = storageTypes.filter( function( storageType ) {
+                        return ( storageType.name !== "file" );
+                    } );
                 },
                 function (response) {
                     alert(response.data.error);
@@ -75,6 +77,7 @@
         }
 
         init();
+        vm.storageType = vm.storageTypes.length > 0 ? vm.storageTypes[ 0 ] : {};
     }
 
 })();

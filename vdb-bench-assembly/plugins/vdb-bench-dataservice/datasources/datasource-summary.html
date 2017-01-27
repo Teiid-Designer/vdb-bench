@@ -6,7 +6,7 @@
              id="svcsource-summary-nosources" 
              ng-show="vm.srcLoading==false && vm.hasSources==false">
             <div class="blank-slate-pf-icon">
-                <span class="pficon pficon pficon-add-circle-o"></span>
+                <span class="fa fa-database"></span>
             </div>
             <h1 ng-bind=":: 'datasource-summary.noSourcesExist' | translate" />
             <h2 ng-bind-html=":: 'datasource-summary.welcomeMsg' | translate"></h2>
@@ -60,7 +60,7 @@
                                     <div class="list-view-pf-additional-info-item" data-toggle="tooltip" data-placement="right" title="{{ttip.value}}" ng-repeat="ttip in item.keng__properties" ng-show="ttip.name=='dsbTeiidStatusMessage'"> 
                                         <span ng-class="{ 'fa fa-check ds-active': prop.value=='Active' , 'fa fa-exclamation-triangle ds-error': prop.value=='Error' ,'fa fa-exclamation-triangle ds-warning': prop.value=='Loading' || prop.value=='Unknown' , 'label label-info': prop.value=='New' }"
                                                   ng-repeat="prop in item.keng__properties" ng-show="prop.name=='dsbTeiidStatus'">
-                                            <font color="black">{{prop.value}}</font>
+                                            {{prop.value}}
                                         </span>
                                        
                                        <!--  <span ng-class="{ 'fa fa-check ds-active': prop.value=='Active', 'fa fa-check ds-active': prop.value=='Error' ,'icon-spinner icon-spin icon-small': prop.value=='Loading', 'fa fa-question': prop.value=='Unknown', 'label label-info': prop.value=='New' }"

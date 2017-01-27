@@ -83,12 +83,10 @@
                 return false;
 
             if (_.isEmpty(vm.repo.parameters['repo-path-property'])) {
-                alert($translate.instant('dsExportGitWizard.missingRepositoryUrlMsg'));
                 return false;
             }
 
             if (_.isEmpty(vm.repo.parameters['file-path-property'])) {
-                alert($translate.instant('dsExportGitWizard.missingPathMsg'));
                 return false;
             }
 
