@@ -10,9 +10,9 @@
         .module('vdb-bench.dataservice')
         .factory('EditWizardService', EditWizardService);
 
-    EditWizardService.$inject = ['$rootScope', 'RepoRestService', 'JOIN'];
+    EditWizardService.$inject = ['$rootScope', '$translate', 'RepoRestService', 'JOIN'];
 
-    function EditWizardService($rootScope, RepoRestService, JOIN) {
+    function EditWizardService($rootScope, $translate, RepoRestService, JOIN) {
 
         var wiz = {};
         wiz.serviceName = "";
@@ -30,6 +30,8 @@
         wiz.src2CriteriaColumnName = "";
         wiz.src1CriteriaColumn = null;
         wiz.src2CriteriaColumn = null;
+        wiz.viewEditable = false;
+        wiz.viewDdl = "";
 
         /*
          * Service instance to be returned
@@ -56,7 +58,7 @@
             } else {
                 wiz.serviceName = dataservice.keng__id;
                 wiz.serviceDescription = dataservice.tko__description;
-                initSourceAndTableSelections(dataservice.keng__id, pageId);
+                initServiceSelections(dataservice.keng__id, pageId);
             }
         };
 
@@ -78,6 +80,12 @@
             wiz.src2CriteriaColumnName = "";
             wiz.src1CriteriaColumn = null;
             wiz.src2CriteriaColumn = null;
+            wiz.viewEditable = false;
+            wiz.viewDdl = "";
+            // Broadcast table change
+            $rootScope.$broadcast("editWizardTablesChanged");
+            // Broadcast name changed
+            $rootScope.$broadcast("editWizardServiceNameChanged");
         }
 
         /*
@@ -113,6 +121,8 @@
          */
         service.setServiceName = function(name) {
             wiz.serviceName = name;
+            // Broadcast name changed
+            $rootScope.$broadcast("editWizardServiceNameChanged");
         };
 
         /*
@@ -147,6 +157,34 @@
         };
 
         /*
+         * Set the dataservice view DDL
+         */
+        service.setViewDdl = function(ddl) {
+            wiz.viewDdl = ddl;
+        };
+
+        /*
+         * Get the dataservice description
+         */
+        service.viewDdl = function() {
+            return wiz.viewDdl;
+        };
+
+        /*
+         * Set the dataservice view editable status
+         */
+        service.setViewEditable = function(editable) {
+            wiz.viewEditable = editable;
+        };
+
+        /*
+         * Get the dataservice view editable status
+         */
+        service.viewEditable = function() {
+            return wiz.viewEditable;
+        };
+
+        /*
          * Reset the source tables
          */
         service.resetSourceTables = function() {
@@ -154,6 +192,8 @@
             wiz.sourceTables = [];
             wiz.src1AvailableColumns = [];
             wiz.src2AvailableColumns = [];
+            // Broadcast table change
+            $rootScope.$broadcast("editWizardTablesChanged");
         };
 
         /*
@@ -163,9 +203,13 @@
             if( wiz.sourceTables.length===0 ) {
                 wiz.sources.push(source);
                 wiz.sourceTables.push(sourceTable);
+                // Broadcast table change
+                $rootScope.$broadcast("editWizardTablesChanged");
             } else if ( wiz.sourceTables.length===1 && ( source !== wiz.sources[0] || sourceTable !== wiz.sourceTables[0] ) ) {
                 wiz.sources.push(source);
                 wiz.sourceTables.push(sourceTable);
+                // Broadcast table change
+                $rootScope.$broadcast("editWizardTablesChanged");
             }
         };
 
@@ -177,6 +221,8 @@
             wiz.sourceTables.splice(0,1);
             // Move source2 columns to source1
             wiz.src1AvailableColumns = wiz.src2AvailableColumns;
+            // Broadcast table change
+            $rootScope.$broadcast("editWizardTablesChanged");
         };
 
         /*
@@ -187,6 +233,8 @@
             wiz.sourceTables.splice(1,1);
             // Clears source2 columns
             wiz.src2AvailableColumns = [];
+            // Broadcast table change
+            $rootScope.$broadcast("editWizardTablesChanged");
         };
 
         /*
@@ -420,9 +468,9 @@
         }
 
         /**
-         * Initialize the source and table selections for the dataservice
+         * Initialize the selections for the dataservice
          */
-        function initSourceAndTableSelections ( dataServiceName, pageId ) {
+        function initServiceSelections ( dataServiceName, pageId ) {
             // Reset selections
             service.resetSourceTables();
 
@@ -450,6 +498,9 @@
                                 wiz.src1CriteriaColumnName = result[i].lhCriteriaCol;
                                 wiz.src2CriteriaColumnName = result[i].rhCriteriaCol;
                                 wiz.selectedJoin = result[i].joinType;
+                            } else if(infoType==="DDL") {
+                                wiz.viewDdl = result[i].viewDdl;
+                                wiz.viewEditable = result[i].viewEditable;
                             }
                         }
 

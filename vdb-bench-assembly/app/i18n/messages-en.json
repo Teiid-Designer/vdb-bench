@@ -63,7 +63,12 @@
     },
 
     "dataservice-edit" : {
-        "instructionsMsg" : "Change the definition of your Data Service by choosing a different data source and table"
+        "instructionsMsg" : "Change the definition of your Data Service by choosing a different data source and table",
+        "enableTextEditLbl" : "Enable Text Edit",
+        "expertTab" : "Expert Mode",
+        "sourceTablesLimitedMsg" : "Limit your view definition to use the following tables:",
+        "viewDdlTitle" : "View Definition",
+        "wizardTab" : "Wizard"
     },
 
     "dataservice-export" : {
@@ -90,9 +95,14 @@
 
     "dataservice-new" : {
         "configureSourceMsg" : "Before you can create a new Data Service, you will need to configure a data source. To configure a data source, click ",
+        "enableTextEditLbl" : "Enable Text Edit",
+        "expertTab" : "Expert Mode",
         "inputFieldsHelpMsg" : "Choose a name (and optional description) for your Data Service",
         "instructionsMsg" : "A Data Service can be composed of one or more of your available data sources. If you don't see your desired data source, click ",
-        "multiTableCheckbox" : "Join multiple tables"
+        "multiTableCheckbox" : "Join multiple tables",
+        "sourceTablesLimitedMsg" : "Limit your view definition to use the following tables:",
+        "viewDdlTitle" : "View Definition",
+        "wizardTab" : "Wizard"
     },
 
     "dataservice-summary" : {
@@ -156,7 +166,8 @@
         "getVdbModelTablesFailedMsg" : "Failed to get Vdb model tables",
         "selectedTables" : "Selected Tables",
         "stepTitle" : "Choose Data Sources",
-        "updateVdbFromDdlFailedMsg" : "Failed to construct temp Vdb from DDL"
+        "updateVdbFromDdlFailedMsg" : "Failed to construct temp Vdb from DDL",
+        "viewDdlTitle" : "View DDL"
     },
     
     "dsCloneController" : {

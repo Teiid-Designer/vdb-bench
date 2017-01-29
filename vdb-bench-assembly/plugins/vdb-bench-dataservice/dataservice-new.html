@@ -2,31 +2,45 @@
 	<div id="dataservice-new-container" class="container-fluid" ng-controller="DSNewController as vm">
 	
 	    <!-- Content shown if No Sources yet -->
-	    <div id="dataservice-new-nosources" ng-show="vm.hasSources==false" class="col-md-10 row">
-	        <div class="row">
-	            <div>
-	                <span translate="dataservice-new.configureSourceMsg" />
-	                    <a href ng-click="vmmain.selectPage('svcsource-new')">
-	                    <span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}">
-	                </span>
-	                <span>{{vmmain.page('svcsource-new').title}}</span></a>
-	            </div>
-	        </div>
-	    </div>
-	    
-	    <div id="dataservice-new-controls" ng-show="vm.hasSources==true" class="row">
-            <div class="row col-md-12">
-                <h4>
-                    <span translate="dataservice-new.instructionsMsg" />
-                        <a href ng-click="vmmain.selectPage('svcsource-new')">
-                        <span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}">
-                    </span>
-                    <span>{{vmmain.page('svcsource-new').title}}</span></a>
-                </h4>
-            </div>
-            <div id="dataservice-edit-wizard" class="row col-md-12">
-                <dataservice-edit-wizard></dataservice-edit-wizard>
-            </div>
-	    </div>
-	</div>
+	    <div id="dataservice-new-nosources" ng-show="vm.hasSources==false" class="col-md-12 row">
+            <span translate="dataservice-new.configureSourceMsg" />
+                <a href ng-click="vmmain.selectPage('svcsource-new')">
+                <span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}">
+            </span>
+            <span>{{vmmain.page('svcsource-new').title}}</span></a>
+        </div>
+
+        <div id="dataservice-new-controls" ng-show="vm.hasSources==true" class="col-md-12 row">
+            <h4>
+                <span translate="dataservice-new.instructionsMsg" />
+                    <a href ng-click="vmmain.selectPage('svcsource-new')">
+                    <span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}">
+                </span>
+                <span>{{vmmain.page('svcsource-new').title}}</span></a>
+            </h4>
+            <uib-tabset>
+                <uib-tab heading="{{:: 'dataservice-new.wizardTab' | translate}}">
+                    <dataservice-edit-wizard></dataservice-edit-wizard>
+                </uib-tab>
+                <uib-tab heading="{{:: 'dataservice-new.expertTab' | translate}}" disable="vm.disableExpertTab" ng-click="vm.onExpertTabSelected()">
+                    <div class="col-md-12">
+                        <h4 class="pull-left">{{'dataservice-new.viewDdlTitle' | translate}}</h4>
+                    </div>
+                    <div class="col-md-12">
+                        <div ui-codemirror ng-model="vm.viewDdl" ui-codemirror-opts="vm.ddlEditorOptions" ui-refresh="vm.refreshViewDdl"></div>
+                    </div>
+                    <div class="col-md-12">
+                        <p><strong>{{'dataservice-new.sourceTablesLimitedMsg' | translate}}</strong></p>
+                        <h4 ng-show="vm.sourceNames[0]!=null">&nbsp;&nbsp;{{vm.sourceNames[0]}}.{{vm.tableNames[0]}}</h4>
+                        <h4 ng-show="vm.sourceNames[1]!=null">&nbsp;&nbsp;{{vm.sourceNames[1]}}.{{vm.tableNames[1]}}</h4>
+                        <p>&nbsp;</p>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="submit" class="btn btn-primary" value="{{:: 'shared.Finish' | translate}}" ng-click="vm.finishClicked()" />
+                        <input type="button" class="btn btn-default" value="{{:: 'shared.Cancel' | translate}}" ng-click="vmmain.selectPage('dataservice-summary')" />
+                    </div>
+                </uib-tab>
+            <uib-tabset>
+       </div>
+
 </div>

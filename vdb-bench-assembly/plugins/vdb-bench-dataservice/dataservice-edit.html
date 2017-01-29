@@ -1,10 +1,30 @@
 <div id="outer" class="outer-wrapper">
 	<div id="dataservice-edit-container" class="container-fluid" ng-controller="DSEditController as vm">
 	
-	    <div id="dsEdit-edit-controls" ng-show="vm.svcSourcesLoading==false" class="row">
-            <div id="dataservice-edit-wizard" class="row col-md-12">
-                <dataservice-edit-wizard></dataservice-edit-wizard>
-            </div>
+	    <div id="dsEdit-edit-controls" ng-show="vm.svcSourcesLoading==false" class="col-md-12 row">
+            <uib-tabset>
+                <uib-tab heading="{{:: 'dataservice-edit.wizardTab' | translate}}" active="vm.wizardTabActive">
+                    <dataservice-edit-wizard></dataservice-edit-wizard>
+                </uib-tab>
+                <uib-tab heading="{{:: 'dataservice-edit.expertTab' | translate}}" active="vm.expertTabActive" disable="vm.disableExpertTab" ng-click="vm.onExpertTabSelected()">
+                    <div class="col-md-12">
+                        <h4 class="pull-left">{{'dataservice-edit.viewDdlTitle' | translate}}</h4>
+                    </div>
+                    <div class="col-md-12">
+                        <div ui-codemirror ng-model="vm.viewDdl" ui-codemirror-opts="vm.ddlEditorOptions" ui-refresh="vm.refreshViewDdl"></div>
+                    </div>
+                    <div class="col-md-12">
+                        <p><strong>{{'dataservice-edit.sourceTablesLimitedMsg' | translate}}</strong></p>
+                        <h4 ng-show="vm.sourceNames[0]!=null">&nbsp;&nbsp;{{vm.sourceNames[0]}}.{{vm.tableNames[0]}}</h4>
+                        <h4 ng-show="vm.sourceNames[1]!=null">&nbsp;&nbsp;{{vm.sourceNames[1]}}.{{vm.tableNames[1]}}</h4>
+                        <p>&nbsp;</p>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="submit" class="btn btn-primary" value="{{:: 'shared.Finish' | translate}}" ng-click="vm.finishClicked()" />
+                        <input type="button" class="btn btn-default" value="{{:: 'shared.Cancel' | translate}}" ng-click="vmmain.selectPage('dataservice-summary')" />
+                    </div>
+                </uib-tab>
+            <uib-tabset>
 	    </div>
 	</div>
 </div>
