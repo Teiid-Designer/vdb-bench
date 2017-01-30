@@ -1,39 +1,31 @@
 <div class="col-sm-12">
-    <h5 translate="shared.Workspace" />
+    <h5 id="repository-control-title" translate="shared.Workspace" />
 </div>
 
 <div>
 
-    <div class="col-sm-12">
+    <div id="repository-control-selector" class="col-sm-8">
         <select class="form-control" ng-model="vm.repo.selected" ng-options="repo as repo.name for repo in vm.repositories()"
                      ng-change="vm.changeSelection(vm.repo.selected)">
         </select>
     </div>
 
     <!-- Only shows buttons if the scope's edit field has been set -->
-    <div class="col-sm-12" ng-show="vm.edit">
-        <div class="row" style="margin-top: 0.5em;">
-            <div class="col-sm-6">
-                <button id="btn-add-repo" 
-                        class="btn btn-xs btn-default" 
-                        ng-click="vm.onAddClicked()"
-                        translate="shared.Add" />
-            </div>
-            <!--
-                Disables the remove button if the controller's selected field is undefined,
-                no selection yet made or locahost selected
-            -->
-            <div class="col-sm-6">
-                <button id="btn-remove-repo" 
-                        class="btn btn-xs btn-default" 
-                        ng-click="vm.onRemoveClicked()" 
-                        ng-disabled="!vm.isWorkspaceSelected() || vm.isDefaultSelected()"
-                        translate="shared.Remove" />
-            </div>
+    <div id="repository-control-selector-btns" class="col-sm-4" ng-show="vm.edit">
+        <div class="col-sm-1">
+            <button id="btn-add-repo"
+                    class="btn btn-xs btn-primary fa fa-plus"
+                    ng-click="vm.onAddClicked()"/>
         </div>
-    </div>
-
-    <div class="col-sm-12">
-        <div id="panel-filter-buttons"></div>
+        <!--
+            Disables the remove button if the controller's selected field is undefined,
+            no selection yet made or locahost selected
+        -->
+        <div class="col-sm-1">
+            <button id="btn-remove-repo"
+                    class="btn btn-xs btn-primary fa fa-minus"
+                    ng-click="vm.onRemoveClicked()"
+                    ng-disabled="!vm.isWorkspaceSelected() || vm.isDefaultSelected()"/>
+        </div>
     </div>
 </div>

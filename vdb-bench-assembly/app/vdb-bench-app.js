@@ -286,6 +286,7 @@ var App;
 
         vm.loginError = '';
         vm.userPwdForgotten = false;
+        vm.showRepoConfig = false;
 
         vm.entity = {
             username: '',
@@ -320,6 +321,10 @@ var App;
 
         vm.showForgottenUserPwd = function() {
             vm.userPwdForgotten = !vm.userPwdForgotten;
+        };
+
+        vm.toggleRepositoryConfig = function() {
+            vm.showRepoConfig = !vm.showRepoConfig;
         };
     }
 })(App || (App = {}));

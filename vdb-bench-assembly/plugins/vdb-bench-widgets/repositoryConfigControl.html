@@ -1,0 +1,21 @@
+<div class="container-fluid">
+    <div class="row">
+        <div>
+
+            <!-- Workspace -->
+
+            <div class="row">
+                <!-- edit attribute tells widget to display the add / remove buttons -->
+                <repository-control edit="true"></repository-control>
+            </div>
+
+            <!-- End of Workspace -->
+
+        </div>
+
+        <!-- Form for editing the selected repository properties -->
+        <div id="repo-config-control-fields" class="col-sm-12">
+            <div hawtio-form-2="vm.repo.editConfig" entity="vm.repo.selected"></div>
+        </div>
+    </div>
+</div>
