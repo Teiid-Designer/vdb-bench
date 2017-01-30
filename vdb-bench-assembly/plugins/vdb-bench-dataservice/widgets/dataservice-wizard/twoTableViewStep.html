@@ -31,14 +31,23 @@
     </div>
     <div class="col-md-1">
          <h3><strong translate="twoTableViewStep.joinType" /></h3>
-         <img title="{{vm.joinToolTipInner}}" ng-class="vm.joinType == 'INNER' ? 'join-button-down' : 'join-button-up'" 
-              ng-click="vm.selectJoinType('INNER')" src="plugins/vdb-bench-dataservice/content/img/JoinInner.png" />
-         <img title="{{vm.joinToolTipLeftOuter}}" ng-class="vm.joinType == 'LEFT_OUTER' ? 'join-button-down' : 'join-button-up'" 
-              ng-click="vm.selectJoinType('LEFT_OUTER')" src="plugins/vdb-bench-dataservice/content/img/JoinLeftOuter.png" />
-         <img title="{{vm.joinToolTipRightOuter}}" ng-class="vm.joinType == 'RIGHT_OUTER' ? 'join-button-down' : 'join-button-up'" 
-              ng-click="vm.selectJoinType('RIGHT_OUTER')" src="plugins/vdb-bench-dataservice/content/img/JoinRightOuter.png" />
-         <img title="{{vm.joinToolTipFullOuter}}" ng-class="vm.joinType == 'FULL_OUTER' ? 'join-button-down' : 'join-button-up'" 
-              ng-click="vm.selectJoinType('FULL_OUTER')" src="plugins/vdb-bench-dataservice/content/img/JoinFullOuter.png" />
+         <div style="height:3em"></div>
+         <div class="col-md-12">
+             <img title="{{vm.joinToolTipInner}}" ng-class="vm.joinType == 'INNER' ? 'join-button-down' : 'join-button-up'" 
+                  ng-click="vm.selectJoinType('INNER')" src="plugins/vdb-bench-dataservice/content/img/JoinInner.png" />
+         </div>
+         <div class="col-md-12">
+             <img title="{{vm.joinToolTipLeftOuter}}" ng-class="vm.joinType == 'LEFT_OUTER' ? 'join-button-down' : 'join-button-up'" 
+                  ng-click="vm.selectJoinType('LEFT_OUTER')" src="plugins/vdb-bench-dataservice/content/img/JoinLeftOuter.png" />
+         </div>
+         <div class="col-md-12">
+             <img title="{{vm.joinToolTipRightOuter}}" ng-class="vm.joinType == 'RIGHT_OUTER' ? 'join-button-down' : 'join-button-up'" 
+                  ng-click="vm.selectJoinType('RIGHT_OUTER')" src="plugins/vdb-bench-dataservice/content/img/JoinRightOuter.png" />
+         </div>
+         <div class="col-md-12">
+             <img title="{{vm.joinToolTipFullOuter}}" ng-class="vm.joinType == 'FULL_OUTER' ? 'join-button-down' : 'join-button-up'" 
+                  ng-click="vm.selectJoinType('FULL_OUTER')" src="plugins/vdb-bench-dataservice/content/img/JoinFullOuter.png" />
+         </div>
     </div>
     <div class="col-md-5">
         <h3><strong>{{vm.selectedSources[1]}}.{{vm.selectedTables[1]}}</strong></h3>
