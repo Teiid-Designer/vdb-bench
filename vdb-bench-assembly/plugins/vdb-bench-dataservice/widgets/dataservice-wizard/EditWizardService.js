@@ -538,7 +538,7 @@
                         throw RepoRestService.newRestException(errorMsg + "\n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {
-                var removeSourceFailedMsg = $translate.instant('dataserviceEditWizard.getColumnsFailedMsg');
+                var errorMsg = $translate.instant('dataserviceEditWizard.getColumnsFailedMsg');
                 throw RepoRestService.newRestException(errorMsg + "\n" + error);
             }
         }

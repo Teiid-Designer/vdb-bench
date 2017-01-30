@@ -394,12 +394,12 @@
                         updateVdbModelFromDdl(vdbName, models[0].keng__id);
                     },
                     function (response) {
-                        var removeSourceFailedMsg = $translate.instant('dataserviceEditWizard.getVdbModelsFailedMsg');
-                        throw RepoRestService.newRestException(removeSourceFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                        var getModelsFailedMsg = $translate.instant('dataserviceEditWizard.getVdbModelsFailedMsg');
+                        throw RepoRestService.newRestException(getModelsFailedMsg + "\n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {
-                var removeSourceFailedMsg = $translate.instant('dataserviceEditWizard.getVdbModelsFailedMsg');
-                throw RepoRestService.newRestException(removeSourceFailedMsg + "\n" + error);
+                var getModelsFailedMsg = $translate.instant('dataserviceEditWizard.getVdbModelsFailedMsg');
+                throw RepoRestService.newRestException(getModelsFailedMsg + "\n" + error);
             }
         }
 
@@ -414,12 +414,12 @@
                             getTempVdbModels( SYNTAX.TEMP+vdbName );
                         },
                         function (response) {
-                            var removeSourceFailedMsg = $translate.instant('dataserviceEditWizard.updateVdbFromDdlFailedMsg');
-                            throw RepoRestService.newRestException(removeSourceFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                            var updateVdbFailedMsg = $translate.instant('dataserviceEditWizard.updateVdbFromDdlFailedMsg');
+                            throw RepoRestService.newRestException(updateVdbFailedMsg + "\n" + RepoRestService.responseMessage(response));
                         });
             } catch (error) {
-                var removeSourceFailedMsg = $translate.instant('dataserviceEditWizard.updateVdbFromDdlFailedMsg');
-                throw RepoRestService.newRestException(removeSourceFailedMsg + "\n" + error);
+                var updateVdbFailedMsg = $translate.instant('dataserviceEditWizard.updateVdbFromDdlFailedMsg');
+                throw RepoRestService.newRestException(updateVdbFailedMsg + "\n" + error);
             }
         }
 
@@ -437,12 +437,12 @@
                         getVdbModelTables(srcVdbName, models[0].keng__id);
                     },
                     function (response) {
-                        var removeSourceFailedMsg = $translate.instant('dataserviceEditWizard.getVdbModelsFailedMsg');
-                        throw RepoRestService.newRestException(removeSourceFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                        var getVdbModelsFailedMsg = $translate.instant('dataserviceEditWizard.getVdbModelsFailedMsg');
+                        throw RepoRestService.newRestException(getVdbModelsFailedMsg + "\n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {
-                var removeSourceFailedMsg = $translate.instant('dataserviceEditWizard.getVdbModelsFailedMsg');
-                throw RepoRestService.newRestException(removeSourceFailedMsg + "\n" + error);
+                var getVdbModelsFailedMsg = $translate.instant('dataserviceEditWizard.getVdbModelsFailedMsg');
+                throw RepoRestService.newRestException(getVdbModelsFailedMsg + "\n" + error);
             }
         	
         }
@@ -473,12 +473,12 @@
                         }
                    },
                     function (response) {
-                       var removeSourceFailedMsg = $translate.instant('dataserviceEditWizard.getVdbModelTablesFailedMsg');
-                       throw RepoRestService.newRestException(removeSourceFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                       var getTablesFailedMsg = $translate.instant('dataserviceEditWizard.getVdbModelTablesFailedMsg');
+                       throw RepoRestService.newRestException(getTablesFailedMsg + "\n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {
-                var removeSourceFailedMsg = $translate.instant('dataserviceEditWizard.getVdbModelTablesFailedMsg');
-                throw RepoRestService.newRestException(removeSourceFailedMsg + "\n" + error);
+                var getTablesFailedMsg = $translate.instant('dataserviceEditWizard.getVdbModelTablesFailedMsg');
+                throw RepoRestService.newRestException(getTablesFailedMsg + "\n" + error);
             }
         }
 
@@ -528,7 +528,7 @@
                         throw RepoRestService.newRestException(errorMsg + "\n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {
-                var removeSourceFailedMsg = $translate.instant('dataserviceEditWizard.getColumnsFailedMsg');
+                var errorMsg = $translate.instant('dataserviceEditWizard.getColumnsFailedMsg');
                 throw RepoRestService.newRestException(errorMsg + "\n" + error);
             }
         }
