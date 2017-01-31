@@ -127,49 +127,66 @@
             setDDL();
         });
 
-                /**
-         * Delete the specified VDB from the server
+        /**
+         * Delete the specified VDB from the server, then remove the repo VDB
          */
         function deleteServerVdb(vdbName) {
+            // Set loading true
+            vm.deleteVdbInProgress = true;
+            SvcSourceSelectionService.setLoading(true);
             try {
                 RepoRestService.deleteTeiidVdb( vdbName ).then(
                     function () {
-                         // Refresh the list of service sources
-                        SvcSourceSelectionService.refresh(null);
-                        vm.refresh();
-                        // Disable the actions until next selection
-                        setActionsDisabled(true);
-                        vm.selectedSourceDDL = "";
+                        // delete repo vdb (server undeploy successful)
+                        deleteVdb(vdbName, true);
                     },
                     function (response) {
-                        var removeSourceFailedMsg = $translate.instant('datasourceSummaryController.removeSourceFailedMsg');
-                        throw RepoRestService.newRestException(removeSourceFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                        // delete repo vdb - (server undeploy failed)
+                        deleteVdb(vdbname, false);
                     });
             } catch (error) {
-                var removeSourceFailedMsg = $translate.instant('datasourceSummaryController.removeSourceFailedMsg');
-                throw RepoRestService.newRestException(removeSourceFailedMsg + "\n" + error);
+                // delete repo vdb - (server undeploy failed)
+                deleteVdb(vdbname, false);
             }
         }
 
         /**
-         * Delete the specified VDB from the workspace, then delete the server vdb (if it exists)
+         * Delete the specified VDB from the workspace
          */
-        function deleteVdb(vdbName) {
-           // Set loading true for modal popup
-           vm.deleteVdbInProgress = true;
-           SvcSourceSelectionService.setLoading(true);
+        function deleteVdb(vdbName, serverUndeploySuccess) {
            try {
                 RepoRestService.deleteVdb( vdbName ).then(
                     function () {
-                        deleteServerVdb(vdbName);
+                        resetListAfterDelete(serverUndeploySuccess);
                     },
                     function (response) {
-                        var removeSourceFailedMsg = $translate.instant('datasourceSummaryController.removeSourceFailedMsg');
-                        throw RepoRestService.newRestException(removeSourceFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                        resetListAfterDelete(serverUndeploySuccess);
+                        var removeLocalSourceFailedMsg = $translate.instant('datasourceSummaryController.removeLocalSourceFailedMsg');
+                        throw RepoRestService.newRestException(removeLocalSourceFailedMsg + "\n" + RepoRestService.responseMessage(response));
                     });
-            } catch (error) {} finally {
+            } catch (error) {
+                resetListAfterDelete(serverUndeploySuccess);
+                var removeLocalSourceFailedMsg = $translate.instant('datasourceSummaryController.removeLocalSourceFailedMsg');
+                throw RepoRestService.newRestException(removeLocalSourceFailedMsg + "\n" + error);
             }
         }
+
+        /** 
+         * Resets the list after a delete
+         */
+        var resetListAfterDelete = function (serverUndeploySuccess) {
+            if(serverUndeploySuccess) {
+                // Refresh the list of service sources
+                SvcSourceSelectionService.refresh(null);
+                vm.refresh();
+                // Disable the actions until next selection
+                setActionsDisabled(true);
+                vm.selectedSourceDDL = "";
+            } else {
+                var removeServerDeploymentFailedMsg = $translate.instant('datasourceSummaryController.removeServerDeploymentFailedMsg');
+                throw RepoRestService.newRestException(removeServerDeploymentFailedMsg + "\n" + error);
+            }
+        };
 
         /**
          * Access to the collection of filtered data services
@@ -298,14 +315,14 @@
      
         /**
          * Handle delete ServiceSource click.
-         * 1) delete the vdb from the repo
-         * 2) undeploy the vdb from the server
+         * 1) undeploy the vdb from the server
+         * 2) delete the vdb from the repo
          */
         var deleteSvcSourceClicked = function ( ) {
             var selVdbName = SvcSourceSelectionService.selectedServiceSource().keng__id;
 
-            // Deletes the workspace and server vdb (if exists).  Also does a refresh when complete
-            deleteVdb(selVdbName);
+            // Deletes the server and workspace vdbs.  Also does a refresh when complete
+            deleteServerVdb(selVdbName);
         };
 
         /**

@@ -282,7 +282,8 @@
         "actionTitleRefresh" : "Refresh the Table",
         "gettingDdlMsg" : "Fetching DDL...",
         "getDdlFailedMsg" : "Failed to get the DDL.",
-        "removeSourceFailedMsg" : "Failed to remove the ServiceSource.",
+        "removeLocalSourceFailedMsg" : "Failed to remove the local ServiceSource.",
+        "removeServerDeploymentFailedMsg" : "Failed to remove the deployed ServiceSource.",
         "getModelSourceFailedMsg" : "Failed to get model source:",
         "getModhelSourceConnectionFailedMsg" : "Failed to get connection:"
     },
