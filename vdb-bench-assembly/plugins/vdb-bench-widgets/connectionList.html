@@ -15,6 +15,11 @@
                         <div class="list-group-item-heading">
                         {{item.keng__id}}
                         </div>
+                        <div class="list-group-item-text">
+                            <span ng-repeat="prop in item.keng__properties" ng-show="prop.name=='connection-url'">
+                                <div ng-if="prop.value"><i>[{{prop.value}}]</i></div>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
