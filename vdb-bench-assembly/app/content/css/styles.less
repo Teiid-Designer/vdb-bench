@@ -176,8 +176,20 @@ html, body {
     font-weight: bold;
 }
 
+/*
+ * Fixes off-centred placement of loading spinners by
+ * mandating they be located on the left of the cell
+ */
 .spinner {
     margin-left: 1em !important;
+}
+
+/*
+ * Fixes problem with patternfly 3.6.0 where the pf-filter
+ * input box appears beneath its partner dropdown control.
+ */
+.filter-pf .input-group {
+    display: table;
 }
 
 .repo-config-page-slide-container {
