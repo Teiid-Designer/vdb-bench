@@ -130,6 +130,8 @@
 
             _editor.setSize(null, "70vh");
 
+            vm.odata.rawEditor = _editor;
+
             //
             // Due to the nested nature of the codemirror
             // instance in the tabs, it doesnt refresh unless
@@ -451,6 +453,15 @@
                 return;
 
             init();
+        });
+
+        $scope.$watch('vm.resultsType', function(newValue, oldValue) {
+            if (newValue === oldValue)
+                return;
+
+            if (newValue ==='Raw' && vm.odata.rawEditor) {
+                vm.odata.rawEditor.refresh();
+            }
         });
 
         /**
