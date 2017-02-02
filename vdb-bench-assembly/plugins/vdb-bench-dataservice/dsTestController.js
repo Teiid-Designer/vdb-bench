@@ -460,7 +460,9 @@
                 return;
 
             if (newValue ==='Raw' && vm.odata.rawEditor) {
-                vm.odata.rawEditor.refresh();
+                $timeout(function () {
+                        vm.odata.rawEditor.refresh();
+                    }, 100);
             }
         });
 
