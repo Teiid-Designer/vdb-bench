@@ -470,27 +470,41 @@
     },
 
     "singleTableViewStep" : {
-        "stepTitle" : "View Definition",
+        "stepTitle" : "Choose Columns",
         "clickFinishInstructionMsg" : "Click Finish to create the data service",
         "selectOneOrMoreColumnsInstructionMsg" : "Select one or more columns for your Data Service view"
     },
 
     "twoTableViewStep" : {
-        "stepTitle" : "Join Definition",
+        "stepTitle" : "Choose Columns",
         "joinType" : "Join Type",
-        "joinCriteria" : "Join Criteria",
-        "equalsCriteria" : "equals",
-        "chooseCriteriaCol" : "-- choose criteria column --",
         "joinToolTipInner" : "Inner Join",
         "joinToolTipLeftOuter" : "Left Outer Join",
         "joinToolTipRightOuter" : "Right Outer Join",
         "joinToolTipFullOuter" : "Full OUter Join",
-        "clickFinishInstructionMsg" : "Click Finish to create the data service",
+        "clickNextJoinCriteriaInstructionMsg" : "Select columns for your service, then click Next to continue",
         "selectColumnsForLeftTableInstructionMsg" : "Select one or more columns from the left source",
         "selectColumnsForRightTableInstructionMsg" : "Select one or more columns from the right source",
-        "selectJoinTypeInstructionMsg" : "Select a join type",
-        "selectLeftTableCriteriaColumnInstructionMsg" : "Select a column for the left table criteria",
-        "selectRightTableCriteriaColumnInstructionMsg" : "Select a column for the right table criteria"
+        "selectJoinTypeInstructionMsg" : "Select a join type"
+    },
+
+    "joinCriteriaStep" : {
+        "stepTitle" : "Define Criteria",
+        "clickFinishInstructionMsg" : "Add more conditions or click Finish to create the data service",
+        "addCriteriaConditionInstructionMsg" : "Click to add a criteria condition",
+        "finishCriteriaConditionInstructionMsg" : "Complete the criteria conditions"
+    },
+
+    "criteriaBuilder" : {
+        "addCondition" : "Add Condition",
+        "currentCriteria" : "Current Criteria",
+        "chooseCriteriaCol" : "-- choose column --",
+        "chooseOperator" : "-- choose --",
+        "chooseKeyword" : "-- choose --",
+        "lhColumnTitle" : "Left Column",
+        "rhColumnTitle" : "Right Column",
+        "operatorTitle" : "Operator",
+        "keywordTitle" : "Keyword"
     }
 
 }

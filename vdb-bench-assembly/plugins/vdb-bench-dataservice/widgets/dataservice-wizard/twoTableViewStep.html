@@ -69,23 +69,4 @@
             </div>
         </div>
     </div>
-    <div class="col-md-12">
-        <h3><strong translate="twoTableViewStep.joinCriteria" /></h3>
-    </div>
-    <div class="col-md-5">
-        <select id="lhCriteriaCol" ng-model="vm.lhCriteriaCol" ng-options="lhCol as lhCol.keng__id for lhCol in vm.lhSourceItems" 
-                                   ng-change="vm.lhCriteriaColumnChanged()">
-            <option value="" translate="twoTableViewStep.chooseCriteriaCol"></option>
-        </select>
-    </div>
-    <div class="col-md-1">
-        <strong translate="twoTableViewStep.equalsCriteria" />
-    </div>
-    <div class="col-md-5">
-        <select id="rhCriteriaCol" ng-model="vm.rhCriteriaCol" ng-options="rhCol as rhCol.keng__id for rhCol in vm.rhSourceItems" 
-                                   ng-change="vm.rhCriteriaColumnChanged()">
-            <option value="" translate="twoTableViewStep.chooseCriteriaCol"></option>
-        </select>
-    </div>
-    
 </div>
