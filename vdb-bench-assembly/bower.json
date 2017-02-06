@@ -46,7 +46,8 @@
     "hawtio-extension-service": "^2.0.3",
     "d3": "^4.2.7",
     "angular-ui-select": "^0.19.6",
-    "abdmob/x2js": "^1.2.0"
+    "abdmob/x2js": "^1.2.0",
+    "angular-drag-and-drop-lists": "dndLists#^2.1.0"
   },
   "devDependencies": {
     "bootstrap": "~3.3.5",
