@@ -63,6 +63,10 @@
         vm.searchInProgress = false;
         vm.resultsType = 'Tabular';
 
+        vm.sql = {
+            refreshEditor : false
+        };
+
         vm.odata = {
             metadata: '',
             conditions: {
@@ -858,6 +862,31 @@
             } finally {
                 // Essential to stop the accordion closing
                 event.stopPropagation();
+            }
+        };
+
+        /*
+        * the selected data service query text
+        */
+        vm.selectedDataserviceQueryText = function () {
+            var modelName = DSSelectionService.selectedDataServiceViewModel();
+            var serviceView = DSSelectionService.selectedDataServiceView();
+
+            if( modelName === SYNTAX.UNKNOWN || serviceView === SYNTAX.UNKNOWN )
+                return "SELECT * FROM ";
+
+            return "SELECT * FROM "+ modelName + "." + serviceView + ";";
+        };
+
+        vm.onTabSelected = function (tabId) {
+            if (tabId === 'Advanced') {
+                /*
+                 * To ensure the sql content is visible,
+                 * signal the sql control should refresh its
+                 * editor. This is done by setting the var
+                 * assigned to the 'refresh' attribute to true
+                 */
+                vm.sql.refreshEditor = true;
             }
         };
     }

@@ -9,7 +9,7 @@
         .directive('sqlControl', SQLControl);
 
     SQLControl.$inject = ['CONFIG', 'SYNTAX'];
-    SQLController.$inject = ['$scope', 'SYNTAX', 'RepoRestService', '$window'];
+    SQLController.$inject = ['$scope', 'SYNTAX', 'RepoRestService', '$window', '$timeout'];
 
     function SQLControl(config, syntax) {
         var directive = {
@@ -19,7 +19,8 @@
             bindToController: {
                 editorHeight : '@',
                 target : '@',
-                queryText : '@'
+                queryText : '@',
+                refresh : '='
             },
             controller: SQLController,
             controllerAs: 'vm',
@@ -31,8 +32,22 @@
         return directive;
     }
 
-    function SQLController($scope, SYNTAX, RepoRestService, $window) {
+    function SQLController($scope, SYNTAX, RepoRestService, $window, $timeout) {
         var vm = this;
+
+        /*
+         * Watch the refresh var and if it changes then the parent
+         * of the directive has requested a refresh should be performed
+         */
+        $scope.$watch('vm.refresh', function(newValue, oldValue) {
+            if (! newValue || _.isEmpty(vm.sqlEditor))
+                return;
+
+            $timeout(function () {
+                vm.sqlEditor.refresh();
+                vm.refresh = false;
+            }, 100);
+        });
 
         vm.showProgress = function(display) {
             vm.inProgress = display;
@@ -54,7 +69,12 @@
         };
 
         vm.editorLoaded = function(_editor) {
+            if (! _editor)
+                return;
+
             _editor.setSize(null, vm.editorHeight);
+
+            vm.sqlEditor = _editor;
         };
 
         vm.gridOptions = {

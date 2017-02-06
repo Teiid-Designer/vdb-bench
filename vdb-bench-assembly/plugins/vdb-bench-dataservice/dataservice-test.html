@@ -248,8 +248,9 @@
 	                <div class="col-sm-12">
 	                    <div id="ds-test-sql-edit-box">
 	                        <sql-control editor-height="20em"
-	                                            target="{{vmmain.selectedDataservice().keng__dataPath}}"
-	                                            query-text="{{vm.selectedDataserviceQueryText()}}">
+                                            target="{{vmmain.selectedDataservice().keng__dataPath}}"
+                                            query-text="{{vm.selectedDataserviceQueryText()}}"
+                                            refresh="vm.sql.refreshEditor">
 	                        </sql-control>
 	                    </div>
 	                </div>
