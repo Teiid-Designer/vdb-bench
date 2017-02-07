@@ -109,6 +109,8 @@
         "connectionsNumberToolTip" : "The number of native data connections, eg. JDBC databases, utilised by this dataservice",
         "createDataServiceMsg" : "A Data Service is created using one or more Data Sources. To create your first Data Service, click <strong>New Data Service</strong> below.",
         "createSourceMsg" : "A Data Service is created using one or more Data Sources. To create your first Data Source, click ",
+        "documentationDataServiceMsg" : "Documentation such as how to connect to your data service and client examples are available here.",
+        "documentationDataService" : "Documentation",
         "GitExport" : "Git Export",
         "importDataServiceMsg" : "You can also import an existing Data Service. To import a Data Service, click ",
         "noDataServiceImportMsg" : "You can also import an existing Data Service. To import an existing Data Service, click <strong>Import Data Service</strong> below.",
@@ -117,6 +119,27 @@
         "noSourcesMsg" : "In order to create a data service you need a data source. To get started, click <strong>Configure Data Source</strong> below to create your first data source.",
         "serviceVdbToolTip" : "The name of the service VDB of this dataservice",
         "welcomeMsg" : "Welcome to the <strong>Data Services Builder</strong>!"
+    },
+    
+    
+    "dataservice-documentation" : {
+        "connecting" : "Connecting",
+        "samples" : "Client Code Examples",
+        "java-sample" : "Java",
+        "javascript-sample" : "JavaScript",
+        "node-sample" : "Node.js",
+        "python-sample" : "Python",
+        "php-sample" : "PHP",
+        "connecting-heading1" : "There are multiple ways to connect to your data service including JDBC, ODBC, OData, REST or SOAP.",
+        "connecting-heading2" : "This is meant to give you a starting point. Please see the documentation for more details.",
+        "connecting-java-heading" : "<h2>JDBC</h2>.",
+        "connecting-java1" : "To connect to your service using JDBC, use the following connection string in your client: {{connection_string}}",
+        "connecting-java2" : "See the client code example tab for a sample implementation.",
+        "connecting-odata-heading" : "<h2>OData</h2>.",
+        "connecting-odata1" : "Deployed services are accessible using OData URLs. This service's metadata is accessible via: {{url}}.", 
+        "connecting-odata2" : "The service is protected using HTTP Basic security and requires the user to have a role of 'odata' defined for OData access." 
+        
+        
     },
 
     "dataservice-test" : {
@@ -197,6 +220,7 @@
     "dsPageService" : {
         "configureSourceTitle" : "Configure Data Source",
         "homeTitle" : "@:shared.Dashboard",
+        "documentationDataServiceTitle" : "Documentation ",
         "testDataServiceTitle" : "Test Data Service",
         "preferencesTitle" : "Preferences"
     },
@@ -208,6 +232,51 @@
         "findViewTablesFailedMsg" : "Failed to find view tables: {{response}}",
         "descriptionFilterPlaceholder" : "Filter by Description...",
         "nameFilterPlaceholder" : "Filter by Name..."
+    },
+    
+     "dsDocumentationController" : {
+        "noResultsColumnName" : "Err: No Data!",
+        "noResultsMsg" : "No data was returned from the query",
+        "resultCountMsg" : "The total number of results returned by the query is {{count}}",
+        "searchErrorColumnName" : "Err: Failed!",
+        "searchErrorConsoleMsg" : "Error: Failed to get value at link {{link}}: {{responseError}}",
+        "searchErrorMsg" : "Error: failed to get any results: {{responseError}}",
+        "whereErrorMsg" : "The chosen column has a type ({{columnType}}) which cannot be used in a where condition",
+        "condition" : {
+            "afterDate" : "after date",
+            "afterEq" : "after or equals",
+            "beforeDate" : "before date",
+            "beforeEq" : "before or equals",
+            "contains" : "contains",
+            "endsWith" : "ends with",
+            "equals" : "equals",
+            "equalsCaseInsensitive" : "equals (case insensitive)",
+            "greaterThan" : "greater than",
+            "greaterThanEqTo" : "greater than or equal to",
+            "in" : "in (separated by ;)",
+            "lengthEq" : "length equals",
+            "lessThan" : "less than",
+            "lessThanEqTo" : "less than or equal to",
+            "notEquals" : "not equals",
+            "notEqualsCaseInsensitive" : "not equals (case insensitive)",
+            "notEndsWith" : "does not end with",
+            "notStartsWith" : "does not start with",
+            "startsWith" : "starts with"
+        },
+        "rowLimit" : {
+            "countOnly" : "count only",
+            "none" : "no limit",
+            "topPrefix" : "top ",
+            "top1" : "top 1",
+            "top10" : "top 10",
+            "top50" : "top 50",
+            "top100" : "top 100",
+            "top1000" : "top 1000",
+            "top10000" : "top 10000"
+        },
+        "configureSourceTitle" : "Configure Data Source",
+        "homeTitle" : "@:shared.Dashboard",
+        "documentationDataServiceTitle" : "Data Service Documentation"
     },
 
     "dsTestController" : {

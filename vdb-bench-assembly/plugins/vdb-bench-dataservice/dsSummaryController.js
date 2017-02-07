@@ -321,6 +321,14 @@
             // Broadcast the pageChange
             $rootScope.$broadcast("dataServicePageChanged", 'dataservice-clone');
         };
+        
+        /**
+         * Handle documentation dataservice click
+         */
+        var documentationDataServiceClicked = function( ) {
+            // Broadcast the pageChange
+            $rootScope.$broadcast("dataServicePageChanged", 'dataservice-documentation');
+        };
 
         /**
          * Handle clone dataservice menu select
@@ -330,6 +338,16 @@
             DSSelectionService.selectDataService(item);
 
             cloneDataServiceClicked();
+        };
+        
+        /**
+         * Handle documentation dataservice menu select
+         */
+        var documentationDataServiceMenuAction = function(action, item) {
+            // Need to select the item first
+            DSSelectionService.selectDataService(item);
+
+            documentationDataServiceClicked();
         };
 
         /**
@@ -454,6 +472,11 @@
                 name: $translate.instant('shared.Copy'),
                 title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.DataService')}),
                 actionFn: cloneDataServiceMenuAction
+            },
+            {
+                name: $translate.instant('dataservice-summary.documentationDataService'),
+                title: $translate.instant('dataservice-summary.documentationDataService'),
+                actionFn: documentationDataServiceMenuAction
             },
             {
                 name: $translate.instant( 'shared.Download' ),
