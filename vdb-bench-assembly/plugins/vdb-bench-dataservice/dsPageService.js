@@ -29,6 +29,7 @@
             EXPORT_DATASERVICE_PAGE: 'dataservice-export',
             EDIT_DATASERVICE_PAGE: 'dataservice-edit',
             CLONE_DATASERVICE_PAGE: 'dataservice-clone',
+            DOCUMENTATION_DATASERVICE_PAGE: 'dataservice-documentation',
             TEST_DATASERVICE_PAGE: 'dataservice-test',
             CONNECTION_SUMMARY_PAGE: 'connection-summary',
             NEW_CONNECTION_PAGE: 'connection-new',
@@ -64,6 +65,7 @@
             pages[service.CLONE_DATASERVICE_PAGE].title = $translate.instant('shared.CopyWhat',
                                                                              {what: $translate.instant('shared.DataService')});
             pages[service.TEST_DATASERVICE_PAGE].title = $translate.instant('dsPageService.testDataServiceTitle');
+            pages[service.DOCUMENTATION_DATASERVICE_PAGE].title = $translate.instant('dsPageService.documentationDataServiceTitle');
             pages[service.CONNECTION_SUMMARY_PAGE].title = $translate.instant('shared.Connections');
             pages[service.NEW_CONNECTION_PAGE].title = $translate.instant('shared.NewWhat',
                                                                           {what: $translate.instant('shared.Connection')});
@@ -177,6 +179,16 @@
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
                             service.TEST_DATASERVICE_PAGE + syntax.DOT + syntax.HTML
+        };
+        pages[service.DOCUMENTATION_DATASERVICE_PAGE] = {
+                id: service.DOCUMENTATION_DATASERVICE_PAGE,
+                title: $translate.instant('dsPageService.documentationDataServiceTitle'),
+                icon: 'pficon-running',
+                helpId: service.DOCUMENTATION_DATASERVICE_PAGE,
+                parent: service.DATASERVICE_SUMMARY_PAGE,
+                template: config.pluginDir + syntax.FORWARD_SLASH +
+                                pluginDirName + syntax.FORWARD_SLASH +
+                                service.DOCUMENTATION_DATASERVICE_PAGE + syntax.DOT + syntax.HTML
         };
         pages[service.CONNECTION_SUMMARY_PAGE] = {
             id: service.CONNECTION_SUMMARY_PAGE,
