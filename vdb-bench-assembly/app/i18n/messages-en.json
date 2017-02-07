@@ -65,7 +65,7 @@
     "dataservice-edit" : {
         "instructionsMsg" : "Change the definition of your Data Service by choosing a different data source and table",
         "enableTextEditLbl" : "Enable Text Edit",
-        "expertTab" : "Expert Mode",
+        "expertTab" : "Expert",
         "sourceTablesLimitedMsg" : "Limit your view definition to use the following tables:",
         "viewDdlTitle" : "View Definition",
         "wizardTab" : "Wizard"
@@ -96,7 +96,7 @@
     "dataservice-new" : {
         "configureSourceMsg" : "Before you can create a new Data Service, you will need to configure a data source. To configure a data source, click ",
         "enableTextEditLbl" : "Enable Text Edit",
-        "expertTab" : "Expert Mode",
+        "expertTab" : "Expert",
         "inputFieldsHelpMsg" : "Choose a name (and optional description) for your Data Service",
         "instructionsMsg" : "A Data Service can be composed of one or more of your available data sources. If you don't see your desired data source, click ",
         "multiTableCheckbox" : "Join multiple tables",
@@ -190,7 +190,11 @@
         "selectedTables" : "Selected Tables",
         "stepTitle" : "Choose Data Sources",
         "updateVdbFromDdlFailedMsg" : "Failed to construct temp Vdb from DDL",
-        "viewDdlTitle" : "View DDL"
+        "viewDdlTitle" : "View DDL",
+        "help" : {
+            "dataSources" : "The available active data sources which can be used in a data service",
+            "selectedTables" : "'<p>The selected tables for your data service</p>Clicking a data source table at left will add it to the selected tables<p></p><p>Clicking a selected table x will remove it</p>'"
+        }
     },
     
     "dsCloneController" : {
@@ -476,7 +480,7 @@
         "Cancel" : "@:shared.Cancel",
         "Connections" : "@:shared.Connections",
         "Description" : "@:shared.Description",
-        "filterConnection" : "Filter Connection",
+        "filterConnection" : "Show Filter Options",
         "instructionsMsg" : "Reconfigure an existing Data Source:",
         "Name" : "@:shared.Name",
         "Save" : "@:shared.Save",
@@ -492,7 +496,7 @@
         "chooseTranslator" : "-- choose translator --",
         "Connections" : "@:shared.Connections",
         "Description" : "@:shared.Description",
-        "filterConnection" : "Filter Connection",
+        "filterConnection" : "Show Filter Options",
         "instructionsMsg" : "Start configuring a new Data Source by selecting one of your available Connection definitions.",
         "nameDescriptionInstructionsMsg" : "Choose a name (and optional description) for your Data Source",
         "Name" : "@:shared.Name",
@@ -541,7 +545,10 @@
     "singleTableViewStep" : {
         "stepTitle" : "Choose Columns",
         "clickFinishInstructionMsg" : "Click Finish to create the data service",
-        "selectOneOrMoreColumnsInstructionMsg" : "Select one or more columns for your Data Service view"
+        "selectOneOrMoreColumnsInstructionMsg" : "Select one or more columns for your Data Service view",
+        "help" : {
+            "table" : "Choose the columns for the data service"
+        }
     },
 
     "twoTableViewStep" : {
@@ -554,7 +561,12 @@
         "clickNextJoinCriteriaInstructionMsg" : "Select columns for your service, then click Next to continue",
         "selectColumnsForLeftTableInstructionMsg" : "Select one or more columns from the left source",
         "selectColumnsForRightTableInstructionMsg" : "Select one or more columns from the right source",
-        "selectJoinTypeInstructionMsg" : "Select a join type"
+        "selectJoinTypeInstructionMsg" : "Select a join type",
+        "help" : {
+            "joinType" : "Choose the type of join for the data service",
+            "leftTable" : "Choose the left table columns for the data service",
+            "rightTable" : "Choose the right table columns for the data service"
+        }
     },
 
     "joinCriteriaStep" : {
@@ -573,7 +585,11 @@
         "lhColumnTitle" : "Left Column",
         "rhColumnTitle" : "Right Column",
         "operatorTitle" : "Operator",
-        "keywordTitle" : "Keyword"
+        "keywordTitle" : "Keyword",
+        "help" : {
+            "addCondition" : "Adds another condition to the current list of conditions",
+            "currentCriteria" : "The current criteria, based on the conditions list and selections"
+        }
     }
 
 }
