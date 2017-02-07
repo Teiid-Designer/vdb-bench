@@ -151,15 +151,8 @@
                         var lhColumnNames = EditWizardService.source1SelectedColumns();
                         var rhColumnNames = EditWizardService.source2SelectedColumns();
                         
-                        // Join criteria columns
-                        var lhJoinColumnName = null;
-                        if(EditWizardService.source1CriteriaColumn() !== null) {
-                            lhJoinColumnName = EditWizardService.source1CriteriaColumn().keng__id;
-                        }
-                        var rhJoinColumnName = null;
-                        if(EditWizardService.source2CriteriaColumn() !== null) {
-                            rhJoinColumnName = EditWizardService.source2CriteriaColumn().keng__id;
-                        }
+                        // Join criteria predicates
+                        var criteriaPredicates = EditWizardService.criteriaPredicates();
                         
                         // Join type
                         var joinType = EditWizardService.joinType();
@@ -167,7 +160,7 @@
                         try {
                             RepoRestService.getDataServiceViewDdlForJoinTables( dataserviceName, lhRelativeTablePath, lhColumnNames,
                                                                                                  rhRelativeTablePath, rhColumnNames, 
-                                                                                                 joinType, lhJoinColumnName, rhJoinColumnName).then(
+                                                                                                 joinType, criteriaPredicates).then(
                                 function (result) {
                                     // View info
                                     vm.viewDdl = result.viewDdl;

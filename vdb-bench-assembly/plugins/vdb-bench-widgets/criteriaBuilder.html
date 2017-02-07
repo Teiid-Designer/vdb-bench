@@ -1,0 +1,80 @@
+<div>
+    <form name="builder-criteria" role="form">
+        <div class="col-md-12">
+            <h5><strong translate="criteriaBuilder.currentCriteria" />:&nbsp;&nbsp;{{vm.criteriaString}}</h5>
+            <h6>&nbsp;</h6>
+        </div>
+        <div class="col-md-12">
+            <button class="btn btn-primary" ng-click="vm.addCriteriaPredicate()">
+                <span class="glyphicon glyphicon-plus"></span>{{:: 'criteriaBuilder.addCondition' | translate}}
+            </button>
+        </div>
+
+        <div class="col-md-3">
+            <h5><strong translate="criteriaBuilder.lhColumnTitle" /></h5>
+        </div>
+        <div class="col-md-2">
+            <h5><strong translate="criteriaBuilder.operatorTitle" /></h5>
+        </div>
+        <div class="col-md-3">
+            <h5><strong translate="criteriaBuilder.rhColumnTitle" /></h5>
+        </div>
+        <div class="col-md-4">
+            <h5>&nbsp;</h4>
+        </div>
+
+        <div class="form-group" ng-repeat="criteriaPredicate in vm.criteriaPredicates">
+          <div class="row">
+            <!--  Left Column -->
+            <div class="col-md-3">
+                <select ng-model="criteriaPredicate.lhColName" ng-change="vm.lhColumnChanged( )">
+                    <option value="" translate="criteriaBuilder.chooseCriteriaCol"></option>
+                    <option ng-selected="{{lhCol.keng__id == criteriaPredicate.lhColName}}"
+                            ng-repeat="lhCol in vm.lhSourceCols"
+                            value="{{lhCol.keng__id}}">
+                            {{lhCol.keng__id}}
+                    </option>
+                </select>
+            </div>
+            <!--  Operator -->
+            <div class="col-md-2">
+                <select ng-model="criteriaPredicate.operatorName" ng-change="vm.operatorChanged( )">
+                    <option value="" translate="criteriaBuilder.chooseOperator"></option>
+                    <option ng-selected="{{operator.name == criteriaPredicate.operatorName}}"
+                            ng-repeat="operator in vm.operatorOptions"
+                            value="{{operator.name}}">
+                            {{operator.name}}
+                    </option>
+                </select>
+            </div>
+            <!-- Right Column -->
+            <div class="col-md-3">
+                <select ng-model="criteriaPredicate.rhColName" ng-change="vm.rhColumnChanged( )">
+                    <option value="" translate="criteriaBuilder.chooseCriteriaCol"></option>
+                    <option ng-selected="{{rhCol.keng__id == criteriaPredicate.rhColName}}"
+                            ng-repeat="rhCol in vm.rhSourceCols"
+                            value="{{rhCol.keng__id}}">
+                            {{rhCol.keng__id}}
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-sm btn-danger" ng-click="vm.removeCriteriaPredicate(criteriaPredicate)" ng-disabled="vm.shouldDisableRemoveButton(criteriaPredicate)">
+                    <span class="glyphicon glyphicon-minus"></span>
+                </button>
+            </div>
+            <!-- combineKey -->
+            <div class="col-md-2">
+                <select ng-model="criteriaPredicate.combineKeyword" ng-change="vm.combineKeywordChanged( )" ng-show="vm.shouldShowCombineKeyword(criteriaPredicate)">
+                    <option value="" translate="criteriaBuilder.chooseKeyword"></option>
+                    <option ng-selected="{{keyword.name == criteriaPredicate.combineKeyword}}"
+                            ng-repeat="keyword in vm.combineKeywords"
+                            value="{{keyword.name}}">
+                            {{keyword.name}}
+                    </option>
+                </select>
+            </div>
+          </div>
+        </div>
+    </form>
+</div>

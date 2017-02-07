@@ -1,0 +1,16 @@
+<div pf-wizard-step
+        step-title="{{vm.stepTitle}}"
+        wz-disabled="{{!vm.wizardActive}}"
+        step-id="wizard-join-criteria"
+        allow-click-nav="false"
+        wz-disabled="false"
+        on-show="vm.joinCriteriaStepShown()"
+        next-enabled = "vm.nextEnablement"
+        prev-enabled = "true"
+        ok-to-nav-away="true">
+    <h3><i>{{vm.instructionMessage}}</i></h3>
+    <div class="col-md-8">
+        <criteria-builder></criteria-builder>
+    </div>
+    
+</div>

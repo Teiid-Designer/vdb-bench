@@ -970,7 +970,7 @@
         service.setDataServiceVdbForJoinTables = function (dataserviceName, modelSourcePath, rhModelSourcePath, viewDdl,
                                                                             tablePath, columnNames,
                                                                             rhTablePath, rhColumnNames, 
-                                                                            joinType, lhJoinColumnName, rhJoinColumnName) {
+                                                                            joinType, criteriaPredicates) {
             if (!dataserviceName || !modelSourcePath || !rhModelSourcePath || !tablePath || !rhTablePath) {
                 throw RestServiceException("Data service update inputs are not defined");
             }
@@ -999,13 +999,9 @@
                 if ( joinType && joinType.length > 0 )  {
                     payload.joinType = joinType;
                 }
-                // Adds requested lhJoinColumn if provided
-                if ( lhJoinColumnName && lhJoinColumnName.length > 0 )  {
-                    payload.lhJoinColumn = lhJoinColumnName;
-                }
-                // Adds requested rhJoinColumn if provided
-                if ( rhJoinColumnName && rhJoinColumnName.length > 0 )  {
-                    payload.rhJoinColumn = rhJoinColumnName;
+                // Adds criteria predicates if provided
+                if ( criteriaPredicates && criteriaPredicates.length > 0 )  {
+                    payload.criteriaPredicates = criteriaPredicates;
                 }
 
                 return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + REST_URI.SERVICE_VDB_FOR_JOIN_TABLES).post(payload);
@@ -1039,7 +1035,7 @@
          */
         service.getDataServiceViewDdlForJoinTables = function (dataserviceName, tablePath, columnNames,
                                                                                 rhTablePath, rhColumnNames, 
-                                                                                joinType, lhJoinColumnName, rhJoinColumnName) {
+                                                                                joinType, criteriaPredicates ) {
             if (!dataserviceName || !tablePath || !rhTablePath ) {
                 throw RestServiceException("get View DDL inputs are not sufficiently defined");
             }
@@ -1051,24 +1047,20 @@
                     "rhTablePath": getUserWorkspacePath()+"/"+rhTablePath
                 };
                 // Adds joinType if provided
-                if ( angular.isDefined(joinType) && joinType!==null )  {
+                if ( joinType )  {
                     payload.joinType = joinType;
                 }
-                // Adds lhJoinColumn if provided
-                if ( angular.isDefined(lhJoinColumnName) && lhJoinColumnName!==null )  {
-                    payload.lhJoinColumn = lhJoinColumnName;
-                }
-                // Adds rhJoinColumn if provided
-                if ( angular.isDefined(rhJoinColumnName) && rhJoinColumnName!==null )  {
-                    payload.rhJoinColumn = rhJoinColumnName;
-                }
                 // Adds requested column names if provided
-                if ( angular.isDefined(columnNames) && columnNames.length > 0 )  {
+                if ( columnNames && columnNames.length > 0 )  {
                     payload.columnNames = columnNames;
                 }
                 // Adds requested rh column names if provided
-                if ( angular.isDefined(rhColumnNames) && rhColumnNames.length > 0 )  {
+                if ( rhColumnNames && rhColumnNames.length > 0 )  {
                     payload.rhColumnNames = rhColumnNames;
+                }
+                // Adds criteria predicates if provided
+                if ( criteriaPredicates && criteriaPredicates.length > 0 )  {
+                    payload.criteriaPredicates = criteriaPredicates;
                 }
 
                 return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + REST_URI.SERVICE_VIEW_DDL_FOR_JOIN_TABLES).post(payload);

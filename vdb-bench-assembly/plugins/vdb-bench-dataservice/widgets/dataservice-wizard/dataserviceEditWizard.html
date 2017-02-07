@@ -108,8 +108,11 @@
             <!-- directive includes the single table step -->
             <single-table-view-step wizard-active="vm.selectedTables.length<2 && vm.includeAllColumns===false"></single-table-view-step>
 
-            <!-- directive includes the two table join steop -->
+            <!-- directive includes the two table join step -->
             <two-table-view-step wizard-active="vm.selectedTables.length==2"></two-table-view-step>
+
+            <!-- directive includes the join criteria step -->
+            <join-criteria-step wizard-active="vm.selectedTables.length==2"></join-criteria-step>
 
         </div>
     </div>

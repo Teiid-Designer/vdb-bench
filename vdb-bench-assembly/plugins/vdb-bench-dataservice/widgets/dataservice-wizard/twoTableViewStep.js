@@ -36,8 +36,6 @@
         vm.selectedTables = [];
         vm.lhSourceItems = [];
         vm.rhSourceItems = [];
-        vm.lhCriteriaCol = null;
-        vm.rhCriteriaCol = null;
         vm.instructionMessage = $translate.instant('twoTableViewStep.selectColumnsForLeftTableInstructionMsg');
         vm.nextEnablement = updateNextEnablement();
         vm.joinType = EditWizardService.joinType();
@@ -59,8 +57,6 @@
             vm.lhSourceItems = EditWizardService.source1AvailableColumns();
             vm.rhSourceItems = EditWizardService.source2AvailableColumns();
             vm.joinType = EditWizardService.joinType();
-            vm.lhCriteriaCol = EditWizardService.source1CriteriaColumn();
-            vm.rhCriteriaCol = EditWizardService.source2CriteriaColumn();
             updateNextEnablement();
         };
 
@@ -70,20 +66,6 @@
         vm.selectJoinType = function(joinType) {
             EditWizardService.setJoinType(joinType);
             vm.joinType = joinType;
-        };
-
-        /*
-         * Called when left criteria column is changed
-         */
-        vm.lhCriteriaColumnChanged = function() {
-            EditWizardService.setSource1CriteriaColumn(vm.lhCriteriaCol);
-        };
-
-        /*
-         * Called when right criteria column is changed
-         */
-        vm.rhCriteriaColumnChanged = function() {
-            EditWizardService.setSource2CriteriaColumn(vm.rhCriteriaCol);
         };
 
        vm.selectAllLeftColumns = function() {
@@ -213,15 +195,9 @@
             } else if( !joinValid() ){
                 vm.nextEnablement = false;
                 vm.instructionMessage = $translate.instant('twoTableViewStep.selectJoinTypeInstructionMsg');
-            } else if( !vm.lhCriteriaCol ){
-                vm.nextEnablement = false;
-                vm.instructionMessage = $translate.instant('twoTableViewStep.selectLeftTableCriteriaColumnInstructionMsg');
-            } else if( !vm.rhCriteriaCol ){
-                vm.nextEnablement = false;
-                vm.instructionMessage = $translate.instant('twoTableViewStep.selectRightTableCriteriaColumnInstructionMsg');
             } else {
                 vm.nextEnablement = true;
-                vm.instructionMessage = $translate.instant('twoTableViewStep.clickFinishInstructionMsg');
+                vm.instructionMessage = $translate.instant('twoTableViewStep.clickNextJoinCriteriaInstructionMsg');
             }
         }
 

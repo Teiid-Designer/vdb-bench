@@ -15,6 +15,14 @@
     function EditWizardService($rootScope, $translate, RepoRestService, JOIN) {
 
         var wiz = {};
+        var DEFAULT_PREDICATE = 
+            { id : 0,
+              lhColName : "",
+              rhColName : "",
+              operatorName : "=",
+              combineKeyword : "AND"
+            };
+
         wiz.serviceName = "";
         wiz.serviceDescription = "";
         wiz.sources = [];
@@ -26,12 +34,9 @@
         wiz.src1SelectedColumnNames = [];
         wiz.src2SelectedColumnNames = [];
         wiz.includeAllSource1Columns = true;
-        wiz.src1CriteriaColumnName = "";
-        wiz.src2CriteriaColumnName = "";
-        wiz.src1CriteriaColumn = null;
-        wiz.src2CriteriaColumn = null;
         wiz.viewEditable = false;
         wiz.viewDdl = "";
+        wiz.criteriaPredicates = [DEFAULT_PREDICATE];
 
         /*
          * Service instance to be returned
@@ -76,16 +81,25 @@
             wiz.src1SelectedColumnNames = [];
             wiz.src2SelectedColumnNames = [];
             wiz.includeAllSource1Columns = true;
-            wiz.src1CriteriaColumnName = "";
-            wiz.src2CriteriaColumnName = "";
-            wiz.src1CriteriaColumn = null;
-            wiz.src2CriteriaColumn = null;
             wiz.viewEditable = false;
             wiz.viewDdl = "";
+            resetPredicates();
             // Broadcast table change
             $rootScope.$broadcast("editWizardTablesChanged");
             // Broadcast name changed
             $rootScope.$broadcast("editWizardServiceNameChanged");
+        }
+
+        /*
+         * Reset predicates to default
+         */
+        function resetPredicates() {
+            wiz.criteriaPredicates = [DEFAULT_PREDICATE];
+            wiz.criteriaPredicates[0].id = 0;
+            wiz.criteriaPredicates[0].lhColName = "";
+            wiz.criteriaPredicates[0].rhColName = "";
+            wiz.criteriaPredicates[0].operatorName = "=";
+            wiz.criteriaPredicates[0].combineKeyword = "AND";
         }
 
         /*
@@ -301,14 +315,6 @@
                     wiz.includeAllSource1Columns = false;
                 }
             }
-
-            // refresh the source 1 criteria column
-            for(var k=0; k<wiz.src1AvailableColumns.length; k++) {
-                if(wiz.src1AvailableColumns[k].keng__id === wiz.src1CriteriaColumnName) {
-                    wiz.src1CriteriaColumn = wiz.src1AvailableColumns[k];
-                    break;
-                }
-            }
         }
 
         /*
@@ -381,14 +387,6 @@
                     }
                 } 
             }
-
-            // refresh the source 2 criteria column
-            for(var k=0; k<wiz.src2AvailableColumns.length; k++) {
-                if(wiz.src2AvailableColumns[k].keng__id === wiz.src2CriteriaColumnName) {
-                    wiz.src2CriteriaColumn = wiz.src2AvailableColumns[k];
-                    break;
-                }
-            }
         }
 
         /*
@@ -433,31 +431,62 @@
         };
 
         /*
-         * Get the source1 criteria column
+         * Update a criteria predicate, if a predicate with the id is found.
          */
-        service.source1CriteriaColumn = function() {
-            return wiz.src1CriteriaColumn;
+        service.updateCriteriaPredicate = function(predicate) {
+            for(var i=0; i<wiz.criteriaPredicates.length; i++) {
+                if(wiz.criteriaPredicates[i].id === predicate.id) {
+                    wiz.criteriaPredicates[i].lhColName = predicate.lhColName;
+                    wiz.criteriaPredicates[i].rhColName = predicate.rhColName;
+                    wiz.criteriaPredicates[i].operatorName = predicate.operatorName;
+                    wiz.criteriaPredicates[i].combineKeyword = predicate.combineKeyword;
+                    // Broadcast table change
+                    $rootScope.$broadcast("editWizardJoinCriteriaChanged");
+                }
+            }
         };
 
         /*
-         * Get the source2 criteria column
+         * Resets the criteria predicates to the supplied set of predicates.
          */
-        service.source2CriteriaColumn = function() {
-            return wiz.src2CriteriaColumn;
+        service.setCriteriaPredicates = function(predicates) {
+            if( !predicates || predicates.length === 0 ) {
+                resetPredicates();
+            } else {
+                wiz.criteriaPredicates = predicates;
+            }
+            // Broadcast table change
+            $rootScope.$broadcast("editWizardJoinCriteriaChanged");
         };
 
         /*
-         * Set the source1 criteria column
+         * get the criteria predicates.
          */
-        service.setSource1CriteriaColumn = function(column) {
-            wiz.src1CriteriaColumn = column;
+        service.criteriaPredicates = function( ) {
+            return wiz.criteriaPredicates;
         };
 
         /*
-         * Set the source2 criteria column
+         * 'true' if criteria predicates are complete.  'complete' currently means they are fully defined
+         * TODO: add more validation for the individual predicates
          */
-        service.setSource2CriteriaColumn = function(column) {
-            wiz.src2CriteriaColumn = column;
+        service.criteriaComplete = function( ) {
+            if(wiz.criteriaPredicates.length===0) return false;
+
+            for(var i=0; i<wiz.criteriaPredicates.length; i++) {
+                // Left and Right Columns must be defined.  Operator must be defined.
+                if(   !wiz.criteriaPredicates[i].lhColName || wiz.criteriaPredicates[i].lhColName.length<1 ||
+                      !wiz.criteriaPredicates[i].rhColName || wiz.criteriaPredicates[i].rhColName.length<1 ||
+                      !wiz.criteriaPredicates[i].operatorName || wiz.criteriaPredicates[i].operatorName.length<1 ) {
+                    return false;
+                }
+                // AND | OR keyword must be defined unless its the last predicate
+                if ( i < wiz.criteriaPredicates.length-1 &&
+                     (!wiz.criteriaPredicates[i].combineKeyword || wiz.criteriaPredicates[i].combineKeyword.length<1) ) {
+                    return false;
+                }
+            }
+            return true;
         };
 
         /**
@@ -478,30 +507,54 @@
             try {
                 RepoRestService.getViewInfoForDataService( dataServiceName ).then(
                     function ( result ) {
+                        // Keeps track of left vs right info
+                        var lhSourceName = null;
+                        var lhTableName = null;
+                        var lhTableColumns = [];
+                        var rhSourceName = null;
+                        var rhTableName = null;
+                        var rhTableColumns = [];
+                        // process result
                         for( var i = 0; i < result.length; i++) {
                             // View info
                             var infoType = result[i].infoType;
-                            if(infoType==="LHTABLE" || infoType==="RHTABLE") {
-                                var sourceName = result[i].sourceVdbName;
-                                var tableName = result[i].tableName;
-                                var tableColumns = [];
+                            if(infoType==="LHTABLE") {
+                                lhSourceName = result[i].sourceVdbName;
+                                lhTableName = result[i].tableName;
                                 if(angular.isDefined(result[i].columnNames)) {
-                                    tableColumns = result[i].columnNames;
+                                    lhTableColumns = result[i].columnNames;
                                 }
-                                service.addSourceTable(sourceName,tableName);
-                                if(i===0) {
-                                    wiz.src1SelectedColumnNames = tableColumns;
-                                } else if(i===1) {
-                                    wiz.src2SelectedColumnNames = tableColumns;
+                            } else if(infoType==="RHTABLE"){
+                                rhSourceName = result[i].sourceVdbName;
+                                rhTableName = result[i].tableName;
+                                if(angular.isDefined(result[i].columnNames)) {
+                                    rhTableColumns = result[i].columnNames;
                                 }
                             } else if(infoType==="CRITERIA") {
-                                wiz.src1CriteriaColumnName = result[i].lhCriteriaCol;
-                                wiz.src2CriteriaColumnName = result[i].rhCriteriaCol;
                                 wiz.selectedJoin = result[i].joinType;
+                                // Add criteria predicates
+                                wiz.criteriaPredicates = [];
+                                for(var j=0; j<result[i].criteriaPredicates.length; j++) {
+                                    var newPredicate = 
+                                    { id : j,
+                                      lhColName : result[i].criteriaPredicates[j].lhColumn,
+                                      rhColName : result[i].criteriaPredicates[j].rhColumn,
+                                      operatorName : result[i].criteriaPredicates[j].operator,
+                                      combineKeyword : result[i].criteriaPredicates[j].combineKeyword
+                                    };
+                                    wiz.criteriaPredicates.push(newPredicate);
+                                }
                             } else if(infoType==="DDL") {
                                 wiz.viewDdl = result[i].viewDdl;
                                 wiz.viewEditable = result[i].viewEditable;
                             }
+                        }
+                        // Sources must be added in order (left then right)
+                        service.addSourceTable(lhSourceName,lhTableName);
+                        wiz.src1SelectedColumnNames = lhTableColumns;
+                        if(rhTableName) {
+                            service.addSourceTable(rhSourceName,rhTableName);
+                            wiz.src2SelectedColumnNames = rhTableColumns;
                         }
 
                         // When ready, transfer control to the provided page

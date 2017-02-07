@@ -273,6 +273,8 @@
             } else if(vm.currentWizardStep === "wizard-view-definition") {
                 vm.nextButtonTitle = $translate.instant('shared.Finish');
             } else if(vm.currentWizardStep === "wizard-join-definition") {
+                vm.nextButtonTitle = $translate.instant('shared.Next');
+            } else if(vm.currentWizardStep === "wizard-join-criteria") {
                 vm.nextButtonTitle = $translate.instant('shared.Finish');
             }
         }
@@ -656,9 +658,8 @@
                     var lhColumnNames = EditWizardService.source1SelectedColumns();
                     var rhColumnNames = EditWizardService.source2SelectedColumns();
                     
-                    // Join criteria columns
-                    var lhJoinColumnName = EditWizardService.source1CriteriaColumn().keng__id;
-                    var rhJoinColumnName = EditWizardService.source2CriteriaColumn().keng__id;
+                    // Join criteria predicates
+                    var criteriaPredicates = EditWizardService.criteriaPredicates();
                     
                     // Join type
                     var joinType = EditWizardService.joinType();
@@ -667,7 +668,7 @@
                         RepoRestService.setDataServiceVdbForJoinTables( dataserviceName, lhRelativeModelSourcePath, rhRelativeModelSourcePath, null,
                                                                                          lhRelativeTablePath, lhColumnNames,
                                                                                          rhRelativeTablePath, rhColumnNames, 
-                                                                                         joinType, lhJoinColumnName, rhJoinColumnName).then(
+                                                                                         joinType, criteriaPredicates).then(
                             function () {
                                 // Reinitialise the list of data services
                                 DSSelectionService.refresh('dataservice-summary');
