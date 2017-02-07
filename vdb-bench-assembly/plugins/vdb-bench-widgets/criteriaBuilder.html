@@ -1,13 +1,23 @@
 <div>
     <form name="builder-criteria" role="form">
         <div class="col-md-12">
-            <h5><strong translate="criteriaBuilder.currentCriteria" />:&nbsp;&nbsp;{{vm.criteriaString}}</h5>
+            <h5><strong translate="criteriaBuilder.currentCriteria" />
+                <label class="help-label">
+                    <span class="fa fa-info-circle" uib-tooltip="{{ 'criteriaBuilder.help.currentCriteria' | translate }}"
+                          tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                </label>
+            :&nbsp;&nbsp;{{vm.criteriaString}}
+            </h5>
             <h6>&nbsp;</h6>
         </div>
         <div class="col-md-12">
             <button class="btn btn-primary" ng-click="vm.addCriteriaPredicate()">
                 <span class="glyphicon glyphicon-plus"></span>{{:: 'criteriaBuilder.addCondition' | translate}}
             </button>
+            <label class="help-label">
+                <span class="fa fa-info-circle" uib-tooltip="{{ 'criteriaBuilder.help.addCondition' | translate }}"
+                      tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+            </label>
         </div>
 
         <div class="col-md-3">

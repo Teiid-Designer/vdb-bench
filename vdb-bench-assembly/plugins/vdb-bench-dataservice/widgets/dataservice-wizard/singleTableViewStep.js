@@ -32,6 +32,8 @@
         var vm = this;
         
         vm.stepTitle = $translate.instant('singleTableViewStep.stepTitle');
+        vm.selectedSources = [];
+        vm.selectedTables = [];
         vm.items = [];
         vm.instructionMessage = $translate.instant('singleTableViewStep.selectOneOrMoreColumnsInstructionMsg');
         vm.nextEnablement = updateNextEnablement();
@@ -39,6 +41,8 @@
         vm.deselectAllColumnsEnabled = true;
 
         vm.viewDefinitionStepShown = function() {
+            vm.selectedSources = EditWizardService.sources();
+            vm.selectedTables = EditWizardService.sourceTables();
             vm.items = EditWizardService.source1AvailableColumns();
             updateNextEnablement();
         };
