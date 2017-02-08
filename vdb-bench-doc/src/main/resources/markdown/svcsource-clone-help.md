@@ -1,5 +1,7 @@
-### Copy Data Source Page
+### <p style="text-align: center">Copy Data Source Page</p>
 
-You can create a duplicate copy of any data source configuration by selecting a data source in the **Data Source Summary** page and selecting the **Copy** action in the toolbar's dropdown menu.
+This page is used to create a new data source from an existing one. The name of the data source being copied appears in the page title. For instance, the page title would say **Copy Data Source 'OracleParts'** if the **OracleParts** data source is being copied to create the new data source.
+ 
+Once you enter the name of the new data source, hit the ![Create](images/CreateButton.png "Create Data Source") button to create the new data source. Of course, you can hit the ![Cancel button](images/CancelButton.png "Cancel Configure Data Source") button if you change your mind. 
 
-Enter a unique name and click **Create** to return to the **Data Source Summary** page. You can then select the copied data source and **Edit** it to change any behavior or properties.
+The next page displayed is the [Data Source Summary page](datasource-summary-help.html). This page will show the new data source if one was successfully created.

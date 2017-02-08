@@ -16,7 +16,7 @@
         dashboardProvider
             .widget('ds-welcome', {
                 title: 'Welcome',
-                description: '',
+                description: 'Displays welcome message and project page links',
                 templateUrl: config.pluginDir + syntax.FORWARD_SLASH +
                                     pluginDirName + syntax.FORWARD_SLASH +
                                     'welcome.html',

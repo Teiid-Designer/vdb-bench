@@ -17,7 +17,7 @@
         /*
          * Set a custom title to the page including the service source's id
          */
-        var page = DSPageService.page(DSPageService.CLONE_DATASERVICE_PAGE);
+        var page = DSPageService.page(DSPageService.SERVICESOURCE_CLONE_PAGE);
         DSPageService.setCustomTitle(page.id, page.title + " '" + SvcSourceSelectionService.selectedServiceSource().keng__id + "'");
 
         /*

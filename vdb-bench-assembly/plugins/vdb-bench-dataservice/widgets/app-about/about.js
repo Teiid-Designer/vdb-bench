@@ -16,7 +16,7 @@
         dashboardProvider
             .widget('app-about', {
                 title: 'About',
-                description: 'Displays the basic application details',
+                description: 'Displays application component name and version details',
                 templateUrl: config.pluginDir + syntax.FORWARD_SLASH +
                                     pluginDirName + syntax.FORWARD_SLASH +
                                     'about.html',
