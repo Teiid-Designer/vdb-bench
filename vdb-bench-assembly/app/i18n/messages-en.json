@@ -238,51 +238,6 @@
         "nameFilterPlaceholder" : "Filter by Name..."
     },
     
-     "dsDocumentationController" : {
-        "noResultsColumnName" : "Err: No Data!",
-        "noResultsMsg" : "No data was returned from the query",
-        "resultCountMsg" : "The total number of results returned by the query is {{count}}",
-        "searchErrorColumnName" : "Err: Failed!",
-        "searchErrorConsoleMsg" : "Error: Failed to get value at link {{link}}: {{responseError}}",
-        "searchErrorMsg" : "Error: failed to get any results: {{responseError}}",
-        "whereErrorMsg" : "The chosen column has a type ({{columnType}}) which cannot be used in a where condition",
-        "condition" : {
-            "afterDate" : "after date",
-            "afterEq" : "after or equals",
-            "beforeDate" : "before date",
-            "beforeEq" : "before or equals",
-            "contains" : "contains",
-            "endsWith" : "ends with",
-            "equals" : "equals",
-            "equalsCaseInsensitive" : "equals (case insensitive)",
-            "greaterThan" : "greater than",
-            "greaterThanEqTo" : "greater than or equal to",
-            "in" : "in (separated by ;)",
-            "lengthEq" : "length equals",
-            "lessThan" : "less than",
-            "lessThanEqTo" : "less than or equal to",
-            "notEquals" : "not equals",
-            "notEqualsCaseInsensitive" : "not equals (case insensitive)",
-            "notEndsWith" : "does not end with",
-            "notStartsWith" : "does not start with",
-            "startsWith" : "starts with"
-        },
-        "rowLimit" : {
-            "countOnly" : "count only",
-            "none" : "no limit",
-            "topPrefix" : "top ",
-            "top1" : "top 1",
-            "top10" : "top 10",
-            "top50" : "top 50",
-            "top100" : "top 100",
-            "top1000" : "top 1000",
-            "top10000" : "top 10000"
-        },
-        "configureSourceTitle" : "Configure Data Source",
-        "homeTitle" : "@:shared.Dashboard",
-        "documentationDataServiceTitle" : "Data Service Documentation"
-    },
-
     "dsTestController" : {
         "noResultsColumnName" : "Err: No Data!",
         "noResultsMsg" : "No data was returned from the query",

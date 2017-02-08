@@ -1,0 +1,134 @@
+<div id="outer" class="outer-wrapper">
+	<div id="dataservice-documentation-container" class="container-fluid"
+		ng-controller="DSDocumentationController as vm">
+
+		<div id="documentation-tabs"">
+			<uib-tabset>  
+			<uib-tab
+				heading="{{:: 'dataservice-documentation.connecting' | translate}}"
+				ng-click="vm.onTabSelected('Standard')">
+				<div translate="dataservice-documentation.connecting-heading1"></div>
+				<div translate="dataservice-documentation.connecting-heading2"></div>
+				<div translate="dataservice-documentation.connecting-java-heading"></div>
+				<div translate="dataservice-documentation.connecting-java1"></div>
+				<div translate="dataservice-documentation.connecting-java2"></div>
+				<div translate="dataservice-documentation.connecting-odata-heading"></div>
+				<div translate="dataservice-documentation.connecting-odata1" + {{vm.endPointUrl()}} ></div>
+				<div translate="dataservice-documentation.connecting-odata2"></div>
+				
+				</uib-tab>
+			<uib-tab
+				heading="{{:: 'dataservice-documentation.samples' | translate}}"
+				ng-click="vm.onTabSelected('Standard')"> 
+			<div id="samples-panel" class="col-sm-4" ng-cloak>
+				<uib-accordion close-others="false"> 
+				<uib-accordion-group
+					heading=":: dataservice-documentation.java | translate"
+					 is-open="true">
+				<uib-accordion-heading>
+				<div class="pull-left odata-control-panel-title"
+					translate="dataservice-documentation.java-sample" ></div>
+				<!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
+				<div class="pull-left odata-control-panel-title-help" uib-dropdown>
+					<label class="help-label"> <span class="fa fa-info-circle"
+						uib-tooltip-html="{{ 'dataservice-documentation.help.java-sample' | translate }}"
+						tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+					</label>
+				</div>
+				</uib-accordion-heading>
+					<div class="odata-exp-select-group">
+						<div>Java code goes here</div>
+					</div>
+				</uib-accordion-group> 
+				<uib-accordion-group
+					heading=":: dataservice-documentation.javascript-sample" is-open="true">
+				<uib-accordion-heading>
+				<div class="pull-left odata-control-panel-title"
+					translate="dataservice-documentation.javascript-sample"></div>
+				<!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
+				<div class="pull-left odata-control-panel-title-help" uib-dropdown>
+					<label class="help-label"> <span class="fa fa-info-circle"
+						uib-tooltip-html="{{ 'dataservice-documentation.help.javascript-sample' | translate }}"
+						tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+					</label>
+				</div>
+				</uib-accordion-heading>
+					<div class="odata-exp-select-group">
+						<div><pre><code>$.ajax({
+             type: 'GET',
+             dataType: 'json',
+             headers: {
+                          Accept: 'application: 'application/json',
+                          Authorization: 'Basic xxxxxxxxxxx',
+                          url: '{{odata_url}}',
+             success: function(data)
+                          for (var x = 0; x < data.length; x++) {
+                                      console.log(data[i]);
+                          }
+             },
+             error: function(data) {
+                         console.log('Error code: ' + data.errorCode);
+                         console.log('Error message: ' + data.errorMessage);
+             }
+});</code></pre></div>
+					</div>
+				</uib-accordion-group>
+				<!-- Node.js -->
+				<uib-accordion-group
+					heading=":: dataservice-documentation.node-sample" is-open="true">
+				<uib-accordion-heading>
+				<div class="pull-left odata-control-panel-title"
+					translate="dataservice-documentation.node-sample"></div>
+				<!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
+				<div class="pull-left odata-control-panel-title-help" uib-dropdown>
+					<label class="help-label"> <span class="fa fa-info-circle"
+						uib-tooltip-html="{{ 'dataservice-documentation.help.node-sample' | translate }}"
+						tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+					</label>
+				</div>
+				</uib-accordion-heading>
+					<div class="odata-exp-select-group">
+						<div>Node.js code goes here</div>
+					</div>
+				</uib-accordion-group>  
+				<!-- Python -->
+				<uib-accordion-group
+					heading=":: dataservice-documentation.python-sample" is-open="true">
+				<uib-accordion-heading>
+				<div class="pull-left odata-control-panel-title"
+					translate="dataservice-documentation.python-sample"></div>
+				<!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
+				<div class="pull-left odata-control-panel-title-help" uib-dropdown>
+					<label class="help-label"> <span class="fa fa-info-circle"
+						uib-tooltip-html="{{ 'dataservice-documentation.help.python-sample' | translate }}"
+						tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+					</label>
+				</div>
+				</uib-accordion-heading>
+					<div class="odata-exp-select-group">
+						<div>Python code goes here</div>
+					</div>
+				</uib-accordion-group> 
+				<!-- PHP -->
+				<uib-accordion-group
+					heading=":: dataservice-documentation.php-sample" is-open="true">
+				<uib-accordion-heading>
+				<div class="pull-left odata-control-panel-title"
+					translate="dataservice-documentation.php-sample"></div>
+				<!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
+				<div class="pull-left odata-control-panel-title-help" uib-dropdown>
+					<label class="help-label"> <span class="fa fa-info-circle"
+						uib-tooltip-html="{{ 'dataservice-documentation.help.php-sample' | translate }}"
+						tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+					</label>
+				</div>
+				</uib-accordion-heading>
+					<div class="odata-exp-select-group">
+						<div>PHP code goes here</div>
+					</div>
+				</uib-accordion-group> 
+
+			</uib-tab> </uib-tabset>
+		</div>
+
+	</div>
