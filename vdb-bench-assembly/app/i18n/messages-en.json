@@ -439,7 +439,12 @@
         "instructionsMsg" : "Reconfigure an existing Data Source:",
         "Name" : "@:shared.Name",
         "Save" : "@:shared.Save",
-        "Translator" : "@:shared.Translator"
+        "Translator" : "@:shared.Translator",
+        "help" : {
+            "connections" : "The list of available connections from your server configuration",
+            "translators" : "The translator to use for the selected connection",
+            "showFilterOptions" : "Show options for refining the scope of tables for your data source"
+        }
     },
 
     "svcsource-import" : {
@@ -456,7 +461,12 @@
         "nameDescriptionInstructionsMsg" : "Choose a name (and optional description) for your Data Source",
         "Name" : "@:shared.Name",
         "Save" : "@:shared.Save",
-        "Translator" : "@:shared.Translator"
+        "Translator" : "@:shared.Translator",
+        "help" : {
+            "connections" : "The list of available connections from your server configuration",
+            "translators" : "The translator to use for the selected connection",
+            "showFilterOptions" : "Show options for refining the scope of tables for your data source"
+        }
     },
 
     "svcSourceCloneController" : {
