@@ -1,5 +1,24 @@
-#### Data Sources Summary Page
+<p style="text-align: center;font-weight: bold;font-size: 22">Data Sources Summary Page</p>
 
-A **Data Source** represents a set of one or more relational tables defined for your database schema that can be used in your data services. Data Sources are configured using any of your JDBC connections available on your running server.
+When data sources are available, here are the actions you can take:
 
-This page contains a table of existing data sources defined on your targeted server. You can add, delete, edit, copy data sources.
+#### Toolbar
+The toolbar contains several options
+
+![Data Source Toolbar](images/DataServiceToolbar.png "Data Source Toolbar")
+
+*  **Filter** - You can filter data sources by name or description value. Select name or description in the drop-down.
+*  **Sort** - You can sort data sources by name or description value. Select name or description in the drop-down. To toggle your sort between ascending and descending, simply click on the ![Sort List](images/SortDataServicebyAscDesc.png "Sort Acsending/Descending") icon.
+*  **New** - The new button allows you to [Create a new data source](svcsource-new-help.html)
+
+#### Row Actions
+Each data source row in the list contains several options
+
+![Data Source Row Actions](images/DataSourceRowOptions.png "Data Source Row Actions")
+
+*  **Edit** - The Edit button allows you to [Edit the Data Source](svcsource-edit-help.html)
+*  **Display DDL** - The Display DDL action (addition actions) displays the source schema.
+*  **Copy** - The Copy action (addition actions) allows you to [Copy the Data Source](svcsource-clone-help.html)
+*  **Download** - The Download action (addition actions) allows you to download the dynamic vdb definition for the source
+*  **Delete** - The Delete action (addition actions) allows you to delete the Data Source.
+

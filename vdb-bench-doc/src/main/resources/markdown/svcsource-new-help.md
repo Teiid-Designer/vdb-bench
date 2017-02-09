@@ -1,13 +1,31 @@
-### New Data Source Page
+<p style="text-align: center;font-weight: bold;font-size: 22">New Data Source Page</p>
 
-A **Data Source** represents a set of one or more relational tables defined for your database schema that can be used in your data services. Data Sources are configured using any of your JDBC connections available on your running server.
+You can configure a new Data Source using any of your currently available Connections.  The Connections are obtained from your teiid instance configuration.  Currently the Data Service Builder will only display the available JDBC connections.
 
-To configure a data source:
+#### Configure Data Source
 
-**Step 1)** select the **New** button on the **Data Source Summary** page or the **Configure Data Source** on the **Data Sources** navigation bar menu.
+Select one of the available connections.
 
-**Step 2a)** On the **Configure Data Source** page, select an existing JDBC connection and a corresponding Teiid translator type.  At this point you can specify a unique name for your data source, add a descriptiona and then click **Save** to create your data source.
+![Connections List image](images/DataSourceConnectionsList.png "Connections")
 
-**Step 2b)** Optionally, you can further refine the scope of your data source tables by checking the **Filter Connection** option.  This will display a summary of the available schemas on your database.  Select your desired schema, specify a unique name for your data source, add a descriptiona and then click **Save** to create your data source.
+When the connection is selected, the translator dropdown will display.  You can keep the translator selection (if one is selected) or select something different.
 
-**Step 3)** You'll be returned to the **Data Source Summary** page where your new **data source** will be displayed 
+![Translators image](images/DataSourceTranslators.png "Translators")
+
+Optionally, you can refine the scope of your source tables by checking **Show Filter Options**.  Filtering is especially helpful for databases which have very large schema, allowing you to limit the tables considered.  If checked, the available schema for the datasource will be shown.  Click the desired schema or catalog.
+
+![Filter Options image](images/DataSourceFilterOptionsOpen.png "Filter Options")
+
+The available tables for the selection will be shown in the tables list.  You can enter a new table filter value if desired.  Click refresh to update the table list.
+
+![Filter Option Tables image](images/DataSourceFilterOptionsTables.png "Filter Option Tables")
+
+Finally, enter a name for your data source.  You can also enter a description (optional).
+
+Once you are finished, click ![Save Data Source image](images/SaveButton.png "Save") to save the Data Source. This will take you to the [Data Source Summary](datasource-summary-help.html) page, which will show the new data source along with your other sources.
+
+Of course, you can hit the ![Cancel button](images/CancelButton.png "Cancel Data Source Configuration") button if you no longer wish to configure the data source. Canceling takes you to the [Data Source Summary](datasource-summary-help.html) page.
+
+
+
+

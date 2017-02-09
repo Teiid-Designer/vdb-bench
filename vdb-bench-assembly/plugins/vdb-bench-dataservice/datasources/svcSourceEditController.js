@@ -9,10 +9,10 @@
         .controller('SvcSourceEditController', SvcSourceEditController);
 
     SvcSourceEditController.$inject = ['$scope', '$rootScope', '$translate', '$document', 'REST_URI', 'SYNTAX', 'RepoRestService', 
-                                       'SvcSourceSelectionService', 'ConnectionSelectionService', 'TranslatorSelectionService'];
+                                       'SvcSourceSelectionService', 'ConnectionSelectionService', 'TranslatorSelectionService', 'DSPageService'];
 
     function SvcSourceEditController($scope, $rootScope, $translate, $document, REST_URI, SYNTAX, RepoRestService, 
-                                      SvcSourceSelectionService, ConnectionSelectionService, TranslatorSelectionService) {
+                                      SvcSourceSelectionService, ConnectionSelectionService, TranslatorSelectionService, DSPageService) {
         var vm = this;
 
         vm.originalConnectionName = null;
@@ -30,6 +30,12 @@
         vm.allTranslators = TranslatorSelectionService.getTranslators(false);
         vm.filterSchema = false;
         vm.updateAndDeployInProgress = false;
+
+        /*
+         * Set a custom title to the page including the service source's id
+         */
+        var page = DSPageService.page(DSPageService.SERVICESOURCE_EDIT_PAGE);
+        DSPageService.setCustomTitle(page.id, page.title + " '" + SvcSourceSelectionService.selectedServiceSource().keng__id + "'");
 
         /*
          * Set initial source selection
