@@ -335,6 +335,9 @@
     },
     
     "gitCredentialsControl" : {
+        "authorEmailInvalid" : "Email is invalid",
+        "authorEmailRequired" : "Email is required",
+        "authorNameRequired" : "Name is required",
         "AuthorEmailLabel" : "Author Email Address:",
         "authorEmailPlaceholder" : "Enter the email address of the author",
         "AuthorNameLabel" : "Author Name:",
@@ -348,20 +351,30 @@
         "fileNotReadableMsg" : "The file is not readable",
         "fileReadAbortedMsg" : "The file read operation was aborted",
         "hostsFileLabel" : "Known Hosts File:",
+        "hostsFileRequired" : "Known hosts file is required",
         "PassphraseLabel" : "Passphrase:",
         "passphrasePlaceholder" : "Enter the passphrase",
+        "passphraseRequired" : "Passphrase is required",
         "passwordPlaceholder" : "Enter the password",
+        "passwordRequired" : "Password is required",
         "passwordTabTitle" : "Password Authentication",
+        "pathRequired" : "Path is required",
         "PrivateKeyFileLabel" : "Private Key File:",
+        "privateKeyFileRequired" : "Private key file is required",
         "privateKeyTabTitle" : "Private Key Authentication",
+        "Properties" : "Properties",
         "RelativeFilePathLabel" : "Relative File Path:",
         "relativeFilePathPlaceholder" : "Enter the relative file path or the name of the destination file (**required**)",
         "RepositoryBranchLabel" : "Repository Branch:",
         "repositoryBranchPlaceholder" : "Enter git repository branch, eg. master",
         "repositoryNamePlaceholder" : "Enter a name for this repository",
+        "repositoryNameRequired" : "Name is required",
+        "repositoryUrlInvalid" : "URL is not valid",
         "RepositoryUrlLabel" : "Repository URL:",
         "repositoryUrlPlaceholder" : "Enter git repository URL (**required**)",
-        "SavedRepositories" : "Saved Repositories",
+        "repositoryUrlRequired" : "URL is required",
+        "SavedRepositories" : "Repository:",
+        "userNameRequired" : "Name is required",
         "help" : {
             "authorEmail" : "Specifies the email address of the author to be used when commiting to the repository",
             "authorName" : "Specifies the name of the author to be used when commiting to the repository",
@@ -380,8 +393,10 @@
     },
 
     "git-export-wizard" : {
-        "exportStepMsg" : "Export the data service to the git repository",
-        "repoDetailsStepMsg" : "Enter the details and security attributes for the destination git repository"
+        "repoPropsStepMsg" : "Enter the details for the destination git repository",
+        "repoPropsStepTitle" : "Repository Properties",
+        "commitStepMsg" : "Commit exported data service to repository",
+        "commitStepTitle" : "Export"
     },
 
     "git-import-wizard" : {

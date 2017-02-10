@@ -10,13 +10,12 @@
         .directive('dsExportGitWizard', DSExportGitWizard);
 
     DSExportGitWizard.$inject = ['CONFIG', 'SYNTAX'];
-    DSExportGitWizardController.$inject = ['$window', 
-                                           '$scope', 
+    DSExportGitWizardController.$inject = ['$scope', 
                                            '$base64', 
-                                           '$translate', 
                                            'SYNTAX', 
                                            'DSSelectionService', 
-                                           'RepoRestService'];
+                                           'RepoRestService',
+                                           '$rootScope'];
 
     function DSExportGitWizard(config, syntax) {
         var directive = {
@@ -36,13 +35,12 @@
         return directive;
     }
 
-    function DSExportGitWizardController($window, 
-                                         $scope, 
-                                         $base64,
-                                         $translate,
+    function DSExportGitWizardController($scope, 
+                                         $base64, 
                                          syntax, 
                                          DSSelectionService, 
-                                         RepoRestService) {
+                                         RepoRestService,
+                                         $rootScope) {
         var vm = this;
 
         /**
@@ -103,6 +101,9 @@
             if (_.isEmpty(vm.repo.parameters))
                 return false;
 
+            if (_.isEmpty(vm.repo.name))
+                return false;
+
             if (_.isEmpty(vm.repo.parameters['repo-path-property'])) {
                 return false;
             }
@@ -111,7 +112,25 @@
                 return false;
             }
 
-            return true;
+            if ( $rootScope.requireAuthorName && _.isEmpty(vm.repo.parameters['author-name-property'])) {
+                return false;
+            }
+
+            if ( $rootScope.requireAuthorEmail && _.isEmpty(vm.repo.parameters['author-email-property'])) {
+                return false;
+            }
+
+            // see if HTTP authentication is complete
+            if ( !_.isEmpty( vm.repo.parameters[ 'repo-password-property' ] ) && !_.isEmpty( vm.repo.parameters[ 'repo-username-property' ] ) ) {
+              return true;
+            }
+            
+            // see if SSH authentication is complete
+            if ( !_.isEmpty( vm.repo.parameters[ 'repo-password-property' ] ) && !_.isEmpty( vm.repo.parameters[ 'repo-known-hosts-property' ] ) ) {
+              return true;
+            }
+
+            return !_.isEmpty( vm.repo.parameters[ 'repo-known-hosts-property' ] ) && !_.isEmpty( vm.repo.parameters[ 'repo-private-key-property' ] ) && !_.isEmpty( vm.repo.parameters[ 'repo-passphrase-property' ] );
         };
 
         vm.showProgress = function(display) {

@@ -2,25 +2,27 @@
    -- Git Wizard Steps
    -->
 <div pf-wizard-step
-        step-title="Repository Properties"
+        step-title="{{:: 'git-export-wizard.repoPropsStepTitle' | translate}}"
         step-id="export-to-git-credentials"
         wz-disabled="{{!vm.wizardActive}}"
         next-enabled="vm.validateCredentials()"
         ok-to-nav-away="vm.validateCredentials()">
-    <h1 translate="git-export-wizard.repoDetailsStepMsg" />
+    <h1 translate="git-export-wizard.repoPropsStepMsg" />
 
     <git-credentials-control show-name="false"
-                                        show-file-path="true"
-                                        show-security-attributes="true"
-                                        on-selection="vm.onRepoSelection(selected)">
+                             show-file-path="true"
+                             show-security-attributes="true"
+                             require-author-name="true"
+                             require-author-email="true"
+                             on-selection="vm.onRepoSelection(selected)">
     </git-credentials-control>
 </div>
 
 <div pf-wizard-step
-        step-title="Commit to Repository"
+        step-title="{{:: 'git-export-wizard.commitStepTitle' | translate}}"
         step-id="export-to-git-final"
         wz-disabled="{{!vm.wizardActive}}">
-    <h1 translate="git-export-wizard.exportStepMsg" />
+    <h1 translate="git-export-wizard.commitStepMsg" />
 
     <div class="ds-export-git-page">
         <!-- Show progress bar on export -->
