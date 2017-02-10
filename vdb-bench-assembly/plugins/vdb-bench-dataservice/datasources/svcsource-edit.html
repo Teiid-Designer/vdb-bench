@@ -7,11 +7,21 @@
 	    <div id="svcsource-edit-controls" ng-show="vm.transLoading==false && vm.updateAndDeployInProgress==false" class="row">
 	            <h4 translate="svcsource-edit.instructionsMsg"></h4>
 	            <div class="col-md-8">
-	                <h4><strong translate="svcsource-edit.Connections"></strong></h4>
+	                <h4><strong translate="svcsource-edit.Connections"></strong>
+                        <label class="help-label">
+                            <span class="fa fa-info-circle" uib-tooltip="{{ 'svcsource-edit.help.connections' | translate }}"
+                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                        </label>
+	                </h4>
 	                <connection-list selection="{{vm.initialConnectionName}}" hide-resource-adapters=true></connection-list>
 	            </div>
 	            <div class="col-md-4">
-	                <h4><strong translate="svcsource-edit.Translator"></strong></h4>
+	                <h4><strong translate="svcsource-edit.Translator"></strong>
+                        <label class="help-label">
+                            <span class="fa fa-info-circle" uib-tooltip="{{ 'svcsource-edit.help.translators' | translate }}"
+                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                        </label>
+                    </h4>
 	                <img src="{{vm.selectedTranslatorImage}}" width="42" height="24"/>
 	                <select id="translators" ng-model="vm.selectedTranslator" ng-options="trans as trans.keng__id for trans in vm.allTranslators"
 	                                         ng-change="vm.translatorChanged()">
@@ -23,7 +33,11 @@
 	            <div class="col-md-12" ng-show="vm.selectedJdbcConnection !== null && vm.selectedTranslator !== null">
 	                <form>
 	                    <input type="checkbox" ng-model="vm.filterSchema" ng-true-value=true ng-false-value=false ng-change="vm.filterCheckboxChanged()">
-	                    <h4 style="display:inline"><strong translate="svcsource-edit.filterConnection"></strong></h4><h4>
+	                    <h4 style="display:inline"><strong translate="svcsource-edit.filterConnection"></strong></h4>
+                        <label class="help-label">
+                            <span class="fa fa-info-circle" uib-tooltip="{{ 'svcsource-edit.help.showFilterOptions' | translate }}"
+                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                        </label>
 	                </form>
 	            </div>
 	

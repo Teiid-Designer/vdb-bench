@@ -7,11 +7,21 @@
 	    <div id="svcsource-new-controls" ng-show="vm.createAndDeployInProgress==false" class="row">
 	      <h4 translate="svcsource-new.instructionsMsg"></h4>
 	      <div class="col-md-8">
-	          <h4><strong translate="svcsource-new.Connections"></strong></h4>
+	          <h4><strong translate="svcsource-new.Connections"></strong>
+                  <label class="help-label">
+                      <span class="fa fa-info-circle" uib-tooltip="{{ 'svcsource-new.help.connections' | translate }}"
+                            tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                  </label>
+              </h4>
 	          <connection-list hide-resource-adapters=true></connection-list>
 	      </div>
 	      <div class="col-md-4" ng-show="vm.showTranslator">
-	          <h4><strong translate="svcsource-new.Translator"></strong></h4>
+	          <h4><strong translate="svcsource-new.Translator"></strong>
+                  <label class="help-label">
+                      <span class="fa fa-info-circle" uib-tooltip="{{ 'svcsource-new.help.translators' | translate }}"
+                            tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                  </label>
+              </h4>
 	          <img src="{{vm.selectedTranslatorImage}}" width="42" height="24"/>
 	          <select id="translators" ng-model="vm.selectedTranslator" ng-options="trans as trans.keng__id for trans in vm.allTranslators" 
 	                  ng-change="vm.translatorChanged()">
@@ -23,7 +33,11 @@
 	      <div class="col-md-12" ng-show="vm.selectedJdbcConnection !== null && vm.selectedTranslator !== null">
 	          <form>
 	              <input type="checkbox" ng-model="vm.filterSchema" ng-true-value=true ng-false-value=false ng-change="vm.filterCheckboxChanged()">
-	              <h4 style="display:inline"><strong translate="svcsource-new.filterConnection"></strong></h4><h4>
+	              <h4 style="display:inline"><strong translate="svcsource-new.filterConnection"></strong></h4>
+                  <label class="help-label">
+                      <span class="fa fa-info-circle" uib-tooltip="{{ 'svcsource-new.help.showFilterOptions' | translate }}"
+                            tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                  </label>
 	          </form>
 	      </div>
 	
