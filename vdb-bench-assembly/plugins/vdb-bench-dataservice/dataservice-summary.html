@@ -96,12 +96,19 @@
 	                            </div>
 	                            <div class="list-view-pf-additional-info">
 	                                <!-- TODO - consider what else to include here, preferably the service sources available -->
+                                    <div class="list-view-pf-additional-info-item" uib-tooltip="{{:: 'dataservice-summary.viewSourcesToolTip' | translate}}">
+                                        <span class="fa fa-database"></span>
+                                        <span ng-show="item.serviceViewTables.length==1">{{item.serviceViewTables[0]}}</span>
+                                        <span ng-show="item.serviceViewTables.length==2">{{item.serviceViewTables[0]}}, {{item.serviceViewTables[1]}}</span>
+                                    </div>
 	
+	                                <!-- 
 	                                <div class="list-view-pf-additional-info-item" uib-tooltip="{{:: 'dataservice-summary.connectionsNumberToolTip' | translate}}">
 	                                    <span class="fa fa-exchange"></span>
 	                                    <strong>{{item.connections}}</strong>
 	                                    <span>{{item.connections === 1 ? 'shared.Connection' : 'shared.Connections' | translate}}</span>
 	                                </div>
+	                                -->
 	                            </div>
 	                        </div>
 	                    </div>
