@@ -7,7 +7,7 @@
         wz-disabled="{{!vm.wizardActive}}"
         next-enabled="vm.validateCredentials()"
         ok-to-nav-away="vm.validateCredentials()">
-    <h1>Enter the details for the destination git repository</h1>
+    <h1 translate="git-export-wizard.repoDetailsStepMsg" />
 
     <git-credentials-control show-name="false"
                                         show-file-path="true"
@@ -20,7 +20,7 @@
         step-title="Commit to Repository"
         step-id="export-to-git-final"
         wz-disabled="{{!vm.wizardActive}}">
-    <h1>Export the artifact to the repository</h1>
+    <h1 translate="git-export-wizard.exportStepMsg" />
 
     <div class="ds-export-git-page">
         <!-- Show progress bar on export -->
@@ -30,10 +30,13 @@
 
         <div ng-show="!vm.inProgress">
             <div class="ds-export-git-page-button">
-                <a class="btn btn-default btn-primary" ng-click="vm.onExportDataServiceClicked()">Export</a>
+                <a class="btn btn-default btn-primary"
+                   ng-click="vm.onExportDataServiceClicked()"
+                   translate="shared.Export">
+                </a>
             </div>
             <div class="ds-export-git-page-response">
-                <div ng-class="vm.responseStyleClass">{{vm.response}}</div>
+                <span ng-class="vm.responseStyleClass" />{{vm.responseMsg}}</div>
             </div>
 
             <div class="ds-export-git-page-error">

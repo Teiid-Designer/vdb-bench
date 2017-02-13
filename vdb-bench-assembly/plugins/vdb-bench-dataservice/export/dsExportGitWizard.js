@@ -10,7 +10,13 @@
         .directive('dsExportGitWizard', DSExportGitWizard);
 
     DSExportGitWizard.$inject = ['CONFIG', 'SYNTAX'];
-    DSExportGitWizardController.$inject = ['$window', '$scope', '$base64', 'SYNTAX', 'DSSelectionService', 'RepoRestService'];
+    DSExportGitWizardController.$inject = ['$window', 
+                                           '$scope', 
+                                           '$base64', 
+                                           '$translate', 
+                                           'SYNTAX', 
+                                           'DSSelectionService', 
+                                           'RepoRestService'];
 
     function DSExportGitWizard(config, syntax) {
         var directive = {
@@ -30,7 +36,13 @@
         return directive;
     }
 
-    function DSExportGitWizardController($window, $scope, $base64, syntax, DSSelectionService, RepoRestService) {
+    function DSExportGitWizardController($window, 
+                                         $scope, 
+                                         $base64,
+                                         $translate,
+                                         syntax, 
+                                         DSSelectionService, 
+                                         RepoRestService) {
         var vm = this;
 
         /**
@@ -51,10 +63,19 @@
 
         function setResponse(response) {
             vm.response = response;
-            if (response === 'OK')
-                vm.responseStyleClass = "ds-export-git-page-response-ok";
-            else
-                vm.responseStyleClass = "ds-export-git-page-response-bad";
+            var dataService = DSSelectionService.selectedDataService();
+
+            if (response === 'Failed') {
+                vm.responseStyleClass = "pficon pficon-ok";
+                vm.responseMsg = $translate.instant( 'dsExportGitWizard.successfulExportMsg', 
+                                                     { dataServiceName: dataService.keng__id, 
+                                                       repoPath: vm.repo.parameters[ 'file-path-property' ] } );
+            } else {
+                vm.responseStyleClass = "pficon pficon-error-circle-o";
+                vm.responseMsg = $translate.instant( 'dsExportGitWizard.failedExportMsg', 
+                                                     { dataServiceName: dataService.keng__id,
+                                                       repoPath: vm.repo.parameters[ 'file-path-property' ] } );
+            }
         }
 
         /**
