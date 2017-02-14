@@ -156,7 +156,15 @@
                                 if(result[r].type === JDBC_FILTER.CATALOG) {
                                     hasCatalogs = true;
                                 }
-                                treeInfo.push(resultItem);
+                                // teiid handling - dont show SYS, SYSADMIN, pg_catalog schemas
+                                if(connection.dv__driverName === "teiid") {
+                                    if(resultItem.type==="Schema" && 
+                                        (resultItem.name!=="SYS" && resultItem.name!=="SYSADMIN" && resultItem.name!=="pg_catalog")) {
+                                        treeInfo.push(resultItem);
+                                    }
+                                } else {
+                                    treeInfo.push(resultItem);
+                                }
                             }
                             // filters available - use to set initial selections
                             if(vm.catalogFilter!==JDBC_FILTER.BLANK || vm.schemaFilter!==JDBC_FILTER.BLANK) {

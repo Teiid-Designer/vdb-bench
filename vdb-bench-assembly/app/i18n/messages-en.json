@@ -195,6 +195,8 @@
         "enterNameInstructionMsg" : "Enter a name for your data service",
         "getVdbModelsFailedMsg" : "Failed to get Vdb models",
         "getVdbModelTablesFailedMsg" : "Failed to get Vdb model tables",
+        "createDataserviceFailedMsg" : "Failed to create the data service",
+        "updateDataserviceFailedMsg" : "Failed to update the data service",
         "selectedTables" : "Selected Tables",
         "stepTitle" : "Choose Data Sources",
         "updateVdbFromDdlFailedMsg" : "Failed to construct temp Vdb from DDL",
@@ -210,6 +212,8 @@
     },
 
     "dsEditController" : {
+        "enterViewDefnMsg" : "Enter a View Definition",
+        "updateDataserviceFailedMsg" : "Failed to update the data service",
         "saveFailedMsg" : "Failed to update the data service: {{response}}"
     },
     
@@ -227,7 +231,8 @@
     },
 
     "dsNewController" : {
-        "createFailedMsg" : "Failed to create the data service: {{response}}",
+        "createDataserviceFailedMsg" : "Failed to create the data service",
+        "enterViewDefnMsg" : "Enter a View Definition",
         "saveFailedMsg" : "Failed to update the data service: {{response}}"
     },
 

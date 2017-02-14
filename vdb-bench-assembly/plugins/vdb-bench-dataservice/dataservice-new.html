@@ -27,8 +27,12 @@
                         <h4 class="pull-left">{{'dataservice-new.viewDdlTitle' | translate}}</h4>
                     </div>
                     <div class="col-md-12">
-                        <div ui-codemirror ng-model="vm.viewDdl" ui-codemirror-opts="vm.ddlEditorOptions" ui-refresh="vm.refreshViewDdl"></div>
+                        <div ui-codemirror="{ onLoad : vm.editorLoaded }" ng-model="vm.viewDdl" ui-codemirror-opts="vm.ddlEditorOptions" ui-refresh="vm.refreshViewDdl"></div>
+                        <div class="has-error" ng-if="vm.showDdlError">
+                            <span class="help-block">{{vm.ddlErrorMsg}}</span>
+                        </div>
                     </div>
+                    <p>&nbsp;</p>
                     <div class="col-md-12">
                         <p><strong>{{'dataservice-new.sourceTablesLimitedMsg' | translate}}</strong></p>
                         <h4 ng-show="vm.sourceNames[0]!=null">&nbsp;&nbsp;{{vm.sourceNames[0]}}.{{vm.tableNames[0]}}</h4>
@@ -36,7 +40,7 @@
                         <p>&nbsp;</p>
                     </div>
                     <div class="col-md-12">
-                        <input type="submit" class="btn btn-primary" value="{{:: 'shared.Finish' | translate}}" ng-click="vm.finishClicked()" />
+                        <input type="submit" class="btn btn-primary" value="{{:: 'shared.Finish' | translate}}" ng-click="vm.finishClicked()" ng-disabled="vm.disableFinish"/>
                         <input type="button" class="btn btn-default" value="{{:: 'shared.Cancel' | translate}}" ng-click="vmmain.selectPage('dataservice-summary')" />
                     </div>
                 </uib-tab>

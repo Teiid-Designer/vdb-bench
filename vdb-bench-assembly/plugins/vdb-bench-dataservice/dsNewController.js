@@ -21,6 +21,19 @@
         vm.disableExpertTab = true;
         vm.sourceNames = [];
         vm.tableNames = [];
+        vm.disableFinish = false;
+        vm.showDdlError = false;
+        vm.ddlErrorMsg = "";
+
+        vm.editorLoaded = function(_editor) {
+            if (! _editor)
+                return;
+
+            // Change Event
+            _editor.on("change", function(obj){ 
+                ddlChanged(obj);
+            });
+        };
 
         /*
          * Handle change of EditWizardService tables
@@ -179,23 +192,21 @@
         vm.finishClicked = function() {
             var svcName = EditWizardService.serviceName();
             var svcDescription = EditWizardService.serviceDescription();
-            
             try {
                 RepoRestService.createDataService( svcName, svcDescription ).then(
                     function () {
                         setDataserviceServiceVdb(svcName);
                     },
                     function (response) {
-                        var errorMsg = $translate.instant('dataserviceEditWizard.createDataserviceFailedMsg');
+                        var errorMsg = $translate.instant('dsNewController.createDataserviceFailedMsg');
                         throw RepoRestService.newRestException(errorMsg + "\n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {
-                var errorMsg = $translate.instant('dataserviceEditWizard.createDataserviceFailedMsg');
+                var errorMsg = $translate.instant('dsNewController.createDataserviceFailedMsg');
                 throw RepoRestService.newRestException(errorMsg + "\n" + error);
             }
         };
-        
-        
+
         /**
          * Sets the dataservice VDB based on one or two tables selected.
          */
@@ -217,18 +228,7 @@
                     var relativeModelSourcePath = sourceName+"/"+selSvcSourceModelName+"/vdb:sources/"+selSvcSourceModelName;
                     var relativeTablePath = SYNTAX.TEMP+sourceName+"/"+selSvcSourceModelName+"/"+tableName;
 
-                    try {
-                        RepoRestService.setDataServiceVdbForSingleTable( dataserviceName, relativeModelSourcePath, vm.viewDdl, relativeTablePath, null ).then(
-                            function () {
-                                // Reinitialise the list of data services
-                                DSSelectionService.refresh('dataservice-summary');
-                            },
-                            function (response) {
-                                throw RepoRestService.newRestException($translate.instant('dsNewController.saveFailedMsg', 
-                                                                                          {response: RepoRestService.responseMessage(response)}));
-                            });
-                    } catch (error) {
-                    }
+                    setDataServiceVdbForSingleTable(dataserviceName, relativeModelSourcePath, vm.viewDdl, relativeTablePath);
                 };
 
                 // Failure callback
@@ -256,19 +256,8 @@
                     var rhRelativeModelSourcePath = vm.sourceNames[1]+"/"+rhSourceModelName+"/vdb:sources/"+rhSourceModelName;
                     var rhRelativeTablePath = SYNTAX.TEMP+vm.sourceNames[1]+"/"+rhSourceModelName+"/"+vm.tableNames[1];
 
-                    try {
-                        RepoRestService.setDataServiceVdbForJoinTables( dataserviceName, lhRelativeModelSourcePath, rhRelativeModelSourcePath, vm.viewDdl,
-                                                                        lhRelativeTablePath, null, rhRelativeTablePath, null, null, null, null).then(
-                            function () {
-                                // Reinitialise the list of data services
-                                DSSelectionService.refresh('dataservice-summary');
-                            },
-                            function (response) {
-                                throw RepoRestService.newRestException($translate.instant('dsNewController.saveFailedMsg', 
-                                                                                          {response: RepoRestService.responseMessage(response)}));
-                            });
-                    } catch (error) {
-                    }
+                    setDataServiceVdbForJoinTables(dataserviceName, lhRelativeModelSourcePath, rhRelativeModelSourcePath, vm.viewDdl,
+                                                                    lhRelativeTablePath, rhRelativeTablePath);
                 };
 
                 // Failure callback
@@ -337,6 +326,25 @@
             getModelForSource(sourceNames[0], successCallback, failureCallback);
         }
 
+        function ddlChanged(obj) {
+            // Get the new document text
+            var lines = obj.doc.children[0].lines;
+            var newText = "";
+            for(var i=0; i<lines.length; i++) {
+                newText = newText.concat(lines[i].text);
+            }
+            // No view definition entered
+            if(newText.length===0) {
+                vm.showDdlError = true;
+                vm.ddlErrorMsg = $translate.instant('dsNewController.enterViewDefnMsg');
+                vm.disableFinish = true;
+            } else {
+                vm.showDdlError = false;
+                vm.ddlErrorMsg = "";
+                vm.disableFinish = false;
+            }
+        }
+
         /**
          * Options for the codemirror editor used for editing ddl
          */
@@ -346,9 +354,51 @@
             mode: 'text/x-sql'
         };
 
-        vm.ddlEditorLoaded = function(_editor) {
-            // Nothing to do at the moment
-        };
+        /**
+         * Set the dataservice VDB.  If fails, delete the dataservice
+         */
+        function setDataServiceVdbForSingleTable( dataserviceName, relativeModelSourcePath, ddl, relativeTablePath ) {
+            try {
+                RepoRestService.setDataServiceVdbForSingleTable( dataserviceName, relativeModelSourcePath, ddl, relativeTablePath, null ).then(
+                    function () {
+                        // Reinitialise the list of data services
+                        DSSelectionService.refresh('dataservice-summary');
+                    },
+                    function (response) {
+                        vm.showDdlError = true;
+                        vm.ddlErrorMsg = RepoRestService.responseMessage(response);
+                        RepoRestService.deleteDataService( dataserviceName );
+                    });
+            } catch (error) {
+                vm.showDdlError = true;
+                vm.ddlErrorMsg = RepoRestService.responseMessage(response);
+                RepoRestService.deleteDataService( dataserviceName );
+            }
+        }
+
+        /**
+         * Set the dataservice VDB.  If fails, delete the dataservice
+         */
+        function setDataServiceVdbForJoinTables(dataserviceName, lhRelativeModelSourcePath, rhRelativeModelSourcePath, ddl,
+                lhRelativeTablePath, rhRelativeTablePath) {
+            try {
+                RepoRestService.setDataServiceVdbForJoinTables( dataserviceName, lhRelativeModelSourcePath, rhRelativeModelSourcePath, ddl,
+                                                                lhRelativeTablePath, null, rhRelativeTablePath, null, null, null, null).then(
+                    function () {
+                        // Reinitialise the list of data services
+                        DSSelectionService.refresh('dataservice-summary');
+                    },
+                    function (response) {
+                        vm.showDdlError = true;
+                        vm.ddlErrorMsg = RepoRestService.responseMessage(response);
+                        RepoRestService.deleteDataService( dataserviceName );
+                    });
+            } catch (error) {
+                vm.showDdlError = true;
+                vm.ddlErrorMsg = RepoRestService.responseMessage(response);
+                RepoRestService.deleteDataService( dataserviceName );
+            }
+        }
 
     }
 

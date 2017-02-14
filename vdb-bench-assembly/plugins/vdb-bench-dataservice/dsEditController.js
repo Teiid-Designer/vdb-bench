@@ -8,10 +8,10 @@
         .module(pluginName)
         .controller('DSEditController', DSEditController);
 
-    DSEditController.$inject = ['$scope', '$document', '$translate', 'SYNTAX', 'RepoRestService', 
+    DSEditController.$inject = ['$scope', '$document', '$translate', '$timeout', 'SYNTAX', 'RepoRestService', 
                                 'EditWizardService', 'SvcSourceSelectionService', 'DSSelectionService', 'DSPageService'];
 
-    function DSEditController($scope, $document, $translate, SYNTAX, 
+    function DSEditController($scope, $document, $translate, $timeout, SYNTAX, 
                               RepoRestService, EditWizardService, SvcSourceSelectionService, DSSelectionService, DSPageService) {
         var vm = this;
         var DEFAULT_VIEW = "CREATE VIEW ServiceView ( ) AS SELECT * FROM aTable;";
@@ -22,6 +22,9 @@
         vm.disableExpertTab = EditWizardService.sourceTables().length === 0;
         vm.sourceNames = [];
         vm.tableNames = [];
+        vm.disableFinish = false;
+        vm.showDdlError = false;
+        vm.ddlErrorMsg = "";
 
         /*
          * Set a custom title to the page including the data service's id
@@ -30,6 +33,26 @@
         DSPageService.setCustomTitle(page.id, page.title + " '" + DSSelectionService.selectedDataService().keng__id + "'");
 
         vm.svcSourcesLoading = SvcSourceSelectionService.isLoading();
+
+        vm.editorLoaded = function(_editor) {
+            if (! _editor)
+                return;
+
+            //
+            // Due to the nested nature of the codemirror
+            // instance in the tabs, it doesnt refresh unless
+            // a key is pressed. This forces a refresh after
+            // a half second.
+            //
+            $timeout(function () {
+                _editor.refresh();
+            }, 500);
+
+            // Change Event
+            _editor.on("change", function(obj){ 
+                ddlChanged(obj);
+            });
+        };
 
         /*
          * Determine initial tab displayed
@@ -204,11 +227,11 @@
                         setDataserviceServiceVdb(svcName);
                     },
                     function (response) {
-                        var errorMsg = $translate.instant('dataserviceEditWizard.updateDataserviceFailedMsg');
+                        var errorMsg = $translate.instant('dsEditController.updateDataserviceFailedMsg');
                         throw RepoRestService.newRestException(errorMsg + "\n" + RepoRestService.responseMessage(response));
                     });
             } catch (error) {
-                var errorMsg = $translate.instant('dataserviceEditWizard.updateDataserviceFailedMsg');
+                var errorMsg = $translate.instant('dsEditController.updateDataserviceFailedMsg');
                 throw RepoRestService.newRestException(errorMsg + "\n" + error);
             }
         };
@@ -234,18 +257,7 @@
                     var relativeModelSourcePath = vm.sourceNames[0]+"/"+selSvcSourceModelName+"/vdb:sources/"+selSvcSourceModelName;
                     var relativeTablePath = SYNTAX.TEMP+vm.sourceNames[0]+"/"+selSvcSourceModelName+"/"+vm.tableNames[0];
 
-                    try {
-                        RepoRestService.setDataServiceVdbForSingleTable( dataserviceName, relativeModelSourcePath, vm.viewDdl, relativeTablePath, null ).then(
-                            function () {
-                                // Reinitialise the list of data services
-                                DSSelectionService.refresh('dataservice-summary');
-                            },
-                            function (response) {
-                                throw RepoRestService.newRestException($translate.instant('dsNewController.saveFailedMsg', 
-                                                                                          {response: RepoRestService.responseMessage(response)}));
-                            });
-                    } catch (error) {
-                    }
+                    setDataServiceVdbForSingleTable(dataserviceName, relativeModelSourcePath, vm.viewDdl, relativeTablePath);
                 };
 
                 // Failure callback
@@ -275,20 +287,9 @@
 
                     // Join type
                     var joinType = EditWizardService.joinType();
-                    
-                    try {
-                        RepoRestService.setDataServiceVdbForJoinTables( dataserviceName, lhRelativeModelSourcePath, rhRelativeModelSourcePath, vm.viewDdl,
-                                                                                         lhRelativeTablePath, null, rhRelativeTablePath, null, null, null, null).then(
-                            function () {
-                                // Reinitialise the list of data services
-                                DSSelectionService.refresh('dataservice-summary');
-                            },
-                            function (response) {
-                                throw RepoRestService.newRestException($translate.instant('dsNewController.saveFailedMsg', 
-                                                                                          {response: RepoRestService.responseMessage(response)}));
-                            });
-                    } catch (error) {
-                    }
+
+                    setDataServiceVdbForJoinTables(dataserviceName, lhRelativeModelSourcePath, rhRelativeModelSourcePath, vm.viewDdl,
+                            lhRelativeTablePath, rhRelativeTablePath);
                 };
 
                 // Failure callback
@@ -357,6 +358,25 @@
             getModelForSource(sourceNames[0], successCallback, failureCallback);
         }
 
+        function ddlChanged(obj) {
+            // Get the new document text
+            var lines = obj.doc.children[0].lines;
+            var newText = "";
+            for(var i=0; i<lines.length; i++) {
+                newText = newText.concat(lines[i].text);
+            }
+            // No view definition entered
+            if(newText.length===0) {
+                vm.showDdlError = true;
+                vm.ddlErrorMsg = $translate.instant('dsEditController.enterViewDefnMsg');
+                vm.disableFinish = true;
+            } else {
+                vm.showDdlError = false;
+                vm.ddlErrorMsg = "";
+                vm.disableFinish = false;
+            }
+        }
+
         /**
          * Options for the codemirror editor used for editing ddl
          */
@@ -366,9 +386,47 @@
             mode: 'text/x-sql'
         };
 
-        vm.ddlEditorLoaded = function(_editor) {
-            // Nothing to do at the moment
-        };
+        /**
+         * Set the dataservice VDB.  If fails, delete the dataservice
+         */
+        function setDataServiceVdbForSingleTable( dataserviceName, relativeModelSourcePath, ddl, relativeTablePath ) {
+            try {
+                RepoRestService.setDataServiceVdbForSingleTable( dataserviceName, relativeModelSourcePath, ddl, relativeTablePath, null ).then(
+                    function () {
+                        // Reinitialise the list of data services
+                        DSSelectionService.refresh('dataservice-summary');
+                    },
+                    function (response) {
+                        vm.showDdlError = true;
+                        vm.ddlErrorMsg = RepoRestService.responseMessage(response);
+                    });
+            } catch (error) {
+                vm.showDdlError = true;
+                vm.ddlErrorMsg = RepoRestService.responseMessage(response);
+            }
+        }
+
+        /**
+         * Set the dataservice VDB.  If fails, delete the dataservice
+         */
+        function setDataServiceVdbForJoinTables(dataserviceName, lhRelativeModelSourcePath, rhRelativeModelSourcePath, ddl,
+                lhRelativeTablePath, rhRelativeTablePath) {
+            try {
+                RepoRestService.setDataServiceVdbForJoinTables( dataserviceName, lhRelativeModelSourcePath, rhRelativeModelSourcePath, ddl,
+                                                                lhRelativeTablePath, null, rhRelativeTablePath, null, null, null, null).then(
+                    function () {
+                        // Reinitialise the list of data services
+                        DSSelectionService.refresh('dataservice-summary');
+                    },
+                    function (response) {
+                        vm.showDdlError = true;
+                        vm.ddlErrorMsg = RepoRestService.responseMessage(response);
+                    });
+            } catch (error) {
+                vm.showDdlError = true;
+                vm.ddlErrorMsg = RepoRestService.responseMessage(response);
+            }
+        }
 
     }
     
