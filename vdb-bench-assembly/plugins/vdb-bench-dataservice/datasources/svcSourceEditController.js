@@ -15,7 +15,6 @@
                                       SvcSourceSelectionService, ConnectionSelectionService, TranslatorSelectionService, DSPageService) {
         var vm = this;
 
-        vm.originalConnectionName = null;
         vm.initialConnectionName = null;
         vm.initialConnectionJndi = null;
         vm.connectionInit = true;
@@ -30,6 +29,14 @@
         vm.allTranslators = TranslatorSelectionService.getTranslators(false);
         vm.filterSchema = false;
         vm.updateAndDeployInProgress = false;
+        vm.originalConnectionName = null;
+        vm.originalTranslatorName = null;
+        vm.originalFilterProps = [];
+        vm.originalDescription = null;
+        vm.connectionChanged = false;
+        vm.translatorChanged = false;
+        vm.filterPropsChanged = false;
+        vm.descriptionChanged = false;
 
         /*
          * Set a custom title to the page including the service source's id
@@ -71,11 +78,16 @@
                 }
             }
             
-            vm.originalConnectionName = vm.initialConnectionName;
             vm.selectedTranslator = TranslatorSelectionService.selectedTranslator();
             vm.selectedTranslatorImage = TranslatorSelectionService.getImageLink(vm.selectedTranslator.keng__id);
             vm.selectedSource = SvcSourceSelectionService.selectedServiceSource();
             vm.selectedJdbcConnection=ConnectionSelectionService.getConnection(vm.initialConnectionName);
+            
+            // Save original values for later comparison
+            vm.originalTranslatorName = vm.selectedTranslator.keng__id;
+            vm.originalConnectionName = vm.initialConnectionName;
+            RepoRestService.copy(filterInfo,vm.originalFilterProps);  // Keep a copy of the original properties
+            vm.originalDescription = vm.selectedSource.vdb__description;
             
             // If JDBC connection is selected and filters defined, select the checkbox
             if(vm.selectedJdbcConnection!==null && vm.selectedJdbcConnection.dv__type===true) {
@@ -110,6 +122,7 @@
                     vm.selectedTranslator = null;
                     vm.selectedTranslatorImage = TranslatorSelectionService.getImageLink(null);
                 }
+                vm.filterSchema = false;
             }
             vm.connectionInit = false;
         });
@@ -240,10 +253,17 @@
 
             // Set in progress status
             vm.updateAndDeployInProgress = true;
-            
+
+            // Determine items changed
+            vm.connectionChanged = connectionName !== vm.originalConnectionName;
+            vm.translatorChanged = translatorName !== vm.originalTranslatorName;
+            vm.filterPropsChanged = !angular.equals(filterProperties,vm.originalFilterProps);
+            vm.descriptionChanged = vm.svcSourceDescription !== vm.originalDescription;
+
             try {
+                
                 // If a different connection was chosen, the original VdbModel must be deleted
-                if(connectionName !== vm.originalConnectionName) {
+                if(vm.connectionChanged) {
                     RepoRestService.deleteVdbModel( vm.svcSourceName, vm.originalConnectionName).then(
                             function (resp) {
                                 createVdbModel( vm.svcSourceName, connectionName, translatorName, jndiName, filterProperties );
@@ -255,17 +275,34 @@
                             });
                 // Connection was not changed, we can update the existing VdbModel and VdbModelSource
                 } else {
-                    RepoRestService.updateVdbModel( vm.svcSourceName, connectionName, true, filterProperties).then(
-                            function (theModel) {
-                                updateVdbModelSource( vm.svcSourceName, connectionName, connectionName, translatorName, jndiName );
-                            },
-                            function (response) {
-                                var sourceUpdateFailedMsg = $translate.instant('svcSourceEditController.sourceUpdateFailedMsg');
-                                alert(sourceUpdateFailedMsg + "\n" + RepoRestService.responseMessage(response));
-                                SvcSourceSelectionService.refresh('datasource-summary');
-                            });
+                    // Filter properties changed, update the model
+                    if(vm.filterPropsChanged) {
+                        RepoRestService.updateVdbModel( vm.svcSourceName, connectionName, true, filterProperties).then(
+                                function (theModel) {
+                                    if(vm.translatorChanged) {
+                                        updateVdbModelSource( vm.svcSourceName, connectionName, connectionName, translatorName, jndiName );
+                                    } else {
+                                        updateVdbDescription( vm.svcSourceName, vm.svcSourceDescription);
+                                    }
+                                },
+                                function (response) {
+                                    var sourceUpdateFailedMsg = $translate.instant('svcSourceEditController.sourceUpdateFailedMsg');
+                                    alert(sourceUpdateFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                                    SvcSourceSelectionService.refresh('datasource-summary');
+                                });
+                    // Filter properties not changed
+                    } else {
+                        // Translator changed, update model source
+                        if(vm.translatorChanged) {
+                            updateVdbModelSource( vm.svcSourceName, connectionName, connectionName, translatorName, jndiName );
+                        // Translator not changed
+                        } else {
+                            updateVdbDescription( vm.svcSourceName, vm.svcSourceDescription);
+                        }
+                    }
                 }
-            } catch (error) {} finally {
+            } catch (error) {
+            } finally {
             }
         };
 
@@ -273,23 +310,27 @@
          * Update the VDB description
          */
         function updateVdbDescription( svcSourceName, svcSourceDescription ) {
-            // Creates the Model within the VDB, then add the ModelSource to the Model
-            try {
-                RepoRestService.updateVdb( svcSourceName, svcSourceDescription, true ).then(
-                    function (theModel) {
-                        deployVdb(svcSourceName);
-                    },
-                    function (resp) {
-                        SvcSourceSelectionService.setLoading(false);
-                        var sourceUpdateFailedMsg = $translate.instant('svcSourceEditController.sourceUpdateFailedMsg');
-                        alert(sourceUpdateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
-                        SvcSourceSelectionService.refresh('datasource-summary');
-                    });
-            } catch (error) {
-                SvcSourceSelectionService.setLoading(false);
-                var sourceUpdateFailedMsg = $translate.instant('svcSourceEditController.sourceUpdateFailedMsg');
-                alert(sourceUpdateFailedMsg + "\n" + error);
-                SvcSourceSelectionService.refresh('datasource-summary');
+            if(vm.descriptionChanged) {
+                // Creates the Model within the VDB, then add the ModelSource to the Model
+                try {
+                    RepoRestService.updateVdb( svcSourceName, svcSourceDescription, true ).then(
+                        function (theModel) {
+                            deployVdb(svcSourceName);
+                        },
+                        function (resp) {
+                            SvcSourceSelectionService.setLoading(false);
+                            var sourceUpdateFailedMsg = $translate.instant('svcSourceEditController.sourceUpdateFailedMsg');
+                            alert(sourceUpdateFailedMsg + "\n" + RepoRestService.responseMessage(resp));
+                            SvcSourceSelectionService.refresh('datasource-summary');
+                        });
+                } catch (error) {
+                    SvcSourceSelectionService.setLoading(false);
+                    var sourceUpdateFailedMsg = $translate.instant('svcSourceEditController.sourceUpdateFailedMsg');
+                    alert(sourceUpdateFailedMsg + "\n" + error);
+                    SvcSourceSelectionService.refresh('datasource-summary');
+                }
+            } else {
+                deployVdb(svcSourceName);
             }
         }
 
@@ -297,6 +338,11 @@
          * Deploys the specified VDB to the server
          */
         function deployVdb(vdbName) {
+            // If nothing changed, no need to redeploy the source vdb.
+            if(!vm.connectionChanged && !vm.translatorChanged && !vm.filterPropsChanged && !vm.descriptionChanged) {
+                SvcSourceSelectionService.refresh('datasource-summary');
+                return;
+            }
             // Deploy the VDB to the server.  At the end, fire notification to go to summary page
             try {
                 SvcSourceSelectionService.setDeploying(true, vdbName, false, null);
@@ -371,7 +417,7 @@
             try {
                 RepoRestService.createVdbModelSource( vdbName, modelName, sourceName, translatorName, jndiName ).then(
                     function (theModelSource) {
-                        deployVdb( vdbName );
+                        updateVdbDescription( vm.svcSourceName, vm.svcSourceDescription);
                     },
                     function (resp) {
                         SvcSourceSelectionService.setLoading(false);

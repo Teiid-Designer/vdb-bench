@@ -30,7 +30,7 @@
 	            </div>
 	
 	            <!--  Filter Checkbox -->
-	            <div class="col-md-12" ng-show="vm.selectedJdbcConnection !== null && vm.selectedTranslator !== null">
+	            <div class="col-md-12" ng-show="vm.selectedJdbcConnection !== null">
 	                <form>
 	                    <input type="checkbox" ng-model="vm.filterSchema" ng-true-value=true ng-false-value=false ng-change="vm.filterCheckboxChanged()">
 	                    <h4 style="display:inline"><strong translate="svcsource-edit.filterConnection"></strong></h4>
