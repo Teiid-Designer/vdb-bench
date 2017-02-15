@@ -207,8 +207,10 @@
     },
     
     "dsExportGitWizard" : {
+        "failedExportMsg" : "Exporting data service '{{dataServiceName}}' to repository path '{{repoPath}}' failed",
         "missingPathMsg" : "@:dsImportGitWizard.missingPathMsg",
-        "missingRepositoryUrlMsg" : "@:dsImportGitWizard.missingRepositoryUrlMsg"
+        "missingRepositoryUrlMsg" : "@:dsImportGitWizard.missingRepositoryUrlMsg",
+        "successfulExportMsg" : "Successfully exported data service '{{dataServiceName}}' to repository path '{{repoPath}}'"
     },
 
     "dsImportGitWizard" : {
@@ -376,7 +378,12 @@
             "userName" : "Specifies the user name for HTTP authentication"
         }
     },
-    
+
+    "git-export-wizard" : {
+        "exportStepMsg" : "Export the data service to the git repository",
+        "repoDetailsStepMsg" : "Enter the details and security attributes for the destination git repository"
+    },
+
     "git-import-wizard" : {
         "extractStepMsg" : "Import the artifact from the repository",
         "extractStepTitle" : "Extract from Repository",
