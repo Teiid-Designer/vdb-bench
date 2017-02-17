@@ -1,7 +1,7 @@
-/deployment==ds-builder.war:add(runtime-name==ds-builder.war,content=[{path=dataVirtualization/dsb/=ds-builder.war/,archive=false,relative-to=jboss.home.dir}])
-/server-group=main-server-group/deployment==ds-builder.war:add(enabled=true)
-/server-group=other-server-group/deployment==ds-builder.war:add(enabled=true)
+/deployment==ds-builder.war:add(runtime-name=ds-builder.war,content=[{path=dataVirtualization/dataServiceBuilder/vdb-bench-war.war/,archive=false,relative-to=jboss.home.dir}])
+/server-group=main-server-group/deployment=ds-builder.war:add(enabled=true)
+/server-group=other-server-group/deployment=ds-builder.war:add(enabled=true)
 
-/deployment==ds-builder-help.war:add(runtime-name==ds-builder-help.war,content=[{path=dataVirtualization/dsb/=ds-builder-help.war/,archive=false,relative-to=jboss.home.dir}])
-/server-group=main-server-group/deployment==ds-builder-help.war:add(enabled=true)
-/server-group=other-server-group/deployment==ds-builder-help.war:add(enabled=true)
+/deployment==ds-builder-help.war:add(runtime-name=ds-builder-help.war,content=[{path=dataVirtualization/dataServiceBuilder/vdb-bench-war.war/,archive=false,relative-to=jboss.home.dir}])
+/server-group=main-server-group/deployment=ds-builder-help.war:add(enabled=true)
+/server-group=other-server-group/deployment=ds-builder-help.war:add(enabled=true)
