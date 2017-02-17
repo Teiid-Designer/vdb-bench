@@ -512,7 +512,7 @@
         /**
          * Service: create a new VDB in the repository
          */
-        service.updateVdbModel = function (vdbName, modelName, isSource, importerProperties) {
+        service.updateVdbModel = function (vdbName, modelName, isSource, importerProperties, modelDdl) {
             if (!vdbName || !modelName) {
                 throw new RestServiceException("VDB name or model name is not defined");
             }
@@ -522,7 +522,8 @@
                     "keng__id": modelName,
                     "keng__dataPath": getUserWorkspacePath()+"/"+vdbName+"/"+modelName,
                     "keng__kType": "Model",
-                    "mmcore__modelType": "PHYSICAL"
+                    "mmcore__modelType": "PHYSICAL",
+                    "keng__ddl": modelDdl
                 };
                 
                 

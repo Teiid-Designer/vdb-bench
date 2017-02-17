@@ -43,8 +43,7 @@
             SEMI_COLON: ';',
             SPEECH_MARKS: '"',
             HTML: 'html',
-            UNKNOWN: 'unknown',
-            TEMP: 'temp'
+            UNKNOWN: 'unknown'
         })
 
         .constant('JOIN', {

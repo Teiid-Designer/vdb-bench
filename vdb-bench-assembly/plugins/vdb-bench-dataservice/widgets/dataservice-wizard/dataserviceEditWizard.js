@@ -409,11 +409,11 @@
          * Creates a temp model in the workspace from teiid DDL.  Temp model is used to build the Views
          */
         function updateVdbModelFromDdl ( vdbName, modelName ) {
-            // Gets the teiid model schema.  If successful, create a temp model using the schema
+            // Updates the selected VdbModel using the specified teiid model schema.
             try {
-                RepoRestService.updateVdbModelFromDdl( SYNTAX.TEMP+vdbName, modelName, vdbName, modelName ).then(
+                RepoRestService.updateVdbModelFromDdl( vdbName, modelName, vdbName, modelName ).then(
                         function ( result ) {
-                            getTempVdbModels( SYNTAX.TEMP+vdbName );
+                            getTempVdbModels( vdbName );
                         },
                         function (response) {
                             var updateVdbFailedMsg = $translate.instant('dataserviceEditWizard.updateVdbFromDdlFailedMsg');
@@ -510,9 +510,9 @@
          * Get the Vdb model table columns
          */
         function setSourceTableColumns(nSrc,vdbName,modelName,tableName) {
-            // Update the items using the Repo scratch object
+            // Update the items using the specified repo table
             try {
-                RepoRestService.getVdbModelTableColumns( SYNTAX.TEMP+vdbName, modelName, tableName ).then(
+                RepoRestService.getVdbModelTableColumns( vdbName, modelName, tableName ).then(
                     function ( result ) {
                         if(nSrc===1) {
                             EditWizardService.setSource1AvailableColumns(result);
@@ -599,9 +599,9 @@
                 var singleSuccessCallback = function(model) {
                     var selSvcSourceModelName = model.keng__id;
 
-                    // Path to modelSource and temp table for definition of the dataservice vdb
+                    // Path to modelSource and table for definition of the dataservice vdb
                     var relativeModelSourcePath = sourceName+"/"+selSvcSourceModelName+"/vdb:sources/"+selSvcSourceModelName;
-                    var relativeTablePath = SYNTAX.TEMP+sourceName+"/"+selSvcSourceModelName+"/"+tableName;
+                    var relativeTablePath = sourceName+"/"+selSvcSourceModelName+"/"+tableName;
                     
                     // Columns to include in the service
                     var columnNames = [];
@@ -647,12 +647,12 @@
                     var lhSourceModelName = models[0].keng__id;
                     var rhSourceModelName = models[1].keng__id;
 
-                    // Path for LH model source and temp table
+                    // Path for LH model source and table
                     var lhRelativeModelSourcePath = lhSourceName+"/"+lhSourceModelName+"/vdb:sources/"+lhSourceModelName;
-                    var lhRelativeTablePath = SYNTAX.TEMP+lhSourceName+"/"+lhSourceModelName+"/"+lhTableName;
+                    var lhRelativeTablePath = lhSourceName+"/"+lhSourceModelName+"/"+lhTableName;
                     // Path for RH model source and temp table
                     var rhRelativeModelSourcePath = rhSourceName+"/"+rhSourceModelName+"/vdb:sources/"+rhSourceModelName;
-                    var rhRelativeTablePath = SYNTAX.TEMP+rhSourceName+"/"+rhSourceModelName+"/"+rhTableName;
+                    var rhRelativeTablePath = rhSourceName+"/"+rhSourceModelName+"/"+rhTableName;
                     
                     // Columns to include in the service
                     var lhColumnNames = EditWizardService.source1SelectedColumns();
