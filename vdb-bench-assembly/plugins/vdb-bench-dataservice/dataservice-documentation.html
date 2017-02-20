@@ -2,25 +2,26 @@
 	<div id="dataservice-documentation-container" class="container-fluid"
 		ng-controller="DSDocumentationController as vm">
 
-		<div id="documentation-tabs"">
+		<div id="documentation-tabs">
 			<uib-tabset>  
 			<uib-tab
-				heading="{{:: 'dataservice-documentation.connecting' | translate}}"
-				ng-click="vm.onTabSelected('Standard')">
+				heading="{{:: 'dataservice-documentation.connecting' | translate}}">
+				<div></div>
 				<div translate="dataservice-documentation.connecting-heading1"></div>
 				<div translate="dataservice-documentation.connecting-heading2"></div>
 				<div translate="dataservice-documentation.connecting-java-heading"></div>
-				<div translate="dataservice-documentation.connecting-java1"></div>
+				<div>{{vm.java1}}</div>
 				<div translate="dataservice-documentation.connecting-java2"></div>
 				<div translate="dataservice-documentation.connecting-odata-heading"></div>
-				<div translate="dataservice-documentation.connecting-odata1" + {{vm.endPointUrl()}} ></div>
+				<div>{{vm.odata1}}</div>
 				<div translate="dataservice-documentation.connecting-odata2"></div>
+				<div translate="dataservice-documentation.connecting-odbc-heading"></div>
+				<div translate="dataservice-documentation.connecting-odbc"></div>
 				
 				</uib-tab>
 			<uib-tab
-				heading="{{:: 'dataservice-documentation.samples' | translate}}"
-				ng-click="vm.onTabSelected('Standard')"> 
-			<div id="samples-panel" class="col-sm-4" ng-cloak>
+				heading="{{:: 'dataservice-documentation.samples' | translate}}"> 
+			<div id="samples-panel" class="col-sm-12" ng-cloak>
 				<uib-accordion close-others="false"> 
 				<uib-accordion-group
 					heading=":: dataservice-documentation.java | translate"
@@ -37,7 +38,33 @@
 				</div>
 				</uib-accordion-heading>
 					<div class="odata-exp-select-group">
-						<div>Java code goes here</div>
+						<div><pre><code>public void execute() throws SQLException {
+    String url = "{{vm.jdbcConnectionString}}";
+    String sql = "select 1"; //CHANGE ME
+ 
+    Class.forName("org.teiid.jdbc.TeiidDriver");
+ 
+    Connection connection;
+    try{
+        connection = DriverManager.getConnection(url, "{user}", "{user}"); //Update credentials accordingly
+        Statement statement = connection.createStatement();
+        ResultSet results = statement.executeQuery(sql);
+        while(results.next()) {
+          System.out.println(results.getString(1));
+        }
+        results.close();
+        statement.close();
+    } catch (SQLException e){
+        e.printStackTrace();
+        throw e;
+    } finally {
+        try{
+          connection.close();
+        }catch(SQLException e1){
+          // ignore
+        }
+    }
+}</code></pre></div>
 					</div>
 				</uib-accordion-group> 
 				<uib-accordion-group
@@ -60,7 +87,7 @@
              headers: {
                           Accept: 'application: 'application/json',
                           Authorization: 'Basic xxxxxxxxxxx',
-                          url: '{{odata_url}}',
+                          url: '{{vm.odataUrl}}',
              success: function(data)
                           for (var x = 0; x < data.length; x++) {
                                       console.log(data[i]);
@@ -88,7 +115,9 @@
 				</div>
 				</uib-accordion-heading>
 					<div class="odata-exp-select-group">
-						<div>Node.js code goes here</div>
+						<div><pre><code>o('{{vm.odataUrl}}').get(function(data) {
+  console.log(data); //returns an array of data
+});</code></pre></div>
 					</div>
 				</uib-accordion-group>  
 				<!-- Python -->
@@ -106,7 +135,13 @@
 				</div>
 				</uib-accordion-heading>
 					<div class="odata-exp-select-group">
-						<div>Python code goes here</div>
+						<div><pre><code>import requests
+from requests.auth import HTTPBasicAuth
+
+headers = {'accept': 'application/json;odata=verbose'}
+r = requests.get({{vm.odataUrl}}, auth=HTTPBasicAuth('someUser', 'somePassword'), headers=headers)
+
+print r.json()</code></pre></div>
 					</div>
 				</uib-accordion-group> 
 				<!-- PHP -->
@@ -124,7 +159,16 @@
 				</div>
 				</uib-accordion-heading>
 					<div class="odata-exp-select-group">
-						<div>PHP code goes here</div>
+						<div><pre><code>$ch = curl_init();
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Basic xxxxxxxxxx'));
+$api_request_parameters = array('filter'=>"some_field eq 'some value'");
+$api_request_url = "{{vm.odataUrl}}";
+$api_request_url .= "?".http_build_query($api_request_parameters);
+$curl_setopt($ch, CURLOPT_URL, $api_request_url);
+$response = curl_exec($ch);
+curl_close($ch);</pre></code></div>
 					</div>
 				</uib-accordion-group> 
 

@@ -27,6 +27,7 @@
         	'connection-clone': "connection-clone-help.html",
         	'connection-new': "connection-new-help.html",
         	'dataservice-clone': "dataservices-clone-help.html",
+        	'dataservice-documentation': "dataservices-documentation-help.html",
         	'dataservice-edit': "dataservices-edit-help.html",
         	'dataservice-export-file': "dataservices-export-file-help.html",
         	'dataservice-export-git': "dataservices-export-git-help.html",
