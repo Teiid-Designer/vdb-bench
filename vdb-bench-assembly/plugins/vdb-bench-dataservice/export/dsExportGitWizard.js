@@ -14,8 +14,7 @@
                                            '$base64', 
                                            'SYNTAX', 
                                            'DSSelectionService', 
-                                           'RepoRestService',
-                                           '$rootScope'];
+                                           'RepoRestService'];
 
     function DSExportGitWizard(config, syntax) {
         var directive = {
@@ -39,8 +38,7 @@
                                          $base64, 
                                          syntax, 
                                          DSSelectionService, 
-                                         RepoRestService,
-                                         $rootScope) {
+                                         RepoRestService) {
         var vm = this;
 
         /**
@@ -112,25 +110,15 @@
                 return false;
             }
 
-            if ( $rootScope.requireAuthorName && _.isEmpty(vm.repo.parameters['author-name-property'])) {
+            if ( vm.requireAuthorName && _.isEmpty(vm.repo.parameters['author-name-property'])) {
                 return false;
             }
 
-            if ( $rootScope.requireAuthorEmail && _.isEmpty(vm.repo.parameters['author-email-property'])) {
+            if ( vm.requireAuthorEmail && _.isEmpty(vm.repo.parameters['author-email-property'])) {
                 return false;
             }
 
-            // see if HTTP authentication is complete
-            if ( !_.isEmpty( vm.repo.parameters[ 'repo-password-property' ] ) && !_.isEmpty( vm.repo.parameters[ 'repo-username-property' ] ) ) {
-              return true;
-            }
-            
-            // see if SSH authentication is complete
-            if ( !_.isEmpty( vm.repo.parameters[ 'repo-password-property' ] ) && !_.isEmpty( vm.repo.parameters[ 'repo-known-hosts-property' ] ) ) {
-              return true;
-            }
-
-            return !_.isEmpty( vm.repo.parameters[ 'repo-known-hosts-property' ] ) && !_.isEmpty( vm.repo.parameters[ 'repo-private-key-property' ] ) && !_.isEmpty( vm.repo.parameters[ 'repo-passphrase-property' ] );
+            return true;
         };
 
         vm.showProgress = function(display) {
@@ -167,5 +155,13 @@
                 setResponse('Failed');
             }
         };
+
+        $scope.$on( "requireAuthorName", function( evt, data ) {
+            vm.requireAuthorName = data;
+        });
+
+        $scope.$on( "requireAuthorName", function( evt, data ) {
+            vm.requireAuthorName = data;
+        });
     }
 })();

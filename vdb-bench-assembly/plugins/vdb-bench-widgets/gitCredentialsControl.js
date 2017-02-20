@@ -17,8 +17,7 @@
                                                'StorageService', 
                                                '$scope', 
                                                '$base64', 
-                                               '$window', 
-                                               '$rootScope'];
+                                               '$window'];
 
     function GitCredentialsControl(config, syntax) {
         var directive = {
@@ -47,15 +46,8 @@
                                              StorageService, 
                                              $scope, 
                                              $base64, 
-                                             $window, 
-                                             $rootScope) {
+                                             $window) {
         var vm = this;
-        vm.protocol = {
-            "useHttp": true,
-            "useSsh": false
-        };
-        $rootScope.requireAuthorName = vm.requireAuthorName;
-        $rootScope.requireAuthorEmail = vm.requireAuthorEmail;
 
         var defaultRepo = {
             name: 'git-repo-1',
@@ -364,5 +356,7 @@
         });
 
         initRepositories();
+        $scope.$emit( "requireAuthorName", vm.requireAuthorName );
+        $scope.$emit( "requireAuthorEmail", vm.requireAuthorEmail );
     }
 })();
