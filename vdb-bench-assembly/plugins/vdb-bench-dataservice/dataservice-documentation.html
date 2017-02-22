@@ -2,8 +2,12 @@
 	<div id="dataservice-documentation-container" class="container-fluid"
 		ng-controller="DSDocumentationController as vm">
 
-		<div id="documentation-tabs">
-			<uib-tabset>  
+
+        <div id="loading-spinner" ng-show="vm.isLoading==true">
+            <div class="spinner spinner-lg" />
+	    </div>
+		<div id="documentation-tabs" ng-show="vm.isLoading==false">
+			<uib-tabset>   
 			<uib-tab
 				heading="{{:: 'dataservice-documentation.connecting' | translate}}">
 				<div></div>
