@@ -49,9 +49,6 @@
          *   If dataservice is supplied, init values for the dataservice.
          */
         service.init = function (dataservice, pageId) {
-            // clear temporary models
-            clearTemporaryModels();
-
             // null dataservice, reset values
             if(dataservice===null) {
                 resetSelections();
@@ -490,20 +487,13 @@
         };
 
         /**
-         * Clears any temp models that may exist in the workspace
-         */
-        function clearTemporaryModels() {
-            // TODO:  clean up temp models
-        }
-
-        /**
          * Initialize the selections for the dataservice
          */
         function initServiceSelections ( dataServiceName, pageId ) {
             // Reset selections
             service.resetSourceTables();
 
-            // Gets the teiid model schema.  If successful, create a temp model using the schema
+            // Gets the teiid model schema.  If successful, update model using the schema
             try {
                 RepoRestService.getViewInfoForDataService( dataServiceName ).then(
                     function ( result ) {
@@ -576,9 +566,9 @@
          * Get the Vdb model table columns
          */
         function setSourceTableColumns(nSrc,vdbName,modelName,tableName) {
-            // Update the items using the Repo scratch object
+            // Update the items
             try {
-                RepoRestService.getVdbModelTableColumns( SYNTAX.TEMP+vdbName, modelName, tableName ).then(
+                RepoRestService.getVdbModelTableColumns( vdbName, modelName, tableName ).then(
                     function ( result ) {
                         if(nSrc===1) {
                             EditWizardService.setSource1AvailableColumns(result);

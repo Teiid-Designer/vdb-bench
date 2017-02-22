@@ -91,7 +91,7 @@
                     var selSvcSourceModelName = model.keng__id;
 
                     // Path to table for definition of the dataservice vdb
-                    var relativeTablePath = SYNTAX.TEMP+vm.sourceNames[0]+"/"+selSvcSourceModelName+"/"+vm.tableNames[0];
+                    var relativeTablePath = vm.sourceNames[0]+"/"+selSvcSourceModelName+"/"+vm.tableNames[0];
 
                     // Columns to include in the service
                     var columnNames = [];
@@ -138,9 +138,9 @@
                     var rhSourceModelName = models[1].keng__id;
 
                     // Path for LH table
-                    var lhRelativeTablePath = SYNTAX.TEMP+vm.sourceNames[0]+"/"+lhSourceModelName+"/"+vm.tableNames[0];
+                    var lhRelativeTablePath = vm.sourceNames[0]+"/"+lhSourceModelName+"/"+vm.tableNames[0];
                     // Path for RH table
-                    var rhRelativeTablePath = SYNTAX.TEMP+vm.sourceNames[1]+"/"+rhSourceModelName+"/"+vm.tableNames[1];
+                    var rhRelativeTablePath = vm.sourceNames[1]+"/"+rhSourceModelName+"/"+vm.tableNames[1];
                     
                     // Columns to include in the service
                     var lhColumnNames = EditWizardService.source1SelectedColumns();
@@ -224,9 +224,9 @@
                 var singleSuccessCallback = function(model) {
                     var selSvcSourceModelName = model.keng__id;
 
-                    // Path to modelSource and temp table for definition of the dataservice vdb
+                    // Path to modelSource and table for definition of the dataservice vdb
                     var relativeModelSourcePath = sourceName+"/"+selSvcSourceModelName+"/vdb:sources/"+selSvcSourceModelName;
-                    var relativeTablePath = SYNTAX.TEMP+sourceName+"/"+selSvcSourceModelName+"/"+tableName;
+                    var relativeTablePath = sourceName+"/"+selSvcSourceModelName+"/"+tableName;
 
                     setDataServiceVdbForSingleTable(dataserviceName, relativeModelSourcePath, vm.viewDdl, relativeTablePath);
                 };
@@ -249,12 +249,12 @@
                     var lhSourceModelName = models[0].keng__id;
                     var rhSourceModelName = models[1].keng__id;
 
-                    // Path for LH model source and temp table
+                    // Path for LH model source and table
                     var lhRelativeModelSourcePath = vm.sourceNames[0]+"/"+lhSourceModelName+"/vdb:sources/"+lhSourceModelName;
-                    var lhRelativeTablePath = SYNTAX.TEMP+vm.sourceNames[0]+"/"+lhSourceModelName+"/"+vm.tableNames[0];
-                    // Path for RH model source and temp table
+                    var lhRelativeTablePath = vm.sourceNames[0]+"/"+lhSourceModelName+"/"+vm.tableNames[0];
+                    // Path for RH model source and table
                     var rhRelativeModelSourcePath = vm.sourceNames[1]+"/"+rhSourceModelName+"/vdb:sources/"+rhSourceModelName;
-                    var rhRelativeTablePath = SYNTAX.TEMP+vm.sourceNames[1]+"/"+rhSourceModelName+"/"+vm.tableNames[1];
+                    var rhRelativeTablePath = vm.sourceNames[1]+"/"+rhSourceModelName+"/"+vm.tableNames[1];
 
                     setDataServiceVdbForJoinTables(dataserviceName, lhRelativeModelSourcePath, rhRelativeModelSourcePath, vm.viewDdl,
                                                                     lhRelativeTablePath, rhRelativeTablePath);

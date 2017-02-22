@@ -49,12 +49,12 @@
                 vm.tablesLoading = false;
                 return;
             }
-            var tempVdbName = SYNTAX.TEMP+selectedSource.keng__id;
+            var vdbName = selectedSource.keng__id;
             
             var successCallback = function(model) {
-                // Update the items using the Repo scratch object
+                // Update the items using the specified vdb model
                 try {
-                    RepoRestService.getVdbModelTables( tempVdbName, model.keng__id ).then(
+                    RepoRestService.getVdbModelTables( vdbName, model.keng__id ).then(
                         function ( result ) {
                             vm.allItems = result;
                             vm.items = vm.allItems;

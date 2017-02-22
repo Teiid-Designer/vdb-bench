@@ -277,7 +277,7 @@
                 } else {
                     // Filter properties changed, update the model
                     if(vm.filterPropsChanged) {
-                        RepoRestService.updateVdbModel( vm.svcSourceName, connectionName, true, filterProperties).then(
+                        RepoRestService.updateVdbModel( vm.svcSourceName, connectionName, true, filterProperties, "").then(
                                 function (theModel) {
                                     if(vm.translatorChanged) {
                                         updateVdbModelSource( vm.svcSourceName, connectionName, connectionName, translatorName, jndiName );
