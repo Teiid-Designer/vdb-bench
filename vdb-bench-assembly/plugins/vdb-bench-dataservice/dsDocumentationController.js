@@ -68,7 +68,7 @@
              var vdbVersion = DSSelectionService.selectedDataServiceVdbVersion();
              var modelName = DSSelectionService.selectedDataServiceViewModel();
              
-             var protocol = isSecure == false ? "@mm://" : "@mms://";
+             var protocol = isSecure === false ? "@mm://" : "@mms://";
              
              if (vdbName === SYNTAX.UNKNOWN || vdbVersion === SYNTAX.UNKNOWN)
             	 vm.jdbcConnectionString="not found";

@@ -8,14 +8,14 @@
         .module(pluginName)
         .controller('TeiidPrefsController', TeiidPrefsController);
 
-    TeiidPrefsController.$inject = ['SYNTAX', 'CONFIG', 'RepoRestService', '$scope'];
+    TeiidPrefsController.$inject = ['SYNTAX', 'CONFIG', 'RepoRestService', '$scope', '$translate'];
 
-    function TeiidPrefsController(syntax, config, RepoRestService, $scope) {
+    function TeiidPrefsController(syntax, config, RepoRestService, $scope, $translate) {
         var vm = this;
 
         vm.loading = true;
-        vm.pingAdminResultStyleClass = "teiid-pref-pingResult-ok";
-        vm.pingJdbcResultStyleClass = "teiid-pref-pingResult-ok";
+        vm.pingAdminResultStyleClass = "";
+        vm.pingJdbcResultStyleClass = "";
 
         vm.teiid = {
             adminUser: 'admin',
@@ -54,11 +54,11 @@
             }
 
             if (status.OK === "true") {
-                vm.pingAdminResultStyleClass = "teiid-pref-pingResult-ok";
-                vm.adminPingResult = status.Message;
+                vm.pingAdminResultStyleClass = "pficon pficon-ok";
+                vm.adminPingResult = $translate.instant('teiidPrefsController.pingSuccessMsg');
             }
             else {
-                vm.pingAdminResultStyleClass = "teiid-pref-pingResult-bad";
+                vm.pingAdminResultStyleClass = "pficon pficon-error-circle-o";
                 vm.adminPingResult = status.Message + syntax.NEWLINE + status.Exception;
             }
         }
@@ -70,11 +70,11 @@
             }
 
             if (status.OK === "true") {
-                vm.pingJdbcResultStyleClass = "teiid-pref-pingResult-ok";
-                vm.jdbcPingResult = status.Message;
+                vm.pingJdbcResultStyleClass = "pficon pficon-ok";
+                vm.jdbcPingResult = $translate.instant('teiidPrefsController.pingSuccessMsg');
             }
             else {
-                vm.pingJdbcResultStyleClass = "teiid-pref-pingResult-bad";
+                vm.pingJdbcResultStyleClass = "pficon pficon-error-circle-o";
                 vm.jdbcPingResult = status.Message + syntax.NEWLINE + status.Exception;
             }
         }

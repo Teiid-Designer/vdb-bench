@@ -44,6 +44,7 @@
         vm.instructionMessage = "";
         vm.expandingTreeNode = null;
         vm.selectedSources = [];   // Dont remove - html page uses this
+        
         vm.selectedTables = [];    // Dont remove - html page uses this
         
         vm.buildVdbs = [];

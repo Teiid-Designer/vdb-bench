@@ -383,19 +383,19 @@
         "repositoryUrlRequired" : "URL is required",
         "SavedRepositories" : "Repository:",
         "help" : {
-            "authorEmail" : "Specifies the email address of the author to be used when commiting to the repository",
-            "authorName" : "Specifies the name of the author to be used when commiting to the repository",
-            "httpPassword" : "Specifies the password for HTTP authentication",
-            "hostsFileKeyAuthentication" : "Specifies the file containing the ssh known hosts for key-based authentication",
-            "hostsFilePasswordAuthentication" : "Specifies the file containing the ssh known hosts for password-based authentication",
-            "passphrase" : "Specifies the ssh passphrase for key-based authentication",
-            "privateKeyFile" : "Specifies the file containing the ssh private key for key-based authentication",
-            "relativePath" : "The relative (to the repository root directory) path of the file. It is enough to specify only the name of the file.",
-            "repositoryBranch" : "The branch that should be checked out of the repository. If not specified then the  master branch is assumed.",
-            "repositoryName" : "A name to identify this git repository",
-            "repositoryUrl" : "The URL location of the git repository to use as the destination storage",
-            "sshPassword" : "Specifies the ssh password for password-based authentication",
-            "userName" : "Specifies the user name for HTTP authentication"
+            "authorEmail" : "The author email address used for the git commit",
+            "authorName" : "The author name used for the git commit",
+            "httpPassword" : "The HTTP authentication password",
+            "hostsFileKeyAuthentication" : "The file containing the ssh known hosts for key-based authentication",
+            "hostsFilePasswordAuthentication" : "The file containing the ssh known hosts for password-based authentication",
+            "passphrase" : "The ssh passphrase for key-based authentication",
+            "privateKeyFile" : "The file containing the ssh private key for key-based authentication",
+            "relativePath" : "The file path, relative to the repository root. You can specify only the file name, if desired",
+            "repositoryBranch" : "The git repository branch. If not specified, the  master branch is assumed.",
+            "repositoryName" : "A name to identify the git repository",
+            "repositoryUrl" : "The URL location of the git repository",
+            "sshPassword" : "The ssh password for password-based authentication",
+            "userName" : "The user name for HTTP authentication"
         }
     },
 
@@ -534,7 +534,18 @@
         "jdbcUserNamePlaceholder" : "Enter the Teiid JDBC user name",
         "StatusErrorLabel" : "Status Error:",
         "TestAdminConnection" : "Test Admin Connection",
-        "TestJdbcConnection" : "Test JDBC Connection"
+        "TestJdbcConnection" : "Test JDBC Connection",
+        "help" : {
+            "adminPassword" : "The administration password",
+            "adminUserName" : "The administration user name",
+            "jdbcPassword" : "The JDBC password",
+            "jdbcUserName" : "The JDBC user name",
+            "jdbcSecure" : "Determines usage of JDBC secure protocol"
+        }
+    },
+
+    "teiidPrefsController" : {
+        "pingSuccessMsg" : "The connection test was successful"
     },
 
     "singleTableViewStep" : {
