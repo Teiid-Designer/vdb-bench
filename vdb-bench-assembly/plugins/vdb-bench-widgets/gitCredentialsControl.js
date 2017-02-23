@@ -13,7 +13,11 @@
         .directive('gitCredentialsControl', GitCredentialsControl);
 
     GitCredentialsControl.$inject = ['CONFIG', 'SYNTAX'];
-    GitCredentialsControlController.$inject = ['$translate', 'StorageService', '$scope', '$base64', '$window'];
+    GitCredentialsControlController.$inject = ['$translate', 
+                                               'StorageService', 
+                                               '$scope', 
+                                               '$base64', 
+                                               '$window'];
 
     function GitCredentialsControl(config, syntax) {
         var directive = {
@@ -24,6 +28,8 @@
                 showName: '=',
                 showFilePath: '=',
                 showSecurityAttributes: '=',
+                requireAuthorName: '=',
+                requireAuthorEmail: '=',
                 onSelection: '&'
             },
             controller: GitCredentialsControlController,
@@ -36,7 +42,11 @@
         return directive;
     }
 
-    function GitCredentialsControlController($translate, StorageService, $scope, $base64, $window) {
+    function GitCredentialsControlController($translate, 
+                                             StorageService, 
+                                             $scope, 
+                                             $base64, 
+                                             $window) {
         var vm = this;
 
         var defaultRepo = {
@@ -69,6 +79,34 @@
             }
             vm.setSelected(vm.repositories[0]);
         }
+
+        vm.httpParamsComplete = function() {
+            if ( _.isEmpty( vm.repo ) || _.isEmpty( vm.repo.parameters ) ) {
+                return false;
+            }
+
+            return !_.isEmpty( vm.repo.parameters[ 'repo-password-property' ] ) && !_.isEmpty( vm.repo.parameters[ 'repo-username-property' ] );
+        };
+
+        vm.sshParamsComplete = function() {
+            return vm.sshPrivateKeyParamsComplete() || vm.sshPasswordParamsComplete();
+        };
+
+        vm.sshPasswordParamsComplete = function() {
+            if ( _.isEmpty( vm.repo ) || _.isEmpty( vm.repo.parameters ) ) {
+                return false;
+            }
+
+            return !_.isEmpty( vm.repo.parameters[ 'repo-password-property' ] ) && !_.isEmpty( vm.repo.parameters[ 'repo-known-hosts-property' ] );
+        };
+
+        vm.sshPrivateKeyParamsComplete = function() {
+            if ( _.isEmpty( vm.repo ) || _.isEmpty( vm.repo.parameters ) ) {
+                return false;
+            }
+
+            return !_.isEmpty( vm.repo.parameters[ 'repo-known-hosts-property' ] ) && !_.isEmpty( vm.repo.parameters[ 'repo-private-key-property' ] ) && !_.isEmpty( vm.repo.parameters[ 'repo-passphrase-property' ] );
+        };
 
         function newRepository() {
             var newRepo = null;
@@ -318,5 +356,7 @@
         });
 
         initRepositories();
+        $scope.$emit( "requireAuthorName", vm.requireAuthorName );
+        $scope.$emit( "requireAuthorEmail", vm.requireAuthorEmail );
     }
 })();

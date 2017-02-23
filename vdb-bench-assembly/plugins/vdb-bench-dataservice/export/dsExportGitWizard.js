@@ -10,10 +10,8 @@
         .directive('dsExportGitWizard', DSExportGitWizard);
 
     DSExportGitWizard.$inject = ['CONFIG', 'SYNTAX'];
-    DSExportGitWizardController.$inject = ['$window', 
-                                           '$scope', 
+    DSExportGitWizardController.$inject = ['$scope', 
                                            '$base64', 
-                                           '$translate', 
                                            'SYNTAX', 
                                            'DSSelectionService', 
                                            'RepoRestService'];
@@ -36,10 +34,8 @@
         return directive;
     }
 
-    function DSExportGitWizardController($window, 
-                                         $scope, 
-                                         $base64,
-                                         $translate,
+    function DSExportGitWizardController($scope, 
+                                         $base64, 
                                          syntax, 
                                          DSSelectionService, 
                                          RepoRestService) {
@@ -103,11 +99,22 @@
             if (_.isEmpty(vm.repo.parameters))
                 return false;
 
+            if (_.isEmpty(vm.repo.name))
+                return false;
+
             if (_.isEmpty(vm.repo.parameters['repo-path-property'])) {
                 return false;
             }
 
             if (_.isEmpty(vm.repo.parameters['file-path-property'])) {
+                return false;
+            }
+
+            if ( vm.requireAuthorName && _.isEmpty(vm.repo.parameters['author-name-property'])) {
+                return false;
+            }
+
+            if ( vm.requireAuthorEmail && _.isEmpty(vm.repo.parameters['author-email-property'])) {
                 return false;
             }
 
@@ -148,5 +155,13 @@
                 setResponse('Failed');
             }
         };
+
+        $scope.$on( "requireAuthorName", function( evt, data ) {
+            vm.requireAuthorName = data;
+        });
+
+        $scope.$on( "requireAuthorName", function( evt, data ) {
+            vm.requireAuthorName = data;
+        });
     }
 })();
