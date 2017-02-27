@@ -25,11 +25,21 @@
         <!-- Section titles -->
         <div class="row" ng-show="vm.optionsResetting==false">
             <div class="col-md-5" ng-show="vm.supportsCatalogOrSchema">
-                <h3 translate="shared.Schemas"></h3>
+                <h3><span translate="shared.Schemas"></span>
+                    <label class="help-label">
+                        <span class="fa fa-info-circle" uib-tooltip="{{ 'jdbcFilterOptions.help.schema' | translate }}"
+                              tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                    </label>
+                </h3>
             </div>
             <div class="col-md-5">
                 <!-- Table Filter -->
-                <h3 class="col-md-3 pull-left" translate="shared.Tables"></h3>
+                <h3 class="col-md-3 pull-left"><span translate="shared.Tables"></span>
+                    <label class="help-label">
+                        <span class="fa fa-info-circle" uib-tooltip="{{ 'jdbcFilterOptions.help.tables' | translate }}"
+                              tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                    </label>
+                </h3>
                 <form>
                     <div class="form-group">
                         <div class="col-md-6">
