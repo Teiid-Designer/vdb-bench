@@ -24,6 +24,7 @@
             };
 
         wiz.serviceName = "";
+        wiz.nameErrorMsg = "";
         wiz.serviceDescription = "";
         wiz.sources = [];
         wiz.sourceTables = [];
@@ -68,7 +69,6 @@
          * Reset user selections
          */
         function resetSelections ( ) {
-            wiz.serviceName = "";
             wiz.serviceDescription = "";
             wiz.sources = [];
             wiz.sourceTables = [];
@@ -83,8 +83,9 @@
             resetPredicates();
             // Broadcast table change
             $rootScope.$broadcast("editWizardTablesChanged");
-            // Broadcast name changed
-            $rootScope.$broadcast("editWizardServiceNameChanged");
+
+            // reset service name
+            service.setServiceName( "" );
         }
 
         /*
@@ -131,9 +132,13 @@
          * Set the dataservice name
          */
         service.setServiceName = function(name) {
-            wiz.serviceName = name;
-            // Broadcast name changed
-            $rootScope.$broadcast("editWizardServiceNameChanged");
+            if ( name ) {
+                wiz.serviceName = name;
+            } else {
+                wiz.serviceName = "";
+            }
+
+            validateServiceName();
         };
 
         /*
@@ -147,11 +152,51 @@
          * Determine if Dataservice has valid name
          */
         service.hasValidName = function() {
-            if( wiz.serviceName !== null && wiz.serviceName.length > 0 ) {
-                return true;
-            }
-            return false;
+            return _.isEmpty( wiz.nameErrorMsg );
         };
+
+        /*
+         * Obtains the current name validation error message (can be empty if name is valid).
+         */
+        service.getNameErrorMessage = function() {
+            return wiz.nameErrorMsg;
+        };
+
+        /*
+         * Determine if Dataservice has valid name.
+         */
+        function validateServiceName() {
+            wiz.nameErrorMsg = "";
+
+            // do not validate name if editing an existing data service since
+            // changing the name is not allowed
+            if ( wiz.isEdit ) {
+                return;
+            }
+
+            if ( _.isEmpty( wiz.serviceName ) ) {
+                wiz.nameErrorMsg = $translate.instant( 'editWizardService.nameRequired' );
+                $rootScope.$broadcast( "editWizardServiceNameChanged" );
+            } else {
+                try {
+                    var uri = encodeURIComponent( wiz.serviceName );
+
+                    RepoRestService.validateDataServiceName( uri ).then(
+                        function ( result ) {
+                            wiz.nameErrorMsg = result;
+                            $rootScope.$broadcast( "editWizardServiceNameChanged" );
+                        },
+                        function ( response ) {
+                            var errorMsg = $translate.instant( 'editWizardService.validateDataServiceNameError' );
+                            throw RepoRestService.newRestException( errorMsg + "\n" + RepoRestService.responseMessage( response ) );
+                        }
+                    );
+                } catch ( error ) {
+                    var errorMsg = $translate.instant( 'editWizardService.validateDataServiceNameError' );
+                    throw RepoRestService.newRestException( errorMsg + "\n" + error );
+                }
+            }
+        }
 
         /*
          * Set the dataservice description

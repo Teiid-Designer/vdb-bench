@@ -14,10 +14,10 @@
     RepoRestService.$inject = ['CONFIG', 'SYNTAX', 'REST_URI', 'VDB_SCHEMA',
                                              'VDB_KEYS', 'RepoSelectionService', 'Restangular',
                                              '$http', '$q', '$base64', 'CredentialService', '$interval',
-                                             '$location'];
+                                             '$location', '$translate'];
 
     function RepoRestService(CONFIG, SYNTAX, REST_URI, VDB_SCHEMA, VDB_KEYS, RepoSelectionService,
-                                            Restangular, $http, $q, $base64, CredentialService, $interval, $location) {
+                                            Restangular, $http, $q, $base64, CredentialService, $interval, $location, $translate) {
 
         /*
          * Service instance to be returned
@@ -257,14 +257,32 @@
          * Service: Try and find the reponse's message and return it
          */
         service.responseMessage = function(response) {
-            if (response.message)
-                return response.message;
-            else if (response.data && response.data.error)
-                return response.data.error;
-            else if (response.status && response.statusText)
-                return response.status + SYNTAX.COLON + response.statusText;
+            var msg = "";
 
-            return "Unknown Error";
+            if (response.message)
+                msg = response.message;
+            else if (response.data && response.data.error)
+                msg = response.data.error;
+            else if (response.status && response.statusText)
+                msg = response.status + SYNTAX.COLON + response.statusText;
+
+            if ( response.config.url ) {
+                var url = decodeURIComponent( response.config.url );
+
+                if ( _.isEmpty( msg ) ) {
+                    return $translate.instant( 'RepositoryRestService.unknownErrorWithUrl',
+                                               { url: url } );
+                }
+
+                return $translate.instant( 'RepositoryRestService.errorWithUrl',
+                                           { url: url, error: msg } );
+            }
+
+            if ( _.isEmpty( msg ) ) {
+                return $translate.instant( 'RepositoryRestService.unknownError' );
+            }
+
+            return msg;
         };
 
         /**
@@ -1562,6 +1580,53 @@
                     pingType: pingType
                 });
             });
+        };
+
+        /**
+         * Validates the specified data service name. If the name contains valid characters and
+         * the name is unique, the service returns 'null'. Otherwise, a 'string' containing an
+         * error message is returned.
+         */
+        service.validateDataServiceName = function( name ) {
+            if ( _.isEmpty( name ) ) {
+                return $translate.instant( 'RepositoryRestService.emptyDataServiceName' );
+            }
+
+            var url = REST_URI.WORKSPACE + 
+                      REST_URI.DATA_SERVICES + 
+                      REST_URI.NAME_VALIDATION + 
+                      SYNTAX.FORWARD_SLASH + 
+                      name;
+
+            return getRestService().then(
+                function( restService ) {
+                    return restService.one( url ).get();
+                }
+            );
+        };
+
+        /**
+         * Validates the specified data source name. If the name contains valid characters and
+         * the name is unique, the service returns 'null'. Otherwise, a 'string' containing an
+         * error message is returned.
+         */
+        service.validateDataSourceName = function( name ) {
+            if ( _.isEmpty( name ) ) {
+                return $translate.instant( 'RepositoryRestService.emptyDataSoureName' );
+            }
+
+            // since data sources are actually VDBs we need to use VDBs URI
+            var url = REST_URI.WORKSPACE + 
+                      REST_URI.VDBS + 
+                      REST_URI.NAME_VALIDATION + 
+                      SYNTAX.FORWARD_SLASH + 
+                      name;
+
+            return getRestService().then(
+                function( restService ) {
+                    return restService.one( url ).get();
+                }
+            );
         };
 
         function RestServiceException(message) {
