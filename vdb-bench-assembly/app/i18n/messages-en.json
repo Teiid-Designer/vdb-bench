@@ -436,9 +436,11 @@
         "noTables" : "No Tables",
         "optionMsg" : "Filter options for connection '{{connName}}'",
         "tableFetchNoConnectionErrorMsg" : "Error fetching tables - null connection",
+        "FilterLabel" : "Filter:",
         "help" : {
             "schema" : "The catalogs or schema available for this source.  Click a node in the tree view to expand it.",
-            "tables" : "The tables for the selected schema.  Enter a filter, then click the refresh button to update the table list."
+            "tables" : "The tables for the selected schema.  You can change the filter to update the table list.",
+            "filter" : "The table filter.  You may include '%' as a wildcard."
         }
     },
 
