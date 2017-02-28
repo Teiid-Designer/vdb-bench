@@ -82,7 +82,7 @@
             <!-- Table display area -->
             <div class="col-md-5">
                 <!-- The table name pick list -->
-                <div class="pick-list-container">
+                <div class="filter-list-container">
                     <!-- spinner while updating -->
                     <div id="tableList-updating" ng-show="vm.tablesLoading==true" class="col-md-10 row">
                         <div class="spinner spinner-lg" />
@@ -96,7 +96,7 @@
                         <h4>{{vm.tableFetchErrorMsg}}</h4>
                     </div>
                     <!--  Results -->
-                    <div class="pick-list-results">
+                    <div class="filter-list-results">
                         <div id="tableNameList-table-row" class="list-view-container" ng-show="vm.tablesLoading==false && vm.tables.length>0 && !vm.hasTableFetchError">
                             <div pf-list-view config="vm.listConfig" items="vm.tables">
                                 <div class="list-view-pf-description">
