@@ -102,7 +102,7 @@
             id: service.DS_PREFERENCE_PAGE,
             title: $translate.instant('dsPageService.preferencesTitle'),
             showTitle: false,
-            icon: 'pficon-settings',
+            icon: 'fa fa-cog',
             helpId: service.DS_PREFERENCE_PAGE,
             parent: null,
             template: config.pluginDir + syntax.FORWARD_SLASH +

@@ -463,7 +463,7 @@
 
     "sqlControl" : {
         "controlFailedMsg" : "Encountered query error: {{errorMsg}}",
-        "instructionMsg" : "Enter query text then click Search",
+        "instructionMsg" : "Enter query text then click Submit",
         "RecordLimit" : "Record Limit",
         "StartingRecordIndex" : "Starting Record Index",
         "help" : {
