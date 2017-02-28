@@ -74,7 +74,7 @@
                     <div ng-show="vm.treeLoading==false && vm.hasTreeFetchError">
                         <h4>{{vm.treeFetchErrorMsg}}</h4>
                     </div>
-                    <div ng-show="vm.treeLoading==false">
+                    <div class="tree-control-inner-container" ng-show="vm.treeLoading==false">
                         <!-- tree control for catalog and schema -->
                         <treecontrol class="tree-light tree-control-results" 
                              tree-model="vm.treedata" 

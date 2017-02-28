@@ -60,7 +60,7 @@
                 <div ng-show="vm.treeLoading==false && vm.hasTreeFetchError">
                     <h4>{{vm.treeFetchErrorMsg}}</h4>
                 </div>
-                <div ng-show="vm.treeLoading==false">
+                <div class="tree-control-inner-container" ng-show="vm.treeLoading==false">
                     <!-- tree control for catalog and schema -->
                     <div treecontrol="" class="tree-classic tree-control-results" tree-model="vm.treedata" expanded-nodes="vm.initialExpandedNodes" selected-node="vm.initialNodeSelection" on-selection="vm.setTreeSelection(node,selected)">
                         {{node.name}}
