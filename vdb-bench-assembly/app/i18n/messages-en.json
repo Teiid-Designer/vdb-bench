@@ -427,7 +427,11 @@
         "notJdbcMsg" : "'{{connName}}' is not a JDBC Connection",
         "noTables" : "No Tables",
         "optionMsg" : "Filter options for connection '{{connName}}'",
-        "tableFetchNoConnectionErrorMsg" : "Error fetching tables - null connection"
+        "tableFetchNoConnectionErrorMsg" : "Error fetching tables - null connection",
+        "help" : {
+            "schema" : "The catalogs or schema available for this source.  Click a node in the tree view to expand it.",
+            "tables" : "The tables for the selected schema.  Enter a filter, then click the refresh button to update the table list."
+        }
     },
 
     "modelTableList" : {
