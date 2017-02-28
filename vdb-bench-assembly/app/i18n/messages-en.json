@@ -30,6 +30,7 @@
         "ImportWhat" : "Import {{what}}",
         "Login" : "Login",
         "Name" : "Name",
+        "nameRequired" : "Name is required",
         "NameLabel" : "Name:",
         "New" : "New",
         "NewWhat" : "New {{what}}",
@@ -193,6 +194,7 @@
         "clickSourceTableInstructionMsg" : "Click on a source table to add it to your selections",
         "dataSources" : "Data Sources",
         "enterNameInstructionMsg" : "Enter a name for your data service",
+        "invalidNameInstructionMsg" : "Data service name has invalid characters or already exists",
         "getVdbModelsFailedMsg" : "Failed to get Vdb models",
         "getVdbModelTablesFailedMsg" : "Failed to get Vdb model tables",
         "createDataserviceFailedMsg" : "Failed to create the data service",
@@ -330,7 +332,13 @@
         "getModelSourceFailedMsg" : "Failed to get model source:",
         "getModhelSourceConnectionFailedMsg" : "Failed to get connection:"
     },
-    
+
+    "editWizardService" : {
+        "initTableSelectionsFailedMsg" : "Error initializing data service source table selections.",
+        "nameRequired" : "@:shared.nameRequired",
+        "validateDataServiceNameError" : "Error validating data service name."
+    },
+
     "fileImportControl" : {
         "fileApisNotSupportedMsg" : "The File APIs are not fully supported in this browser. Cannot proceed with import.",
         "fileLockedMsg" : "The file '{{fileName}}' is in a locked state",
@@ -444,7 +452,15 @@
         "welcomeTitle" : "Welcome to Data Services Builder",
         "welcomeDescription" : "A tool for creating, managing and deploying simple data services."
     },
-    
+
+    "RepositoryRestService" : {
+        "emptyDataServiceName" : "The data service name cannot be empty.",
+        "emptyDataSourceName" : "The data source name cannot be empty.",
+        "errorWithUrl" : "{{error}} URL: {{url}}",
+        "unknownError" : "Unknown Error.",
+        "unknownErrorWithUrl" : "Unknown Error. Make sure URL does not have slashes or backslashes. URL: {{url}}"
+    },
+
     "sqlControl" : {
         "controlFailedMsg" : "Encountered query error: {{errorMsg}}",
         "instructionMsg" : "Enter query text then click Search",
@@ -519,10 +535,12 @@
 
     "svcSourceNewController" : {
         "getTranslatorsFailedMsg" : "Failed attempting to fetch translator.",
+        "nameRequired" : "@:shared.nameRequired",
         "sourceCreateFailedMsg" : "Failed to create the data source.",
         "sourceDeployFailedMsg" : "Failed to deploy the data source.",
         "sourceModelCreateFailedMsg" : "Failed to create the data source model.",
-        "sourceModelConnectionCreateFailedMsg" : "Failed to create the source model connection."
+        "sourceModelConnectionCreateFailedMsg" : "Failed to create the source model connection.",
+        "validateDataSourceNameError" : "Error validating data source name."
     },
     
     "teiid-preference-config" : {

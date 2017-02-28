@@ -21,11 +21,24 @@
 
                 <h3><i>{{vm.instructionMessage}}</i></h3>
                 <div class="col-md-12">
-                    <form class="form-horizontal" >
+                    <form name="dataServiceEditWizardForm" class="form-horizontal" >
                         <div class="form-group">
-                            <label class="col-md-2 control-label" for="textInput" translate="shared.Name"></label>
+                            <label class="col-md-2 control-label" for="dsName" translate="shared.Name"></label>
                             <div class="col-md-9">
-                                <input type="text" ng-readonly="vm.isEditing()" ng-model="vm.serviceName" ng-init="vm.serviceName" ng-change="vm.serviceNameChanged()" class="form-control">
+                                <input type="text"
+                                       id="dsName"
+                                       name="dsName"
+                                       ng-readonly="vm.isEditing()"
+                                       ng-model="vm.serviceName"
+                                       ng-init="vm.serviceName"
+                                       ng-change="vm.serviceNameChanged()"
+                                       required
+                                       class="form-control">
+                                <div ng-show="vm.hasNameErrorMessage()"
+                                     class="error-message"
+                                     ng-if="dataServiceEditWizardForm.dsName.$dirty || dataServiceEditWizardForm.dsName.$touched">
+                                    {{ vm.getNameErrorMessage() }}
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">

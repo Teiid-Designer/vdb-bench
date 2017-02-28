@@ -79,9 +79,8 @@
             }
             vm.currentWizardStep = "wizard-select-tables";
 
-            // Update instructions and next button enablement
-            updateInstructionMessage();
-            updateNextEnablementAndText();
+            // Call the the service name change handler.
+            internalServiceNameChanged();
 
             // Initialize the tree with available sources
             initSourceTableTree();
@@ -91,19 +90,31 @@
          * Update the instruction message
          */
         function updateInstructionMessage() {
-            var name = EditWizardService.serviceName();
-            if( name === null || name.length === 0 ) {
-                vm.instructionMessage = $translate.instant('dataserviceEditWizard.enterNameInstructionMsg');
-            } else if ( vm.selectedTables.length === 0 ) {
-                vm.instructionMessage = $translate.instant('dataserviceEditWizard.clickSourceTableInstructionMsg');
-            } else if ( vm.selectedTables.length === 1 ) {
-                if(vm.includeAllColumns) {
-                    vm.instructionMessage = $translate.instant('dataserviceEditWizard.clickFinishInstructionMsg');
-                } else {
-                    vm.instructionMessage = $translate.instant('dataserviceEditWizard.clickNextSingleTableInstructionMsg');
+            vm.instructionMessage = "";
+
+            // only validate name if creating a new data service
+            if ( !EditWizardService.isEditing() ) {
+                var name = EditWizardService.serviceName();
+
+                if( name === null || name.length === 0 ) {
+                    vm.instructionMessage = $translate.instant('dataserviceEditWizard.enterNameInstructionMsg');
+                } else if ( !EditWizardService.hasValidName() ) {
+                    vm.instructionMessage = $translate.instant('dataserviceEditWizard.invalidNameInstructionMsg');
                 }
-            } else if ( vm.selectedTables.length === 2 ) {
-                vm.instructionMessage = $translate.instant('dataserviceEditWizard.clickNextTwoTablesInstructionMsg');
+            }
+
+            if ( _.isEmpty( vm.instructionMessage ) ) {
+                if ( vm.selectedTables.length === 0 ) {
+                    vm.instructionMessage = $translate.instant('dataserviceEditWizard.clickSourceTableInstructionMsg');
+                } else if ( vm.selectedTables.length === 1 ) {
+                    if(vm.includeAllColumns) {
+                        vm.instructionMessage = $translate.instant('dataserviceEditWizard.clickFinishInstructionMsg');
+                    } else {
+                        vm.instructionMessage = $translate.instant('dataserviceEditWizard.clickNextSingleTableInstructionMsg');
+                    }
+                } else if ( vm.selectedTables.length === 2 ) {
+                    vm.instructionMessage = $translate.instant('dataserviceEditWizard.clickNextTwoTablesInstructionMsg');
+                }
             }
         }
 
@@ -231,10 +242,14 @@
          * Handler for changes to the dataservice name
          */
         vm.serviceNameChanged = function() {
+            internalServiceNameChanged();
+        };
+
+        function internalServiceNameChanged() {
             EditWizardService.setServiceName(vm.serviceName);
             updateInstructionMessage();
             updateNextEnablementAndText();
-        };
+        }
 
         /**
          * Handler for changes to the dataservice description
@@ -249,28 +264,8 @@
          * Updates the Next button enablement and text
          */
         function updateNextEnablementAndText() {
-            vm.nextEnablement = false;
             if(vm.currentWizardStep === "wizard-select-tables") {
-                if( EditWizardService.hasValidName() ) {
-                    if( EditWizardService.sourceTables().length === 1 ) {
-                        if(vm.includeAllColumns) {
-                            vm.nextButtonTitle = $translate.instant('shared.Finish');
-                        } else {
-                            vm.nextButtonTitle = $translate.instant('shared.Next');
-                        }
-                        vm.nextEnablement = true;
-                    } else {
-                        vm.nextButtonTitle = $translate.instant('shared.Next');
-                        if ( EditWizardService.sourceTables().length === 0 ) {
-                            vm.nextEnablement = false;
-                        } else {
-                            vm.nextEnablement = true;
-                        }
-                    }
-                } else {
-                    vm.nextButtonTitle = $translate.instant('shared.Next');
-                    vm.nextEnablement = false;
-                }
+                updateFirstPageEnablement();
             } else if(vm.currentWizardStep === "wizard-view-definition") {
                 vm.nextButtonTitle = $translate.instant('shared.Finish');
             } else if(vm.currentWizardStep === "wizard-join-definition") {
@@ -743,6 +738,46 @@
             
             getModelForSource(sourceNames[0], successCallback, failureCallback);
         }
+
+        vm.getNameErrorMessage = function() {
+            return EditWizardService.getNameErrorMessage();
+        };
+
+        vm.hasNameErrorMessage = function() {
+            return !EditWizardService.hasValidName();
+        };
+
+        function updateFirstPageEnablement() {
+            if ( !vm.isEditing || ( vm.isEditing && EditWizardService.hasValidName() ) ) {
+                if( EditWizardService.sourceTables().length === 1 ) {
+                    if(vm.includeAllColumns) {
+                        vm.nextButtonTitle = $translate.instant('shared.Finish');
+                    } else {
+                        vm.nextButtonTitle = $translate.instant('shared.Next');
+                    }
+                    vm.nextEnablement = true;
+                } else {
+                    vm.nextButtonTitle = $translate.instant('shared.Next');
+                    if ( EditWizardService.sourceTables().length === 0 ) {
+                        vm.nextEnablement = false;
+                    } else {
+                        vm.nextEnablement = true;
+                    }
+                }
+            } else {
+                vm.nextButtonTitle = $translate.instant('shared.Next');
+                vm.nextEnablement = false;
+            }
+
+            updateInstructionMessage();
+        }
+
+        /**
+         * Handles next button enablement and text whenever the service name changes.
+         */
+        $rootScope.$on('editWizardServiceNameChanged', function( value ) {
+            updateFirstPageEnablement();
+        } );
 
     }
 

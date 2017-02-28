@@ -28,6 +28,7 @@
         vm.filterSchema = false;
         
         vm.createAndDeployInProgress = false;
+        vm.nameErrorMsg = "";
 
         /*
          * Handle Change in selected connection
@@ -282,11 +283,51 @@
         };
 
         /**
+         * Indicates if data source has a valid name.
+         */
+        vm.hasValidName = function() {
+            return _.isEmpty( vm.nameErrorMsg );
+        };
+
+        vm.sourceNameChanged = function() {
+            vm.nameErrorMsg = "";
+
+            if ( _.isEmpty( vm.svcSourceName ) ) {
+                vm.nameErrorMsg = $translate.instant( 'svcSourceNewController.nameRequired' );
+            } else {
+                try {
+                    var uri = encodeURIComponent( vm.svcSourceName );
+
+                    RepoRestService.validateDataSourceName( uri ).then(
+                        function ( result ) {
+                            vm.nameErrorMsg = result;
+
+                            // since a data source is really a VDB, replace VDB with Data Source so 
+                            // user will not be confused
+                            if ( !_.isEmpty( vm.nameErrorMsg ) ) {
+                                vm.nameErrorMsg = vm.nameErrorMsg.replace( "VDB", $translate.instant( 'shared.Source' ) );
+                            }
+                        },
+                        function ( response ) {
+                            var errorMsg = $translate.instant( 'svcSourceNewController.validateDataSourceNameError' );
+                            throw RepoRestService.newRestException( errorMsg + "\n" + RepoRestService.responseMessage( response ) );
+                        }
+                    );
+                } catch ( error ) {
+                    var errorMsg = $translate.instant( 'svcSourceNewController.validateDataSourceNameError' );
+                    throw RepoRestService.newRestException( errorMsg + "\n" + error );
+                }
+            }
+        };
+
+        /**
          * Can a new source be created
          */
         vm.canCreateSvcSource = function() {
             if (angular.isUndefined(vm.svcSourceName) ||
-                vm.svcSourceName === null || vm.svcSourceName === SYNTAX.EMPTY_STRING)
+                vm.svcSourceName === null ||
+                vm.svcSourceName === SYNTAX.EMPTY_STRING ||
+                !vm.hasValidName())
                 return false;
 
             if (angular.isUndefined(vm.selectedConnection) || vm.selectedConnection === null)

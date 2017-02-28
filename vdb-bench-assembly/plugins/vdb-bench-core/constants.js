@@ -107,6 +107,7 @@
             QUERY: '/query',
             CREDENTIALS: '/credentials',
             PING: '/ping',
+            NAME_VALIDATION: '/nameValidation',
 
             //
             // Types used for whether a teiid vdb
