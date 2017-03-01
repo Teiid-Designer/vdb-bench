@@ -11,14 +11,28 @@
         .module(pluginName)
         .controller('DSImportExportController', DSImportExportController);
 
-    DSImportExportController.$inject = ['$translate', 'CONFIG', 'SYNTAX', 'RepoRestService', '$scope', 'DSPageService'];
+    DSImportExportController.$inject = ['$translate', 
+                                        'CONFIG', 
+                                        'SYNTAX', 
+                                        'RepoRestService', 
+                                        '$scope', 
+                                        'DSPageService',
+                                        'DSSelectionService'];
 
-    function DSImportExportController($translate, config, syntax, RepoRestService, $scope, DSPageService) {
+    function DSImportExportController($translate, 
+                                      config, 
+                                      syntax, 
+                                      RepoRestService, 
+                                      $scope, 
+                                      DSPageService,
+                                      DSSelectionService) {
         var vm = this;
 
         vm.storageTypes = {};
         vm.storageType = {};
         vm.gitWizard = false;
+        vm.exportFailed = false;
+        vm.exportMessage = "";
 
         vm.backCallback = function (step) {
             return true;
@@ -50,6 +64,29 @@
                 vm.storageType = {};
 
             vm.gitWizard = vm.storageType.name === 'git' ? true : false;
+        };
+
+        vm.doExport = function() {
+            var dataservice = DSSelectionService.selectedDataService();
+
+            try {
+                RepoRestService.export( 'git', $scope.repo.parameters, dataservice ).then(
+                    function ( exportStatus ) {
+                        // set successful export message
+                        // display summary page
+                        vm.exportMessage = "Successful export";
+                        vm.exportFailed = false;
+                    },
+                    function ( response ) {
+                        // set error message
+                        vm.exportMessage = "Failed export";
+                        vm.exportFailed = true;
+                    });
+            } catch ( error ) {
+                // set error message
+                vm.exportMessage = "Failed export";
+                vm.exportFailed = true;
+            }
         };
 
         $scope.$watch('vm.storageType', function(value) {

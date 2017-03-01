@@ -45,7 +45,7 @@
          * Final location of all the parameters
          * populated by the wizard
          */
-        vm.repo = {
+        $scope.repo = {
             parameters: {}
         };
 
@@ -65,12 +65,12 @@
                 vm.responseStyleClass = "pficon pficon-ok";
                 vm.responseMsg = $translate.instant( 'dsExportGitWizard.successfulExportMsg', 
                                                      { dataServiceName: dataService.keng__id, 
-                                                       repoPath: vm.repo.parameters[ 'file-path-property' ] } );
+                                                       repoPath: $scope.repo.parameters[ 'file-path-property' ] } );
             } else {
                 vm.responseStyleClass = "pficon pficon-error-circle-o";
                 vm.responseMsg = $translate.instant( 'dsExportGitWizard.failedExportMsg', 
                                                      { dataServiceName: dataService.keng__id,
-                                                       repoPath: vm.repo.parameters[ 'file-path-property' ] } );
+                                                       repoPath: $scope.repo.parameters[ 'file-path-property' ] } );
             }
         }
 
@@ -79,12 +79,12 @@
          */
         vm.onRepoSelection = function(selected) {
             if (!selected) {
-                vm.repo = {
+                $scope.repo = {
                     parameters: {}
                 };
                 return;
             } else {
-                vm.repo = selected;
+                $scope.repo = selected;
             }
         };
 
@@ -93,28 +93,28 @@
         // false if validation has failed
         //
         vm.validateCredentials = function() {
-            if (_.isEmpty(vm.repo))
+            if (_.isEmpty($scope.repo))
                 return false;
 
-            if (_.isEmpty(vm.repo.parameters))
+            if (_.isEmpty($scope.repo.parameters))
                 return false;
 
-            if (_.isEmpty(vm.repo.name))
+            if (_.isEmpty($scope.repo.name))
                 return false;
 
-            if (_.isEmpty(vm.repo.parameters['repo-path-property'])) {
-                return false;
-            }
-
-            if (_.isEmpty(vm.repo.parameters['file-path-property'])) {
+            if (_.isEmpty($scope.repo.parameters['repo-path-property'])) {
                 return false;
             }
 
-            if ( vm.requireAuthorName && _.isEmpty(vm.repo.parameters['author-name-property'])) {
+            if (_.isEmpty($scope.repo.parameters['file-path-property'])) {
                 return false;
             }
 
-            if ( vm.requireAuthorEmail && _.isEmpty(vm.repo.parameters['author-email-property'])) {
+            if ( vm.requireAuthorName && _.isEmpty($scope.repo.parameters['author-name-property'])) {
+                return false;
+            }
+
+            if ( vm.requireAuthorEmail && _.isEmpty($scope.repo.parameters['author-email-property'])) {
                 return false;
             }
 
@@ -137,7 +137,7 @@
             vm.showProgress(true);
 
             try {
-                RepoRestService.export('git', vm.repo.parameters, dataservice).then(
+                RepoRestService.export('git', $scope.repo.parameters, dataservice).then(
                     function (exportStatus) {
                         vm.showProgress(false);
                         setError(null);
