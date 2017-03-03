@@ -419,8 +419,18 @@
             // Need to select the item first
             SvcSourceSelectionService.selectServiceSource(item);
 
-            editSvcSourceClicked();
+            // Initiate a Connection refresh prior to edit.  Wait for the refresh to complete before proceeding.  
+            ConnectionSelectionService.refresh();
         };
+
+        /*
+         * Edit triggers a Connection refresh.  When complete (loading=false), proceed with the edit.
+         */
+        $scope.$on('loadingConnectionsChanged', function (event, loading) {
+            if(loading === false) {
+                editSvcSourceClicked();
+            }
+        });
 
         /**
          * Handle clone ServiceSource click
