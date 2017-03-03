@@ -12,11 +12,11 @@ When the connection is selected, the translator dropdown will display.  You can 
 
 ![Translators image](images/DataSourceTranslators.png "Translators")
 
-Optionally, you can refine the scope of your source tables by checking **Show Filter Options**.  Filtering is especially helpful for databases which have very large schema, allowing you to limit the tables considered.  If checked, the available schema for the datasource will be shown.  Click the desired schema or catalog.
+Optionally, you can refine the scope of your source tables by checking **Show Filter Options**.  Filtering is especially helpful for databases which have very large schema, allowing you to limit the tables considered.  If checked, the available schema for the datasource will be shown.  Expand and click the desired schema or catalog.
 
 ![Filter Options image](images/DataSourceFilterOptionsOpen.png "Filter Options")
 
-The available tables for the selection will be shown in the tables list.  You can enter a new table filter value if desired.  Click refresh to update the table list.
+The available tables for the selection will be shown in the tables list.  You can enter a new table filter value if desired.  The '%' wildcard can be used in your filter.  For example, a filter value of 'A%' will yield all tables that start with 'A'.  The table list will update when you change the filter text.
 
 ![Filter Option Tables image](images/DataSourceFilterOptionsTables.png "Filter Option Tables")
 
