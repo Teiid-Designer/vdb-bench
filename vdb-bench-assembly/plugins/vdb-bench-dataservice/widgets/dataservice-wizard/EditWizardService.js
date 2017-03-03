@@ -248,6 +248,8 @@
             wiz.sourceTables = [];
             wiz.src1AvailableColumns = [];
             wiz.src2AvailableColumns = [];
+            // Reset the criteria
+            resetPredicates();
             // Broadcast table change
             $rootScope.$broadcast("editWizardTablesChanged");
         };
@@ -264,6 +266,8 @@
             } else if ( wiz.sourceTables.length===1 && ( source !== wiz.sources[0] || sourceTable !== wiz.sourceTables[0] ) ) {
                 wiz.sources.push(source);
                 wiz.sourceTables.push(sourceTable);
+                // Set the criteria predicates based on the table selections
+                setCriteriaPredicatesFromTables(wiz.sourceTables[0],wiz.sourceTables[1]);
                 // Broadcast table change
                 $rootScope.$broadcast("editWizardTablesChanged");
             }
@@ -277,6 +281,8 @@
             wiz.sourceTables.splice(0,1);
             // Move source2 columns to source1
             wiz.src1AvailableColumns = wiz.src2AvailableColumns;
+            // Reset the criteria
+            resetPredicates();
             // Broadcast table change
             $rootScope.$broadcast("editWizardTablesChanged");
         };
@@ -289,6 +295,8 @@
             wiz.sourceTables.splice(1,1);
             // Clears source2 columns
             wiz.src2AvailableColumns = [];
+            // Reset the criteria
+            resetPredicates();
             // Broadcast table change
             $rootScope.$broadcast("editWizardTablesChanged");
         };
@@ -532,6 +540,65 @@
         };
 
         /**
+         * Sets the predicate criteria based on the currently selected tables.
+         * This will make a REST call to use the PK - FK relationships on the tables to determine the join criteria.
+         */
+        function setCriteriaPredicatesFromTables(table1, table2) {
+            resetPredicates();
+            // --------------------------------------------
+            // Success callback returns the source models
+            // --------------------------------------------
+            var joinSuccessCallback = function(models) {
+                var lhSourceModelName = models[0].keng__id;
+                var rhSourceModelName = models[1].keng__id;
+
+                // Path for LH table
+                var lhRelativeTablePath = wiz.sources[0]+"/"+lhSourceModelName+"/"+table1;
+                // Path for RH table
+                var rhRelativeTablePath = wiz.sources[1]+"/"+rhSourceModelName+"/"+table2;
+
+                try {
+                    RepoRestService.getJoinCriteriaForTables( lhRelativeTablePath, rhRelativeTablePath ).then(
+                        function ( result ) {
+                            // Criteria predicates
+                            if(result.infoType==="CRITERIA") {
+                                if(result.criteriaPredicates.length > 0) {
+                                    wiz.criteriaPredicates = [];
+                                }
+                                // Add criteria predicates
+                                for(var j=0; j<result.criteriaPredicates.length; j++) {
+                                    var newPredicate = 
+                                    { id : j,
+                                      lhColName : result.criteriaPredicates[j].lhColumn,
+                                      rhColName : result.criteriaPredicates[j].rhColumn,
+                                      operatorName : result.criteriaPredicates[j].operator,
+                                      combineKeyword : result.criteriaPredicates[j].combineKeyword
+                                    };
+                                    wiz.criteriaPredicates.push(newPredicate);
+                                }
+                            }
+                        },
+                        function (response) {
+                            var errMsg = $translate.instant('editWizardService.getJoinCriteriaFailedMsg');
+                            throw RepoRestService.newRestException(errMsg + "\n" + RepoRestService.responseMessage(response));
+                        });
+                } catch (error) {
+                    var errMsg = $translate.instant('editWizardService.getJoinCriteriaFailedMsg');
+                    throw RepoRestService.newRestException(errMsg + "\n" + error);
+                }
+            };
+
+            // Failure callback
+            var joinFailureCallback = function(errorMsg) {
+                var errMsg = $translate.instant('editWizardService.getJoinCriteriaFailedMsg');
+                alert(errMsg + "\n" + errorMsg);
+            };
+
+            // get models for source vdbs
+            service.getModelsForSourceVdbs(wiz.sources, joinSuccessCallback, joinFailureCallback);
+        }
+
+        /**
          * Initialize the selections for the dataservice
          */
         function initServiceSelections ( dataServiceName, pageId ) {
@@ -631,6 +698,63 @@
             }
         }
 
+        /**
+         * Service: get the source VDB model.  (There is only one model within a sourceVDB)
+         * success callback has the model for the requested source
+         * failure callback has the failure message
+         */
+        service.getModelForSourceVdb = function(sourceVdbName, onSuccessCallback, onFailureCallback) {
+            try {
+                RepoRestService.getVdbModels(sourceVdbName).then(
+                    function (models) {
+                        if (_.isEmpty(models) || models.length === 0) {
+                            onFailureCallback("Failed getting VDB Models.\nThe source model is not available");
+                            return;
+                        }
+
+                        onSuccessCallback(models[0]);
+                    },
+                    function (response) {
+                        onFailureCallback("Failed getting VDB Models.\n" + RepoRestService.responseMessage(response));
+                    });
+            } catch (error) {
+                onFailureCallback("An exception occurred:\n" + error.message);
+            }
+        };
+
+        /**
+         * Service: get models for the supplied source VDBs.  (An array of 2 vdb names is expected)
+         * success callback has the models for the requested sources
+         */
+        service.getModelsForSourceVdbs = function(sourceVdbNames, onSuccessCallback, onFailureCallback) {
+            if(sourceVdbNames.length !== 2) {
+                onFailureCallback("Failed getting VDB Models - array of size 2 is expected.");
+            }
+            var resultModels = [];
+
+            // Success callback returns the source 1 model
+            var successCallback = function(model) {
+                resultModels.push(model);
+                
+                // Call again to get the second model
+                var innerSuccessCallback = function(model) {
+                    resultModels.push(model);
+                    onSuccessCallback(resultModels);
+                };
+                var innerFailureCallback = function(errorMsg) {
+                    onFailureCallback("An exception occurred: \n" + errorMsg.message);
+                };
+                
+                service.getModelForSourceVdb(sourceVdbNames[1], innerSuccessCallback, innerFailureCallback);
+            };
+
+            // Failure callback
+            var failureCallback = function(errorMsg) {
+                onFailureCallback("An exception occurred: \n" + errorMsg.message);
+            };
+
+            service.getModelForSourceVdb(sourceVdbNames[0], successCallback, failureCallback);
+        };
 
         return service;
     }

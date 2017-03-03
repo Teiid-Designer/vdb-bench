@@ -1087,6 +1087,24 @@
         };
 
         /**
+         * Service: Get the DataService join criteria for the provided tables.
+         */
+        service.getJoinCriteriaForTables = function (tablePath, rhTablePath ) {
+            if ( !tablePath || !rhTablePath ) {
+                throw RestServiceException("getJoinCriteria inputs are not sufficiently defined");
+            }
+            
+            return getRestService().then(function (restService) {
+                var payload = {
+                    "tablePath": getUserWorkspacePath()+"/"+tablePath,
+                    "rhTablePath": getUserWorkspacePath()+"/"+rhTablePath
+                };
+
+                return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SERVICES + SYNTAX.FORWARD_SLASH + REST_URI.CRITERIA_FOR_JOIN_TABLES).post(payload);
+            });
+        };
+
+        /**
          * Service: delete a data service from the resposiory
          */
         service.deleteDataService = function (dataserviceName) {

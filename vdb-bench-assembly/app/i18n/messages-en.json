@@ -335,6 +335,7 @@
 
     "editWizardService" : {
         "initTableSelectionsFailedMsg" : "Error initializing data service source table selections.",
+        "getJoinCriteriaFailedMsg" : "Error retrieving join criteria.",
         "nameRequired" : "@:shared.nameRequired",
         "validateDataServiceNameError" : "Error validating data service name."
     },
