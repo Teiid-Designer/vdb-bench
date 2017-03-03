@@ -12,11 +12,11 @@ Keep the selected translator or select something different.
 
 ![Translators image](images/DataSourceTranslators.png "Translators")
 
-Re-select filter options, if desired.
+Enter filter options, if desired.  Filtering allows you to define the scope of your source tables, and is especially helpful for databases which have very large schema.  Expand and click on the desired catalog or schema node in the display.
 
 ![Filter Options image](images/DataSourceFilterOptionsOpen.png "Filter Options")
 
-Re-select the table filter, if desired.  Click refresh to update the table list.
+Enter a table filter, if desired.  You can use the '%' wildcard in your filter.  For example, a filter of 'A%' will yield all tables that start with 'A'.  The table list will update when you change the filter text.
 
 ![Filter Option Tables image](images/DataSourceFilterOptionsTables.png "Filter Option Tables")
 
