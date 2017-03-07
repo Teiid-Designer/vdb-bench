@@ -121,11 +121,13 @@
 
                 // Failure callback
                 var singleFailureCallback = function(errorMsg) {
+                    vm.viewDdl = DEFAULT_VIEW;
+                    vm.refreshViewDdl = !vm.refreshViewDdl;
                     alert($translate.instant('shared.changedConnectionFailedMsg', {errorMsg: errorMsg}));
                 };
 
                 // get model for source 1
-                getModelForSource(EditWizardService.sources()[0], singleSuccessCallback, singleFailureCallback);
+                EditWizardService.getModelForSourceVdb(EditWizardService.sources()[0], singleSuccessCallback, singleFailureCallback);
             // -------------------------------------------------
             // Two tables selected
             // -------------------------------------------------
@@ -182,7 +184,7 @@
                 };
 
                 // get models for sources
-                getModelsForSources(EditWizardService.sources(), joinSuccessCallback, joinFailureCallback);
+                EditWizardService.getModelsForSourceVdbs(EditWizardService.sources(), joinSuccessCallback, joinFailureCallback);
             }
         }
 
@@ -233,11 +235,13 @@
 
                 // Failure callback
                 var singleFailureCallback = function(errorMsg) {
+                    vm.viewDdl = DEFAULT_VIEW;
+                    vm.refreshViewDdl = !vm.refreshViewDdl;
                     alert($translate.instant('shared.changedConnectionFailedMsg', {errorMsg: errorMsg}));
                 };
 
                 // get model for source 1
-                getModelForSource(EditWizardService.sources()[0], singleSuccessCallback, singleFailureCallback);
+                EditWizardService.getModelForSourceVdb(EditWizardService.sources()[0], singleSuccessCallback, singleFailureCallback);
             // -------------------------------------------------
             // Two tables selected
             // -------------------------------------------------
@@ -266,64 +270,8 @@
                 };
 
                 // get models for sources
-                getModelsForSources(EditWizardService.sources(), joinSuccessCallback, joinFailureCallback);
+                EditWizardService.getModelsForSourceVdbs(EditWizardService.sources(), joinSuccessCallback, joinFailureCallback);
             }
-        }
-
-        /*
-         * success callback has the model for the requested source
-         */
-        function getModelForSource(sourceName, onSuccessCallback, onFailureCallback) {
-            try {
-                RepoRestService.getVdbModels(sourceName).then(
-                    function (models) {
-                        if (_.isEmpty(models) || models.length === 0) {
-                            onFailureCallback("Failed getting VDB Models.\nThe source model is not available");
-                            return;
-                        }
-
-                        onSuccessCallback(models[0]);
-                    },
-                    function (response) {
-                        vm.viewDdl = DEFAULT_VIEW;
-                        vm.refreshViewDdl = !vm.refreshViewDdl;
-                        onFailureCallback("Failed getting VDB Models.\n" + RepoRestService.responseMessage(response));
-                    });
-            } catch (error) {
-                vm.viewDdl = DEFAULT_VIEW;
-                vm.refreshViewDdl = !vm.refreshViewDdl;
-                onFailureCallback("An exception occurred:\n" + error.message);
-            }
-        }
-
-        /*
-         * success callback has the models for the requested sources
-         */
-        function getModelsForSources(sourceNames, onSuccessCallback, onFailureCallback) {
-            var resultModels = [];
-
-            // Success callback returns the source 1 model
-            var successCallback = function(model) {
-                resultModels.push(model);
-                
-                // Call again to get the second model
-                var innerSuccessCallback = function(model) {
-                    resultModels.push(model);
-                    onSuccessCallback(resultModels);
-                };
-                var innerFailureCallback = function(errorMsg) {
-                    onFailureCallback("An exception occurred: \n" + errorMsg.message);
-                };
-                
-                getModelForSource(sourceNames[1], innerSuccessCallback, innerFailureCallback);
-            };
-
-            // Failure callback
-            var failureCallback = function(errorMsg) {
-                alert($translate.instant('shared.changedConnectionFailedMsg', {errorMsg: errorMsg}));
-            };
-            
-            getModelForSource(sourceNames[0], successCallback, failureCallback);
         }
 
         function ddlChanged(obj) {

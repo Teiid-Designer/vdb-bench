@@ -68,6 +68,7 @@
             TABLES: '/Tables',
             COLUMNS: '/Columns',
             JDBC_CATALOG_SCHEMA: '/JdbcCatalogSchema',
+            CRITERIA_FOR_JOIN_TABLES: 'CriteriaForJoinTables',
             SERVICE_VDB_FOR_SINGLE_TABLE: 'ServiceVdbForSingleTable',
             SERVICE_VDB_FOR_JOIN_TABLES: 'ServiceVdbForJoinTables',
             SERVICE_VIEW_DDL_FOR_SINGLE_TABLE: 'ServiceViewDdlForSingleTable',
