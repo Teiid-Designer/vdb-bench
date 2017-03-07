@@ -37,7 +37,7 @@
         // Event handler for clicking the create button
         vm.onCreateConnectionClicked = function ( connectionName, jndiName, driverName ) {
             try {
-                RepoRestService.createDataSource( connectionName, jndiName, driverName ).then(
+                RepoRestService.createConnection( connectionName, jndiName, driverName ).then(
                     function () {
                         // Reinitialise the list of data services
                         ConnectionSelectionService.refresh();

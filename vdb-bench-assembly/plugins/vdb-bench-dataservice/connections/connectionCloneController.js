@@ -18,7 +18,7 @@
          */
         vm.onCloneConnectionClicked = function ( connectionName, newConnectionName ) {
             try {
-                RepoRestService.cloneDataSource( connectionName, newConnectionName ).then(
+                RepoRestService.cloneConnection( connectionName, newConnectionName ).then(
                     function () {
                         // Reinitialise the list of data services
                         ConnectionSelectionService.refresh();

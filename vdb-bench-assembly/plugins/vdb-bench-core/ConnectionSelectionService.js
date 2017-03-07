@@ -44,9 +44,9 @@
             setLoading(true);
 
             try {
-                RepoRestService.getDataSources(REST_URI.TEIID_SERVICE).then(
-                    function (newDataSources) {
-                        RepoRestService.copy(newDataSources, conn.connections);
+                RepoRestService.getConnections(REST_URI.TEIID_SERVICE).then(
+                    function (newConnections) {
+                        RepoRestService.copy(newConnections, conn.connections);
                         conn.connections = sortByKey(conn.connections, 'keng__id');
                         setLoading(false);
                     },

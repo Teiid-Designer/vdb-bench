@@ -379,7 +379,7 @@
          * Service: return the list of table names for the jdbc connection
          */
         service.getJdbcConnectionTables = function (catalogFilter, schemaFilter, tableFilter, connectionName) {
-            var url = REST_URI.TEIID + REST_URI.DATA_SOURCES + REST_URI.TABLES;
+            var url = REST_URI.TEIID + REST_URI.CONNECTIONS + REST_URI.TABLES;
 
             var catFilter = "";
             var schFilter = "";
@@ -410,7 +410,7 @@
          * Service: return the catalog and schema info for the jdbc connection
          */
         service.getJdbcConnectionCatalogSchemaInfo = function (connectionName) {
-            var url = REST_URI.TEIID + REST_URI.DATA_SOURCES + SYNTAX.FORWARD_SLASH + connectionName + REST_URI.JDBC_CATALOG_SCHEMA;
+            var url = REST_URI.TEIID + REST_URI.CONNECTIONS + SYNTAX.FORWARD_SLASH + connectionName + REST_URI.JDBC_CATALOG_SCHEMA;
 
             return getRestService().then(function (restService) {
                 return restService.one(url).get();
@@ -1209,18 +1209,18 @@
         };
 
         /**
-         * Service: return the list of data sources.
-         * Returns: promise object for the data source collection
+         * Service: return the list of connections.
+         * Returns: promise object for the connection collection
          */
-        service.getDataSources = function (serviceType) {
+        service.getConnections = function (serviceType) {
             if (!serviceType) {
                 throw new RestServiceException("DataSource serviceType not specified");
             }
 
-            var url = REST_URI.WORKSPACE + REST_URI.DATA_SOURCES;
+            var url = REST_URI.WORKSPACE + REST_URI.CONNECTIONS;
 
             if (serviceType === REST_URI.TEIID_SERVICE)
-                url = REST_URI.TEIID + REST_URI.DATA_SOURCES;
+                url = REST_URI.TEIID + REST_URI.CONNECTIONS;
 
             return getRestService().then(function (restService) {
                 return restService.all(url).getList();
@@ -1228,14 +1228,14 @@
         };
 
         /**
-         * Service: Get a datasource from the repository
+         * Service: Get a connection from the repository
          */
-        service.getDataSource = function (datasourceName) {
+        service.getConnection = function (connectionName) {
             return getRestService().then(function (restService) {
-                if (!datasourceName)
+                if (!connectionName)
                     return null;
 
-                return restService.one(REST_URI.WORKSPACE + REST_URI.DATA_SOURCES + SYNTAX.FORWARD_SLASH + datasourceName).get();
+                return restService.one(REST_URI.WORKSPACE + REST_URI.CONNECTIONS + SYNTAX.FORWARD_SLASH + connectionName).get();
             });
         };
         
@@ -1254,82 +1254,82 @@
         };
         
        /**
-         * Service: create a new datasource in the repository
+         * Service: create a new connection in the repository
          */
-        service.createDataSource = function (datasourceName, jndiName, driverName) {
-            if (!datasourceName || !driverName || !jndiName) {
-                throw new RestServiceException("Data source name, jndiName or driverName is not defined");
+        service.createConnection = function (connectionName, jndiName, driverName) {
+            if (!connectionName || !driverName || !jndiName) {
+                throw new RestServiceException("Connection name, jndiName or driverName is not defined");
             }
 
             return getRestService().then(function (restService) {
                 var payload = {
-                    "keng__id": datasourceName,
-                    "keng__dataPath": getUserWorkspacePath()+"/"+datasourceName,
+                    "keng__id": connectionName,
+                    "keng__dataPath": getUserWorkspacePath()+"/"+connectionName,
                     "keng__kType": "Datasource",
                     "driverName": driverName,
                     "jndiName": jndiName
                 };
 
-                var uri = REST_URI.WORKSPACE + REST_URI.DATA_SOURCES + SYNTAX.FORWARD_SLASH + datasourceName;
+                var uri = REST_URI.WORKSPACE + REST_URI.CONNECTIONS + SYNTAX.FORWARD_SLASH + connectionName;
                 return restService.all(uri).post(payload);
             });
         };
         
         /**
-         * Service: clone a datasource in the repository
+         * Service: clone a connection in the repository
          */
-        service.cloneDataSource = function (datasourceName, newDatasourceName) {
-            if (!datasourceName || !newDatasourceName) {
-                throw new RestServiceException("Data source name or source name for clone are not defined");
+        service.cloneConnection = function (connectionName, newConnectionName) {
+            if (!connectionName || !newConnectionName) {
+                throw new RestServiceException("Connection name or name for clone are not defined");
             }
 
             return getRestService().then(function (restService) {
-                var link = REST_URI.WORKSPACE + REST_URI.DATA_SOURCES_CLONE + SYNTAX.FORWARD_SLASH + datasourceName;
-                return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SOURCES_CLONE + SYNTAX.FORWARD_SLASH + datasourceName).post(newDatasourceName);
+                var link = REST_URI.WORKSPACE + REST_URI.CONNECTIONS_CLONE + SYNTAX.FORWARD_SLASH + connectionName;
+                return restService.all(REST_URI.WORKSPACE + REST_URI.CONNECTIONS_CLONE + SYNTAX.FORWARD_SLASH + connectionName).post(newConnectionName);
             });
         };
 
        /**
-         * Service: update an existing datasource in the repository
+         * Service: update an existing connection in the repository
          */
-        service.updateDataSource = function (datasourceName, jsonPayload) {
-            if (!datasourceName || !jsonPayload) {
+        service.updateConnection = function (connectionName, jsonPayload) {
+            if (!connectionName || !jsonPayload) {
                 throw new RestServiceException("One of the inputs for update are not defined");
             }
             
             return getRestService().then(function (restService) {
-                return restService.all(REST_URI.WORKSPACE + REST_URI.DATA_SOURCES + SYNTAX.FORWARD_SLASH + datasourceName).customPUT(jsonPayload);
+                return restService.all(REST_URI.WORKSPACE + REST_URI.CONNECTIONS + SYNTAX.FORWARD_SLASH + connectionName).customPUT(jsonPayload);
             });
         };
 
         /**
-         * Service: delete a datasource from the resposiory
+         * Service: delete a connection from the resposiory
          */
-        service.deleteDataSource = function (datasourceName) {
-            if (!datasourceName) {
-                throw new RestServiceException("Data source name for delete is not defined");
+        service.deleteConnection = function (connectionName) {
+            if (!connectionName) {
+                throw new RestServiceException("Connection name for delete is not defined");
             }
 
             return getRestService().then(function (restService) {
 
-                return restService.one(REST_URI.WORKSPACE + REST_URI.DATA_SOURCES + SYNTAX.FORWARD_SLASH + datasourceName).remove();
+                return restService.one(REST_URI.WORKSPACE + REST_URI.CONNECTIONS + SYNTAX.FORWARD_SLASH + connectionName).remove();
             });
         };
 
         /**
-         * Service: deploy a datasource from the resposiory
+         * Service: deploy a connection from the resposiory
          */
-        service.deployDataSource = function (datasourceName) {
-            if (!datasourceName) {
-                throw new RestServiceException("Data source name for deploy is not defined");
+        service.deployConnection = function (connectionName) {
+            if (!connectionName) {
+                throw new RestServiceException("Connection name for deploy is not defined");
             }
 
             return getRestService().then(function (restService) {
                 var payload = {
-                    "path": getUserWorkspacePath()+"/"+datasourceName
+                    "path": getUserWorkspacePath()+"/"+connectionName
                 };
 
-                var uri = REST_URI.TEIID + REST_URI.DATA_SOURCE;
+                var uri = REST_URI.TEIID + REST_URI.CONNECTION;
                 return restService.all(uri).post(payload);
             });
         };
@@ -1547,7 +1547,7 @@
          */
         service.getDefaultTranslatorForConnection = function(connectionName) {
             return getRestService().then(function (restService) {
-                var url = REST_URI.TEIID + REST_URI.DATA_SOURCES + SYNTAX.FORWARD_SLASH + connectionName + REST_URI.TRANSLATOR_DEFAULT;
+                var url = REST_URI.TEIID + REST_URI.CONNECTIONS + SYNTAX.FORWARD_SLASH + connectionName + REST_URI.TRANSLATOR_DEFAULT;
                 return restService.one(url).get();
             });
         };
