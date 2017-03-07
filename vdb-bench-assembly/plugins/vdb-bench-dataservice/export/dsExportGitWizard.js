@@ -174,7 +174,7 @@
                             setError( null );
                         } else {
                             var msg = $translate.instant( 'dsExportGitWizard.failedNoDetailsMsg', 
-                                                          { dataServiceName: dataService.keng__id } );
+                                                          { dataServiceName: dataservice.keng__id } );
                             setError( msg );
                         }
                     },
