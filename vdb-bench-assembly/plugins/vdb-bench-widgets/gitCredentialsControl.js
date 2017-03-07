@@ -24,9 +24,11 @@
             restrict: 'E',
             scope: {},
             bindToController: {
+                repo: '=',
                 edit: '=',
                 showName: '=',
                 showFilePath: '=',
+                showRepoProps: '=',
                 showSecurityAttributes: '=',
                 requireAuthorName: '=',
                 requireAuthorEmail: '=',
@@ -77,36 +79,11 @@
                 vm.repositories = [defaultRepo];
                 StorageService.setObject(GIT_REPOS_KEY, vm.repositories);
             }
-            vm.setSelected(vm.repositories[0]);
+
+            if ( _.isEmpty( vm.repo ) || _.isEmpty( vm.repo.name ) ) {
+                vm.setSelected( vm.repositories[ 0 ] );
+            }
         }
-
-        vm.httpParamsComplete = function() {
-            if ( _.isEmpty( vm.repo ) || _.isEmpty( vm.repo.parameters ) ) {
-                return false;
-            }
-
-            return !_.isEmpty( vm.repo.parameters[ 'repo-password-property' ] ) && !_.isEmpty( vm.repo.parameters[ 'repo-username-property' ] );
-        };
-
-        vm.sshParamsComplete = function() {
-            return vm.sshPrivateKeyParamsComplete() || vm.sshPasswordParamsComplete();
-        };
-
-        vm.sshPasswordParamsComplete = function() {
-            if ( _.isEmpty( vm.repo ) || _.isEmpty( vm.repo.parameters ) ) {
-                return false;
-            }
-
-            return !_.isEmpty( vm.repo.parameters[ 'repo-password-property' ] ) && !_.isEmpty( vm.repo.parameters[ 'repo-known-hosts-property' ] );
-        };
-
-        vm.sshPrivateKeyParamsComplete = function() {
-            if ( _.isEmpty( vm.repo ) || _.isEmpty( vm.repo.parameters ) ) {
-                return false;
-            }
-
-            return !_.isEmpty( vm.repo.parameters[ 'repo-known-hosts-property' ] ) && !_.isEmpty( vm.repo.parameters[ 'repo-private-key-property' ] ) && !_.isEmpty( vm.repo.parameters[ 'repo-passphrase-property' ] );
-        };
 
         function newRepository() {
             var newRepo = null;
@@ -144,8 +121,8 @@
         }
 
         vm.setSelected = function(selected) {
-            vm.selected = selected;
-            vm.changeSelection(vm.selected);
+            vm.repo = selected;
+            vm.changeSelection(vm.repo);
         };
 
         // Save the repositories
@@ -169,7 +146,7 @@
             // may have been edited. Ensures that next time of loading the 'new'
             // name is used to select the correct repository
             //
-            var name = _.isEmpty(vm.selected) ? '' : vm.selected.name;
+            var name = _.isEmpty(vm.repo) ? '' : vm.repo.name;
             StorageService.set(SELECTED_GIT_REPO_KEY, name);
         };
 
@@ -183,7 +160,7 @@
 
         // Is a repository selected
         vm.isRepoSelected = function () {
-            return angular.isDefined(vm.selected);
+            return angular.isDefined(vm.repo);
         };
 
         // On change of selection update the external callback
@@ -200,10 +177,10 @@
 
         // Event handler for clicking the remove button
         vm.onRemoveClicked = function () {
-            if (!vm.selected)
+            if (!vm.repo)
                 return;
 
-            var index = vm.repositories.indexOf(vm.selected);
+            var index = vm.repositories.indexOf(vm.repo);
             if (index === -1)
                 return;
 
@@ -284,7 +261,7 @@
                 //
                 reader.onload = function (event) {
                     var data = event.target.result;
-                    vm.selected.parameters[paramName] = $base64.encode(data);
+                    vm.repo.parameters[paramName] = $base64.encode(data);
                 };
 
                 //
@@ -324,16 +301,16 @@
          * ready for transport
          */
         $scope.$watch('vm.clearPassword', function(value) {
-            if (angular.isUndefined(vm.selected))
+            if (angular.isUndefined(vm.repo))
                 return;
 
             if (angular.isUndefined(value) || value.length === 0) {
-                delete vm.selected.parameters['repo-password-property'];
+                delete vm.repo.parameters['repo-password-property'];
                 vm.saveRepositories();
                 return;
             }
 
-            vm.selected.parameters['repo-password-property'] = $base64.encode(value);
+            vm.repo.parameters['repo-password-property'] = $base64.encode(value);
             vm.saveRepositories();
         });
 
@@ -342,21 +319,19 @@
          * ready for transport
          */
         $scope.$watch('vm.clearPassphrase', function(value) {
-            if (angular.isUndefined(vm.selected))
+            if (angular.isUndefined(vm.repo))
                 return;
 
             if (angular.isUndefined(value) || value.length === 0) {
-                delete vm.selected.parameters['repo-passphrase-property'];
+                delete vm.repo.parameters['repo-passphrase-property'];
                 vm.saveRepositories();
                 return;
             }
 
-            vm.selected.parameters['repo-passphrase-property'] = $base64.encode(value);
+            vm.repo.parameters['repo-passphrase-property'] = $base64.encode(value);
             vm.saveRepositories();
         });
 
         initRepositories();
-        $scope.$emit( "requireAuthorName", vm.requireAuthorName );
-        $scope.$emit( "requireAuthorEmail", vm.requireAuthorEmail );
     }
 })();

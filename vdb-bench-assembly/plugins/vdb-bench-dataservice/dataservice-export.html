@@ -1,18 +1,9 @@
 <div id="outer" class="outer-wrapper">
 	<div div="dataservice-export-container" class="container-fluid" ng-controller="DSImportExportController as vm">
-
-<div ng-show="vm.exportFailed" class="toast-pf toast-pf-max-width toast-pf-top-right alert alert-danger alert-dismissable">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-    <span class="pficon pficon-close"></span>
-  </button>
-  <span class="pficon pficon-error-circle-o"></span>
-  <strong>Export Failed: </strong>{{ vm.exportMessage }}.
-</div>
-
 	    <div class="row">
 	        <div class="wizard-pf-container dsb-wizard-container">
 	            <div pf-wizard title="{{:: 'dataservice-export.wizardTitle' | translate}}"
-	                    on-finish="vm.doExport()"
+	                    on-finish="vmmain.selectPage('dataservice-summary',null)"
 	                    on-cancel="vmmain.selectPage('dataservice-summary',null)"
 	                    back-callback="vm.backCallback"
 	                    next-title="vm.nextButtonTitle"
@@ -42,7 +33,9 @@
 	                </div>
 	
 	                <!-- directive includes the git wizard steps -->
-	                <ds-export-git-wizard wizard-active="vm.gitWizard"></ds-export-git-wizard>
+                    <ds-export-git-wizard wizard-active="vm.gitWizard" 
+                                          repo="vm.repo">
+                    </ds-export-git-wizard>
 	            </div>
 	        </div>
 	    </div>
