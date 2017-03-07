@@ -396,12 +396,13 @@ button[id^='dropdownKebabRight_'] {
     margin-bottom: 2em;
 }
 
-.wizard-pf-main {
-    margin-left: 0 !important;
+.wizard-pf-sidebar .list-group-item.active > a {
+    color: white;
 }
 
 .wizard-pf-footer {
     position: relative !important;
+    background-color: inherit;
 }
 
 .wizard-pf-container {
@@ -410,6 +411,13 @@ button[id^='dropdownKebabRight_'] {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+}
+
+.wizard-pf-container .step-message {
+    font-family: FontAwesome;
+    font-style: italic;
+    font-size: 18px;
+    padding-left: 1em;
 }
 
 .steps-indicator {

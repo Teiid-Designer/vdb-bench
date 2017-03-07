@@ -11,7 +11,8 @@
 
     DSExportGitWizard.$inject = ['CONFIG', 'SYNTAX'];
     DSExportGitWizardController.$inject = ['$scope', 
-                                           '$base64', 
+                                           '$base64',
+                                           '$translate',
                                            'SYNTAX', 
                                            'DSSelectionService', 
                                            'RepoRestService'];
@@ -21,7 +22,8 @@
             restrict: 'E',
             scope: {},
             bindToController: {
-                'wizardActive': '='
+                'wizardActive': '=',
+                'repo': '='
             },
             controller: DSExportGitWizardController,
             controllerAs: 'vm',
@@ -35,20 +37,18 @@
     }
 
     function DSExportGitWizardController($scope, 
-                                         $base64, 
+                                         $base64,
+                                         $translate,
                                          syntax, 
                                          DSSelectionService, 
                                          RepoRestService) {
         var vm = this;
 
-        /**
-         * Final location of all the parameters
-         * populated by the wizard
-         */
-        vm.repo = {
-            parameters: {}
-        };
-
+        vm.requireAuthorName = false;
+        vm.requireEmailName = false;
+        vm.inProgress = false;
+        vm.response = '';
+ 
         function setError(message) {
             if (message) {
                 message = message.replace(/<br\/>/g, syntax.NEWLINE);
@@ -57,18 +57,29 @@
             vm.error = message;
         }
 
+        vm.exportFailure = function() {
+            return !vm.inProgress && vm.response === 'Failed';
+        };
+
+        vm.exportSuccess = function() {
+            return !vm.inProgress && vm.response === 'OK';
+        };
+
+        vm.dataServiceName = function() {
+            var dataService = DSSelectionService.selectedDataService();
+            return dataService.keng__id;
+        };
+
         function setResponse(response) {
             vm.response = response;
             var dataService = DSSelectionService.selectedDataService();
 
-            if (response === 'Failed') {
-                vm.responseStyleClass = "pficon pficon-ok";
-                vm.responseMsg = $translate.instant( 'dsExportGitWizard.successfulExportMsg', 
+            if (response === 'OK') {
+                vm.responseMsg = $translate.instant( 'dsExportGitWizard.successfulExportDetailMsg', 
                                                      { dataServiceName: dataService.keng__id, 
                                                        repoPath: vm.repo.parameters[ 'file-path-property' ] } );
             } else {
-                vm.responseStyleClass = "pficon pficon-error-circle-o";
-                vm.responseMsg = $translate.instant( 'dsExportGitWizard.failedExportMsg', 
+                vm.responseMsg = $translate.instant( 'dsExportGitWizard.failedExportDetailMsg', 
                                                      { dataServiceName: dataService.keng__id,
                                                        repoPath: vm.repo.parameters[ 'file-path-property' ] } );
             }
@@ -88,11 +99,10 @@
             }
         };
 
-        //
-        // Validates the credentials wizard step and returns true is ok to continue or
-        // false if validation has failed
-        //
-        vm.validateCredentials = function() {
+        /**
+         * Returns 'true' if the repository properties are valid; otherwise 'false'.
+         */
+        vm.validateRepoProps = function() {
             if (_.isEmpty(vm.repo))
                 return false;
 
@@ -110,38 +120,63 @@
                 return false;
             }
 
-            if ( vm.requireAuthorName && _.isEmpty(vm.repo.parameters['author-name-property'])) {
+            if ( vm.requireAuthorName && 
+                 _.isEmpty( vm.repo.parameters[ 'author-name-property' ] ) ) {
                 return false;
             }
 
-            if ( vm.requireAuthorEmail && _.isEmpty(vm.repo.parameters['author-email-property'])) {
+            if ( vm.requireAuthorEmail && 
+                 _.isEmpty( vm.repo.parameters[ 'author-email-property' ] ) ) {
                 return false;
             }
 
             return true;
         };
 
+        /**
+         * Returns 'true' if the authentication settings are valid; otherwise 'false'.
+         */
+        vm.validateAuthentication = function() {
+            return true; // no validation needed
+        };
+
+        //
+        // Validates the repository properties and the authentication settings.
+        // Returns 'true' if valid; otherwise 'false'.
+        //
+        vm.validateCredentials = function() {
+            return vm.validateRepoProps && vm.validateAuthentication;
+        };
+
         vm.showProgress = function(display) {
             vm.inProgress = display;
         };
 
-        /**
-         * Event handler for exporting the dataservice to git repository
-         */
-        vm.onExportDataServiceClicked = function() {
+        $scope.$on( "wizard:stepChanged", function ( e, parameters ) {
+            if ( parameters.step.stepId == 'data-service-export-progress-final' ) {
+                exportDataService();
+            }
+        });
+
+        function exportDataService() {
             var dataservice = DSSelectionService.selectedDataService();
 
-            //
-            // Display the progress bar and hide the browse button
-            //
+            // Display the progress bar
             vm.showProgress(true);
 
             try {
                 RepoRestService.export('git', vm.repo.parameters, dataservice).then(
                     function (exportStatus) {
                         vm.showProgress(false);
-                        setError(null);
                         setResponse(exportStatus.success ? 'OK': 'Failed');
+
+                        if ( exportStatus.success === 'OK' ) {
+                            setError( null );
+                        } else {
+                            var msg = $translate.instant( 'dsExportGitWizard.failedNoDetailsMsg', 
+                                                          { dataServiceName: dataService.keng__id } );
+                            setError( msg );
+                        }
                     },
                     function (response) {
                         // Some kind of error has occurred
@@ -154,14 +189,6 @@
                 setError(error.message);
                 setResponse('Failed');
             }
-        };
-
-        $scope.$on( "requireAuthorName", function( evt, data ) {
-            vm.requireAuthorName = data;
-        });
-
-        $scope.$on( "requireAuthorName", function( evt, data ) {
-            vm.requireAuthorName = data;
-        });
+        }
     }
 })();

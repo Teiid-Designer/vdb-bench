@@ -11,21 +11,43 @@
         .module(pluginName)
         .controller('DSImportExportController', DSImportExportController);
 
-    DSImportExportController.$inject = ['$translate', 'CONFIG', 'SYNTAX', 'RepoRestService', '$scope', 'DSPageService'];
+    DSImportExportController.$inject = ['$translate', 
+                                        'CONFIG', 
+                                        'SYNTAX', 
+                                        'RepoRestService', 
+                                        '$scope', 
+                                        'DSPageService',
+                                        'DSSelectionService'];
 
-    function DSImportExportController($translate, config, syntax, RepoRestService, $scope, DSPageService) {
+    function DSImportExportController($translate, 
+                                      config, 
+                                      syntax, 
+                                      RepoRestService, 
+                                      $scope, 
+                                      DSPageService,
+                                      DSSelectionService) {
         var vm = this;
 
         vm.storageTypes = {};
         vm.storageType = {};
         vm.gitWizard = false;
 
+        /**
+         * Final location of all the parameters
+         * populated by the wizard
+         */
+        vm.repo = {
+            parameters: {}
+        };
+
         vm.backCallback = function (step) {
             return true;
         };
 
         $scope.$on("wizard:stepChanged", function (e, parameters) {
-            if (parameters.step.stepId.endsWith('-final')) {
+            if ( parameters.step.stepId == 'data-service-export' ) {
+                vm.nextButtonTitle = $translate.instant( 'shared.Export' );
+            } else if (parameters.step.stepId.endsWith('-final')) {
                 vm.nextButtonTitle = $translate.instant('shared.Finish');
             } else {
                 vm.nextButtonTitle = $translate.instant('shared.Next');

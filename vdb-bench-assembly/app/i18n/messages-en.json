@@ -221,10 +221,15 @@
     },
     
     "dsExportGitWizard" : {
-        "failedExportMsg" : "Exporting data service '{{dataServiceName}}' to repository path '{{repoPath}}' failed",
+        "exportProgressDetailMsg" : "Data service '{{dataServiceName}}' is being exported ...",
+        "exportProgressMsg" : "<strong>Export in Progress</strong>",
+        "failedExportDetailMsg" : "Data service '{{dataServiceName}}' could not be exported to repository path '{{repoPath}}'",
+        "failedExportMsg" : "<strong>Export Failed</strong>",
+        "failedNoDetailsMsg" : "Data service '{{dataServiceName}}' failed for a unspecified reasons.'",
         "missingPathMsg" : "@:dsImportGitWizard.missingPathMsg",
         "missingRepositoryUrlMsg" : "@:dsImportGitWizard.missingRepositoryUrlMsg",
-        "successfulExportMsg" : "Successfully exported data service '{{dataServiceName}}' to repository path '{{repoPath}}'"
+        "successfulExportDetailMsg" : "Data service '{{dataServiceName}}' was exported to repository path '{{repoPath}}'",
+        "successfulExportMsg" : "<strong>Successful Export</strong>"
     },
 
     "dsImportGitWizard" : {
@@ -414,8 +419,8 @@
     "git-export-wizard" : {
         "repoPropsStepMsg" : "Enter the details for the destination git repository",
         "repoPropsStepTitle" : "Repository Properties",
-        "commitStepMsg" : "Commit exported data service to repository",
-        "commitStepTitle" : "Export"
+        "commitStepMsg" : "If required, complete either the SSH or HTTP authentication. Click 'Export' to commit the data service to the repository.",
+        "commitStepTitle" : "Authentication and Export"
     },
 
     "git-import-wizard" : {
