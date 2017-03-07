@@ -23,6 +23,7 @@
         vm.deploymentMessage = null;
         vm.allItems = DSSelectionService.getDataServices();
         vm.items = vm.allItems;
+        vm.confirmDeleteMsg = "";
 
         function setHelpId() {
             var page = DSPageService.page(DSPageService.DATASERVICE_SUMMARY_PAGE);
@@ -203,10 +204,13 @@
         };
      
         /**
-         * Handle delete dataservice click
+         * Delete the selected data service
          */
-        var deleteDataServiceClicked = function ( ) {
+        vm.deleteSelectedDataService = function( ) {
             var selDSName = DSSelectionService.selectedDataService().keng__id;
+
+            // dismiss the delete confirmation modal
+            $('#confirmDeleteModal').modal('hide');
             try {
                 RepoRestService.deleteDataService( selDSName ).then(
                     function () {
@@ -217,7 +221,9 @@
                         throw RepoRestService.newRestException($translate.instant('dsSummaryController.deleteFailedMsg', 
                                                                                   {response: RepoRestService.responseMessage(response)}));
                     });
-            } catch (error) {} finally {
+            } catch (error) {
+                throw RepoRestService.newRestException($translate.instant('dsSummaryController.deleteFailedMsg', 
+                        {response: error.message}));
             }
 
             // Disable the actions until next selection
@@ -231,7 +237,9 @@
             // Need to select the item first
             DSSelectionService.selectDataService(item);
 
-            deleteDataServiceClicked();
+            // Show the delete confirmation modal
+            vm.confirmDeleteMsg = $translate.instant('dsSummaryController.confirmDeleteMsg', {serviceName: item.keng__id});
+            $('#confirmDeleteModal').modal('show');
         };
 
         /**

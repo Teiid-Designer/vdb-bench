@@ -26,6 +26,7 @@
         vm.deleteVdbInProgress = false;
         vm.displayDdl = false; // Do not display by default
         vm.hasSources = false;
+        vm.confirmDeleteMsg = "";
 
         /**
          * Options for the codemirror editor used for previewing ddl
@@ -314,13 +315,15 @@
         };
      
         /**
-         * Handle delete ServiceSource click.
+         * Delete the selected ServiceSource.
          * 1) undeploy the vdb from the server
          * 2) delete the vdb from the repo
          */
-        var deleteSvcSourceClicked = function ( ) {
+        vm.deleteSelectedSvcSource = function ( ) {
             var selVdbName = SvcSourceSelectionService.selectedServiceSource().keng__id;
 
+            // dismiss the delete confirmation modal
+            $('#confirmDeleteModal').modal('hide');
             // Deletes the server and workspace vdbs.  Also does a refresh when complete
             deleteServerVdb(selVdbName);
         };
@@ -332,7 +335,9 @@
             // Need to select the item first
             SvcSourceSelectionService.selectServiceSource(item);
 
-            deleteSvcSourceClicked();
+            // show the delete confirmation modal
+            vm.confirmDeleteMsg = $translate.instant('datasourceSummaryController.confirmDeleteMsg', {sourceName: item.keng__id});
+            $('#confirmDeleteModal').modal('show');
         };
  
         /**

@@ -110,6 +110,7 @@
         "connectionsNumberToolTip" : "The number of native data connections, eg. JDBC databases, utilised by this dataservice",
         "createDataServiceMsg" : "A Data Service is created using one or more Data Sources. To create your first Data Service, click <strong>New Data Service</strong> below.",
         "createSourceMsg" : "A Data Service is created using one or more Data Sources. To create your first Data Source, click ",
+        "confirmDeleteTitle" : "Confirm Delete",
         "documentationDataServiceMsg" : "Documentation such as how to connect to your data service and client examples are available here.",
         "documentationDataService" : "Documentation",
         "GitExport" : "Git Export",
@@ -247,6 +248,7 @@
     },
 
     "dsSummaryController" : {
+        "confirmDeleteMsg" : "Are you sure you want to delete data service '{{serviceName}}'?",
         "deleteFailedMsg" : "Failed to remove the data service: {{response}}",
         "deployFailedMsg" : "Failed to deploy the data service: {{response}}",
         "findSourceVdbsFailedMsg" : "Failed to find source VDBs: {{response}}",
@@ -254,7 +256,7 @@
         "descriptionFilterPlaceholder" : "Filter by Description...",
         "nameFilterPlaceholder" : "Filter by Name..."
     },
-    
+
     "dsTestController" : {
         "noResultsColumnName" : "Err: No Data!",
         "noResultsMsg" : "No data was returned from the query",
@@ -301,6 +303,7 @@
     },
 
     "datasource-summary" : {
+        "confirmDeleteTitle" : "Confirm Delete",
         "welcomeMsg" : "Currently, there are no data sources configured. In order to create a data service you must create a data source.",
         "noSourcesExist" : "No Data Sources Found",
         "noSourcesInstructionsMsg" : "To get started, click <strong>Configure Data Source</strong> below to create your first data source.",
@@ -325,6 +328,7 @@
         "actionTitleImport" : "Import a Data Source",
         "actionTitleNew" : "Create a Data Source",
         "actionTitleRefresh" : "Refresh the Table",
+        "confirmDeleteMsg" : "Are you sure you want to delete data source '{{sourceName}}'?",
         "gettingDdlMsg" : "Fetching DDL...",
         "getDdlFailedMsg" : "Failed to get the DDL.",
         "removeLocalSourceFailedMsg" : "Failed to remove the local ServiceSource.",
