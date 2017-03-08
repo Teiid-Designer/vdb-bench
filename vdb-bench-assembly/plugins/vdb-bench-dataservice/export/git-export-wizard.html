@@ -79,7 +79,10 @@
             </div>
             <h3 class="blank-slate-pf-main-action" translate="dsExportGitWizard.failedExportMsg" />
             <p class="blank-slate-pf-secondary-action">{{ vm.responseMsg }}</p>
-            <p class="blank-slate-pf-secondary-action">{{ vm.error }}</p>
+            <a ng-click="vm.toggleDetails()">{{vm.detailsToggleTitle}}</a>
+            <div ng-init="vm.showDetails = false" ng-show="vm.showDetails">
+                <p><div style="text-align:left" ng-bind-html="vm.error"></div></p>
+            </div>
         </div>
     </div>
 </div>
