@@ -473,6 +473,11 @@
                 title: $translate.instant('shared.TestWhat', {what: $translate.instant('shared.DataService')}),
                 actionFn: deployDataServiceMenuAction
             },
+            {
+                name: $translate.instant('dataservice-summary.codeSamplesDataService'),
+                title: $translate.instant('dataservice-summary.codeSamplesDataService'),
+                actionFn: documentationDataServiceMenuAction
+            }
         ];
 
         vm.menuActions = [
@@ -480,11 +485,6 @@
                 name: $translate.instant('shared.Copy'),
                 title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.DataService')}),
                 actionFn: cloneDataServiceMenuAction
-            },
-            {
-                name: $translate.instant('dataservice-summary.documentationDataService'),
-                title: $translate.instant('dataservice-summary.documentationDataService'),
-                actionFn: documentationDataServiceMenuAction
             },
             {
                 name: $translate.instant( 'shared.Download' ),

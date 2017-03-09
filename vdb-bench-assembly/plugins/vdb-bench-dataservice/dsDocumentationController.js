@@ -34,6 +34,12 @@
              var vdbVersion = DSSelectionService.selectedDataServiceVdbVersion();
              var modelName = DSSelectionService.selectedDataServiceViewModel();
              var serviceView = DSSelectionService.selectedDataServiceView();
+             if(serviceView === 'unknown') {
+                 var vdbIndx = vdbName.lastIndexOf("VDB");
+                 if(vdbIndx>-1) {
+                     serviceView = vdbName.substring(0,vdbIndx)+"View";
+                 }
+             }
 
              if (vdbName === SYNTAX.UNKNOWN || vdbVersion === SYNTAX.UNKNOWN || modelName === SYNTAX.UNKNOWN)
                  return null;
@@ -44,6 +50,7 @@
          }();
          
           vm.init = function() {
+             vm.connectionDetailTitle = $translate.instant('dataservice-documentation.connection-detail-title', { dsName: DSSelectionService.selectedDataService().keng__id });
              try {
                  RepoRestService.getTeiidStatus().then(
                      function (teiidStatus) {
@@ -74,12 +81,12 @@
             	 vm.jdbcConnectionString="not found";
 
              vm.jdbcConnectionString = "jdbc:teiid:" + vdbName + protocol + hostName + SYNTAX.COLON + port + ";version=" + vdbVersion;
-             vm.java1 = $translate.instant('dataservice-documentation.connecting-java1', { connection_string: vm.jdbcConnectionString });
+             vm.java1 = $translate.instant('dataservice-documentation.connecting-java', { connection_string: vm.jdbcConnectionString });
              vm.isLoading=false;
          }
 
          vm.odata1 = function() {
-        	 return $translate.instant('dataservice-documentation.connecting-odata1', { url: vm.odataUrl });
+        	 return $translate.instant('dataservice-documentation.connecting-odata', { url: vm.odataUrl });
          }();
          
         
