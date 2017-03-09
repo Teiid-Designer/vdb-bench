@@ -24,7 +24,7 @@
             restrict: 'E',
             scope: {},
             bindToController: {
-                repo: '=',
+                repo: '=?',
                 edit: '=',
                 showName: '=',
                 showFilePath: '=',
