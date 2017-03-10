@@ -111,8 +111,8 @@
         "createDataServiceMsg" : "A Data Service is created using one or more Data Sources. To create your first Data Service, click <strong>New Data Service</strong> below.",
         "createSourceMsg" : "A Data Service is created using one or more Data Sources. To create your first Data Source, click ",
         "confirmDeleteTitle" : "Confirm Delete",
-        "documentationDataServiceMsg" : "Documentation such as how to connect to your data service and client examples are available here.",
-        "documentationDataService" : "Documentation",
+        "codeSamplesDataServiceMsg" : "Code samples showing how to connect to your data service are available here.",
+        "codeSamplesDataService" : "Code Samples",
         "GitExport" : "Git Export",
         "importDataServiceMsg" : "You can also import an existing Data Service. To import a Data Service, click ",
         "noDataServiceImportMsg" : "You can also import an existing Data Service. To import an existing Data Service, click <strong>Import Data Service</strong> below.",
@@ -126,30 +126,20 @@
     
     
     "dataservice-documentation" : {
-        "connecting" : "Connecting",
-        "samples" : "Client Code Examples",
-        "java-sample" : "Java",
-        "javascript-sample" : "JavaScript",
-        "node-sample" : "node.js",
-        "python-sample" : "Python",
-        "php-sample" : "PHP",
-        "connecting-heading1" : "There are multiple ways to connect to your data service including JDBC, ODBC, OData, REST or SOAP.",
-        "connecting-heading2" : "This is meant to give you a starting point. Please see the full documentation for more details.",
-        "connecting-java-heading" : "<h2>JDBC</h2>",
-        "connecting-java1" : "To connect to your service using JDBC, use the following connection string in your client: {{connection_string}}",
-        "connecting-java2" : "Before you can make a JDBC connection to the data service, you must include the Teiid driver jar file in your application's classpath. For a Java application to connect to a JDBC source, it needs a URL, user-id, and password. To connect to your VDB all you need is a URL and any additional optional properties that you would like to set. A JDBC connection can be obtained through the Teiid driver 'org.teiid.jdbc.TeiidDriver' with the URL syntax of jdbc:teiid:{VDB-Name}@mm(s)://{host name}:{port}. You can add optional properties at the end of the URL using a semi-colon(;) name=value format. For example 'jdbc:teiid:{VDB-Name}@mm(s)://{host name}:{port};autoCommitTxn=DETECT'. Check out Client Developer's guide for all the optional connection properties in your URL. See the sample code tab for an example of how to make JDBC connection.", 
-        "connecting-odata-heading" : "<h2>OData</h2>",
-        "connecting-odata1" : "Deployed services are accessible using OData URLs. This service is accessible via: {{url}}.", 
-        "connecting-odata2" : "The service is protected using HTTP Basic security and requires the user to have a role of 'odata' defined for OData access. For more information on the OData protocol, please see <a target='_blank' href='http://odata.org'>http://odata.org</a>",
-        "connecting-odbc-heading" : "<h2>ODBC</h2>",
-        "connecting-odbc" : "Open Database Connectivity (ODBC) is a standard database access method developed by the SQL Access group in 1992. ODBC, just like JDBC in Java, allows consistent client access regardless of which database management system (DBMS) is handling the data. ODBC uses a driver to translate the application's data queries into commands that the DBMS understands. For this to work, both the application and the DBMS must be ODBC-compliant -- that is, the application must be capable of issuing ODBC commands and the DBMS must be capable of responding to them.Teiid can provide ODBC access to deployed VDBs in the Teiid runtime through PostgreSQL's ODBC driver. This is possible because Teiid has a PostgreSQL server emulation layer accessible via socket clients. By default, ODBC is enabled and running on on port 35432.", 
-        "help" : {
-           "java-sample" : "'This example illustrates how to connect to and query a data service from a Java client. The Teiid driver needs to be included in the client classpath.'",
-           "javascript-sample" : "'This example uses jquery to retrieve an OData result set. See <a href='https://jquery.com/'>http://jquery.com</a> for details.'",
-           "python-sample" : "'This example uses Python to query the data service via an OData URL. You will need to update the username and password accordingly.'",
-           "php-sample" : "'This example uses curl to query the data service via an OData URL. The appropriate Base64 encoded authentication string will need to be added.'",
-           "node-sample" : "'This example uses the o.js javascript library available for node. See <a href='https://www.npmjs.com/package/odata'>http://www.npmjs.com/package/odata</a> for details.'"
-        } 
+        "javaTab" : "Java",
+        "javaScriptTab" : "Javascript",
+        "nodeTab" : "node.js",
+        "pythonTab" : "Python",
+        "phpTab" : "PHP",
+        "connecting-heading1" : "There are multiple ways to connect to your data service including <strong>JDBC, ODBC, and OData</strong>.  Several code samples are provided below, which demonstrate how you can connect to your data service from different client applications.  For more information about the supported access methods, see the <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/Client_Developers_Guide.html'>Client Developers Guide</a>.  In the Client Developers Guide you can find specific support information for <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/JDBC_Support.html'>JDBC</a>, <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/ODBC_Support.html'>ODBC</a> and <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/OData_Support.html'>OData</a>.",
+        "connection-detail-title" : "Connections for '{{dsName}}'",
+        "connecting-java" : "<strong>JDBC&nbsp;&nbsp;</strong>To connect to your service using JDBC, use the following connection string in your client: <strong>{{connection_string}}</strong>",
+        "connecting-odata" : "<strong>OData&nbsp;&nbsp;</strong>Deployed services are accessible using OData URLs. This service is accessible via: {{url}}.", 
+        "java-instructions" : "<i>This <strong>Java</strong> code sample shows how to connect and query the data service from a java client.  You must include the Teiid driver jar file in your client's classpath.  See <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/JDBC_Support.html'>JDBC Support</a> in the <strong>Client Developers Guide</strong> for more information.</i>", 
+        "javascript-instructions" : "<i>This <strong>Javascript</strong> code sample uses jquery to retrieve an OData result set. See <a target='_blank' href='https://jquery.com/'>http://jquery.com</a> for details.  The OData URL is protected using HTTP Basic security - the user is required to have a role of 'odata' defined for access.</i>",
+        "node-instructions" : "<i>This <strong>node.js</strong> code sample uses the o.js javascript library available for node. See <a target='_blank' href='https://www.npmjs.com/package/odata'>http://www.npmjs.com/package/odata</a> for details.  The OData URL is protected using HTTP Basic security - the user is required to have a role of 'odata' defined for access.</i>",
+        "python-instructions" : "<i>This <strong>Python</strong> code sample queries the data service via the OData URL. You will need to update the username and password in the provided code.  The OData URL is protected using HTTP Basic security - the user is required to have a role of 'odata' defined for access.</i>",
+        "php-instructions" : "<i>This <strong>PHP</strong> code sample uses curl to query the data service via the OData URL. The appropriate Base64 encoded authentication string will need to be added in the provided code.  The OData URL is protected using HTTP Basic security - the user is required to have a role of 'odata' defined for access.</i>"
     },
 
     "dataservice-test" : {
@@ -249,7 +239,7 @@
     "dsPageService" : {
         "configureSourceTitle" : "Configure Data Source",
         "homeTitle" : "@:shared.Dashboard",
-        "documentationDataServiceTitle" : "Documentation ",
+        "documentationDataServiceTitle" : "Code Samples ",
         "testDataServiceTitle" : "Test Data Service",
         "preferencesTitle" : "Preferences"
     },
