@@ -1,18 +1,35 @@
-<div class="page-help-icon-container">
-        <a class="page-help-icon pficon-help" href="" ng-click="vm.togglePageHelp()">
-            <div class="page-help-page-slide-container"
-                        pageslide ps-open="vm.showPageHelp"
-                        ps-size="{{vm.sliderWidth}}"
-                        ps-key-listener="true"
-                        ps-container="{{ vm.containerId }}">
-                <div class="page-help-slide-container">
-                    <iframe id="help-iframe" frameborder="1" scrolling="yes" width="100%" height="600" ng-src="{{vm.helpPageUrl}}" frameborder="5" >
+<div class="page-help-icon-container" tabindex="-1">
+        <a class="page-help-icon pficon-help" href="" ng-click="vm.togglePageHelp()" tabindex="-1">
+            <div class="page-help-page-slide-container" 
+                 tabindex="-1"
+                 pageslide ps-open="vm.showPageHelp"
+                 ps-size="{{vm.sliderWidth}}"
+                 ps-key-listener="true"
+                 ps-container="{{ vm.containerId }}">
+                <div class="page-help-slide-container" tabindex="-1">
+                    <iframe id="help-iframe" 
+                            tabindex="-1" 
+                            frameborder="1" 
+                            scrolling="yes" 
+                            width="100%" 
+                            height="600" 
+                            ng-src="{{vm.helpPageUrl}}" 
+                            frameborder="5" >
             	        {{ 'HelpService.inlineFramesNotSupportedMsg' | translate }}
                     </iframe>
-                    <div class="row page-help-buttons">
-	                    <button class="btn" translate="shared.Back"  onClick="window.parent.history.back();return true;" />
-	                    <button class="btn" translate="shared.Forward"  onClick="window.parent.history.forward();return true;" />
-	                    <button class="btn btn-primary" ng-click="vm.togglePageHelp()" translate="shared.Close" />
+                    <div class="row page-help-buttons" tabindex="-1">
+	                    <button class="btn" 
+                                tabindex="-1" 
+                                translate="shared.Back" 
+                                onClick="window.parent.history.back();return true;" />
+	                    <button class="btn" 
+                                tabindex="-1" 
+                                translate="shared.Forward" 
+                                onClick="window.parent.history.forward();return true;" />
+	                    <button class="btn btn-primary" 
+                                tabindex="-1" 
+                                ng-click="vm.togglePageHelp()" 
+                                translate="shared.Close" />
                     </div>
                 </div>
             </div>
