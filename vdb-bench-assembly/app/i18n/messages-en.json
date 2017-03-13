@@ -67,8 +67,10 @@
         "instructionsMsg" : "Change the definition of your Data Service by choosing a different data source and table",
         "enableTextEditLbl" : "Enable Text Edit",
         "expertTab" : "Expert",
-        "sourceTablesLimitedMsg" : "Limit your view definition to use the following tables:",
+        "noContent" : "No Content",
         "viewDdlTitle" : "View Definition",
+        "viewTablesTitle" : "Selected Tables",
+        "viewDdlInstructions" : "You can modify the view definition in the area below.  Limit the view to use only the selected tables for the data service.",
         "wizardTab" : "Wizard"
     },
 
@@ -101,8 +103,10 @@
         "inputFieldsHelpMsg" : "Choose a name (and optional description) for your Data Service",
         "instructionsMsg" : "A Data Service can be composed of one or more of your available data sources. If you don't see your desired data source, click ",
         "multiTableCheckbox" : "Join multiple tables",
-        "sourceTablesLimitedMsg" : "Limit your view definition to use the following tables:",
+        "noContent" : "No Content",
         "viewDdlTitle" : "View Definition",
+        "viewTablesTitle" : "Selected Tables",
+        "viewDdlInstructions" : "You can modify the view definition in the area below.  Limit the view to use only the selected tables for the data service.",
         "wizardTab" : "Wizard"
     },
 
