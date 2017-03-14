@@ -10,20 +10,35 @@
                     <div class="col-md-12">
                         <h4 class="pull-left">{{'dataservice-edit.viewDdlTitle' | translate}}</h4>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-8">
+                        <i>{{'dataservice-edit.viewDdlInstructions' | translate}}</i>
                         <div ui-codemirror="{ onLoad : vm.editorLoaded }" ng-model="vm.viewDdl" ui-codemirror-opts="vm.ddlEditorOptions" ui-refresh="vm.refreshViewDdl"></div>
                         <div class="has-error" ng-if="vm.showDdlError">
                             <span class="help-block">{{vm.ddlErrorMsg}}</span>
                         </div>
                     </div>
-                    <p>&nbsp;</p>
-                    <div class="col-md-12">
-                        <p><strong>{{'dataservice-edit.sourceTablesLimitedMsg' | translate}}</strong></p>
-                        <h4 ng-show="vm.sourceNames[0]!=null">&nbsp;&nbsp;{{vm.sourceNames[0]}}.{{vm.tableNames[0]}}</h4>
-                        <h4 ng-show="vm.sourceNames[1]!=null">&nbsp;&nbsp;{{vm.sourceNames[1]}}.{{vm.tableNames[1]}}</h4>
-                        <p>&nbsp;</p>
+                    <div class="col-md-4">
+                        <h5>{{'dataservice-edit.viewTablesTitle' | translate}}</h5>
+                        <!-- Tree control to display tables / columns -->
+                        <div class="tree-control-container">
+                            <!-- No Content Message -->
+                            <div ng-show="vm.treedata.length == 0">
+                                <h4 translate="dataservice-edit.noContent"></h4>
+                            </div>
+                            <div class="tree-control-inner-container">
+                                <!-- tree control for catalog and schema -->
+                                <div treecontrol="" class="tree-light tree-control-results" tree-model="vm.treedata" expanded-nodes="vm.initialExpandedNodes">
+                                    <span ng-switch="" on="node.type">
+                                        <span ng-switch-when="table" class="fa fa-table" aria-hidden="true"></span>
+                                        <span ng-switch-when="column" class="fa fa-square" aria-hidden="true"></span>
+                                    </span>
+                                    {{node.name}}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-12">
+                        <p>&nbsp;</p>
                         <input type="submit" class="btn btn-primary" value="{{:: 'shared.Finish' | translate}}" ng-click="vm.finishClicked()" ng-disabled="vm.disableFinish" />
                         <input type="button" class="btn btn-default" value="{{:: 'shared.Cancel' | translate}}" ng-click="vmmain.selectPage('dataservice-summary')" />
                     </div>

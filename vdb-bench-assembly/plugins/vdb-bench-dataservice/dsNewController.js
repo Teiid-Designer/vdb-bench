@@ -24,10 +24,14 @@
         vm.disableFinish = false;
         vm.showDdlError = false;
         vm.ddlErrorMsg = "";
+        vm.treedata = [];
+        vm.initialExpandedNodes = [];
 
         vm.editorLoaded = function(_editor) {
             if (! _editor)
                 return;
+
+            _editor.setSize(null, "30vh");
 
             // Change Event
             _editor.on("change", function(obj){ 
@@ -64,6 +68,7 @@
          */
         vm.onExpertTabSelected = function() {
             setViewDdlFromEditor();
+            loadTableColumnTree();
         };
 
         /**
@@ -185,6 +190,62 @@
 
                 // get models for sources
                 EditWizardService.getModelsForSourceVdbs(EditWizardService.sources(), joinSuccessCallback, joinFailureCallback);
+            }
+        }
+
+        // Builds the table-column tree data.  Tree contains source.table root nodes, with column children.
+        // The tree control is expecting data in this form
+        //    	vm.treedata =
+        //    	[
+        //    	    { "name" : "srcTable1", "type" : "table", "children" : [
+        //    	        { "name" : "Col1", "type" : "column", "children" : [] },
+        //    	        { "name" : "Col2", "type" : "column", "children" : [] }
+        //    	    ]},
+        //    	    { "name" : "srcTable2", "type" : "table", "children" : [
+        //    	        { "name" : "Col1", "type" : "column", "children" : [] },
+        //    	        { "name" : "Col2", "type" : "column", "children" : [] }
+        //    	    ]},
+        //    	    { "name" : "srcTable3", "type" : "table", "children" : [] }
+        //    	];
+        function loadTableColumnTree( ) {
+            vm.initialExpandedNodes = [];
+
+            // No tables
+            if(vm.sourceNames.length === 0) {
+                vm.treedata = [];
+            // One or two tables
+            } else {
+                var treeInfo = [];
+                for ( var i = 0; i < vm.sourceNames.length; ++i) {
+                    var sourceTableName = vm.sourceNames[i] + "." + vm.tableNames[i];
+                    // Children are the columns for the table
+                    var kids = [];
+                    var kidCols = [];
+                    if(i === 0) {
+                        kidCols = EditWizardService.source1AvailableColumns();
+                    } else if(i === 1) {
+                        kidCols = EditWizardService.source2AvailableColumns();
+                    }
+                    // Build the child column nodes
+                    for(var j = 0; j < kidCols.length; ++j) {
+                        var kid = {
+                            name : kidCols[j].keng__id + "  [" + kidCols[j].Datatype.toLowerCase() + "]",
+                            type : "column",
+                            parent : sourceTableName,
+                            children : []
+                        };
+                        kids.push(kid);
+                    }
+                    // Create the source-table node 
+                    var sourceTableNode = {
+                        name : sourceTableName,
+                        type : "table",
+                        children : kids
+                    };
+                    treeInfo.push(sourceTableNode);
+                    vm.initialExpandedNodes.push(sourceTableNode);
+                }
+                vm.treedata = treeInfo;
             }
         }
 
