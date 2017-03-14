@@ -195,6 +195,45 @@
             vm.saveRepositories();
         };
 
+        vm.hasPathWarnings = function() {
+            return !_.isEmpty( vm.PathWarningsMsg );
+        };
+
+        /**
+         *  Needs to stay in sync with dsExportGitWizard
+         */
+        vm.pathValidation = function() {
+            vm.pathWarningsMsg = "";
+
+            if ( !_.isEmpty( vm.gitCredentialsForm ) ) {
+                delete vm.gitCredentialsForm.path.$error.invalidPath;
+            }
+
+            if ( !_.isEmpty( vm.repo.parameters[ 'file-path-property' ] ) ) {
+                var error = false;
+
+                // invalid path
+                if ( vm.repo.parameters[ 'file-path-property' ].includes( "//" ) ||
+                     vm.repo.parameters[ 'file-path-property' ].includes( "\\" ) ||
+                     vm.repo.parameters[ 'file-path-property' ] == "/" ) {
+                    error = true;
+                }
+
+                if ( error && !_.isEmpty( vm.gitCredentialsForm ) ) {
+                    vm.gitCredentialsForm.path.$error.invalidPath = true;
+                }
+
+                if ( error ) return;
+
+                // warnings
+                if ( vm.repo.parameters[ 'file-path-property' ].endsWith( ".zip" ) ) {
+                    vm.pathWarningsMsg = $translate.instant( 'gitCredentialsControl.folderNameZipMsg' );
+                } else if ( vm.repo.parameters[ 'file-path-property' ].includes( "." ) ) {
+                    vm.pathWarningsMsg = $translate.instant( 'gitCredentialsControl.folderNameDotMsg' );
+                }
+            }
+        };
+
         /**
          * Generic handler function for alerting if the
          * FileReader failed to read a file for whatever
@@ -333,5 +372,6 @@
         });
 
         initRepositories();
+        vm.pathValidation(); // initialize path validation warnings
     }
 })();
