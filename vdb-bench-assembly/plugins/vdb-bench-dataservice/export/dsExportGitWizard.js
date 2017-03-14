@@ -113,6 +113,7 @@
 
         /**
          * Returns 'true' if the repository properties are valid; otherwise 'false'.
+         * This needs to stay in sync with gitCredentialsControl validation.
          */
         vm.validateRepoProps = function() {
             if (_.isEmpty(vm.repo))
@@ -128,14 +129,17 @@
                 return false;
             }
 
-            if (_.isEmpty(vm.repo.parameters['file-path-property'])) {
+            if ( _.isEmpty( vm.repo.parameters[ 'file-path-property' ] ) ||
+                vm.repo.parameters[ 'file-path-property' ].includes( "//" ) ||
+                vm.repo.parameters[ 'file-path-property' ].includes( "\\" ) ||
+                vm.repo.parameters[ 'file-path-property' ] == "/" ) {
                 return false;
             }
 
             if ( vm.requireAuthorName && 
                  _.isEmpty( vm.repo.parameters[ 'author-name-property' ] ) ) {
                 return false;
-            }
+           }
 
             if ( vm.requireAuthorEmail && 
                  _.isEmpty( vm.repo.parameters[ 'author-email-property' ] ) ) {
