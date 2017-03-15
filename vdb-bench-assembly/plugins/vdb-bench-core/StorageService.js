@@ -16,7 +16,10 @@
     function StorageService($window) {
         var service = {
             set: function (key, value) {
-                $window.localStorage[key] = value;
+                if (_.isEmpty(value))
+                    delete $window.localStorage[key];
+                else
+                    $window.localStorage[key] = value;
             },
 
             get: function (key, defaultValue) {
@@ -24,12 +27,45 @@
             },
 
             setObject: function (key, value) {
-                var jsonValue = JSON.stringify(value);
-                $window.localStorage[key] = JSON.stringify(value);
+                if (_.isEmpty(value))
+                    delete $window.localStorage[key];
+                else {
+                    var jsonValue = JSON.stringify(value);
+                    $window.localStorage[key] = JSON.stringify(value);
+                }
             },
 
             getObject: function (key, defaultValue) {
                 var value = $window.localStorage[key];
+                if (!value)
+                    return defaultValue;
+
+                var valueObj = JSON.parse(value);
+                return valueObj;
+            },
+
+            sessionSet: function (key, value) {
+                if (_.isEmpty(value))
+                    delete $window.sessionStorage[key];
+                else
+                    $window.sessionStorage[key] = value;
+            },
+
+            sessionGet: function (key, defaultValue) {
+                return $window.sessionStorage[key] || defaultValue;
+            },
+
+            sessionSetObject: function (key, value) {
+                if (_.isEmpty(value))
+                    delete $window.sessionStorage[key];
+                else {
+                    var jsonValue = JSON.stringify(value);
+                    $window.sessionStorage[key] = JSON.stringify(value);
+                }
+            },
+
+            sessionGetObject: function (key, defaultValue) {
+                var value = $window.sessionStorage[key];
                 if (!value)
                     return defaultValue;
 

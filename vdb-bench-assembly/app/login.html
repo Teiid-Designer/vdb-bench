@@ -13,68 +13,44 @@
                     </div>
                     <!--/#brand-->
                 </div>
-                <!--/.col-*-->
-                <div class="col-sm-7 col-md-6 col-lg-5 login">
-                    <form class="form-horizontal" role="form" ng-submit="vm.doLogin()">
-                        <div class="form-group">
-                            <label for="inputUsername" class="col-sm-2 col-md-2 control-label">{{'shared.Username' | translate}}</label>
-                            <div class="col-sm-10 col-md-10">
-                                <input type="text" class="form-control" id="inputUsername" placeholder="" tabindex="1" required ng-model="vm.entity.username" autofill autofocus>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputPassword" class="col-sm-2 col-md-2 control-label">{{'shared.Password' | translate}}</label>
-                            <div class="col-sm-10 col-md-10">
-                                <input type="password" class="form-control" id="inputPassword" placeholder="" tabindex="2" required ng-model="vm.entity.password" autofill>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-xs-8 col-sm-offset-2 col-sm-6 col-md-offset-2 col-md-6">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" tabindex="3" ng-model="vm.rememberMe"> {{'loginPage.rememberCredentials' | translate}}
-                                    </label>
+
+                <div class="col-sm-7 col-md-6 col-lg-5">
+                    <div id="vdb-login-repo-config">
+
+                        <a ng-click="vm.toggleRepositoryConfig()" class="btn btn-primary">Select Workspace</a>
+                            <div class="repo-config-page-slide-container"
+                                pageslide ps-open="vm.showRepoConfig"
+                                ps-size="50%"
+                                ps-key-listener="true"
+                                ps-container="vdb-login">
+                                <div class="repo-config-slide-container">
+                                    <repository-config-control edit="true"></repository-config-control>
+                                    <div class="row repo-config-slide-buttons">
+                                        <button class="btn btn-primary" ng-click="vm.toggleRepositoryConfig()" translate="shared.Close" />
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-xs-4 col-sm-4 col-md-4 submit">
-                                <button type="submit" class="btn btn-primary btn-lg" tabindex="4">{{'shared.Login' | translate}}</button>
-                            </div>
-                            <div id="vdb-login-forgotten-userpwd" class="col-xs-12 col-sm-offset-2 col-sm-10 col-md-offset-2 col-md-10">
-                                Forgot <a ng-click="vm.showForgottenUserPwd()">username</a> or <a ng-click="vm.showForgottenUserPwd()">password</a>?
-                            </div>
-                            <div id="vdb-login-error" class="col-xs-6 col-sm-offset-6 col-sm-6 col-md-offset-6 col-md-6">
-                                <p ng-bind-html="vm.loginError"></p>
-                            </div>
-                            <div id="vdb-login-repo-config" class="col-xs-12 col-sm-offset-2 col-sm-10 col-md-offset-2 col-md-10">
-                                <a ng-click="vm.toggleRepositoryConfig()">Configure</a> Workspace Location
-                                    <div class="repo-config-page-slide-container"
-                                                pageslide ps-open="vm.showRepoConfig"
-                                                ps-size="50%"
-                                                ps-key-listener="true"
-                                                ps-container="vdb-login">
-                                        <div class="repo-config-slide-container">
-                                            <repository-config-control edit="true"></repository-config-control>
-                                            <div class="row repo-config-slide-buttons">
-                                                <button class="btn btn-primary" ng-click="vm.toggleRepositoryConfig()" translate="shared.Close" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </form>
+                        </a>
+
+                        <p>Selected workspace is <b>{{vm.selectedRepo()}}</b> using <b>{{vm.selectedRepoAuthType()}}</b> login.</p>
+                    </div>
+
+                    <div id="vdb-login-auth-mechanism" class="login">
+                        <!-- Basic Authentication UI -->
+                        <div ng-include="'app/login-basic.html'" ng-show="vm.isBasicAuth()==true"></div>
+
+                        <!-- Keycloak Authentication UI -->
+                        <div ng-include="'app/login-keycloak.html'" ng-show="vm.isKeycloakAuth()==true"></div>
+                    </div>
                 </div>
-                <!--/.col-*-->
+
                 <div class="col-sm-5 col-md-6 col-lg-7 details">
                     <p>
                         <strong>{{'loginPage.welcomeTitle' | translate}}</strong> - {{'loginPage.welcomeDescription' | translate}}
                     </p>
                 </div>
-                <div class="col-sm-5 col-md-5 col-lg-5 user-pwd-forgotten" ng-show="vm.userPwdForgotten">
-                    <p>
-                        Connection to the repository is a pre-requisite to accessing this application. For successful connections, the username and
-                        password must be configured on the host server.
-                    </p>
+                <div id="vdb-login-error">
+                    <p ng-bind-html="vm.loginError"></p>
                 </div>
                 <!--/.col-*-->
             </div>

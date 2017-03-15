@@ -14,10 +14,10 @@
     RepoRestService.$inject = ['CONFIG', 'SYNTAX', 'REST_URI', 'VDB_SCHEMA',
                                              'VDB_KEYS', 'RepoSelectionService', 'Restangular',
                                              '$http', '$q', '$base64', 'CredentialService', '$interval',
-                                             '$location', '$translate'];
+                                             '$location', '$translate', '$window'];
 
     function RepoRestService(CONFIG, SYNTAX, REST_URI, VDB_SCHEMA, VDB_KEYS, RepoSelectionService,
-                                            Restangular, $http, $q, $base64, CredentialService, $interval, $location, $translate) {
+                                            Restangular, $http, $q, $base64, CredentialService, $interval, $location, $translate, $window) {
 
         /*
          * Service instance to be returned
@@ -63,14 +63,35 @@
             return "Basic " + authInfo;
         }
 
-        function authHeader(username, password) {
-            return {'Authorization': basicAuthHeader(username, password)};
+        function keycloakAuthHeader() {
+            if (_.isEmpty($window.keycloak))
+                return;
+
+            if (! $window.keycloak.authenticated)
+                return;
+
+            if (_.isEmpty($window.keycloak.token))
+                return;
+
+            return "Bearer " + keycloak.token;
         }
 
-        function httpHeaders(username, password) {
-            return { headers: authHeader(username, password) };
+        function authHeader(repo) {
+            if (angular.isUndefined(repo) || _.isEmpty(repo.authType))
+                return {};
+
+            if (isBasicAuth(repo)) {
+                var credentials = CredentialService.credentials();
+                return { 'Authorization': basicAuthHeader(credentials.username, credentials.password) };
+            }
+            else if (isKeycloakAuth(repo))
+                return { 'Authorization': keycloakAuthHeader() };
+            else {
+                // Some other authType not currently handled
+                return {};
+            }
         }
-        
+
         function getUserWorkspacePath() {
             return "/tko:komodo/tko:workspace/" + CredentialService.credentials().username;
         }
@@ -85,10 +106,9 @@
             var repo = RepoSelectionService.getSelected();
             var baseUrl = url(repo);
             var restService = service.cachedServices[baseUrl];
-            var user = CredentialService.credentials();
 
             if (!_.isEmpty(restService)) {
-                restService.setDefaultHeaders(authHeader(user.username, user.password));
+                restService.setDefaultHeaders(authHeader(repo));
                 //
                 // Want to be consistent in the function's return type
                 // Promise will resolve immediately upon return.
@@ -97,14 +117,18 @@
             }
 
             var testUrl = baseUrl + REST_URI.SERVICE + REST_URI.ABOUT;
-            return $http.get(testUrl, httpHeaders(user.username, user.password))
+            var httpHeaders = {
+                headers: authHeader(repo)
+            };
+
+            return $http.get(testUrl, httpHeaders)
                 .then(function (response) {
                     restService = Restangular.withConfig(function (RestangularConfigurer) {
                         RestangularConfigurer.setBaseUrl(baseUrl);
                         RestangularConfigurer.setRestangularFields({
                             selfLink: VDB_KEYS.LINKS + '[0].href'
                         });
-                        RestangularConfigurer.setDefaultHeaders(authHeader(user.username, user.password));
+                        RestangularConfigurer.setDefaultHeaders(authHeader(repo));
                     });
 
                 service.cachedServices[baseUrl] = restService;
@@ -123,21 +147,71 @@
         service.workspacePath = function( ) {
             return getUserWorkspacePath();
         };
-        
-        /**
-         * Service: Simple connection test.
-         */
-        service.testConnection = function(username, password) {
-            var repo = RepoSelectionService.getSelected();
+
+        function isBasicAuth() {
+            return CredentialService.authType() === CONFIG.rest.authTypes[0]; // basic
+        }
+
+        function isKeycloakAuth() {
+            return CredentialService.authType() === CONFIG.rest.authTypes[1]; // keycloak
+        }
+
+        function basicTestConnection(repo) {
             var baseUrl = url(repo);
             var testUrl = baseUrl + REST_URI.SERVICE + REST_URI.ABOUT;
 
-            return $http.get(testUrl, httpHeaders(username, password))
+            var username = CredentialService.credential('username');
+            var password = CredentialService.credential('password');
+            var headers = {
+                headers: {
+                    'Authorization': basicAuthHeader(username, password)
+                }
+            };
+
+            return $http.get(testUrl, headers)
                     .then(function (response) {
-                        return 0;
+                        return {
+                            status: 0
+                        };
                     }, function (response) {
-                        return 1;
+                        return {
+                            status: 1
+                        };
                     });
+        }
+
+        function keycloakTestConnection(repo) {
+            var baseUrl = url(repo);
+            var testUrl = baseUrl + REST_URI.SERVICE + REST_URI.ABOUT;
+
+            var headers = {
+                headers: {
+                    'Authorization': keycloakAuthHeader()
+                }
+            };
+
+            return $http.get(testUrl, headers)
+                    .then(function (response) {
+                        return {
+                            status: 0
+                        };
+                    }, function (response) {
+                        return {
+                            status: 1
+                        };
+                    });
+        }
+
+        /**
+         * Service: Simple connection test.
+         */
+        service.testConnection = function() {
+            var repo = RepoSelectionService.getSelected();
+            if (isBasicAuth()) {
+                return basicTestConnection(repo);
+            }
+
+            return keycloakTestConnection(repo);
         };
 
         function isXML(xml){
@@ -156,7 +230,7 @@
 
                 // Handle non-exception-throwing cases:
                 // Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
-                // but... JSON.parse(null) returns null, and typeof null === "object", 
+                // but... JSON.parse(null) returns null, and typeof null === "object",
                 // so we must check for that, too. Thankfully, null is falsey, so this suffices:
                 if (o && typeof o === "object") {
                     return o;
@@ -191,10 +265,11 @@
          */
         service.odataGet = function(url) {
             var user = CredentialService.credentials();
+            var repo = RepoSelectionService.getSelected();
             return $http.get(
                             url,
                             {
-                                headers: authHeader(user.username, user.password),
+                                headers: authHeader(repo),
                                 transformResponse:function(data) {
                                     var jobj = tryJsonParse(data);
                                     if (_.isObject(jobj)) {
@@ -394,7 +469,7 @@
                 tblFilter = tableFilter;
             }
             var jdbcTableAttributes = {
-                dataSourceName: connectionName,    
+                dataSourceName: connectionName,
                 catalogFilter: catFilter,
                 schemaFilter: schFilter,
                 tableFilter: tblFilter
@@ -430,7 +505,7 @@
                 return restService.all(uri).post();
             });
         };
-        
+
         /**
          * Service: updates workspace VDB status from teiid
          */
@@ -458,7 +533,7 @@
                     "vdb__description": vdbDescription,
                     "vdb__originalFile" : getUserWorkspacePath()+"/"+vdbName
                 };
-                
+
                 // Property added to distinguish service sources
                 if (isSource)  {
                     payload.keng__properties = [{ "name": "dsbServiceSource",
@@ -487,7 +562,7 @@
                     "vdb__description": vdbDescription,
                     "vdb__originalFile" : getUserWorkspacePath()+"/"+vdbName
                 };
-                
+
                 // Property added to distinguish service sources
                 if (isSource)  {
                     payload.keng__properties = [{ "name": "dsbServiceSource",
@@ -514,14 +589,14 @@
                     "keng__kType": "Model",
                     "mmcore__modelType": "PHYSICAL"
                 };
-                
-                
+
+
                 // Adds importer properties for service sources
                 if (isSource && angular.isDefined(importerProperties))  {
                     payload.keng__properties = importerProperties;
                 }
 
-                var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + 
+                var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName +
                           SYNTAX.FORWARD_SLASH + REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName;
                 return restService.all(uri).post(payload);
             });
@@ -543,14 +618,14 @@
                     "mmcore__modelType": "PHYSICAL",
                     "keng__ddl": modelDdl
                 };
-                
-                
+
+
                 // Adds importer properties for service sources
                 if ( isSource && angular.isDefined(importerProperties) && importerProperties.length > 0 )  {
                     payload.keng__properties = importerProperties;
                 }
 
-                var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + 
+                var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName +
                           SYNTAX.FORWARD_SLASH + REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName;
                 return restService.all(uri).customPUT(payload);
             });
@@ -576,13 +651,13 @@
                     "vdb__sourceTranslator": transName
                 };
 
-                var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + 
-                          REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName + 
+                var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName +
+                          REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName +
                           REST_URI.MODEL_SOURCES + SYNTAX.FORWARD_SLASH + sourceName;
                 return restService.all(uri).post(payload);
             });
         };
-        
+
         /**
          * Service: update an existing ModelSource in the repository
          */
@@ -593,7 +668,7 @@
             if (!transName || !jndiName) {
                 throw new RestServiceException("Translator name or JNDI name is not defined");
             }
-            
+
             return getRestService().then(function (restService) {
                 var payload = {
                         "keng__id": sourceName,
@@ -603,8 +678,8 @@
                         "vdb__sourceTranslator": transName
                     };
 
-                var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + 
-                REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName + 
+                var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName +
+                REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName +
                 REST_URI.MODEL_SOURCES + SYNTAX.FORWARD_SLASH + sourceName;
                 return restService.all(uri).customPUT(payload);
             });
@@ -634,7 +709,7 @@
 
             return getRestService().then(function (restService) {
 
-                return restService.one(REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + 
+                return restService.one(REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName +
                 		               REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName).remove();
             });
         };
@@ -673,7 +748,7 @@
             if (!vdbName) {
                 throw new RestServiceException("VDB name for deploy is not defined");
             }
-            
+
             return getRestService().then(function (restService) {
                 var payload = {
                     "path": getUserWorkspacePath()+"/"+vdbName
@@ -829,7 +904,7 @@
          * Returns: promise object for the table collection
          */
         service.getVdbModelTables = function (vdbName, modelName) {
-            var url = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + 
+            var url = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName +
                       REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName + SYNTAX.FORWARD_SLASH + REST_URI.TABLES;
 
             return getRestService().then(function (restService) {
@@ -842,7 +917,7 @@
          * Returns: promise object for the column collection
          */
         service.getVdbModelTableColumns = function (vdbName, modelName, tableName) {
-            var url = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName + 
+            var url = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName +
                       REST_URI.MODELS + SYNTAX.FORWARD_SLASH + modelName + SYNTAX.FORWARD_SLASH +
                       REST_URI.TABLES + SYNTAX.FORWARD_SLASH + tableName + SYNTAX.FORWARD_SLASH + REST_URI.COLUMNS;
 
@@ -858,7 +933,7 @@
             if (!vdbName || !modelName || !teiidVdbName || !teiidModelName) {
                 throw RestServiceException("VDB update inputs are not defined");
             }
-            
+
             return getRestService().then(function (restService) {
                 var payload = {
                     "vdbName": vdbName,
@@ -866,7 +941,7 @@
                     "teiidVdbName": teiidVdbName,
                     "teiidModelName": teiidModelName
                 };
-                
+
                 var uri = REST_URI.TEIID + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + REST_URI.MODEL_FROM_TEIID_DDL;
                 return restService.all(uri).post(payload);
             });
@@ -916,7 +991,7 @@
                 return restService.all(uri).post(payload);
             });
         };
-        
+
         /**
          * Service: clone a dataservice in the repository
          */
@@ -937,7 +1012,7 @@
             if (!dataserviceName) {
                 throw new RestServiceException("Data service name for update is not defined");
             }
-            
+
             return getRestService().then(function (restService) {
                 var payload = {
                     "keng__id": dataserviceName,
@@ -960,7 +1035,7 @@
             if (!dataserviceName || !modelSourcePath || !tablePath) {
                 throw RestServiceException("Data service update inputs are not defined");
             }
-            
+
             return getRestService().then(function (restService) {
                 var payload = {
                     "dataserviceName": dataserviceName,
@@ -988,12 +1063,12 @@
          */
         service.setDataServiceVdbForJoinTables = function (dataserviceName, modelSourcePath, rhModelSourcePath, viewDdl,
                                                                             tablePath, columnNames,
-                                                                            rhTablePath, rhColumnNames, 
+                                                                            rhTablePath, rhColumnNames,
                                                                             joinType, criteriaPredicates) {
             if (!dataserviceName || !modelSourcePath || !rhModelSourcePath || !tablePath || !rhTablePath) {
                 throw RestServiceException("Data service update inputs are not defined");
             }
-            
+
             return getRestService().then(function (restService) {
                 var payload = {
                     "dataserviceName": dataserviceName,
@@ -1034,7 +1109,7 @@
             if (!dataserviceName || !tablePath ) {
                 throw RestServiceException("get View DDL inputs are not sufficiently defined");
             }
-            
+
             return getRestService().then(function (restService) {
                 var payload = {
                     "dataserviceName": dataserviceName,
@@ -1053,12 +1128,12 @@
          * Service: Get the DataService View DDL based on the provided info.
          */
         service.getDataServiceViewDdlForJoinTables = function (dataserviceName, tablePath, columnNames,
-                                                                                rhTablePath, rhColumnNames, 
+                                                                                rhTablePath, rhColumnNames,
                                                                                 joinType, criteriaPredicates ) {
             if (!dataserviceName || !tablePath || !rhTablePath ) {
                 throw RestServiceException("get View DDL inputs are not sufficiently defined");
             }
-            
+
             return getRestService().then(function (restService) {
                 var payload = {
                     "dataserviceName": dataserviceName,
@@ -1093,7 +1168,7 @@
             if ( !tablePath || !rhTablePath ) {
                 throw RestServiceException("getJoinCriteria inputs are not sufficiently defined");
             }
-            
+
             return getRestService().then(function (restService) {
                 var payload = {
                     "tablePath": getUserWorkspacePath()+"/"+tablePath,
@@ -1155,7 +1230,7 @@
             }
 
             var dataservicePath = getUserWorkspacePath() + "/" +dataserviceName;
-            
+
             return getRestService().then(function (restService) {
                 var payload = {
                     "path" : dataservicePath
@@ -1238,7 +1313,7 @@
                 return restService.one(REST_URI.WORKSPACE + REST_URI.CONNECTIONS + SYNTAX.FORWARD_SLASH + connectionName).get();
             });
         };
-        
+
         /**
          * Service: Get schema for a deployed teiid VDB model
          */
@@ -1252,7 +1327,7 @@
                 return restService.one(url).get();
             });
         };
-        
+
        /**
          * Service: create a new connection in the repository
          */
@@ -1274,7 +1349,7 @@
                 return restService.all(uri).post(payload);
             });
         };
-        
+
         /**
          * Service: clone a connection in the repository
          */
@@ -1296,7 +1371,7 @@
             if (!connectionName || !jsonPayload) {
                 throw new RestServiceException("One of the inputs for update are not defined");
             }
-            
+
             return getRestService().then(function (restService) {
                 return restService.all(REST_URI.WORKSPACE + REST_URI.CONNECTIONS + SYNTAX.FORWARD_SLASH + connectionName).customPUT(jsonPayload);
             });
@@ -1384,7 +1459,7 @@
                 //
                 // Link is absolute so need to realize a new service
                 // and use 'allUrl' to fetch the results
-                //  
+                //
                 var restService = Restangular.withConfig(function (RestangularConfigurer) {
                     RestangularConfigurer.setRestangularFields({
                         selfLink: VDB_KEYS.LINKS + '[0].href'
@@ -1610,10 +1685,10 @@
                 return $translate.instant( 'RepositoryRestService.emptyDataServiceName' );
             }
 
-            var url = REST_URI.WORKSPACE + 
-                      REST_URI.DATA_SERVICES + 
-                      REST_URI.NAME_VALIDATION + 
-                      SYNTAX.FORWARD_SLASH + 
+            var url = REST_URI.WORKSPACE +
+                      REST_URI.DATA_SERVICES +
+                      REST_URI.NAME_VALIDATION +
+                      SYNTAX.FORWARD_SLASH +
                       name;
 
             return getRestService().then(
@@ -1634,10 +1709,10 @@
             }
 
             // since data sources are actually VDBs we need to use VDBs URI
-            var url = REST_URI.WORKSPACE + 
-                      REST_URI.VDBS + 
-                      REST_URI.NAME_VALIDATION + 
-                      SYNTAX.FORWARD_SLASH + 
+            var url = REST_URI.WORKSPACE +
+                      REST_URI.VDBS +
+                      REST_URI.NAME_VALIDATION +
+                      SYNTAX.FORWARD_SLASH +
                       name;
 
             return getRestService().then(

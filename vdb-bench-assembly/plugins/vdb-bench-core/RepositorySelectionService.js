@@ -20,7 +20,8 @@
             name: 'default',
             host: $location.host(),
             port: config.rest.port,
-            baseUrl: config.rest.baseUrl
+            baseUrl: config.rest.baseUrl,
+            authType: config.rest.authTypes[1]
         };
 
         var repos;

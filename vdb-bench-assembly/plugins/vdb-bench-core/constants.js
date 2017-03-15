@@ -12,7 +12,14 @@
             rest: {
                 protocol: 'https',
                 port: 8443,
-                baseUrl: '/vdb-builder/v1'
+                baseUrl: '/vdb-builder/v1',
+                authTypes: [
+                    'basic', 'keycloak'
+                ]
+            },
+            keycloak: {
+                sessionNode: 'dsb-auth',
+                clientId: 'ds-builder'
             },
             help: {
                 baseUrl: '/ds-builder-help'

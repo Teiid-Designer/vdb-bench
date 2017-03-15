@@ -30,9 +30,9 @@
         return directive;
     }
 
-    RepositoryConfigController.$inject = ['REST_URI', 'RepoSelectionService', '$scope'];
+    RepositoryConfigController.$inject = ['REST_URI', 'CONFIG', 'RepoSelectionService', '$scope'];
 
-    function RepositoryConfigController(REST_URI, RepoSelectionService, $scope) {
+    function RepositoryConfigController(REST_URI, CONFIG, RepoSelectionService, $scope) {
         var vm = this;
 
         var repoEditBaseConfig = {
@@ -72,6 +72,28 @@
                     'input-attributes': {
                         'required': 'true',
                         'placeholder': REST_URI.BASE_URL
+                    }
+                },
+                'authType': {
+                    'type': 'string',
+                    'label': 'Authentication Scheme',
+                    'enum': CONFIG.rest.authTypes
+                },
+                'keycloakUrl': {
+                    'type': 'string',
+                    'label': 'Server Url',
+                    'control-group-attributes': {
+                        'class': 'keycloak-control',
+                        'ng-hide': "entity.authType != 'keycloak'"
+                    }
+                },
+                'keycloakRealm': {
+                    'type': 'string',
+                    'label': 'Server Realm',
+                    'default': 'vdb',
+                    'control-group-attributes': {
+                        'class': 'keycloak-control',
+                        'ng-hide': "entity.authType != 'keycloak'"
                     }
                 }
             },

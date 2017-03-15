@@ -1,6 +1,4 @@
-var App;
-
-(function (App) {
+var VdbBenchApp = (function (App) {
     'use strict';
 
     App.pluginName = 'VdbBenchApp';
@@ -8,195 +6,44 @@ var App;
 
     App._module = angular.module(App.pluginName, ['vdb-bench.core', 'pascalprecht.translate']);
 
-    App._module.factory('AboutService', AboutService);
-    AboutService.$inject = ['$http', '$location'];
-    function AboutService($http, $location) {
-        /*
-         * Service instance to be returned
-         */
-        var service = {};
+    /**
+     * Inteceptor for handling expired keycloak tokens
+     */
+    App._module.factory('authInterceptor', authInterceptor);
+    authInterceptor.$inject = ['$q', '$window'];
+    function authInterceptor($q, $window) {
 
-        service.getAbout = function() {
-            var baseUrl = $location.protocol() + '://' + $location.host() + ':' + $location.port() + '/';
+        var factory = {};
 
-            var absUrl = $location.absUrl();
-            var url = absUrl.replace(baseUrl, "");
-            var firstSlash = url.indexOf('/');
-            var context;
-            if (firstSlash >= 0)
-                context = url.substring(0, firstSlash);
-            else
-                context = url;
+        factory.request = function (config) {
+            var deferred = $q.defer();
+            if ($window.keycloak && $window.keycloak.token) {
+                $window.keycloak.updateToken(5)
+                    .success(function() {
+                        config.headers = config.headers || {};
+                        config.headers.Authorization = 'Bearer ' + $window.keycloak.token;
 
-            url = baseUrl + context + '/about.xml';
-            return $http.get(url)
-                    .then(function (response) {
-                        return response.data;
-                    }, function (response) {
-                        return response;
+                        deferred.resolve(config);
+                    })
+                    .error(function() {
+                        deferred.reject('Failed to refresh token');
                     });
-        };
-
-        return service;
-    }
-
-    App._module.factory('CredentialService', CredentialService);
-    CredentialService.$inject = ['localStorage', '$window'];
-    function CredentialService(localStorage, $window) {
-        /*
-         * Service instance to be returned
-         */
-        var service = {};
-
-        var user = {
-            username: null,
-            password: null
-        };
-
-        var loggingOut = false;
-
-        service.loggingOut = function() {
-            return loggingOut;
-        };
-
-        service.setLoggingOut = function(value) {
-            loggingOut = value;
-        };
-
-        service.credentials = function() {
-            if (loggingOut)
-                return user;
-
-            if (user.username === null && user.password === null) {
-                if ('userPrincipal' in $window) {
-                    user = $window.userPrincipal;
-                    console.debug("User details loaded from parent window: ", StringHelpers.toString(user));
-                }
-                else if ('userPrincipal' in localStorage) {
-                    user = angular.fromJson(localStorage.userPrincipal);
-                    console.debug("User details loaded from local storage: ", StringHelpers.toString(user));
-                }
-            }
-
-            return user;
-        };
-
-        service.reset = function() {
-            user.username = null;
-            user.password = null;
-        };
-
-        service.setCredentials = function(username, password, remember) {
-            user.username = username;
-            user.password = password;
-
-            if (remember)
-                localStorage.userPrincipal = angular.toJson(user);
-            else
-                delete localStorage.userPrincipal;
-        };
-
-        service.isRemembered = function() {
-            return 'userPrincipal' in localStorage;
-        };
-
-        return service;
-    }
-
-    App._module.factory('AuthService', AuthService);
-    AuthService.$inject = ['CredentialService', '$rootScope', '$location', '$route', 'RepoRestService'];
-    function AuthService(CredentialService, $rootScope, $location, $route, RepoRestService) {
-
-        /*
-         * Service instance to be returned
-         */
-        var service = {};
-
-        var listener;
-
-        var lastLocation = {};
-
-        var authenticated = false;
-
-        service.authenticated = function() {
-            return authenticated;
-        };
-
-        service.lastLocation = function() {
-            return lastLocation.url || '/';
-        };
-
-        var redirectCallback = function() {
-            if (! service.authenticated()) {
-                var currentUrl = $location.url();
-                if (!currentUrl.startsWith('/login')) {
-                    lastLocation.url = currentUrl;
-                    $location.url('/login');
-                }
-                else {
-                    if (!$rootScope.reloaded) {
-                        $route.reload();
-                        $rootScope.reloaded = true;
-                    }
-                }
-            }
-            else {
-                if ($location.url().startsWith('/login')) {
-                    var url = '/';
-                    if (angular.isDefined(lastLocation.url)) {
-                        url = lastLocation.url;
-                    }
-                    $location.url(url);
-                }
-            }
-        };
-
-        service.redirect = function() {
-            if (CredentialService.isRemembered() && ! CredentialService.loggingOut()) {
-                var credentials = CredentialService.credentials();
-                service.login(credentials.username, credentials.password, true, redirectCallback, redirectCallback);
             } else {
-                redirectCallback();
+                deferred.resolve(config);
             }
+
+            return deferred.promise;
         };
 
-        service.login = function(username, password, remember, onSuccess, onFailure) {
-            CredentialService.setLoggingOut(false);
-
-            RepoRestService.testConnection(username, password)
-                                    .then(
-                                        function(response) {
-                                            if (response === 0) {
-                                                CredentialService.setCredentials(username, password, remember);
-                                                authenticated = true;
-                                                if (angular.isDefined(onSuccess) && onSuccess !== null)
-                                                    onSuccess();
-                                            } else {
-                                                authenticated = false;
-                                                if (angular.isDefined(onFailure) && onFailure !== null)
-                                                    onFailure();
-                                            }
-                                        }
-                                    );
-        };
-
-        service.logout = function() {
-            CredentialService.reset();
-            authenticated = false;
-            CredentialService.setLoggingOut(true);
-            service.redirect();
-        };
-
-        listener = $rootScope.$on('$routeChangeStart', function (event, args) {
-            service.redirect();
-        });
-
-        return service;
+        return factory;
     }
 
+    /**
+     * Module Configure function
+     */
     App._module.config(configure);
-    configure.$inject = ["$locationProvider", "$routeProvider", "$dialogProvider", "$translateProvider"];
-    function configure($locationProvider, $routeProvider, $dialogProvider, $translateProvider) {
+    configure.$inject = ["$locationProvider", "$routeProvider", "$dialogProvider", "$translateProvider", "$httpProvider"];
+    function configure($locationProvider, $routeProvider, $dialogProvider, $translateProvider, $httpProvider) {
         $locationProvider.html5Mode(true);
         $dialogProvider.options({
             backdropFade: true,
@@ -206,21 +53,21 @@ var App;
             .when('/login', {
                 templateUrl: App.templatePath + 'login.html'
             });
-        
+
         // configure i18n
         $translateProvider.useSanitizeValueStrategy('sanitize');
         $translateProvider.useStaticFilesLoader({
             prefix: 'app/i18n/messages-',
             suffix: '.json'
         });
-        
+
         // default all en_* and every other locale to en right now
         $translateProvider.registerAvailableLanguageKeys(['en'], {
             'en_*': 'en',
             'en-*': 'en',
             '*': 'en'
          });
-        
+
         // try to get locale from browser
         var l_lang;
         if (navigator.languages !== undefined) { // Chrome
@@ -232,15 +79,21 @@ var App;
         } else {
         	l_lang = 'en'; // fallback
         }
-        
+
         // must set lang
         $translateProvider.preferredLanguage(l_lang);
         $translateProvider.fallbackLanguage('en');
+
+        $httpProvider.interceptors.push('authInterceptor');
     }
 
+    /**
+     * Module Run function
+     */
     App._module.run(run);
-    run.$inject = ['HawtioExtension', '$compile'];
-    function run(HawtioExtension, $compile) {
+    run.$inject = ['CONFIG', 'HawtioExtension', '$compile', '$window', 'StorageService', 'AuthService', 'CredentialService'];
+    function run(CONFIG, HawtioExtension, $compile, $window, StorageService, AuthService, CredentialService) {
+
         //
         // Configure the hawtio nav bar to show a logout menu-item once user is authenticated
         // This plugs into the hawtio-extension-service that allows for abitrary elements to be added
@@ -252,81 +105,47 @@ var App;
                         "</li>";
             return $compile(template)(scope);
         });
+
+        var sessionNode = StorageService.sessionGetObject(CONFIG.keycloak.sessionNode);
+
+        if (_.isEmpty(sessionNode))
+            return;
+
+        //
+        // Will attempt to authenticate with keycloak (without showing login page)
+        // after the login page has redirected back from a successful login, ie.
+        // when the page loads for the second time after credentials have been entered
+        //
+
+        var options = {};
+        options.rememberMe = false;
+        options.url = sessionNode.url;
+        options.realm = sessionNode.realm;
+
+        CredentialService.setAuthType(CONFIG.rest.authTypes[1]);
+        CredentialService.setCredentials(options);
+
+        $window.keycloak = new Keycloak({
+            url: sessionNode.url,
+            realm: sessionNode.realm,
+            clientId: 'ds-builder'
+        });
+
+        $window.keycloak.onAuthSuccess = function() {
+            console.debug("Authentication Success for keyloak => check-sso");
+            AuthService.redirect();
+        };
+
+        $window.keycloak.onAuthError = function() {
+            console.debug("Authentication Failure for keycloak => check-sso");
+            AuthService.redirect();
+        };
+
+        $window.keycloak.init({ onLoad: 'check-sso' });
     }
 
-    function $apply($scope) {
-        var phase = $scope.$$phase || $scope.$root.$$phase;
-        if (!phase) {
-            $scope.$apply();
-        }
-    }
+    return App;
 
-    App.AppController = App._module.controller('App.AppController', AppController);
-    AppController.$inject = ['AuthService', 'CredentialService'];
-    function AppController(AuthService, CredentialService) {
-        var vm = this;
+})(VdbBenchApp || (VdbBenchApp = {}));
 
-        vm.authenticated = function() {
-            return AuthService.authenticated();
-        };
-
-        vm.getUsername = function() {
-            return CredentialService.credentials().username || 'User';
-        };
-
-        vm.logout = function() {
-            AuthService.logout();
-        };
-    }
-
-    App.LoginController = App._module.controller('App.LoginController', LoginController);
-    LoginController.$inject = ['$rootScope', '$location', '$scope', 'branding', 'RepoRestService', 'CredentialService', 'AuthService'];
-    function LoginController ($rootScope, $location, $scope, branding, RepoRestService, CredentialService, AuthService) {
-        var vm = this;
-
-        vm.loginError = '';
-        vm.userPwdForgotten = false;
-        vm.showRepoConfig = false;
-
-        vm.entity = {
-            username: '',
-            password: ''
-        };
-
-        vm.rememberMe = CredentialService.isRemembered();
-
-        var credentials = CredentialService.credentials();
-        vm.entity.username = credentials.username;
-        vm.entity.password = credentials.password;
-
-        vm.branding = branding;
-
-        var onLoginSuccessful = function() {
-            vm.loginError = '';
-            $location.path(AuthService.lastLocation());
-            $apply($rootScope);
-        };
-
-        var onLoginFailure = function() {
-            vm.loginError = "Access Failure.<br>Either the username/password are incorrect or the repository cannot be contacted.";
-        };
-
-        vm.doLogin = function () {
-            if (vm.entity.username.trim() === '') {
-                vm.loginError = 'A user name is required';
-            }
-
-            AuthService.login(vm.entity.username, vm.entity.password, vm.rememberMe, onLoginSuccessful, onLoginFailure);
-        };
-
-        vm.showForgottenUserPwd = function() {
-            vm.userPwdForgotten = !vm.userPwdForgotten;
-        };
-
-        vm.toggleRepositoryConfig = function() {
-            vm.showRepoConfig = !vm.showRepoConfig;
-        };
-    }
-})(App || (App = {}));
-
-hawtioPluginLoader.addModule(App.pluginName);
+hawtioPluginLoader.addModule(VdbBenchApp.pluginName);
