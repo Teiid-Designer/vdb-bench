@@ -8,10 +8,10 @@
         .module(pluginName)
         .controller('DSSummaryController', DSSummaryController);
 
-    DSSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSPageService',
+    DSSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSPageService', 'ImportExportService',
                                    'EditWizardService', 'DSSelectionService', 'SvcSourceSelectionService', 'DownloadService', 'pfViewUtils'];
 
-    function DSSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, DSPageService,
+    function DSSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, DSPageService, ImportExportService,
                                  EditWizardService, DSSelectionService, SvcSourceSelectionService, DownloadService, pfViewUtils) {
         var vm = this;
 
@@ -404,8 +404,15 @@
             // Need to select the item first
             DSSelectionService.selectDataService(item);
 
-            exportDataServiceClicked();
+            ImportExportService.init();
         };
+
+        /*
+         * Notification that ImportExportService init has finished
+         */
+        $scope.$on('importExportInitFinished', function (event) {
+            exportDataServiceClicked();
+        });
 
         /** 
          * Handle listView and cardView selection
