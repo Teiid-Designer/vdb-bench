@@ -17,7 +17,8 @@
                                         'RepoRestService', 
                                         '$scope', 
                                         'DSPageService',
-                                        'DSSelectionService'];
+                                        'DSSelectionService',
+                                        'ImportExportService'];
 
     function DSImportExportController($translate, 
                                       config, 
@@ -25,10 +26,11 @@
                                       RepoRestService, 
                                       $scope, 
                                       DSPageService,
-                                      DSSelectionService) {
+                                      DSSelectionService,
+                                      ImportExportService) {
         var vm = this;
 
-        vm.storageTypes = {};
+        vm.storageTypes = [];
         vm.storageType = {};
         vm.gitWizard = false;
 
@@ -67,39 +69,17 @@
             DSPageService.setCustomHelpId( exportPage.id, "dataservice-export-" + suffix );
         };
 
-        vm.storageTypeSet = function() {
-            if (angular.isUndefined(vm.storageType))
-                vm.storageType = {};
+        function init() {
+            vm.storageTypes = ImportExportService.storageTypes();
+            vm.storageType = vm.storageTypes.length > 0 ? vm.storageTypes[ 0 ] : {};
 
             vm.gitWizard = vm.storageType.name === 'git' ? true : false;
-        };
-
-        $scope.$watch('vm.storageType', function(value) {
-            vm.storageTypeSet();
 
             // update page help ID when storage type changes
             updatePageHelpId();
-        });
-
-        function init() {
-            try {
-                 RepoRestService.availableStorageTypes().then(
-                function (storageTypes) {
-                    // remove 'file' storage type as it is not part of export wizard and
-                    // currently data service import is not allowed
-                    vm.storageTypes = storageTypes.filter( function( storageType ) {
-                        return ( storageType.name !== "file" );
-                    } );
-                },
-                function (response) {
-                    alert(response.data.error);
-                });
-            } finally {
-            }
         }
 
         init();
-        vm.storageType = vm.storageTypes.length > 0 ? vm.storageTypes[ 0 ] : {};
     }
 
 })();
