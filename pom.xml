@@ -12,7 +12,7 @@
 	<groupId>org.teiid</groupId>
 	<artifactId>vdb-bench</artifactId>
 	<packaging>pom</packaging>
-	<version>0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>vdb-bench</name>
 	<description>vdb :: bench</description>
 	<url>http://www.jboss.org/teiiddesigner</url>
