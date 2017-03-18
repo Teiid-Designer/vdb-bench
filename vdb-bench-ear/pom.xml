@@ -14,7 +14,7 @@
 	<description>dataservice builder - komodo :: Web Kit</description>
 
 	<properties>
-		<version.komodo.rest>0.0.4-SNAPSHOT</version.komodo.rest>
+		<version.komodo.rest>0.0.4</version.komodo.rest>
 		<finalName>ds-builder-archive</finalName>
 	</properties>
 
