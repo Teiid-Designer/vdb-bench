@@ -145,7 +145,7 @@
         var deleteConnectionClicked = function ( ) {
             var selConnName = ConnectionSelectionService.selectedConnection().keng__id;
             try {
-                RepoRestService.deleteDataSource( selConnName ).then(
+                RepoRestService.deleteConnection( selConnName ).then(
                     function () {
                         // Refresh the list of connections
                         ConnectionSelectionService.refresh();
@@ -167,7 +167,7 @@
             var selConnName = ConnectionSelectionService.selectedConnection().keng__id;
             ConnectionSelectionService.setDeploying(true, selConnName, false, null);
             try {
-                RepoRestService.deployDataSource( selConnName ).then(
+                RepoRestService.deployConnection( selConnName ).then(
                     function ( result ) {
                         vm.deploymentSuccess = result.Information.deploymentSuccess == "true";
                         if(vm.deploymentSuccess === true) {
