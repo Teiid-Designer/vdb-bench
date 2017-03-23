@@ -40,7 +40,7 @@
             vm.showImport = false;
 
             // Reinitialise the list of connections
-            ConnectionSelectionService.refresh();
+            ConnectionSelectionService.refresh(true);
             // Broadcast the pageChange
             $rootScope.$broadcast("dataServicePageChanged", 'connection-summary');
         };

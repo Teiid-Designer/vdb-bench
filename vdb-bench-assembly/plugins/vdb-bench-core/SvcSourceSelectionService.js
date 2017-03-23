@@ -263,21 +263,6 @@
         };
 
         /*
-         * Set info about the service source being edited.
-         * [connectionName :
-         */
-        service.setEditSourceInfo = function(sourceInfo) {
-            svcSrc.editSourceInfo = sourceInfo;
-        };
-
-        /*
-         * Returns the info about the service source being edited.
-         */
-        service.getEditSourceInfo = function() {
-            return svcSrc.editSourceInfo;
-        };
-
-        /*
          * return selected serviceSource vdb model
          */
         service.selectedServiceSourceModel = function(onSuccessCallback, onFailureCallback) {
@@ -365,8 +350,8 @@
          * Refresh Connections and Translators
          */
         service.refreshConnectionsAndTranslators = function() {
-            ConnectionSelectionService.refresh();
-            TranslatorSelectionService.refresh();
+            ConnectionSelectionService.refresh(true);
+            TranslatorSelectionService.refresh(true);
         };
 
         // Initialise service source collection on loading

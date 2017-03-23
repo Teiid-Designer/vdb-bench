@@ -148,7 +148,7 @@
                 RepoRestService.deleteConnection( selConnName ).then(
                     function () {
                         // Refresh the list of connections
-                        ConnectionSelectionService.refresh();
+                        ConnectionSelectionService.refresh(true);
                     },
                     function (response) {
                         throw RepoRestService.newRestException("Failed to remove the connection. \n" + RepoRestService.responseMessage(response));

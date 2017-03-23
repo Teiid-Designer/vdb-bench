@@ -1,0 +1,108 @@
+<div ng-show="vm.deployInProgress==true || vm.wizardServiceReady==false" class="row">
+    <div class="spinner spinner-lg" />
+</div>
+
+<div ng-show="vm.deployInProgress==false && vm.wizardServiceReady==true">
+    <div class="wizard-pf-container dsb-wizard-container">
+        <div pf-wizard 
+                on-finish="vm.finishPressed()"
+                on-cancel="vm.cancelPressed()"
+                back-callback="vm.backCallback"
+                next-callback="vm.nextCallback"
+                next-title="vm.nextButtonTitle"
+                hide-indicators="false"
+                embed-in-page="true" 
+                content-height="'470px'">
+
+            <div pf-wizard-step
+                    step-title="{{vm.stepTitle}}"
+                    step-id="wizard-select-connection"
+                    allow-click-nav="true"
+                    wz-disabled="false"
+                    next-enabled = "vm.nextEnablement"
+                    prev-enabled = "false"
+                    ok-to-nav-away="true">
+
+                <h3><i>{{vm.instructionMessage}}</i></h3>
+                <div class="col-md-12">
+                    <form name="datasourceEditWizardForm" class="form-horizontal" >
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="sourceName" translate="shared.Name"></label>
+                            <div class="col-md-9">
+                                <input type="text"
+                                       id="sourceName"
+                                       name="sourceName"
+                                       ng-readonly="vm.isEditing()"
+                                       ng-model="vm.sourceName"
+                                       ng-init="vm.sourceName" 
+                                       ng-change="vm.sourceNameChanged()" 
+                                       required
+                                       class="form-control">
+                                <div ng-show="vm.hasNameErrorMessage()"
+                                     class="error-message"
+                                     ng-if="datasourceEditWizardForm.sourceName.$dirty || datasourceEditWizardForm.sourceName.$touched">
+                                    {{ vm.getNameErrorMessage() }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="textInput" translate="shared.Description"></label>
+                            <div class="col-md-9">
+                                <textarea rows="1"
+                                          maxlength="256"
+                                          ng-model="vm.sourceDescription" 
+                                          ng-init="vm.sourceDescription" 
+                                          ng-change="vm.sourceDescriptionChanged()" 
+                                          class="form-control">
+                                </textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-8">
+                    <h4><strong translate="datasourceEditWizard.Connections"></strong>
+                        <label class="help-label">
+                            <span class="fa fa-info-circle" uib-tooltip="{{ 'datasourceEditWizard.help.connections' | translate }}"
+                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                        </label>
+                    </h4>
+                    <connection-list hide-resource-adapters=true></connection-list>
+                </div>
+                <div class="col-md-4" ng-show="vm.showTranslator">
+                    <h4><strong translate="datasourceEditWizard.Translator"></strong>
+                        <label class="help-label">
+                            <span class="fa fa-info-circle" uib-tooltip="{{ 'datasourceEditWizard.help.translators' | translate }}"
+                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                        </label>
+                    </h4>
+                    <img src="{{vm.selectedTranslatorImage}}" width="42" height="24"/>
+                    <span class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{vm.selectedTranslatorName}}
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="trans in vm.allTranslators"><a tabindex="-1" data-ng-click="vm.selectTranslator(trans)">{{trans.keng__id}}</a></li>
+                        </ul>
+                    </span>
+                    <!--  Filter Checkbox -->
+                    <div style="margin-top:125px" ng-show="vm.jdbcConnectionSelected">
+                        <form>
+                            <input type="checkbox" ng-model="vm.showJdbcFilterOptions" ng-true-value=true ng-false-value=false ng-change="vm.showJdbcFilterOptionsCheckboxChanged()">
+                            <h4 style="display:inline"><strong translate="datasourceEditWizard.filterConnection"></strong></h4>
+                            <label class="help-label">
+                                <span class="fa fa-info-circle" uib-tooltip="{{ 'datasourceEditWizard.help.showFilterOptions' | translate }}"
+                                      tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                            </label>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+
+            <!-- jdbc filter options step -->
+            <jdbc-filter-options-step wizard-active="vm.showJdbcFilterOptions===true"></jdbc-filter-options-step>
+
+        </div>
+    </div>
+</div>
+

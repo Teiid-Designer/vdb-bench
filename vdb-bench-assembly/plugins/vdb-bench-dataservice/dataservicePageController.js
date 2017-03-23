@@ -10,7 +10,7 @@
         .controller('DataServicePageController', DataServicePageController);
 
     BodyClickDirective.$inject = ['$parse', '$document'];
-    DataServicePageController.$inject = ['$scope', 'SYNTAX', 'CONFIG', 'RepoRestService', 'DSSelectionService',
+    DataServicePageController.$inject = ['$scope', 'SYNTAX', 'CONFIG', 'RepoRestService', 'DSSelectionService', 'DatasourceWizardService',
                                          'EditWizardService', 'ConnectionSelectionService', 'SvcSourceSelectionService', 'DSPageService'];
 
     /**
@@ -53,7 +53,7 @@
         return directive;
     }
     
-    function DataServicePageController($scope, syntax, config, RepoRestService, DSSelectionService,
+    function DataServicePageController($scope, syntax, config, RepoRestService, DSSelectionService, DatasourceWizardService,
                                        EditWizardService, ConnectionSelectionService, SvcSourceSelectionService, DSPageService) {
         var vm = this;
 
@@ -89,7 +89,7 @@
 
         vm.selectPage = function(pageId) {
             if(pageId === DSPageService.SERVICESOURCE_NEW_PAGE) {
-                ConnectionSelectionService.resetFilterProperties();
+                DatasourceWizardService.init(null,null);
             } else if(pageId == DSPageService.NEW_DATASERVICE_PAGE) {
                 EditWizardService.init(null,null);
             }
