@@ -7,8 +7,8 @@ var VdbBenchApp = (function(App) {
     function AppController(AuthService, CredentialService) {
         var vm = this;
 
-        vm.authenticated = function() {
-            return AuthService.authenticated();
+        vm.hasAccess = function() {
+            return AuthService.hasAccess();
         };
 
         vm.getUsername = function() {

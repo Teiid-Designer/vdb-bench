@@ -4,12 +4,12 @@ var VdbBenchApp = (function(App) {
     App.LoginController = App._module.controller('App.LoginController', LoginController);
     LoginController.$inject = ['$rootScope', '$location', '$scope', 'branding',
         'RepoRestService', 'CredentialService', 'AuthService',
-        'RepoSelectionService', 'CONFIG'
+        'RepoSelectionService', 'CONFIG', 'StorageService'
     ];
 
     function LoginController($rootScope, $location, $scope, branding,
         RepoRestService, CredentialService, AuthService,
-        RepoSelectionService, CONFIG) {
+        RepoSelectionService, CONFIG, StorageService) {
         var vm = this;
         vm.branding = branding;
         vm.showRepoConfig = false;
@@ -104,11 +104,41 @@ var VdbBenchApp = (function(App) {
             options.url = repo.keycloakUrl;
             options.realm = repo.keycloakRealm;
 
+            if (_.isEmpty(options.url)) {
+                vm.loginError = "A keycloak server url has not been specified in the workspace settings. This is required for authentication,";
+                return;
+            }
+
+            if (_.isEmpty(options.realm)) {
+                vm.loginError = "A keycloak server realm has not been specified in the workspace settings. This is required for authentication,";
+                return;
+            }
+
             CredentialService.setAuthType(repo.authType);
             CredentialService.setCredentials(options);
 
             AuthService.keycloakLogin();
         };
+
+        vm.logout = function() {
+            AuthService.logout();
+        };
+
+        /**
+         * Initialise the error message for use on second-time page redirect
+         */
+        if (vm.isKeycloakAuth()) {
+            var sessionNode = StorageService.sessionGetObject(CONFIG.keycloak.sessionNode);
+
+            if (_.isEmpty(sessionNode))
+                return; // No attempt to login has been made yet so no login error required
+
+            if (! AuthService.authenticated()) {
+                vm.loginError = "User has not been authenticated successfully";
+            } else if (! AuthService.authorised()) {
+                vm.loginError = "User is not authorised to access this application";
+            }
+        }
     }
 
     return App;

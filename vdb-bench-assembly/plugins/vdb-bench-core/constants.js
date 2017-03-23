@@ -19,7 +19,8 @@
             },
             keycloak: {
                 sessionNode: 'dsb-auth',
-                clientId: 'ds-builder'
+                clientId: 'ds-builder',
+                role: 'ds-builder-access'
             },
             help: {
                 baseUrl: '/ds-builder-help'

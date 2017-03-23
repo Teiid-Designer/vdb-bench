@@ -100,7 +100,7 @@ var VdbBenchApp = (function (App) {
         // to named extension points.
         //
         HawtioExtension.add("hawtio-user", function(scope){
-            var template = "<li ng-controller=\"HawtioPreferences.MenuItemController\" ng-show=\"vm.authenticated()\">\n"+
+            var template = "<li ng-controller=\"HawtioPreferences.MenuItemController\" ng-show=\"vm.hasAccess()\">\n"+
                         "<a href=\"\" ng-click=\"vm.logout()\">Log out</a>\n" +
                         "</li>";
             return $compile(template)(scope);
@@ -133,6 +133,11 @@ var VdbBenchApp = (function (App) {
 
         $window.keycloak.onAuthSuccess = function() {
             console.debug("Authentication Success for keyloak => check-sso");
+            $window.keycloak.loadUserInfo()
+                .success(function (userInfo) {
+                    CredentialService.setCredential('username', userInfo.preferred_username);
+                });
+
             AuthService.redirect();
         };
 

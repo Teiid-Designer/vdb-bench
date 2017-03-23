@@ -17,6 +17,27 @@ var VdbBenchApp = (function(App) {
 
         var authenticated = false;
 
+        service.authorised = function() {
+            if (! CredentialService.isKeycloakAuth())
+                return true; // not applicable to basic authentication
+
+            if (! angular.isDefined($window.keycloak)) {
+                return false; // no keycloak object
+            }
+
+            if (! $window.keycloak.authenticated)
+                return false; // not authenticated
+
+            /**
+             * Test if user has ds-builder-access
+             */
+             if (! $window.keycloak.hasRealmRole(CONFIG.keycloak.role)) {
+                 return false;
+             }
+
+             return true;
+        };
+
         service.authenticated = function() {
             if (CredentialService.isKeycloakAuth() && angular.isDefined($window.keycloak)) {
                 authenticated = $window.keycloak.authenticated;
@@ -25,12 +46,20 @@ var VdbBenchApp = (function(App) {
             return authenticated;
         };
 
+        service.hasAccess = function() {
+            if (service.authenticated()) {
+                return service.authorised();
+            }
+
+            return false;
+        };
+
         service.lastLocation = function() {
             return lastLocation.url || '/';
         };
 
         var redirectCallback = function() {
-            if (!service.authenticated()) {
+            if (!service.hasAccess()) {
                 var currentUrl = $location.url();
 
                 if (!currentUrl.startsWith('/login')) {
@@ -53,7 +82,8 @@ var VdbBenchApp = (function(App) {
             }
         };
 
-        function keycloakTestConnection(options, onSuccess, onFailure) {
+        function keycloakTestConnection(onSuccess, onFailure) {
+            var options = {};
             var repo = RepoSelectionService.getSelected();
             if (angular.isDefined(repo.keycloakUrl))
                 options.url = repo.keycloakUrl;
@@ -64,13 +94,16 @@ var VdbBenchApp = (function(App) {
             RepoRestService.testConnection(options)
                 .then(
                     function(response) {
-                        if (response.status === 0) {
-                            if (angular.isDefined(onSuccess) && onSuccess !== null)
-                                onSuccess();
-                        } else {
-                            if (angular.isDefined(onFailure) && onFailure !== null)
-                                onFailure();
+                        if (response.status === 1) {
+                            /*
+                             * Failure to authenticate or connect to reposiory
+                             */
+                            onFailure();
+
+                            return;
                         }
+
+                        onSuccess();
                     }
                 );
         }
@@ -161,7 +194,7 @@ var VdbBenchApp = (function(App) {
             CredentialService.eraseOptions(CONFIG.keycloak.sessionNode);
             CredentialService.setLoggingOut(true);
 
-            if ($window.keycloak.authenticated)
+            if (angular.isDefined($window.keycloak.authenticated) && $window.keycloak.authenticated)
                 $window.keycloak.logout();
 
             service.redirect();
