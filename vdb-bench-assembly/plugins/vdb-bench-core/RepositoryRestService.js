@@ -14,10 +14,10 @@
     RepoRestService.$inject = ['CONFIG', 'SYNTAX', 'REST_URI', 'VDB_SCHEMA',
                                              'VDB_KEYS', 'RepoSelectionService', 'Restangular',
                                              '$http', '$q', '$base64', 'CredentialService', '$interval',
-                                             '$location', '$translate', '$window'];
+                                             '$location', '$translate', 'KCService'];
 
     function RepoRestService(CONFIG, SYNTAX, REST_URI, VDB_SCHEMA, VDB_KEYS, RepoSelectionService,
-                                            Restangular, $http, $q, $base64, CredentialService, $interval, $location, $translate, $window) {
+                                            Restangular, $http, $q, $base64, CredentialService, $interval, $location, $translate, KCService) {
 
         /*
          * Service instance to be returned
@@ -63,33 +63,30 @@
             return "Basic " + authInfo;
         }
 
-        function keycloakAuthHeader() {
-            if (_.isEmpty($window.keycloak))
+        function kcAuthHeader() {
+            if (! KCService.isAuthenticated())
                 return;
 
-            if (! $window.keycloak.authenticated)
+            if (! KCService.hasToken())
                 return;
 
-            if (_.isEmpty($window.keycloak.token))
-                return;
-
-            return "Bearer " + keycloak.token;
+            return "Bearer " + KCService.token();
         }
 
         function authHeader(repo) {
             if (angular.isUndefined(repo) || _.isEmpty(repo.authType))
                 return {};
 
-            if (isBasicAuth(repo)) {
+            var headers = {};
+            if (CredentialService.isBasicAuth(repo)) {
                 var credentials = CredentialService.credentials();
-                return { 'Authorization': basicAuthHeader(credentials.username, credentials.password) };
+                headers[CONFIG.http.authHeader] = basicAuthHeader(credentials.username, credentials.password);
             }
-            else if (isKeycloakAuth(repo))
-                return { 'Authorization': keycloakAuthHeader() };
-            else {
-                // Some other authType not currently handled
-                return {};
+            else if (CredentialService.isKCAuth(repo)) {
+                headers[CONFIG.http.authHeader] = kcAuthHeader();
             }
+
+            return headers;
         }
 
         function getUserWorkspacePath() {
@@ -148,70 +145,34 @@
             return getUserWorkspacePath();
         };
 
-        function isBasicAuth() {
-            return CredentialService.authType() === CONFIG.rest.authTypes[0]; // basic
-        }
-
-        function isKeycloakAuth() {
-            return CredentialService.authType() === CONFIG.rest.authTypes[1]; // keycloak
-        }
-
-        function basicTestConnection(repo) {
-            var baseUrl = url(repo);
-            var testUrl = baseUrl + REST_URI.SERVICE + REST_URI.ABOUT;
-
-            var username = CredentialService.credential('username');
-            var password = CredentialService.credential('password');
-            var headers = {
-                headers: {
-                    'Authorization': basicAuthHeader(username, password)
-                }
-            };
-
-            return $http.get(testUrl, headers)
-                    .then(function (response) {
-                        return {
-                            status: 0
-                        };
-                    }, function (response) {
-                        return {
-                            status: 1
-                        };
-                    });
-        }
-
-        function keycloakTestConnection(repo) {
-            var baseUrl = url(repo);
-            var testUrl = baseUrl + REST_URI.SERVICE + REST_URI.ABOUT;
-
-            var headers = {
-                headers: {
-                    'Authorization': keycloakAuthHeader()
-                }
-            };
-
-            return $http.get(testUrl, headers)
-                    .then(function (response) {
-                        return {
-                            status: 0
-                        };
-                    }, function (response) {
-                        return {
-                            status: 1
-                        };
-                    });
-        }
-
         /**
          * Service: Simple connection test.
          */
         service.testConnection = function() {
             var repo = RepoSelectionService.getSelected();
-            if (isBasicAuth()) {
-                return basicTestConnection(repo);
+            var baseUrl = url(repo);
+            var testUrl = baseUrl + REST_URI.SERVICE + REST_URI.ABOUT;
+
+            var config = {};
+            config.headers = {};
+            if (CredentialService.isBasicAuth()) {
+                var username = CredentialService.credential(CONFIG.basic.username);
+                var password = CredentialService.credential(CONFIG.basic.password);
+                config.headers[CONFIG.http.authHeader] = basicAuthHeader(username, password);
+            } else if (CredentialService.isKCAuth()){
+                config.headers[CONFIG.http.authHeader] = kcAuthHeader();
             }
 
-            return keycloakTestConnection(repo);
+            return $http.get(testUrl, config)
+                    .then(function (response) {
+                        return {
+                            status: 0
+                        };
+                    }, function (response) {
+                        return {
+                            status: 1
+                        };
+                    });
         };
 
         function isXML(xml){

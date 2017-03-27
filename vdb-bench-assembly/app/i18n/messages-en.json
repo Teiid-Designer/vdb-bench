@@ -505,7 +505,14 @@
     "loginPage" : {
         "rememberCredentials" : "Remember Credentials",
         "welcomeTitle" : "Welcome to Data Services Builder",
-        "welcomeDescription" : "A tool for creating, managing and deploying simple data services."
+        "welcomeDescription" : "A tool for creating, managing and deploying simple data services.",
+        "basicAccessFailure" : "Access Failure.<br>Either the username/password are incorrect or the repository cannot be contacted.",
+        "userNameRequired" : "A user name is required",
+        "kcServerUrlRequired" : "A keycloak server url has not been specified in the workspace settings. This is required for authentication,",
+        "kcServerRealmRequired" : "A keycloak server realm has not been specified in the workspace settings. This is required for authentication,",
+        "kcAuthenticationFailure" : "The user has failed to authenticate with the authentication server",
+        "kcAuthorisationFailure" : "The user is not authorised to access this application. The user requires the 'ds-builder-access' or 'admin' roles",
+        "kcAuthRepoConnectFailure" : "The user is unable to connect to the repository. The user requires at least the 'vdb-builder-auditor' role to allow access"
     },
 
     "RepositoryRestService" : {
@@ -544,7 +551,7 @@
         "copyFailedMsg" : "Failed to copy the data source.",
         "deployFailedMsg" : "Failed to deploy the data source."
     },
-
+    
     "teiid-preference-config" : {
         "tabTitle" : "Teiid Settings"
     },

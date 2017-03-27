@@ -2,9 +2,9 @@ var VdbBenchApp = (function(App) {
     'use strict';
 
     App._module.factory('CredentialService', CredentialService);
-    CredentialService.$inject = ['StorageService', 'CONFIG', '$window'];
+    CredentialService.$inject = ['StorageService', 'CONFIG'];
 
-    function CredentialService(StorageService, CONFIG, $window) {
+    function CredentialService(StorageService, CONFIG) {
         /*
          * Service instance to be returned
          */
@@ -35,7 +35,7 @@ var VdbBenchApp = (function(App) {
             return authenticateType === CONFIG.rest.authTypes[0];
         };
 
-        service.isKeycloakAuth = function() {
+        service.isKCAuth = function() {
             if (angular.isUndefined(authenticateType))
                 return false;
 

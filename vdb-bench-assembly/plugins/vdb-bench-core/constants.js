@@ -9,6 +9,9 @@
             pluginDir: 'plugins',
             contentDir: 'content',
             imagesDir: 'img',
+            http: {
+                authHeader: 'Authorization'
+            },
             rest: {
                 protocol: 'https',
                 port: 8443,
@@ -17,10 +20,15 @@
                     'basic', 'keycloak'
                 ]
             },
+            basic: {
+                username: 'username',
+                password: 'password'
+            },
             keycloak: {
                 sessionNode: 'dsb-auth',
                 clientId: 'ds-builder',
-                role: 'ds-builder-access'
+                role: 'ds-builder-access',
+                adminRole: 'admin'
             },
             help: {
                 baseUrl: '/ds-builder-help'

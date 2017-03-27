@@ -91,8 +91,8 @@ var VdbBenchApp = (function (App) {
      * Module Run function
      */
     App._module.run(run);
-    run.$inject = ['CONFIG', 'HawtioExtension', '$compile', '$window', 'StorageService', 'AuthService', 'CredentialService'];
-    function run(CONFIG, HawtioExtension, $compile, $window, StorageService, AuthService, CredentialService) {
+    run.$inject = ['CONFIG', 'HawtioExtension', '$compile', 'KCService', 'StorageService', 'AuthService', 'CredentialService'];
+    function run(CONFIG, HawtioExtension, $compile, KCService, StorageService, AuthService, CredentialService) {
 
         //
         // Configure the hawtio nav bar to show a logout menu-item once user is authenticated
@@ -125,28 +125,26 @@ var VdbBenchApp = (function (App) {
         CredentialService.setAuthType(CONFIG.rest.authTypes[1]);
         CredentialService.setCredentials(options);
 
-        $window.keycloak = new Keycloak({
+        var kcOptions = {
+            checkOnly: true,
             url: sessionNode.url,
             realm: sessionNode.realm,
-            clientId: 'ds-builder'
-        });
+            clientId: CONFIG.keycloak.clientId,
+        };
 
-        $window.keycloak.onAuthSuccess = function() {
+        kcOptions.successCB = function() {
             console.debug("Authentication Success for keyloak => check-sso");
-            $window.keycloak.loadUserInfo()
-                .success(function (userInfo) {
-                    CredentialService.setCredential('username', userInfo.preferred_username);
-                });
+            KCService.loadUserInfo();
 
             AuthService.redirect();
         };
 
-        $window.keycloak.onAuthError = function() {
+        kcOptions.failureCB = function() {
             console.debug("Authentication Failure for keycloak => check-sso");
             AuthService.redirect();
         };
 
-        $window.keycloak.init({ onLoad: 'check-sso' });
+        KCService.init(kcOptions);
     }
 
     return App;

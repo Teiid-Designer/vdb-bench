@@ -2,9 +2,11 @@ var VdbBenchApp = (function(App) {
     'use strict';
 
     App._module.factory('AuthService', AuthService);
-    AuthService.$inject = ['CONFIG', 'CredentialService', '$rootScope', '$location', '$route', '$window', 'RepoRestService', 'RepoSelectionService'];
+    AuthService.$inject = ['CONFIG', 'CredentialService', '$rootScope', '$location', '$route',
+                           'KCService', 'RepoRestService', 'RepoSelectionService'];
 
-    function AuthService(CONFIG, CredentialService, $rootScope, $location, $route, $window, RepoRestService, RepoSelectionService) {
+    function AuthService(CONFIG, CredentialService, $rootScope, $location, $route,
+                            KCService, RepoRestService, RepoSelectionService) {
 
         /*
          * Service instance to be returned
@@ -15,43 +17,59 @@ var VdbBenchApp = (function(App) {
 
         var lastLocation = {};
 
-        var authenticated = false;
+        var repoConnectStatus = false;
 
-        service.authorised = function() {
-            if (! CredentialService.isKeycloakAuth())
-                return true; // not applicable to basic authentication
-
-            if (! angular.isDefined($window.keycloak)) {
-                return false; // no keycloak object
+        /**
+         * Is user authenticated.
+         * basic: return status of connection to repository
+         * kc: return status of keycloak authentication
+         */
+        service.authenticated = function() {
+            if (CredentialService.isKCAuth()) {
+                return KCService.isAuthenticated();
             }
 
-            if (! $window.keycloak.authenticated)
+            return repoConnectStatus;
+        };
+
+        service.authorised = function() {
+            if (! CredentialService.isKCAuth())
+                return true; // not applicable to basic authentication
+
+            if (! KCService.isAuthenticated()) {
                 return false; // not authenticated
+            }
 
             /**
-             * Test if user has ds-builder-access
+             * Test if user has ds-builder-access or admin roles
              */
-             if (! $window.keycloak.hasRealmRole(CONFIG.keycloak.role)) {
-                 return false;
+             if (! KCService.hasAccessRole() && ! KCService.hasAdminRole()) {
+                 return false; // user has no access or admin role
              }
 
              return true;
         };
 
-        service.authenticated = function() {
-            if (CredentialService.isKeycloakAuth() && angular.isDefined($window.keycloak)) {
-                authenticated = $window.keycloak.authenticated;
-            }
-
-            return authenticated;
+        service.connectToRepo = function() {
+            return repoConnectStatus;
         };
 
+        /**
+         * Does user have access to ds-builder and the configured repository
+         * basic: is user authenticated
+         * kc: is user authenticated, authorised and can connect to repository
+         */
         service.hasAccess = function() {
-            if (service.authenticated()) {
-                return service.authorised();
-            }
+            // Is user authenticated - true is repoConnectStatus is true
+            if (! service.authenticated())
+                return false;
 
-            return false;
+            // Is user authorised - always true for basic
+            if (! service.authorised())
+                return false;
+
+            // Can user connect to repository
+            return service.connectToRepo();
         };
 
         service.lastLocation = function() {
@@ -82,28 +100,34 @@ var VdbBenchApp = (function(App) {
             }
         };
 
-        function keycloakTestConnection(onSuccess, onFailure) {
-            var options = {};
-            var repo = RepoSelectionService.getSelected();
-            if (angular.isDefined(repo.keycloakUrl))
-                options.url = repo.keycloakUrl;
-
-            if (angular.isDefined(repo.keycloakRealm))
-                options.realm = repo.keycloakRealm;
-
-            RepoRestService.testConnection(options)
+        function repoTestConnection(onSuccess, onFailure) {
+            RepoRestService.testConnection()
                 .then(
                     function(response) {
                         if (response.status === 1) {
                             /*
-                             * Failure to authenticate or connect to reposiory
+                             * Set the connection status flag
                              */
-                            onFailure();
+                            repoConnectStatus = false;
+
+                            if (angular.isDefined(onFailure) && onFailure !== null) {
+                                /*
+                                * Failure to authenticate or connect to reposiory
+                                */
+                                onFailure();
+                            }
 
                             return;
                         }
 
-                        onSuccess();
+                        /*
+                         * Set the connection status flag
+                         */
+                        repoConnectStatus = true;
+
+                        if (angular.isDefined(onSuccess) && onSuccess !== null) {
+                            onSuccess();
+                        }
                     }
                 );
         }
@@ -122,8 +146,8 @@ var VdbBenchApp = (function(App) {
                 // Checks that connection can be made to repository through rest and BASIC Authentiation
                 //
                 service.basicLogin(redirectCallback, redirectCallback);
-            } else if (!_.isEmpty($window.keycloak) && $window.keycloak.authenticated) {
-                keycloakTestConnection(redirectCallback, redirectCallback);
+            } else if (KCService.isAuthenticated()) {
+                repoTestConnection(redirectCallback, redirectCallback);
             } else {
                 redirectCallback();
             }
@@ -132,24 +156,10 @@ var VdbBenchApp = (function(App) {
         service.basicLogin = function(onSuccess, onFailure) {
             CredentialService.setLoggingOut(false);
 
-            RepoRestService.testConnection()
-                .then(
-                    function(response) {
-                        if (response.status === 0) {
-                            authenticated = true;
-                            if (angular.isDefined(onSuccess) && onSuccess !== null)
-                                onSuccess();
-                        } else {
-                            authenticated = false;
-                            if (angular.isDefined(onFailure) && onFailure !== null)
-                                onFailure();
-                        }
-                    }
-                );
+            repoTestConnection(onSuccess, onFailure);
         };
 
-        service.keycloakLogin = function(onSuccess, onFailure) {
-            var credentials = CredentialService.credentials();
+        service.kcLogin = function() {
             CredentialService.setLoggingOut(false);
 
             //
@@ -162,40 +172,26 @@ var VdbBenchApp = (function(App) {
             // button is clicked. Logging-in will redirect the page to the keycloak
             // page then redirect back.
             //
-            var keyOptions = {};
-            keyOptions.url = credentials.url;
-            keyOptions.realm = credentials.realm;
-            keyOptions.clientId = CONFIG.keycloak.clientId;
-
-            $window.keycloak = new Keycloak(keyOptions);
-
-            $window.keycloak.authSuccess = function() {
-                keycloakTestConnection(redirectCallback, redirectCallback);
+            var credentials = CredentialService.credentials();
+            var kcOptions = {};
+            kcOptions.url = credentials.url;
+            kcOptions.realm = credentials.realm;
+            kcOptions.clientId = CONFIG.keycloak.clientId;
+            kcOptions.successCB = function() {
+                testConnection(redirectCallback, redirectCallback);
             };
 
-            $window.keycloak.init({
-                    onLoad: 'login-required'
-                })
-                .success(function(response) {
-                    //
-                    // If logging-in for the first time then this will never be called
-                    //
-                    console.debug("keycloak successfully inited");
-                })
-                .error(function(response) {
-                    console.debug("keycloak init failed");
-                });
+            KCService.init(kcOptions);
         };
 
         service.logout = function() {
-            authenticated = false;
+            repoConnectStatus = false;
 
             CredentialService.reset();
             CredentialService.eraseOptions(CONFIG.keycloak.sessionNode);
             CredentialService.setLoggingOut(true);
 
-            if (angular.isDefined($window.keycloak.authenticated) && $window.keycloak.authenticated)
-                $window.keycloak.logout();
+            KCService.logout();
 
             service.redirect();
         };

@@ -2,12 +2,12 @@ var VdbBenchApp = (function(App) {
     'use strict';
 
     App.LoginController = App._module.controller('App.LoginController', LoginController);
-    LoginController.$inject = ['$rootScope', '$location', '$scope', 'branding',
+    LoginController.$inject = ['$rootScope', '$location', '$scope', '$timeout', '$translate', 'branding',
         'RepoRestService', 'CredentialService', 'AuthService',
         'RepoSelectionService', 'CONFIG', 'StorageService'
     ];
 
-    function LoginController($rootScope, $location, $scope, branding,
+    function LoginController($rootScope, $location, $scope, $timeout, $translate, branding,
         RepoRestService, CredentialService, AuthService,
         RepoSelectionService, CONFIG, StorageService) {
         var vm = this;
@@ -34,7 +34,7 @@ var VdbBenchApp = (function(App) {
             return repo.authType === CONFIG.rest.authTypes[0];
         };
 
-        vm.isKeycloakAuth = function() {
+        vm.isKCAuth = function() {
             var repo = RepoSelectionService.getSelected();
             if (angular.isUndefined(repo))
                 return false;
@@ -59,7 +59,7 @@ var VdbBenchApp = (function(App) {
         };
 
         var onLoginFailure = function() {
-            vm.loginError = "Access Failure.<br>Either the username/password are incorrect or the repository cannot be contacted.";
+            vm.loginError = $translate.instant( 'loginPage.basicAccessFailure' );
         };
 
         var onLoginSuccessful = function() {
@@ -82,7 +82,7 @@ var VdbBenchApp = (function(App) {
 
         vm.doBasicLogin = function() {
             if (vm.basic.username.trim() === '') {
-                vm.loginError = 'A user name is required';
+                vm.loginError = $translate.instant( 'loginPage.userNameRequired' );
             }
 
             CredentialService.setAuthType(vm.selectedRepoAuthType());
@@ -105,19 +105,19 @@ var VdbBenchApp = (function(App) {
             options.realm = repo.keycloakRealm;
 
             if (_.isEmpty(options.url)) {
-                vm.loginError = "A keycloak server url has not been specified in the workspace settings. This is required for authentication,";
+                vm.loginError = $translate.instant( 'loginPage.kcServerUrlRequired' );
                 return;
             }
 
             if (_.isEmpty(options.realm)) {
-                vm.loginError = "A keycloak server realm has not been specified in the workspace settings. This is required for authentication,";
+                vm.loginError = $translate.instant( 'loginPage.kcServerRealmRequired' );
                 return;
             }
 
             CredentialService.setAuthType(repo.authType);
             CredentialService.setCredentials(options);
 
-            AuthService.keycloakLogin();
+            AuthService.kcLogin();
         };
 
         vm.logout = function() {
@@ -127,17 +127,21 @@ var VdbBenchApp = (function(App) {
         /**
          * Initialise the error message for use on second-time page redirect
          */
-        if (vm.isKeycloakAuth()) {
+        if (vm.isKCAuth()) {
             var sessionNode = StorageService.sessionGetObject(CONFIG.keycloak.sessionNode);
 
             if (_.isEmpty(sessionNode))
                 return; // No attempt to login has been made yet so no login error required
 
-            if (! AuthService.authenticated()) {
-                vm.loginError = "User has not been authenticated successfully";
-            } else if (! AuthService.authorised()) {
-                vm.loginError = "User is not authorised to access this application";
-            }
+            $timeout(function() {
+                if (! AuthService.authenticated()) {
+                    vm.loginError = $translate.instant( 'loginPage.kcAuthenticationFailure' );
+                } else if (! AuthService.authorised()) {
+                    vm.loginError = $translate.instant( 'loginPage.kcAuthorisationFailure' );
+                } else if (! AuthService.connectToRepo()) {
+                    vm.loginError = $translate.instant( 'loginPage.kcAuthRepoConnectFailure' );
+                }
+            }, 500); // Give the authentication a chance to complete
         }
     }
 
