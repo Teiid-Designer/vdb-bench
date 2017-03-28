@@ -40,7 +40,7 @@
                 RepoRestService.createConnection( connectionName, jndiName, driverName ).then(
                     function () {
                         // Reinitialise the list of data services
-                        ConnectionSelectionService.refresh();
+                        ConnectionSelectionService.refresh(true);
                         // Broadcast the pageChange
                         $rootScope.$broadcast("dataServicePageChanged", 'connection-summary');
                     },

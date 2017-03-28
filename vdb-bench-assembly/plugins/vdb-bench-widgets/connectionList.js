@@ -42,30 +42,13 @@
         /*
          * Notification when connection loading status has changed
          */
-        $scope.$on('loadingConnectionsChanged', function (event, loading) {
+        $rootScope.$on('loadingConnectionsChanged', function (event, loading) {
             vm.connectionsLoading = loading;
             if(vm.connectionsLoading === false) {
-                vm.allItems = ConnectionSelectionService.getConnections();
-                vm.items = filterItems(vm.allItems);
+                vm.refresh();
             }
         });
 
-        function setSelection() {
-            // Selection if specified
-            var selItems = [];
-            if(vm.selection !== null) {
-            	// See if item match
-                var itemsLength = vm.items.length;
-                for (var i = 0; i < itemsLength; i++) {
-                	if(vm.items[i].keng__id==vm.selection) {
-                		selItems.push(vm.items[i]);
-                        break;
-                	}
-                } 
-            }
-            vm.listConfig.selectedItems = selItems;
-        }
-        
         function filterItems(all) {
             // Determine from supplied 'hide' attributes which types to include
             var showJdbc = true;
@@ -135,24 +118,43 @@
             vm.items = filterItems(vm.allItems);
             
             // Set the selection (if specified)
-            var selItems = [];
-            if(vm.selection !== null) {
-            	// See if item match
-                var itemsLength = vm.items.length;
-                for (var i = 0; i < itemsLength; i++) {
-                	if(vm.items[i].keng__id==vm.selection) {
-                		selItems.push(vm.items[i]);
-                        break;
-                	}
-                } 
-            }
-            if(selItems.length==1) {
-                vm.listConfig.selectedItems = selItems;
-                ConnectionSelectionService.selectConnection(selItems[0], true);
-            }
+            setSelection();
         };
 
+        function setSelection() {
+            // Selection if specified
+            var selItems = [];
+            if(vm.selection) {
+                // See if item match
+                var itemsLength = vm.items.length;
+                for (var i = 0; i < itemsLength; i++) {
+                    if(vm.items[i].keng__id==vm.selection) {
+                        selItems.push(vm.items[i]);
+                        break;
+                    }
+                } 
+                if(selItems.length==1) {
+                    vm.listConfig.selectedItems = selItems;
+                    ConnectionSelectionService.selectConnection(selItems[0], true);
+                }
+            } else {
+                var conn = ConnectionSelectionService.selectedConnection();
+                if(conn !== null) {
+                    // See if item match
+                    for (var j = 0; j < vm.items.length; j++) {
+                        if(vm.items[j].keng__id==conn.keng__id) {
+                            selItems.push(vm.items[j]);
+                            break;
+                        }
+                    } 
+                    if(selItems.length==1) {
+                        vm.listConfig.selectedItems = selItems;
+                    }
+                }
+            }
+        }
+
         vm.refresh();
-        
+
     }
 })();

@@ -40,7 +40,32 @@
             "salesforce" : "plugins/vdb-bench-core/content/img/Salesforce_dv_logos_70x40.png",
             "salesforce-34" : "plugins/vdb-bench-core/content/img/Salesforce_dv_logos_70x40.png",
             "teiid" : "plugins/vdb-bench-core/content/img/Teiid_dv_logos_70x40.png",
-            "ws" : "plugins/vdb-bench-core/content/img/WebService_dv_logos_70x40.png"
+            "ws" : "plugins/vdb-bench-core/content/img/WebService_dv_logos_70x40.png",
+            "access" : "plugins/vdb-bench-core/content/img/access.png",
+            "actian-vector" : "plugins/vdb-bench-core/content/img/actian.png",
+            "db2" : "plugins/vdb-bench-core/content/img/db2.png",
+            "derby" : "plugins/vdb-bench-core/content/img/derby.png",
+            "greenplum" : "plugins/vdb-bench-core/content/img/greenplum.png",
+            "hana" : "plugins/vdb-bench-core/content/img/hana.png",
+            "hbase" : "plugins/vdb-bench-core/content/img/hbase.png",
+            "hive" : "plugins/vdb-bench-core/content/img/hive.png",
+            "hsql" : "plugins/vdb-bench-core/content/img/hsql.png",
+            "impala" : "plugins/vdb-bench-core/content/img/impala.png",
+            "informix" : "plugins/vdb-bench-core/content/img/informix.png",
+            "ingres" : "plugins/vdb-bench-core/content/img/ingress.png",
+            "ingres93" : "plugins/vdb-bench-core/content/img/ingress-93.png",
+            "intersystems-cache" : "plugins/vdb-bench-core/content/img/intersystems-cache.png",
+            "netezza" : "plugins/vdb-bench-core/content/img/netezza.png",
+            "oracle" : "plugins/vdb-bench-core/content/img/oracle.png",
+            "osisoft-pi" : "plugins/vdb-bench-core/content/img/osisoft.png",
+            "prestodb" : "plugins/vdb-bench-core/content/img/presto.png",
+            "redshift" : "plugins/vdb-bench-core/content/img/redshift.png",
+            "sqlserver" : "plugins/vdb-bench-core/content/img/sqlserver.png",
+            "sybase" : "plugins/vdb-bench-core/content/img/sybase.png",
+            "sybaseiq" : "plugins/vdb-bench-core/content/img/sybaseiq.png",
+            "teradata" : "plugins/vdb-bench-core/content/img/teradata.png",
+            "ucanaccess" : "plugins/vdb-bench-core/content/img/ucanaccess.png",
+            "vertica" : "plugins/vdb-bench-core/content/img/vertica.png"
         };
 
         var raTranslators = ["simpledb", 
@@ -81,7 +106,7 @@
         /**
          * Fetch the translators from CachedTeiid
          */
-        function initTranslators() {
+        function initTranslators(resetSelection) {
             setLoading(true);
 
             try {
@@ -109,8 +134,10 @@
                 alert("An exception occurred:\n" + error.message);
             }
 
-            // Removes any outdated selection
-            service.selectTranslator(null);
+            // reset selected translator if desired
+            if(resetSelection) {
+                service.selectTranslator(null);
+            }
         }
 
         function sortByKey(array, key) {
@@ -221,9 +248,6 @@
             // Set the selected translator
             //
             tran.translator = translator;
-
-            // Useful for broadcasting the selected translator has been updated
-            $rootScope.$broadcast("selectedTranslatorChanged", tran.translator);
         };
 
         /*
@@ -237,9 +261,6 @@
                     break;
                 }
             } 
-
-            // Useful for broadcasting the selected translator has been updated
-            $rootScope.$broadcast("selectedTranslatorChanged", tran.translator);
         };
 
         /*
@@ -268,12 +289,12 @@
         /*
          * Refresh the collection of translators
          */
-        service.refresh = function() {
-            initTranslators();
+        service.refresh = function(resetSelection) {
+            initTranslators(resetSelection);
         };
 
         // Initialise translator collection on loading
-        service.refresh();
+        service.refresh(true);
 
         return service;
     }

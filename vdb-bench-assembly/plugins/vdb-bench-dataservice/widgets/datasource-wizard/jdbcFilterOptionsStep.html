@@ -1,0 +1,19 @@
+<div pf-wizard-step
+        step-title="{{vm.stepTitle}}"
+        wz-disabled="{{!vm.wizardActive}}"
+        step-id="wizard-jdbc-filter-options"
+        allow-click-nav="false"
+        wz-disabled="false"
+        on-show="vm.jdbcFilterOptionsStepShown()"
+        next-enabled = "vm.nextEnablement"
+        prev-enabled = "true"
+        ok-to-nav-away="true">
+
+    <h3><i>{{vm.instructionMessage}}</i></h3>
+
+    <!--  JDBC Filter Options -->
+    <div class="col-md-12">
+        <jdbc-filter-options></jdbc-filter-options>
+    </div>
+
+</div>

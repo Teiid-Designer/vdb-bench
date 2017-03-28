@@ -9,11 +9,11 @@
         .controller('DatasourceSummaryController', DatasourceSummaryController);
 
     DatasourceSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 
-                                           'SvcSourceSelectionService', 'TranslatorSelectionService', 
+                                           'SvcSourceSelectionService', 'TranslatorSelectionService', 'DatasourceWizardService', 
                                            'ConnectionSelectionService', 'DownloadService', 'pfViewUtils'];
 
     function DatasourceSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, 
-                                          SvcSourceSelectionService, TranslatorSelectionService, 
+                                          SvcSourceSelectionService, TranslatorSelectionService, DatasourceWizardService, 
                                           ConnectionSelectionService, DownloadService, pfViewUtils) {
         var vm = this;
 
@@ -360,62 +360,6 @@
             exportSvcSourceClicked();
         };
 
-        /**
-         * Handle edit ServiceSource click
-         */
-        var editSvcSourceClicked = function( ) {
-            // Builds the name value pairs of info needed for the edit page.
-            var editInfo = [];
-            
-            // Get the connectionName and TranslatorName for the selected source,
-            // then transfer to the edit page.
-            
-            var successCallback = function(model) {
-                // Update the connection name for the source being edited
-                //SvcSourceSelectionService.setEditSourceConnectionNameSelection(model.keng__id);
-                editInfo.push({ 
-                    "name" : "connectionName",
-                    "value": model.keng__id
-                });
-                // If model has filter properties, include them
-                ConnectionSelectionService.resetFilterProperties();
-                if(angular.isDefined(model.keng__properties)) {
-                    for(var key in model.keng__properties) {
-                        var propName = model.keng__properties[key].name;
-                        var propValue = model.keng__properties[key].value;
-                        if( propName==='importer.catalog' || propName==='importer.schemaPattern' || propName==='importer.tableNamePattern') {
-                            ConnectionSelectionService.addFilterProperty(propName,propValue);
-                        }
-                    }
-                }
-                
-                var modelSourceSuccessCallback = function(modelSource) {
-                    TranslatorSelectionService.selectTranslatorName(modelSource.vdb__sourceTranslator);
-                    //SvcSourceSelectionService.setEditSourceConnectionJndiSelection(modelSource.vdb__sourceJndiName);
-                    editInfo.push({ 
-                        "name" : "sourceJndiName",
-                        "value": modelSource.vdb__sourceJndiName
-                    });
-                    SvcSourceSelectionService.setEditSourceInfo(editInfo);
-                    //
-                    // Broadcast the pageChange
-                    $rootScope.$broadcast("dataServicePageChanged", 'svcsource-edit');
-                };
-                var modelSourceFailureCallback = function(modelSourceErrorMsg) {
-                    var getModelSourceFailedMsg = $translate.instant('datasourceSummaryController.getModelSourceFailedMsg');
-                    alert(getModelSourceFailedMsg + "\n" + modelSourceErrorMsg);
-                };
-                SvcSourceSelectionService.selectedServiceSourceModelSource(modelSourceSuccessCallback,modelSourceFailureCallback);
-            };
-
-            var failureCallback = function(errorMsg) {
-                var getModelSourceConnectionFailedMsg = $translate.instant('datasourceSummaryController.getModelSourceConnectionFailedMsg');
-                alert(getModelSourceConnectionFailedMsg + "\n" + errorMsg);
-            };
-
-            SvcSourceSelectionService.selectedServiceSourceModel(successCallback, failureCallback);
-        };
-
         
         /**
          * Handle edit ServiceSource menu select
@@ -424,18 +368,9 @@
             // Need to select the item first
             SvcSourceSelectionService.selectServiceSource(item);
 
-            // Initiate a Connection refresh prior to edit.  Wait for the refresh to complete before proceeding.  
-            ConnectionSelectionService.refresh();
+            // Init the DatasourceWizardService.  The Wizard service handles the page change when ready. 
+            DatasourceWizardService.init(SvcSourceSelectionService.selectedServiceSource(), 'svcsource-edit');
         };
-
-        /*
-         * Edit triggers a Connection refresh.  When complete (loading=false), proceed with the edit.
-         */
-        $scope.$on('loadingConnectionsChanged', function (event, loading) {
-            if(loading === false) {
-                editSvcSourceClicked();
-            }
-        });
 
         /**
          * Handle clone ServiceSource click
@@ -468,14 +403,10 @@
         };
         
         /**
-         * Handle new ServiceSource click
+         * Handle new ServiceSource click.  The Wizard service handles the page change when ready.
          */
         var newSvcSourceClicked = function( ) {
-            // Start refresh of Connections and Translators, then broadcast a page change
-            SvcSourceSelectionService.refreshConnectionsAndTranslators();
-            //
-            // Broadcast the pageChange
-            $rootScope.$broadcast("dataServicePageChanged", 'svcsource-new');
+            DatasourceWizardService.init(null, 'svcsource-new');
         };
         
         /**
