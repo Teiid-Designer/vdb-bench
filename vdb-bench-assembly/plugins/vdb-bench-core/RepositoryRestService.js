@@ -462,7 +462,7 @@
                 // Property added to distinguish service sources
                 if (isSource)  {
                     payload.keng__properties = [{ "name": "dsbServiceSource",
-                                                  "value": "true"}];
+                                                  "value": CredentialService.credentials().username}];
                 }
 
                 var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName;
@@ -491,7 +491,7 @@
                 // Property added to distinguish service sources
                 if (isSource)  {
                     payload.keng__properties = [{ "name": "dsbServiceSource",
-                                                  "value": "true"}];
+                                                  "value": CredentialService.credentials().username}];
                 }
 
                 var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName;

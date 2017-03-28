@@ -10,11 +10,11 @@
 
     DatasourceSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 
                                            'SvcSourceSelectionService', 'TranslatorSelectionService', 'DatasourceWizardService', 
-                                           'ConnectionSelectionService', 'DownloadService', 'pfViewUtils'];
+                                           'ConnectionSelectionService', 'DownloadService', 'CredentialService', 'pfViewUtils'];
 
     function DatasourceSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, 
                                           SvcSourceSelectionService, TranslatorSelectionService, DatasourceWizardService, 
-                                          ConnectionSelectionService, DownloadService, pfViewUtils) {
+                                          ConnectionSelectionService, DownloadService, CredentialService, pfViewUtils) {
         var vm = this;
 
         vm.srcLoading = SvcSourceSelectionService.isLoading();
@@ -494,7 +494,8 @@
                 name: $translate.instant('datasourceSummaryController.actionNameEdit'),
                 title: $translate.instant('datasourceSummaryController.actionTitleEdit'),
                 actionFn: editSvcSourceMenuAction,
-                include: false
+                include: false,
+                isDisabled: true
             }
         ];
 
@@ -530,7 +531,7 @@
           sortConfig: vm.sortConfig,
           actionsConfig: vm.actionsConfig
         };
-     
+
         /**
          * List and Card Configuration
          */
@@ -542,7 +543,37 @@
           onSelect: handleSelect,
           checkDisabled: false
         };
-        
+
+        /**
+         * Sets the listView button enablements
+         */
+        vm.enableButton = function(action, item) {
+            // Disable edit if a different user owns the datasource
+            if(action.name==='Edit') {
+                var owner = SvcSourceSelectionService.getServiceSourceOwner(item);
+                if( owner === CredentialService.credentials().username ) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        };
+
+        /**
+         * Sets the listView menu actions enablements
+         */
+        vm.enableMenuAction = function(action, item) {
+            // Disable delete if a different user owns the datasource
+            if(action.name==='Delete') {
+                var owner = SvcSourceSelectionService.getServiceSourceOwner(item);
+                if( owner === CredentialService.credentials().username ) {
+                    action.isDisabled = false;
+                } else {
+                    action.isDisabled = true;
+                }
+            }
+        };
+
         /**
          * Access to the collection of data services
          */
