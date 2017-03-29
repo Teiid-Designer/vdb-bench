@@ -62,9 +62,52 @@
         vm.dsDeploymentMessage = null;
         vm.searchInProgress = false;
         vm.resultsType = 'Tabular';
+        vm.pinging=true;
+        vm.pinged=false;
 
         vm.sql = {
             refreshEditor : false
+        };
+        
+        vm.pingJdbcResultStyleClass = "";
+
+        function setJdbcResult(status) {
+            if (!status) {
+                vm.jdbcPingResult = null;
+                return;
+            }
+
+            if (status.OK === "true") {
+               vm.pinged = true;
+            }
+            else {
+                vm.pinged = false;
+            	vm.pingJdbcResultStyleClass = "pficon pficon-error-circle-o";
+                vm.jdbcPingResult = status.Message + SYNTAX.NEWLINE + status.Exception;
+            }
+        }
+
+        /**
+         * Ping Teiid via JDBC URL/Credentials.
+         * Set error message on failure.
+         */
+        vm.ping = function() {
+            vm.pinging = true;
+            vm.pinged = false;
+
+            try {
+                RepoRestService.ping("jdbc").then(
+                    function (statusObj) {
+                        setJdbcResult(statusObj.Information);
+                    },
+                    function (response) {
+                        // Some kind of error has occurred
+                        setJdbcResult(response.message);
+                    });
+            } catch (error) {
+                setJdbcResult(error.message);
+            }
+            vm.pinging = false;
         };
 
         vm.odata = {
@@ -406,14 +449,13 @@
 
             return value + SYNTAX.AMPERSAND;
         }
-
+        
         /**
          * Initialise the control panel by fetching the metadata from
          * the odata link
          */
         function init() {
             var url = vm.rootUrl() + '$metadata';
-
             RepoRestService.odataGet(url).then(
                 function(response) {
                     if (response.status === 200) {
@@ -426,7 +468,7 @@
                 }
             );
         }
-
+        
         /**
          * Tidy up the interval that might have been created
          */
@@ -496,7 +538,7 @@
 
             return cvColumns;
         }
-
+     
         /**
          * On receipt of the metadata traverse the node tree
          * and extract the available entities.
@@ -684,7 +726,7 @@
         vm.displayLinkContent = function(grid, row, column, link) {
             vm.fetchLinkedData(link, row.entity, column.field);
         };
-
+        
         /**
          * Returns true if the odata control widgets
          * should be displayed.
@@ -880,13 +922,16 @@
 
         vm.onTabSelected = function (tabId) {
             if (tabId === 'Advanced') {
+            	 vm.ping();
                 /*
                  * To ensure the sql content is visible,
                  * signal the sql control should refresh its
                  * editor. This is done by setting the var
                  * assigned to the 'refresh' attribute to true
                  */
-                vm.sql.refreshEditor = true;
+            	vm.sql.refreshEditor = true;
+            } else {
+            	
             }
         };
     }
