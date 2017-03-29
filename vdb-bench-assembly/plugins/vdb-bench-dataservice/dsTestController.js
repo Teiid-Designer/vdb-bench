@@ -71,40 +71,6 @@
         
         vm.pingJdbcResultStyleClass = "";
 
-        vm.teiid = {
-            adminUser: 'admin',
-            adminPasswd: 'admin',
-            jdbcUser: 'user',
-            jdbcPasswd: 'user',
-            jdbcSecure: false,
-        };
-
-        vm.error = null;
-
-        function setError(error) {
-            vm.error = error;
-        }
-
-        vm.submitCredentials = function() {
-            setError(null);
-
-            try {
-                RepoRestService.setTeiidCredentials(vm.teiid).then(
-                    function (status) {
-                    },
-                    function (response) {
-                        // Some kind of error has occurred
-                        setError(response.message);
-                    });
-            } catch (error) {
-                setError(error.message);
-            }
-        };
-
-        /**
-         * Ping Teiid via JDBC URL/Credentials.
-         * Set error message on failure.
-         */
         function setJdbcResult(status) {
             if (!status) {
                 vm.jdbcPingResult = null;
@@ -121,8 +87,11 @@
             }
         }
 
+        /**
+         * Ping Teiid via JDBC URL/Credentials.
+         * Set error message on failure.
+         */
         vm.ping = function() {
-            setError(null);
             vm.pinging = true;
             vm.pinged = false;
 
@@ -133,11 +102,9 @@
                     },
                     function (response) {
                         // Some kind of error has occurred
-                        setError(response.message);
                         setJdbcResult(response.message);
                     });
             } catch (error) {
-                setError(error.message);
                 setJdbcResult(error.message);
             }
             vm.pinging = false;
