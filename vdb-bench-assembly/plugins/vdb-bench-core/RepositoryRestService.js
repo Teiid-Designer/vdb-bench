@@ -43,6 +43,16 @@
         HostNotReachableException.prototype = new Error();
         HostNotReachableException.prototype.constructor = HostNotReachableException;
 
+        function RequiredRoleException(role) {
+            this.role = role;
+            this.message = "User lacks the required '" + role + "' role";
+            this.toString = function () {
+                return this.message;
+            };
+        }
+        RequiredRoleException.prototype = new Error();
+        RequiredRoleException.prototype.constructor = RequiredRoleException;
+
         /**
          * returns true if the given vdb is a deployed teiid vdb
          *  false otherwise.
@@ -138,6 +148,18 @@
             });
         }
 
+        function noRoleError(role) {
+            throw new RequiredRoleException(role);
+        }
+
+        function noRoleReturnEarly(role) {
+            var result = {
+                "error": "User lacks the required '" + role + "'role"
+            };
+
+            return $q.when(result);
+        }
+
         /**
          * Service: workspace patch
          */
@@ -225,6 +247,9 @@
          * Service: Simple connection test.
          */
         service.odataGet = function(url) {
+            if (! CredentialService.canOdataTest())
+                noRoleError(CONFIG.keycloak.odataRole);
+
             var user = CredentialService.credentials();
             var repo = RepoSelectionService.getSelected();
             return $http.get(
@@ -415,8 +440,10 @@
          * Service: return the list of table names for the jdbc connection
          */
         service.getJdbcConnectionTables = function (catalogFilter, schemaFilter, tableFilter, connectionName) {
-            var url = REST_URI.TEIID + REST_URI.CONNECTIONS + REST_URI.TABLES;
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
 
+            var url = REST_URI.TEIID + REST_URI.CONNECTIONS + REST_URI.TABLES;
             var catFilter = "";
             var schFilter = "";
             var tblFilter = "%";
@@ -461,6 +488,9 @@
          * Service: create a new VDB in the repository
          */
         service.copyServerVdbsToWorkspace = function ( ) {
+            if (! CredentialService.canEdit())
+                return noRoleReturnEarly(CONFIG.keycloak.repoEditorRole);
+
             return getRestService().then(function (restService) {
                 var uri = REST_URI.TEIID + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + REST_URI.VDBS_FROM_TEIID;
                 return restService.all(uri).post();
@@ -471,6 +501,9 @@
          * Service: updates workspace VDB status from teiid
          */
         service.updateWorkspaceVdbStatusFromTeiid = function ( ) {
+            if (! CredentialService.canEdit())
+                return noRoleReturnEarly(CONFIG.keycloak.repoEditorRole);
+
             return getRestService().then(function (restService) {
                 var uri = REST_URI.TEIID + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + REST_URI.VDBS_FROM_TEIID;
                 return restService.all(uri).customPUT();
@@ -481,6 +514,9 @@
          * Service: create a new VDB in the repository
          */
         service.createVdb = function (vdbName, vdbDescription, isSource) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!vdbName) {
                 throw new RestServiceException("VDB name is not defined");
             }
@@ -510,6 +546,9 @@
          * Service: updates a VDB in the repository
          */
         service.updateVdb = function (vdbName, vdbDescription, isSource) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!vdbName) {
                 throw new RestServiceException("VDB name is not defined");
             }
@@ -539,6 +578,9 @@
          * Service: create a new VDB in the repository
          */
         service.createVdbModel = function (vdbName, modelName, isSource, importerProperties) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!vdbName || !modelName) {
                 throw new RestServiceException("VDB name or model name is not defined");
             }
@@ -567,6 +609,9 @@
          * Service: create a new VDB in the repository
          */
         service.updateVdbModel = function (vdbName, modelName, isSource, importerProperties, modelDdl) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!vdbName || !modelName) {
                 throw new RestServiceException("VDB name or model name is not defined");
             }
@@ -596,6 +641,9 @@
          * Service: create a new VDB in the repository
          */
         service.createVdbModelSource = function (vdbName, modelName, sourceName, transName, jndiName) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!vdbName || !modelName || !sourceName) {
                 throw new RestServiceException("VDB name, modelName or sourceName is not defined");
             }
@@ -623,6 +671,9 @@
          * Service: update an existing ModelSource in the repository
          */
         service.updateVdbModelSource = function (vdbName, modelName, sourceName, transName, jndiName) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!vdbName || !modelName || !sourceName) {
                 throw new RestServiceException("VDB name, modelName or sourceName is not defined");
             }
@@ -650,6 +701,9 @@
          * Service: delete a vdb from the resposiory
          */
         service.deleteVdb = function (vdbName) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!vdbName) {
                 throw new RestServiceException("Vdb name for delete is not defined");
             }
@@ -664,6 +718,9 @@
          * Service: delete the specified model from a repository vdb
          */
         service.deleteVdbModel = function (vdbName, modelName) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!vdbName || !modelName) {
                 throw new RestServiceException("Vdb name or model name for delete is not defined");
             }
@@ -679,6 +736,9 @@
          * Service: delete a vdb from the resposiory
          */
         service.deleteTeiidVdb = function (vdbName) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!vdbName) {
                 throw new RestServiceException("Vdb name for delete is not defined");
             }
@@ -693,6 +753,9 @@
          * Service: clone a Vdb in the repository
          */
         service.cloneVdb = function (vdbName, newVdbName) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!vdbName || !newVdbName) {
                 throw new RestServiceException("Vdb name or name for the copy are not defined");
             }
@@ -706,6 +769,9 @@
          * Service: deploy a vdb from the resposiory
          */
         service.deployVdb = function (vdbName) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!vdbName) {
                 throw new RestServiceException("VDB name for deploy is not defined");
             }
@@ -766,6 +832,9 @@
          * Returns: promise object for the imported item
          */
         service.import = function(storageType, artifactPath, parameters, documentType, data) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!storageType || !documentType)
                 return null;
 
@@ -814,6 +883,9 @@
          * Returns: promise object for the exported item
          */
         service.export = function(storageType, parameters, artifact) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!artifact || !storageType)
                 return null;
 
@@ -891,6 +963,9 @@
          * Service: Creates/Updates a VDB Model using DDL from the supplied teiid VDB Model
          */
         service.updateVdbModelFromDdl = function (vdbName, modelName, teiidVdbName, teiidModelName) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!vdbName || !modelName || !teiidVdbName || !teiidModelName) {
                 throw RestServiceException("VDB update inputs are not defined");
             }
@@ -936,6 +1011,9 @@
          * Service: create a new dataservice in the repository
          */
         service.createDataService = function (dataserviceName, dataserviceDescription) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!dataserviceName) {
                 throw new RestServiceException("Data service name is not defined");
             }
@@ -957,6 +1035,9 @@
          * Service: clone a dataservice in the repository
          */
         service.cloneDataService = function (dataserviceName, newDataserviceName) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!dataserviceName || !newDataserviceName) {
                 throw new RestServiceException("Data service name or service name for clone are not defined");
             }
@@ -970,6 +1051,9 @@
          * Service: update an existing dataservice in the repository
          */
         service.updateDataService = function (dataserviceName, dataserviceDescription) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!dataserviceName) {
                 throw new RestServiceException("Data service name for update is not defined");
             }
@@ -993,6 +1077,9 @@
          * - null or empty columnNames means "include all columns"
          */
         service.setDataServiceVdbForSingleTable = function (dataserviceName, modelSourcePath, viewDdl, tablePath, columnNames) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!dataserviceName || !modelSourcePath || !tablePath) {
                 throw RestServiceException("Data service update inputs are not defined");
             }
@@ -1026,6 +1113,9 @@
                                                                             tablePath, columnNames,
                                                                             rhTablePath, rhColumnNames,
                                                                             joinType, criteriaPredicates) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!dataserviceName || !modelSourcePath || !rhModelSourcePath || !tablePath || !rhTablePath) {
                 throw RestServiceException("Data service update inputs are not defined");
             }
@@ -1067,6 +1157,9 @@
          * Service: Get the DataService View DDL based on the provided info.
          */
         service.getDataServiceViewDdlForSingleTable = function (dataserviceName, tablePath, columnNames) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!dataserviceName || !tablePath ) {
                 throw RestServiceException("get View DDL inputs are not sufficiently defined");
             }
@@ -1091,6 +1184,10 @@
         service.getDataServiceViewDdlForJoinTables = function (dataserviceName, tablePath, columnNames,
                                                                                 rhTablePath, rhColumnNames,
                                                                                 joinType, criteriaPredicates ) {
+
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!dataserviceName || !tablePath || !rhTablePath ) {
                 throw RestServiceException("get View DDL inputs are not sufficiently defined");
             }
@@ -1126,6 +1223,9 @@
          * Service: Get the DataService join criteria for the provided tables.
          */
         service.getJoinCriteriaForTables = function (tablePath, rhTablePath ) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if ( !tablePath || !rhTablePath ) {
                 throw RestServiceException("getJoinCriteria inputs are not sufficiently defined");
             }
@@ -1144,6 +1244,9 @@
          * Service: delete a data service from the resposiory
          */
         service.deleteDataService = function (dataserviceName) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!dataserviceName) {
                 throw new RestServiceException("Data service name for delete is not defined");
             }
@@ -1186,6 +1289,9 @@
          * Service: deploy a data service from the resposiory
          */
         service.deployDataService = function (dataserviceName) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!dataserviceName) {
                 throw new RestServiceException("Data service name for deploy is not defined");
             }
@@ -1293,8 +1399,12 @@
          * Service: create a new connection in the repository
          */
         service.createConnection = function (connectionName, jndiName, driverName) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!connectionName || !driverName || !jndiName) {
                 throw new RestServiceException("Connection name, jndiName or driverName is not defined");
+
             }
 
             return getRestService().then(function (restService) {
@@ -1315,6 +1425,9 @@
          * Service: clone a connection in the repository
          */
         service.cloneConnection = function (connectionName, newConnectionName) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!connectionName || !newConnectionName) {
                 throw new RestServiceException("Connection name or name for clone are not defined");
             }
@@ -1329,6 +1442,9 @@
          * Service: update an existing connection in the repository
          */
         service.updateConnection = function (connectionName, jsonPayload) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!connectionName || !jsonPayload) {
                 throw new RestServiceException("One of the inputs for update are not defined");
             }
@@ -1342,6 +1458,9 @@
          * Service: delete a connection from the resposiory
          */
         service.deleteConnection = function (connectionName) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!connectionName) {
                 throw new RestServiceException("Connection name for delete is not defined");
             }
@@ -1356,6 +1475,9 @@
          * Service: deploy a connection from the resposiory
          */
         service.deployConnection = function (connectionName) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!connectionName) {
                 throw new RestServiceException("Connection name for deploy is not defined");
             }
@@ -1393,6 +1515,9 @@
          * Service: deploy a driver from the resposiory
          */
         service.deployDriver = function (driverName) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!driverName) {
                 throw new RestServiceException("Driver name for deploy is not defined");
             }
@@ -1506,6 +1631,9 @@
          * }
          */
         service.search = function (searchAttributes) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             return getRestService().then(function (restService) {
                 if (!searchAttributes)
                     return null;
@@ -1539,6 +1667,9 @@
          * }
          */
         service.saveSearch = function (searchAttributes) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             return getRestService().then(function (restService) {
                 if (!searchAttributes)
                     return null;
@@ -1551,6 +1682,9 @@
          * Service: delete a search from the reposiory
          */
         service.deleteSavedSearch = function (searchName) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             return getRestService().then(function (restService) {
                 if (!searchName)
                     return null;
@@ -1598,6 +1732,9 @@
          *           }
          */
         service.setTeiidCredentials = function(teiidCredentials) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             if (!teiidCredentials)
                 return null;
 
@@ -1610,6 +1747,9 @@
          * Service: query a target deployed on the teiid instance
          */
         service.query = function(query, target, limit, offset) {
+            if (! CredentialService.canEdit())
+                noRoleError(CONFIG.keycloak.repoEditorRole);
+
             var queryAttributes = {
                 query: query,
                 target: target,

@@ -28,7 +28,9 @@
                 sessionNode: 'dsb-auth',
                 clientId: 'ds-builder',
                 role: 'ds-builder-access',
-                adminRole: 'admin'
+                adminRole: 'admin',
+                repoEditorRole: 'vdb-builder-editor',
+                odataRole: 'odata'
             },
             help: {
                 baseUrl: '/ds-builder-help'

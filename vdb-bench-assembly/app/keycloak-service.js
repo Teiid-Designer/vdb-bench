@@ -2,9 +2,9 @@ var VdbBenchApp = (function(App) {
     'use strict';
 
     App._module.factory('KCService', KCService);
-    KCService.$inject = ['CONFIG', 'SYNTAX', '$window', 'RepoSelectionService', 'CredentialService'];
+    KCService.$inject = ['CONFIG', 'SYNTAX', '$window', 'RepoSelectionService'];
 
-    function KCService(CONFIG, SYNTAX, $window, RepoSelectionService, CredentialService) {
+    function KCService(CONFIG, SYNTAX, $window, RepoSelectionService) {
 
         /*
          * Service instance to be returned
@@ -82,6 +82,14 @@ var VdbBenchApp = (function(App) {
             return service.hasRole(CONFIG.keycloak.adminRole);
         };
 
+        service.hasEditorRole = function() {
+            return service.hasRole(CONFIG.keycloak.repoEditorRole);
+        };
+
+        service.hasOdataRole = function() {
+            return service.hasRole(CONFIG.keycloak.odataRole);
+        };
+
         service.hasToken = function() {
             if (! service.isDefined())
                 return false;
@@ -96,10 +104,20 @@ var VdbBenchApp = (function(App) {
             return $window.keycloak.token;
         };
 
-        service.loadUserInfo = function() {
+        service.userId = function() {
+            if (! service.isDefined())
+                return SYNTAX.EMPTY_STRING;
+
+            return $window.keycloak.subject;
+        };
+
+        service.loadUserInfo = function(successCB) {
+            if (! service.isDefined())
+                return;
+
             $window.keycloak.loadUserInfo()
                 .success(function (userInfo) {
-                    CredentialService.setCredential('username', userInfo.preferred_username);
+                    successCB(userInfo);
                 });
         };
 

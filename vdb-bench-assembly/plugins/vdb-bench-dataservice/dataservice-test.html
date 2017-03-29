@@ -20,6 +20,10 @@
 	        <uib-tabset>
 	        <uib-tab heading="{{:: 'dataservice-test.OData' | translate}}" ng-click="vm.onTabSelected('Standard')">
 
+                <div id="odata-no-access" class="row col-sm-8" ng-show="vm.hasOdataAttributes() == false" ng-cloak>
+                    <p>The odata query tool cannot be displayed. The user does not have access to the teiid odata functions.</p>
+                </div>
+
 	            <!--
 	                -- OData Querying
 	                -->

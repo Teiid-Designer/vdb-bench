@@ -134,7 +134,21 @@ var VdbBenchApp = (function (App) {
 
         kcOptions.successCB = function() {
             console.debug("Authentication Success for keyloak => check-sso");
-            KCService.loadUserInfo();
+
+            //
+            // The username is in fact the user id, eg. b5655e6b-6ea3-4aea-a8da-2fcbfa5d8c88
+            // The preferred username is the proper name of the user, eg. pj
+            //
+            // The user name though must remain the user id since that is what is tramsmitted
+            // within the token to vdb-builder and what the latter uses as the username when
+            // constructing the home path of the user.
+            //
+            CredentialService.setCredential('username', KCService.userId());
+
+            var userInfoCB = function(userInfo) {
+                CredentialService.setCredential('preferredUsername', userInfo.preferred_username);
+            };
+            KCService.loadUserInfo(userInfoCB);
 
             AuthService.redirect();
         };

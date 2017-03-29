@@ -11,10 +11,10 @@
         .controller('DSTestController', DSTestController);
 
     DSTestController.$inject = ['$scope', '$translate', 'CONFIG', 'SYNTAX', 'RepoSelectionService', 'DSSelectionService',
-                                                'RepoRestService', 'DSPageService', '$interval', '$filter', '$timeout'];
+                                'CredentialService', 'RepoRestService', 'DSPageService', '$interval', '$filter', '$timeout'];
 
     function DSTestController($scope, $translate, CONFIG, SYNTAX, RepoSelectionService, DSSelectionService,
-                                                RepoRestService, DSPageService, $interval, $filter, $timeout) {
+                                CredentialService, RepoRestService, DSPageService, $interval, $filter, $timeout) {
         var vm = this;
 
         /*
@@ -412,6 +412,9 @@
          * the odata link
          */
         function init() {
+            if (! CredentialService.canOdataTest())
+                return;
+
             var url = vm.rootUrl() + '$metadata';
 
             RepoRestService.odataGet(url).then(

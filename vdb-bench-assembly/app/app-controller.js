@@ -12,6 +12,10 @@ var VdbBenchApp = (function(App) {
         };
 
         vm.getUsername = function() {
+            var name = CredentialService.credentials().preferredUsername;
+            if (! _.isEmpty(name))
+                return name;
+
             return CredentialService.credentials().username || 'User';
         };
 

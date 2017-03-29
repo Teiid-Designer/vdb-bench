@@ -2,9 +2,9 @@ var VdbBenchApp = (function(App) {
     'use strict';
 
     App._module.factory('CredentialService', CredentialService);
-    CredentialService.$inject = ['StorageService', 'CONFIG'];
+    CredentialService.$inject = ['StorageService', 'CONFIG', 'KCService'];
 
-    function CredentialService(StorageService, CONFIG) {
+    function CredentialService(StorageService, CONFIG, KCService) {
         /*
          * Service instance to be returned
          */
@@ -40,6 +40,26 @@ var VdbBenchApp = (function(App) {
                 return false;
 
             return authenticateType === CONFIG.rest.authTypes[1];
+        };
+
+        /**
+         * Does the user have the roles for editing
+         */
+        service.canEdit = function() {
+            if (! service.isKCAuth())
+                return true; // basic users are always editors
+
+            return KCService.hasEditorRole();
+        };
+
+        /**
+         * Does the user have the roles for editing
+         */
+        service.canOdataTest = function() {
+            if (! service.isKCAuth())
+                return true; // basic users are always editors
+
+            return KCService.hasOdataRole();
         };
 
         service.credential = function(key) {
