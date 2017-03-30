@@ -76,7 +76,7 @@
             pages[service.CLONE_CONNECTION_PAGE].title = $translate.instant('shared.CopyWhat',
                                                                             {what: $translate.instant('shared.Connection')});
             pages[service.SERVICESOURCE_SUMMARY_PAGE].title = $translate.instant('shared.Sources');
-            pages[service.SERVICESOURCE_NEW_PAGE].title = $translate.instant('dsPageService.configureSourceTitle');
+            pages[service.SERVICESOURCE_NEW_PAGE].title = $translate.instant('dsPageService.newSourceTitle');
             pages[service.SERVICESOURCE_EDIT_PAGE].title = $translate.instant('shared.EditWhat',
                                                                               {what: $translate.instant('shared.Source')});
             pages[service.SERVICESOURCE_CLONE_PAGE].title = $translate.instant('shared.CopyWhat',
@@ -247,8 +247,8 @@
         };
         pages[service.SERVICESOURCE_NEW_PAGE] = {
             id: service.SERVICESOURCE_NEW_PAGE,
-            title: $translate.instant('dsPageService.configureSourceTitle'),
-            icon: 'pficon-settings',
+            title: $translate.instant('dsPageService.newSourceTitle'),
+            icon: 'fa-plus',
             helpId: service.SERVICESOURCE_NEW_PAGE,
             parent: service.SERVICESOURCE_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +

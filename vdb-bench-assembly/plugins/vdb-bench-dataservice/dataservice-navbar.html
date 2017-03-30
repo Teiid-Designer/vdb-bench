@@ -2,11 +2,11 @@
 </div>
 
 <div id="dsb-vertical-nav">
-    <div id="dsb-nav-item-dataservices" class="dsb-nav-item dsb-nav-secondary-item {{vmmain.dataserviceNav}}" ng-click="vmmain.selectNavItem('dataservice-summary')" body-click="vmmain.selectNavItem(null);">
+    <div id="dsb-nav-item-dataservices" class="dsb-nav-item {{vmmain.dataserviceNav}}" ng-click="vmmain.selectPage('dataservice-summary')" body-click="vmmain.selectNavItem(null);">
         <span class="fa fa-fw {{vmmain.page('dataservice-summary').icon}}"></span>
         <div class="dsb-vertical-nav-label" translate="shared.DataServices"></div>
     </div>
-    <div id="ds-nav-item-sources" class="dsb-nav-item dsb-nav-secondary-item {{vmmain.datasourceNav}}" ng-click="vmmain.selectNavItem('datasource-summary')" body-click="vmmain.selectNavItem(null);">
+    <div id="ds-nav-item-sources" class="dsb-nav-item {{vmmain.datasourceNav}}" ng-click="vmmain.selectPage('datasource-summary')" body-click="vmmain.selectNavItem(null);">
         <span class="fa fa-fw {{vmmain.page('datasource-summary').icon}}"></span>
         <div class="dsb-vertical-nav-label" translate="shared.Sources"></div>
     </div>

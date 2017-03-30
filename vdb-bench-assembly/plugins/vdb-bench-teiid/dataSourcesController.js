@@ -26,7 +26,7 @@
             try {
                 var type = REST_URI.TEIID_SERVICE;
 
-                RepoRestService.getDataSources(type).then(
+                RepoRestService.getConnections(type).then(
                     function (newDataSources) {
                         RepoRestService.copy(newDataSources, vm.datasources);
                         vm.init = false;

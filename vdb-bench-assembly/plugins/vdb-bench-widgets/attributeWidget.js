@@ -221,7 +221,7 @@
                 var jsonPayload = angular.toJson(vm.component);
                 var connName = vm.component.keng__id;
                 try {
-                    RepoRestService.updateDataSource( connName, jsonPayload ).then(
+                    RepoRestService.updateConnection( connName, jsonPayload ).then(
                         function () {
                             alert("Connection saved");
                         },

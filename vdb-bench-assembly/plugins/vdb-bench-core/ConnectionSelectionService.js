@@ -23,7 +23,20 @@
         conn.deploymentConnectionName = null;
         conn.deploymentSuccess = false;
         conn.deploymentMessage = null;
-        conn.filterProperties = [];
+        conn.filterProperties = [{ "name": "importer.TableTypes",
+            "value": "TABLE"},
+          { "name": "importer.UseFullSchemaName",
+            "value": "false"},
+          { "name": "importer.UseQualifiedName",
+            "value": "false"},
+          { "name": "importer.UseCatalogName",
+            "value": "false"},
+          { "name": "importer.catalog",
+            "value": ""},
+          { "name": "importer.schemaPattern",
+            "value": ""},
+          { "name": "importer.tableNamePattern",
+            "value": "%"}];
 
         /*
          * Service instance to be returned
@@ -40,13 +53,13 @@
         /**
          * Fetch the connections from CachedTeiid
          */
-        function initConnections() {
+        function initConnections(resetSelection) {
             setLoading(true);
 
             try {
-                RepoRestService.getDataSources(REST_URI.TEIID_SERVICE).then(
-                    function (newDataSources) {
-                        RepoRestService.copy(newDataSources, conn.connections);
+                RepoRestService.getConnections(REST_URI.TEIID_SERVICE).then(
+                    function (newConnections) {
+                        RepoRestService.copy(newConnections, conn.connections);
                         conn.connections = sortByKey(conn.connections, 'keng__id');
                         setLoading(false);
                     },
@@ -62,8 +75,10 @@
                 alert("An exception occurred:\n" + error.message);
             }
 
-            // Removes any outdated selection
-            service.selectConnection(null, true);
+            // Reset selection if desired
+            if(resetSelection) {
+                service.selectConnection(null, true);
+            }
         }
 
         function sortByKey(array, key) {
@@ -174,25 +189,35 @@
          * Resets the filter properties to defaults
          */
         service.resetFilterProperties = function() {
-            conn.filterProperties = [{ "name": "importer.TableTypes",
-                                       "value": "TABLE"},
-                                     { "name": "importer.UseFullSchemaName",
-                                       "value": "false"},
-                                     { "name": "importer.UseQualifiedName",
-                                       "value": "false"},
-                                     { "name": "importer.UseCatalogName",
-                                       "value": "false"}];
+            for (var i = 0; i < conn.filterProperties.length; ++i) {
+                if(conn.filterProperties[i].name === "importer.TableTypes") {
+                    conn.filterProperties[i].value = "TABLE";
+                } else if(conn.filterProperties[i].name === "importer.UseFullSchemaName") {
+                    conn.filterProperties[i].value = "false";
+                } else if(conn.filterProperties[i].name === "importer.UseQualifiedName") {
+                    conn.filterProperties[i].value = "false";
+                } else if(conn.filterProperties[i].name === "importer.UseCatalogName") {
+                    conn.filterProperties[i].value = "false";
+                } else if(conn.filterProperties[i].name === "importer.catalog") {
+                    conn.filterProperties[i].value = "";
+                } else if(conn.filterProperties[i].name === "importer.schemaPattern") {
+                    conn.filterProperties[i].value = "";
+                } else if(conn.filterProperties[i].name === "importer.tableNamePattern") {
+                    conn.filterProperties[i].value = "%";
+                }
+            }
         };
 
         /*
-         * Adds the specified filter property
+         * Set the specified filter property
          */
-        service.addFilterProperty = function(propName, propValue) {
-            if(angular.isDefined(propValue) && propValue!==null && propValue.length>0 ) {
-                conn.filterProperties.push({ 
-                    "name" : propName,
-                    "value": propValue
-                });
+        service.setFilterProperty = function(propName, propValue) {
+            if(propValue === null) propValue = "";
+            for (var i = 0; i < conn.filterProperties.length; ++i) {
+                if(conn.filterProperties[i].name === propName) {
+                    conn.filterProperties[i].value = propValue;
+                    break;
+                }
             }
         };
 
@@ -222,12 +247,12 @@
         /*
          * Refresh the collection of connections
          */
-        service.refresh = function() {
-            initConnections();
+        service.refresh = function(resetSelection) {
+            initConnections(resetSelection);
         };
 
         // Initialise connection collection on loading
-        service.refresh();
+        service.refresh(true);
 
         return service;
     }

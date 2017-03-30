@@ -16,10 +16,10 @@
         // Event handler for clicking the update button
         vm.onUpdateConnectionClicked = function ( jsonPayload ) {
             try {
-                RepoRestService.updateDataSource( jsonPayload ).then(
+                RepoRestService.updateConnection( jsonPayload ).then(
                     function () {
                         // Reinitialise the list of connections
-                        ConnectionSelectionService.refresh();
+                        ConnectionSelectionService.refresh(true);
                         // Broadcast the pageChange
                         $rootScope.$broadcast("dataServicePageChanged", 'connection-summary');
                     },

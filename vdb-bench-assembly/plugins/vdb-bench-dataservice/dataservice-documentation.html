@@ -6,43 +6,24 @@
         <div id="loading-spinner" ng-show="vm.isLoading==true">
             <div class="spinner spinner-lg" />
 	    </div>
-		<div id="documentation-tabs" ng-show="vm.isLoading==false">
-			<uib-tabset>   
-			<uib-tab
-				heading="{{:: 'dataservice-documentation.connecting' | translate}}">
-				<div></div>
-				<div translate="dataservice-documentation.connecting-heading1"></div>
-				<div translate="dataservice-documentation.connecting-heading2"></div>
-				<div translate="dataservice-documentation.connecting-java-heading"></div>
-				<div>{{vm.java1}}</div>
-				<div translate="dataservice-documentation.connecting-java2"></div>
-				<div translate="dataservice-documentation.connecting-odata-heading"></div>
-				<div>{{vm.odata1}}</div>
-				<div translate="dataservice-documentation.connecting-odata2"></div>
-				<div translate="dataservice-documentation.connecting-odbc-heading"></div>
-				<div translate="dataservice-documentation.connecting-odbc"></div>
-				
-				</uib-tab>
-			<uib-tab
-				heading="{{:: 'dataservice-documentation.samples' | translate}}"> 
-			<div id="samples-panel" class="col-sm-12" ng-cloak>
-				<uib-accordion close-others="false"> 
-				<uib-accordion-group
-					heading=":: dataservice-documentation.java | translate"
-					 is-open="true">
-				<uib-accordion-heading>
-				<div class="pull-left odata-control-panel-title"
-					translate="dataservice-documentation.java-sample" ></div>
-				<!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
-				<div class="pull-left odata-control-panel-title-help" uib-dropdown>
-					<label class="help-label"> <span class="fa fa-info-circle"
-						uib-tooltip-html="{{ 'dataservice-documentation.help.java-sample' | translate }}"
-						tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
-					</label>
-				</div>
-				</uib-accordion-heading>
-					<div class="odata-exp-select-group">
-						<div><pre><code>public void execute() throws SQLException {
+        <div translate="dataservice-documentation.connecting-heading1"></div>
+        <h5>{{vm.connectionDetailTitle}}</h5>
+        <div><strong>&nbsp;&nbsp;&nbsp;JDBC:&nbsp;</strong>{{vm.jdbcConnectionString}}</div>
+        <div><strong>&nbsp;&nbsp;&nbsp;OData:&nbsp;</strong>{{vm.odataUrl}}</div>
+        <p></p>
+        <!--  Tabs for Code Samples -->
+        <div id="sample-tabs" ng-show="vm.isLoading==false">
+            <uib-tabset>
+            <!--  -->
+            <!--  -->
+            <!--  Java Code Sample -->
+            <uib-tab
+                heading="{{:: 'dataservice-documentation.javaTab' | translate}}">
+                <p></p>
+                <!-- instructions -->
+                <div translate="dataservice-documentation.java-instructions"></div>
+                <!-- Code Sample -->
+                <div><pre><code>public void execute() throws SQLException {
     String url = "{{vm.jdbcConnectionString}}";
     String sql = "select 1"; //CHANGE ME
  
@@ -68,24 +49,19 @@
           // ignore
         }
     }
-}</code></pre></div>
-					</div>
-				</uib-accordion-group> 
-				<uib-accordion-group
-					heading=":: dataservice-documentation.javascript-sample" is-open="true">
-				<uib-accordion-heading>
-				<div class="pull-left odata-control-panel-title"
-					translate="dataservice-documentation.javascript-sample"></div>
-				<!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
-				<div class="pull-left odata-control-panel-title-help" uib-dropdown>
-					<label class="help-label"> <span class="fa fa-info-circle"
-						uib-tooltip-html="{{ 'dataservice-documentation.help.javascript-sample' | translate }}"
-						tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
-					</label>
-				</div>
-				</uib-accordion-heading>
-					<div class="odata-exp-select-group">
-						<div><pre><code>$.ajax({
+}</code></pre>
+                </div>
+            </uib-tab>
+            <!--  -->
+            <!--  -->
+            <!--  Javascript Code Sample -->
+            <uib-tab
+                heading="{{:: 'dataservice-documentation.javaScriptTab' | translate}}">
+                <p></p>
+                <!-- instructions -->
+                <div translate="dataservice-documentation.javascript-instructions"></div>
+                <!-- Code Sample -->
+                <div><pre><code>$.ajax({
              type: 'GET',
              dataType: 'json',
              headers: {
@@ -101,69 +77,48 @@
                          console.log('Error code: ' + data.errorCode);
                          console.log('Error message: ' + data.errorMessage);
              }
-});</code></pre></div>
-					</div>
-				</uib-accordion-group>
-				<!-- Node.js -->
-				<uib-accordion-group
-					heading=":: dataservice-documentation.node-sample" is-open="true">
-				<uib-accordion-heading>
-				<div class="pull-left odata-control-panel-title"
-					translate="dataservice-documentation.node-sample"></div>
-				<!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
-				<div class="pull-left odata-control-panel-title-help" uib-dropdown>
-					<label class="help-label"> <span class="fa fa-info-circle"
-						uib-tooltip-html="{{ 'dataservice-documentation.help.node-sample' | translate }}"
-						tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
-					</label>
-				</div>
-				</uib-accordion-heading>
-					<div class="odata-exp-select-group">
-						<div><pre><code>o('{{vm.odataUrl}}').get(function(data) {
+});</code></pre>
+                </div>
+            </uib-tab>
+            <!--  -->
+            <!--  -->
+            <!--  Node.js Code Sample -->
+            <uib-tab
+                heading="{{:: 'dataservice-documentation.nodeTab' | translate}}">
+                <p></p>
+                <!-- instructions -->
+                <div translate="dataservice-documentation.node-instructions"></div>
+                <!-- Code Sample -->
+                <div><pre><code>o('{{vm.odataUrl}}').get(function(data) {
   console.log(data); //returns an array of data
 });</code></pre></div>
-					</div>
-				</uib-accordion-group>  
-				<!-- Python -->
-				<uib-accordion-group
-					heading=":: dataservice-documentation.python-sample" is-open="true">
-				<uib-accordion-heading>
-				<div class="pull-left odata-control-panel-title"
-					translate="dataservice-documentation.python-sample"></div>
-				<!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
-				<div class="pull-left odata-control-panel-title-help" uib-dropdown>
-					<label class="help-label"> <span class="fa fa-info-circle"
-						uib-tooltip-html="{{ 'dataservice-documentation.help.python-sample' | translate }}"
-						tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
-					</label>
-				</div>
-				</uib-accordion-heading>
-					<div class="odata-exp-select-group">
-						<div><pre><code>import requests
+            </uib-tab>
+            <!--  Python Code Sample -->
+            <uib-tab
+                heading="{{:: 'dataservice-documentation.pythonTab' | translate}}">
+                <p></p>
+                <!-- instructions -->
+                <div translate="dataservice-documentation.python-instructions"></div>
+                <!-- Code Sample -->
+                <div><pre><code>import requests
 from requests.auth import HTTPBasicAuth
 
 headers = {'accept': 'application/json;odata=verbose'}
 r = requests.get({{vm.odataUrl}}, auth=HTTPBasicAuth('someUser', 'somePassword'), headers=headers)
 
-print r.json()</code></pre></div>
-					</div>
-				</uib-accordion-group> 
-				<!-- PHP -->
-				<uib-accordion-group
-					heading=":: dataservice-documentation.php-sample" is-open="true">
-				<uib-accordion-heading>
-				<div class="pull-left odata-control-panel-title"
-					translate="dataservice-documentation.php-sample"></div>
-				<!-- Necessary to make it into a uib-dropdown as they do not refresh the page when clicked -->
-				<div class="pull-left odata-control-panel-title-help" uib-dropdown>
-					<label class="help-label"> <span class="fa fa-info-circle"
-						uib-tooltip-html="{{ 'dataservice-documentation.help.php-sample' | translate }}"
-						tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
-					</label>
-				</div>
-				</uib-accordion-heading>
-					<div class="odata-exp-select-group">
-						<div><pre><code>$ch = curl_init();
+print r.json()</code></pre>
+                </div>
+            </uib-tab>
+            <!--  -->
+            <!--  -->
+            <!--  PHP Code Sample -->
+            <uib-tab
+                heading="{{:: 'dataservice-documentation.phpTab' | translate}}">
+                <p></p>
+                <!-- instructions -->
+                <div translate="dataservice-documentation.php-instructions"></div>
+                <!-- Code Sample -->
+                <div><pre><code>$ch = curl_init();
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch, CURLOPT_TIMEOUT, 100);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Basic xxxxxxxxxx'));
@@ -172,11 +127,10 @@ $api_request_url = "{{vm.odataUrl}}";
 $api_request_url .= "?".http_build_query($api_request_parameters);
 $curl_setopt($ch, CURLOPT_URL, $api_request_url);
 $response = curl_exec($ch);
-curl_close($ch);</pre></code></div>
-					</div>
-				</uib-accordion-group> 
-
-			</uib-tab> </uib-tabset>
-		</div>
+curl_close($ch);</pre></code>
+                </div>
+            </uib-tab>
+            </uib-tabset>
+        </div>
 
 	</div>

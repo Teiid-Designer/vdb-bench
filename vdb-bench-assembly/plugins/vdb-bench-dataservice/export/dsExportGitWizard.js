@@ -13,6 +13,7 @@
     DSExportGitWizardController.$inject = ['$scope', 
                                            '$base64',
                                            '$translate',
+                                           '$sce',
                                            'SYNTAX', 
                                            'DSSelectionService', 
                                            'RepoRestService'];
@@ -39,6 +40,7 @@
     function DSExportGitWizardController($scope, 
                                          $base64,
                                          $translate,
+                                         $sce,
                                          syntax, 
                                          DSSelectionService, 
                                          RepoRestService) {
@@ -48,14 +50,24 @@
         vm.requireEmailName = false;
         vm.inProgress = false;
         vm.response = '';
+        vm.showDetails = false;
+        vm.detailsToggleTitle = $translate.instant("dsExportGitWizard.showErrorDetailTitle");
  
         function setError(message) {
-            if (message) {
-                message = message.replace(/<br\/>/g, syntax.NEWLINE);
-            }
-
-            vm.error = message;
+            vm.error = $sce.trustAsHtml(message);
         }
+
+        /**
+         * Toggles display of the error details
+         */
+        vm.toggleDetails = function() {
+            vm.showDetails = !vm.showDetails;
+            if(vm.showDetails) {
+                vm.detailsToggleTitle = $translate.instant("dsExportGitWizard.hideErrorDetailTitle");
+            } else {
+                vm.detailsToggleTitle = $translate.instant("dsExportGitWizard.showErrorDetailTitle");
+            }
+        };
 
         vm.exportFailure = function() {
             return !vm.inProgress && vm.response === 'Failed';
@@ -101,6 +113,7 @@
 
         /**
          * Returns 'true' if the repository properties are valid; otherwise 'false'.
+         * This needs to stay in sync with gitCredentialsControl validation.
          */
         vm.validateRepoProps = function() {
             if (_.isEmpty(vm.repo))
@@ -116,14 +129,17 @@
                 return false;
             }
 
-            if (_.isEmpty(vm.repo.parameters['file-path-property'])) {
+            if ( _.isEmpty( vm.repo.parameters[ 'file-path-property' ] ) ||
+                vm.repo.parameters[ 'file-path-property' ].includes( "//" ) ||
+                vm.repo.parameters[ 'file-path-property' ].includes( "\\" ) ||
+                vm.repo.parameters[ 'file-path-property' ] == "/" ) {
                 return false;
             }
 
             if ( vm.requireAuthorName && 
                  _.isEmpty( vm.repo.parameters[ 'author-name-property' ] ) ) {
                 return false;
-            }
+           }
 
             if ( vm.requireAuthorEmail && 
                  _.isEmpty( vm.repo.parameters[ 'author-email-property' ] ) ) {

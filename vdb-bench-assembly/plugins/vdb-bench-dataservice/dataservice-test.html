@@ -8,13 +8,7 @@
 	    <div id="deployment-spinner" ng-show="vm.dsDeploymentInProgress==true" class="col-md-10 row">
             <div class="spinner spinner-lg" />
 	    </div>
-
-	    <div ng-show="vm.dsDeploymentInProgress==false && vm.dsDeploymentSuccess==false" class="row">
-	        <div class="col-sm-12">
-	            <h3 translate="dataservice-test.failedDeploymentMsg"></h3>
-	            <h4>&nbsp;&nbsp;'{{vm.dsDeploymentMessage}}'</h4>
-	        </div>
-	    </div>
+	    
 
 	    <div id="deployed-test-search-tabs" ng-show="vm.dsDeploymentInProgress==false && vm.dsDeploymentSuccess==true">
 	        <uib-tabset>
@@ -240,11 +234,20 @@
 	            </div>
 	        </uib-tab>
 
-	        <uib-tab heading="{{:: 'dataservice-test.SQL' | translate}}" ng-click="vm.onTabSelected('Advanced')">
-	            <!--
-	                -- JDBC Querying
-	                -->
-	            <div class="row">
+	        <uib-tab heading="{{:: 'dataservice-test.SQL' | translate}}"  ng-click="vm.onTabSelected('Advanced')">
+	         
+	           <div id="deployment-spinner" ng-show="vm.pinging == true" class="col-md-10 row">
+              		<div class="spinner spinner-lg" />
+	          </div>
+	         
+	           <div class="col-sm-12" ng-show="vm.pinging == false && vm.pinged == false">
+	               <span class="col-sm-12 row">&nbsp;</span>
+	               <span class="col-sm-12 row">&nbsp;</span>
+	               <span class="col-sm-12 row">&nbsp;</span>
+ 	          	   <span ng-class="vm.pingJdbcResultStyleClass" style="font-size:1.75em"></span>
+    	           <span class="teiid-pref-pingResult">{{vm.jdbcPingResult}}</span>
+        		</div>
+	            <div class="row"  ng-show="vm.pinged == true">
 	                <div class="col-sm-12">
 	                    <div id="ds-test-sql-edit-box">
 	                        <sql-control editor-height="20em"
@@ -252,8 +255,8 @@
                                             query-text="{{vm.selectedDataserviceQueryText()}}"
                                             refresh="vm.sql.refreshEditor">
 	                        </sql-control>
-	                    </div>
 	                </div>
+	             </div>
 	            </div>
 	        </uib-tab>
 	        </uib-tabset>

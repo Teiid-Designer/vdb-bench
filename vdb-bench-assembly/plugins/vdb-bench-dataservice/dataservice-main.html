@@ -24,9 +24,12 @@
         <!-- page content -->
         <div id="dataservice-page-content-outer">
 
-            <div ng-show="! vmmain.isPreferencePage()">
-                <div class="pref-page-icon-container">
-                    <a class="pref-page-icon fa fa-cog" href="" ng-click="vmmain.openPreferences()"></a>
+            <div ng-show="! vmmain.isPreferencePage()" tabindex="-1">
+                <div class="pref-page-icon-container" tabindex="-1">
+                    <a class="pref-page-icon fa fa-cog" 
+                       href="" 
+                       tabindex="-1"
+                       ng-click="vmmain.openPreferences()"></a>
                 </div>
             </div>
 

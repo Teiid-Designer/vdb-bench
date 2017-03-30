@@ -358,12 +358,12 @@
 
             // Add catalog pattern
             if(catalog!==null) {
-                ConnectionSelectionService.addFilterProperty(JDBC_FILTER.KEY_CATALOG, catalog);
+                ConnectionSelectionService.setFilterProperty(JDBC_FILTER.KEY_CATALOG, catalog);
             }
 
             // Add schema Pattern
             if(schemaPattern!==null) {
-                ConnectionSelectionService.addFilterProperty(JDBC_FILTER.KEY_SCHEMA_PATTERN, schemaPattern);
+                ConnectionSelectionService.setFilterProperty(JDBC_FILTER.KEY_SCHEMA_PATTERN, schemaPattern);
             }
 
             // Add table Pattern
@@ -373,7 +373,7 @@
             } else {
                 tblPattern = tablePattern;
             }
-            ConnectionSelectionService.addFilterProperty(JDBC_FILTER.KEY_TABLE_NAME_PATTERN, tablePattern);
+            ConnectionSelectionService.setFilterProperty(JDBC_FILTER.KEY_TABLE_NAME_PATTERN, tablePattern);
         }
 
         /**
