@@ -39,6 +39,7 @@
         "Password" : "Password",
         "PasswordLabel" : "Password:",
         "Remove" : "Remove",
+        "Repository" : "Repository",
         "Save" : "Save",
         "Schemas" : "Schemas",
         "Search" : "Search",
@@ -217,14 +218,14 @@
     "dsExportGitWizard" : {
         "exportProgressDetailMsg" : "Data service '{{dataServiceName}}' is being exported ...",
         "exportProgressMsg" : "<strong>Export in Progress</strong>",
-        "failedExportDetailMsg" : "Data service '{{dataServiceName}}' could not be exported to repository path '{{repoPath}}'",
+        "failedExportDetailMsg" : "Data service '{{dataServiceName}}' could not be exported to the git repository '{{repoPath}}'",
         "failedExportMsg" : "<strong>Export Failed</strong>",
         "failedNoDetailsMsg" : "Data service '{{dataServiceName}}' failed for a unspecified reasons.'",
         "hideErrorDetailTitle" : "Hide Error Detail",
         "missingPathMsg" : "@:dsImportGitWizard.missingPathMsg",
         "missingRepositoryUrlMsg" : "@:dsImportGitWizard.missingRepositoryUrlMsg",
         "showErrorDetailTitle" : "Show Error Detail",
-        "successfulExportDetailMsg" : "Data service '{{dataServiceName}}' was exported to repository path '{{repoPath}}'",
+        "successfulExportDetailMsg" : "Data service '{{dataServiceName}}' was successfully exported to the git repository",
         "successfulExportMsg" : "<strong>Successful Export</strong>"
     },
 
