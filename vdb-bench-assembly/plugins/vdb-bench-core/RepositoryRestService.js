@@ -783,6 +783,12 @@
 
             parameters = parameters || {};
 
+            // If the repoBranchProperty is empty, default to 'master'
+            var repoBranchProp = parameters['repo-branch-property'];
+            if( !repoBranchProp || repoBranchProp.length === 0 ) {
+                parameters['repo-branch-property'] = 'master';
+            }
+
             var url = REST_URI.IMPORT_EXPORT + REST_URI.EXPORT;
 
             return getRestService().then(function (restService) {
