@@ -8,9 +8,11 @@
         .module(pluginName)
         .controller('SvcSourceCloneController', SvcSourceCloneController);
 
-    SvcSourceCloneController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'SvcSourceSelectionService', 'DSPageService'];
+    SvcSourceCloneController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 
+                                        'SvcSourceSelectionService', 'CredentialService', 'DSPageService'];
 
-    function SvcSourceCloneController($scope, $rootScope, $translate, RepoRestService, SvcSourceSelectionService, DSPageService) {
+    function SvcSourceCloneController($scope, $rootScope, $translate, RepoRestService, 
+                                      SvcSourceSelectionService, CredentialService, DSPageService) {
         var vm = this;
         vm.cloneVdbInProgress = false;
 
@@ -36,20 +38,59 @@
             // Set loading true for modal popup
            vm.cloneVdbInProgress = true;
            SvcSourceSelectionService.setLoading(true);
-            
+           var svcSource = SvcSourceSelectionService.selectedServiceSource();
+
            try {
                 RepoRestService.cloneVdb( svcSourceName, newSvcSourceName ).then(
                     function () {
-                        deployVdb(newSvcSourceName);
+                        if( !ownerIsCurrentUser( svcSource ) ) {
+                            updateVdbOwner( newSvcSourceName );	
+                        } else {
+                            deployVdb(newSvcSourceName);
+                        }
                     },
                     function (response) {
                         var copyFailedMsg = $translate.instant('svcSourceCloneController.copyFailedMsg');
                         throw RepoRestService.newRestException(copyFailedMsg + "\n" + RepoRestService.responseMessage(response));
                     });
-            } catch (error) {} finally {
+            } catch (error) {
+                var copyFailedMsg = $translate.instant('svcSourceCloneController.copyFailedMsg');
+                throw RepoRestService.newRestException(copyFailedMsg + "\n" + error);
             }
         };
-        
+
+        /**
+         * Determine if owner of the datasource is the currently logged in user
+         */
+        function ownerIsCurrentUser( datasource ) {
+            var owner = SvcSourceSelectionService.getServiceSourceOwner(datasource);
+            if( owner === CredentialService.credentials().username ) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        /**
+         * Updates the VDB owner to the current user then deploys the VDB
+         */
+        function updateVdbOwner( svcSourceName ) {
+            try {
+                var description = SvcSourceSelectionService.selectedServiceSource().vdb__description;
+                RepoRestService.updateVdb( svcSourceName, description, true ).then(
+                    function (theModel) {
+                        deployVdb(svcSourceName);
+                    },
+                    function (response) {
+                        var copyFailedMsg = $translate.instant('svcSourceCloneController.copyFailedMsg');
+                        throw RepoRestService.newRestException(copyFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                    });
+            } catch (error) {
+                var copyFailedMsg = $translate.instant('svcSourceCloneController.copyFailedMsg');
+                throw RepoRestService.newRestException(copyFailedMsg + "\n" + error);
+            }
+        }
+
         /**
          * Deploys the specified VDB to the server
          */
