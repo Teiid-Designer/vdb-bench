@@ -29,18 +29,21 @@
             </div>
             <h1 ng-bind-html=":: 'dataservice-summary.welcomeMsg' | translate" />
             <h2 ng-bind-html=":: 'dataservice-summary.noSourcesOrDataServicesExist' | translate"></h2>
-            <p>
+            <p ng-show="vm.canCreateDataservice()">
                 <span translate="dataservice-summary.noSourcesMsg" />
             </p>
 <!--            <p>
                 <span translate="dataservice-summary.noDataServiceImportMsg" />
             </p>-->
             <div class="blank-slate-pf-main-action">
-                <button class="btn btn-primary btn-lg" 
-                        ng-click="vmmain.selectPage('svcsource-new')">
+                <button class="btn btn-primary btn-lg"
+                        ng-click="vmmain.selectPage('svcsource-new')" ng-show="vm.canCreateDataservice()">
                     <span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span>
                     <span>{{vmmain.page('svcsource-new').title}}</span>
                 </button>
+                <p class="no-access" ng-show="! vm.canCreateDataservice()">
+                    <span translate="dataservice-summary.noUserAccess" />
+                </p>
             </div>
 <!--            <div class="blank-slate-pf-secondary-action">
                 <button class="btn btn-default btn-lg" 

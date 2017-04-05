@@ -29,15 +29,18 @@
             </div>
             <h1 ng-bind=":: 'datasource-summary.noSourcesExist' | translate" />
             <h2 ng-bind-html=":: 'datasource-summary.welcomeMsg' | translate"></h2>
-            <p>
+            <p ng-show="vm.canCreateDatasource()">
                 <span translate="datasource-summary.noSourcesInstructionsMsg" />
             </p>
             <div class="blank-slate-pf-main-action">
-                <button class="btn btn-primary btn-lg" 
-                        ng-click="vmmain.selectPage('svcsource-new')">
+                <button class="btn btn-primary btn-lg"
+                        ng-click="vmmain.selectPage('svcsource-new')" ng-show="vm.canCreateDatasource()">
                     <span class="fa fa-fw {{vmmain.page('svcsource-new').icon}}"></span>
                     <span>{{vmmain.page('svcsource-new').title}}</span>
                 </button>
+                <p class="no-access" ng-show="! vm.canCreateDatasource()">
+                    <span translate="datasource-summary.noUserAccess" />
+                </p>
             </div>
         </div>
 

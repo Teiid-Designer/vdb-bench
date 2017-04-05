@@ -33,10 +33,10 @@
                             </label>
                             <label class="control-label pull-right" for="adminUser" translate="shared.UserNameLabel"></label>
                         </div>
-                        <div class="controls col-sm-9">
+                        <div class="controls col-sm-9 tooltip-wrapper" title="{{(! vm.canEditCredentials() ? vm.noUserAccessMsg() : '')}}">
                             <input type="text" id="teiid-pref-adminUser" class="form-control" ng-model="vm.teiid.adminUser"
                                 placeholder="{{:: 'teiid-preferences.adminUserNamePlaceholder' | translate}}"
-                                required ng-blur="vm.submitCredentials()">
+                                required ng-blur="vm.submitCredentials()" ng-disabled="! vm.canEditCredentials()">
                         </div>
                     </div>
 
@@ -48,10 +48,10 @@
                             </label>
                             <label class="control-label pull-right" for="adminPasswd" translate="shared.PasswordLabel"></label>
                         </div>
-                        <div class="controls col-sm-9">
+                        <div class="controls col-sm-9 tooltip-wrapper" title="{{(! vm.canEditCredentials() ? vm.noUserAccessMsg() : '')}}">
                             <input type="password" id="teiid-pref-adminPasswd" class="form-control" ng-model="vm.teiid.adminPasswd"
                                 placeholder="{{:: 'teiid-preferences.adminPasswordPlaceholder' | translate}}"
-                                required ng-blur="vm.submitCredentials()">
+                                required ng-blur="vm.submitCredentials()" ng-disabled="! vm.canEditCredentials()">
                         </div>
                     </div>
 
@@ -84,10 +84,10 @@
                             </label>
                             <label class="control-label pull-right" for="jdbcUser" translate="shared.UserNameLabel"></label>
                         </div>
-                        <div class="controls col-sm-9">
+                        <div class="controls col-sm-9 tooltip-wrapper" title="{{(! vm.canEditCredentials() ? vm.noUserAccessMsg() : '')}}">
                             <input type="text" id="teiid-pref-jdbcUser" class="form-control" ng-model="vm.teiid.jdbcUser"
                                 placeholder="{{:: 'teiid-preferences.jdbcUserNamePlaceholder' | translate}}"
-                                required ng-blur="vm.submitCredentials()">
+                                required ng-blur="vm.submitCredentials()" ng-disabled="! vm.canEditCredentials()">
                         </div>
                     </div>
 
@@ -99,10 +99,10 @@
                             </label>
                             <label class="control-label pull-right" for="jdbcPasswd" translate="shared.PasswordLabel"></label>
                         </div>
-                        <div class="controls col-sm-9">
+                        <div class="controls col-sm-9 tooltip-wrapper" title="{{(! vm.canEditCredentials() ? vm.noUserAccessMsg() : '')}}">
                             <input type="password" id="teiid-pref-jdbcPasswd" class="form-control" ng-model="vm.teiid.jdbcPasswd"
                                 placeholder="{{:: 'teiid-preferences.jdbcPasswordPlaceholder' | translate}}"
-                                required ng-blur="vm.submitCredentials()">
+                                required ng-blur="vm.submitCredentials()" ng-disabled="! vm.canEditCredentials()">
                         </div>
                     </div>
 
@@ -114,9 +114,9 @@
                             </label>
                             <label class="control-label pull-right" for="jdbcSecure" translate="teiid-preferences.jdbcSecureLabel"></label>
                         </div>
-                        <div class="controls col-sm-9">
+                        <div class="controls col-sm-9 tooltip-wrapper" title="{{(! vm.canEditCredentials() ? vm.noUserAccessMsg() : '')}}">
                             <input type="checkbox" id="teiid-pref-jdbcSecure" class="form-control"
-                                ng-model="vm.teiid.jdbcSecure" ng-blur="vm.submitCredentials()">
+                                ng-model="vm.teiid.jdbcSecure" ng-blur="vm.submitCredentials()" ng-disabled="! vm.canEditCredentials()">
                         </div>
                     </div>
 

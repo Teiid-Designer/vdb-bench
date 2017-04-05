@@ -23,7 +23,7 @@
                     <span class="fa fa-fw {{vm.page('dataservice-summary').icon}}"></span><span>Go to Summary</span>
                 </a>
                 <span></span>
-                <a ng-click="vm.selectPage('dataservice-new')" class="pull-right">
+                <a ng-click="vm.selectPage('dataservice-new')" class="pull-right" ng-show="vm.canCreateDataservice()">
                     <span class="fa fa-fw {{vm.page('dataservice-new').icon}}"></span><span>New Data Service</span>
                 </a>
             </p>

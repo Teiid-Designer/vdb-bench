@@ -124,6 +124,7 @@
         "noSourcesOrDataServicesExist" : "<i>No Data Sources or Data Services Found</i>",
         "noSourcesMsg" : "In order to create a data service you need a data source. To get started, click <strong>New Data Source</strong> below to create your first data source.",
         "serviceVdbToolTip" : "The name of the service VDB of this dataservice",
+        "noUserAccess" : "User has insufficent access for creating new dataservices",
         "viewSourcesToolTip" : "The source tables accessed by this data service",
         "welcomeMsg" : "Welcome to the <strong>Data Services Builder</strong>!"
     },
@@ -138,8 +139,8 @@
         "connecting-heading1" : "There are multiple ways to connect to your data service including <strong>JDBC, ODBC, and OData</strong>.  Several code samples are provided below, which demonstrate how you can connect to your data service from different client applications.  For more information about the supported access methods, see the <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/Client_Developers_Guide.html'>Client Developers Guide</a>.  In the Client Developers Guide you can find specific support information for <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/JDBC_Support.html'>JDBC</a>, <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/ODBC_Support.html'>ODBC</a> and <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/OData_Support.html'>OData</a>.",
         "connection-detail-title" : "Connections for '{{dsName}}'",
         "connecting-java" : "<strong>JDBC&nbsp;&nbsp;</strong>To connect to your service using JDBC, use the following connection string in your client: <strong>{{connection_string}}</strong>",
-        "connecting-odata" : "<strong>OData&nbsp;&nbsp;</strong>Deployed services are accessible using OData URLs. This service is accessible via: {{url}}.", 
-        "java-instructions" : "<i>This <strong>Java</strong> code sample shows how to connect and query the data service from a java client.  You must include the Teiid driver jar file in your client's classpath.  See <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/JDBC_Support.html'>JDBC Support</a> in the <strong>Client Developers Guide</strong> for more information.</i>", 
+        "connecting-odata" : "<strong>OData&nbsp;&nbsp;</strong>Deployed services are accessible using OData URLs. This service is accessible via: {{url}}.",
+        "java-instructions" : "<i>This <strong>Java</strong> code sample shows how to connect and query the data service from a java client.  You must include the Teiid driver jar file in your client's classpath.  See <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/JDBC_Support.html'>JDBC Support</a> in the <strong>Client Developers Guide</strong> for more information.</i>",
         "javascript-instructions" : "<i>This <strong>Javascript</strong> code sample uses jquery to retrieve an OData result set. See <a target='_blank' href='https://jquery.com/'>http://jquery.com</a> for details.  The OData URL is protected using HTTP Basic security - the user is required to have a role of 'odata' defined for access.</i>",
         "node-instructions" : "<i>This <strong>node.js</strong> code sample uses the o.js javascript library available for node. See <a target='_blank' href='https://www.npmjs.com/package/odata'>http://www.npmjs.com/package/odata</a> for details.  The OData URL is protected using HTTP Basic security - the user is required to have a role of 'odata' defined for access.</i>",
         "python-instructions" : "<i>This <strong>Python</strong> code sample queries the data service via the OData URL. You will need to update the username and password in the provided code.  The OData URL is protected using HTTP Basic security - the user is required to have a role of 'odata' defined for access.</i>",
@@ -158,6 +159,7 @@
         "NoSortChoice" : "No sort",
         "OData" : "OData",
         "ODataEndpoint" : "OData Endpoint: ",
+        "noUserAccess" : "The odata query tool cannot be displayed. The user does not have access to the teiid odata functions.",
         "resultLimitPlaceholder" : "Select result limit...",
         "resultsTabular": "Tabular",
         "resultsRaw": "Raw",
@@ -307,6 +309,7 @@
         "welcomeMsg" : "Currently, no data sources exist. In order to create a data service you must create a data source.",
         "noSourcesExist" : "No Data Sources Found",
         "noSourcesInstructionsMsg" : "To get started, click <strong>New Data Source</strong> below to create your first data source.",
+        "noUserAccess" : "User has insufficent access for creating new data sources",
         "sourceSchema" : "Data Source Schema"
     },
     
@@ -576,6 +579,7 @@
     },
 
     "teiidPrefsController" : {
+        "noUserAccess" : "User has insufficient access to edit the teiid credentials",
         "pingSuccessMsg" : "The connection test was successful"
     },
 

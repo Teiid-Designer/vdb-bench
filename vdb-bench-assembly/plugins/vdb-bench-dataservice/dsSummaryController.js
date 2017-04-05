@@ -8,11 +8,13 @@
         .module(pluginName)
         .controller('DSSummaryController', DSSummaryController);
 
-    DSSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSPageService', 'ImportExportService',
-                                   'EditWizardService', 'DSSelectionService', 'SvcSourceSelectionService', 'DownloadService', 'pfViewUtils'];
+    DSSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSPageService',
+                                    'ImportExportService', 'EditWizardService', 'DSSelectionService', 'SvcSourceSelectionService',
+                                    'DownloadService', 'pfViewUtils', 'CredentialService'];
 
-    function DSSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, DSPageService, ImportExportService,
-                                 EditWizardService, DSSelectionService, SvcSourceSelectionService, DownloadService, pfViewUtils) {
+    function DSSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, DSPageService,
+                                    ImportExportService, EditWizardService, DSSelectionService, SvcSourceSelectionService,
+                                    DownloadService, pfViewUtils, CredentialService) {
         var vm = this;
 
         vm.dsLoading = DSSelectionService.isLoading();
@@ -547,6 +549,13 @@
          */
         vm.refreshSourceState = function() {
         	vm.hasSources = SvcSourceSelectionService.getServiceSources().length>0;
+        };
+
+        /**
+         * Whether the user can create a data service
+         */
+        vm.canCreateDataservice = function() {
+            return CredentialService.canEdit();
         };
 
         vm.refreshServices();

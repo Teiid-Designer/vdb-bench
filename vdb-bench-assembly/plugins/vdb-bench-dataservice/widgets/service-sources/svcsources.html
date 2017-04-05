@@ -23,7 +23,7 @@
                     <span class="fa fa-fw {{vm.page('datasource-summary').icon}}"></span><span>Go to Summary</span>
                 </a>
                 <span></span>
-                <a ng-click="vm.selectPage('svcsource-new')" class="pull-right">
+                <a ng-click="vm.selectPage('svcsource-new')" class="pull-right" ng-show="vm.canCreateDatasource()">
                     <span class="fa fa-fw {{vm.page('svcsource-new').icon}}"></span><span>New Data Source</span>
                 </a>
             </p>

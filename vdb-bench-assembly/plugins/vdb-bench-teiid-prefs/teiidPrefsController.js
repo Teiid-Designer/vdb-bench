@@ -8,9 +8,9 @@
         .module(pluginName)
         .controller('TeiidPrefsController', TeiidPrefsController);
 
-    TeiidPrefsController.$inject = ['SYNTAX', 'CONFIG', 'RepoRestService', '$scope', '$translate'];
+    TeiidPrefsController.$inject = ['SYNTAX', 'CONFIG', 'RepoRestService', '$scope', '$translate', 'CredentialService'];
 
-    function TeiidPrefsController(syntax, config, RepoRestService, $scope, $translate) {
+    function TeiidPrefsController(syntax, config, RepoRestService, $scope, $translate, CredentialService) {
         var vm = this;
 
         vm.loading = true;
@@ -97,6 +97,14 @@
             } catch (error) {
                 setError(error.message);
             }
+        };
+
+        vm.canEditCredentials = function() {
+            return CredentialService.canEdit();
+        };
+
+        vm.noUserAccessMsg = function() {
+            return $translate.instant('teiidPrefsController.noUserAccess');
         };
 
         vm.init = function() {

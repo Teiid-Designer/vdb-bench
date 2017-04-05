@@ -8,13 +8,13 @@
         .module(pluginName)
         .controller('DatasourceSummaryController', DatasourceSummaryController);
 
-    DatasourceSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 
-                                           'SvcSourceSelectionService', 'TranslatorSelectionService', 'DatasourceWizardService', 
-                                           'ConnectionSelectionService', 'DownloadService', 'pfViewUtils'];
+    DatasourceSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX',
+                                           'SvcSourceSelectionService', 'TranslatorSelectionService', 'DatasourceWizardService',
+                                           'ConnectionSelectionService', 'DownloadService', 'pfViewUtils', 'CredentialService'];
 
-    function DatasourceSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, 
-                                          SvcSourceSelectionService, TranslatorSelectionService, DatasourceWizardService, 
-                                          ConnectionSelectionService, DownloadService, pfViewUtils) {
+    function DatasourceSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX,
+                                          SvcSourceSelectionService, TranslatorSelectionService, DatasourceWizardService,
+                                          ConnectionSelectionService, DownloadService, pfViewUtils, CredentialService) {
         var vm = this;
 
         vm.srcLoading = SvcSourceSelectionService.isLoading();
@@ -551,6 +551,13 @@
             vm.items = vm.allItems;
             vm.filterConfig.resultsCount = vm.items.length;
             vm.hasSources = vm.allItems.length>0;
+        };
+
+        /**
+         * Whether the user can create a data source
+         */
+        vm.canCreateDatasource = function() {
+            return CredentialService.canEdit();
         };
 
         vm.refresh();

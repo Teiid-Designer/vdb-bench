@@ -27,9 +27,9 @@
             });
     }
 
-    DSDataservicesController.$inject = ['RepoRestService', '$scope', '$rootScope', 'DSPageService'];
+    DSDataservicesController.$inject = ['RepoRestService', '$scope', '$rootScope', 'DSPageService', 'CredentialService'];
 
-    function DSDataservicesController(RepoRestService, $scope, $rootScope, DSPageService) {
+    function DSDataservicesController(RepoRestService, $scope, $rootScope, DSPageService, CredentialService) {
         var vm = this;
 
         vm.loading = true;
@@ -91,6 +91,13 @@
                 setError(error.message);
                 vm.loading = false;
             }
+        };
+
+        /**
+         * Whether the user can create a data service
+         */
+        vm.canCreateDataservice = function() {
+            return CredentialService.canEdit();
         };
 
         vm.init();

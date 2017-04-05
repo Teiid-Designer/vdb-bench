@@ -27,9 +27,9 @@
             });
     }
 
-    DSSvcSourcesController.$inject = ['SvcSourceSelectionService', '$scope', '$rootScope', 'DSPageService'];
+    DSSvcSourcesController.$inject = ['SvcSourceSelectionService', '$scope', '$rootScope', 'DSPageService', 'CredentialService'];
 
-    function DSSvcSourcesController(SvcSourceSelectionService, $scope, $rootScope, DSPageService) {
+    function DSSvcSourcesController(SvcSourceSelectionService, $scope, $rootScope, DSPageService, CredentialService) {
         var vm = this;
 
         vm.loading = true;
@@ -76,6 +76,13 @@
             setTotal(sources.length);
             setNames(sources);
             vm.loading = false;
+        };
+
+        /**
+         * Whether the user can create a data source
+         */
+        vm.canCreateDatasource = function() {
+            return CredentialService.canEdit();
         };
 
         $scope.$on('loadingServiceSourcesChanged', function(event, loadingState) {
