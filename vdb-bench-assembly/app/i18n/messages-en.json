@@ -251,11 +251,14 @@
     "dsSummaryController" : {
         "confirmDeleteMsg" : "Are you sure you want to delete data service '{{serviceName}}'?",
         "deleteFailedMsg" : "Failed to remove the data service: {{response}}",
-        "deployFailedMsg" : "Failed to deploy the data service: {{response}}",
         "findSourceVdbsFailedMsg" : "Failed to find source VDBs: {{response}}",
         "findViewTablesFailedMsg" : "Failed to find view tables: {{response}}",
         "descriptionFilterPlaceholder" : "Filter by Description...",
         "nameFilterPlaceholder" : "Filter by Name..."
+    },
+
+    "DSSelectionService" : {
+        "deployFailedMsg" : "Failed to deploy the data service: {{response}}"
     },
 
     "dsTestController" : {

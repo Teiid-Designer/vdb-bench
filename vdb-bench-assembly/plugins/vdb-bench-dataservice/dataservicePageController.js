@@ -94,6 +94,8 @@
                 EditWizardService.init(null,null);
             } else if(pageId === DSPageService.SERVICESOURCE_SUMMARY_PAGE) {
                 SvcSourceSelectionService.refresh();
+            } else if(pageId == DSPageService.TEST_DATASERVICE_PAGE) {
+                DSSelectionService.deploySelectedDataService();
             }
 
             vm.prevPageId = vm.selectedPageId();
