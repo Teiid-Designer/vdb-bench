@@ -15,12 +15,53 @@
                                       SvcSourceSelectionService, CredentialService, DSPageService) {
         var vm = this;
         vm.cloneVdbInProgress = false;
+        vm.sourceName = '';
+        vm.nameErrorMsg = '';
 
         /*
          * Set a custom title to the page including the service source's id
          */
         var page = DSPageService.page(DSPageService.SERVICESOURCE_CLONE_PAGE);
         DSPageService.setCustomTitle(page.id, page.title + " '" + SvcSourceSelectionService.selectedServiceSource().keng__id + "'");
+
+        /**
+         * Indicates if the data source name is invalid.
+         */
+        vm.hasInvalidName = function() {
+            return !_.isEmpty( vm.nameErrorMsg );
+        };
+
+        /**
+         * Handler for changes to the data source name.
+         */
+        vm.sourceNameChanged = function() {
+            if ( _.isEmpty( vm.sourceName ) ) {
+                vm.nameErrorMsg = $translate.instant( 'datasourceWizardService.nameRequired' );
+            } else {
+                try {
+                    var name = encodeURIComponent( vm.sourceName );
+
+                    RepoRestService.validateDataSourceName( name ).then(
+                        function ( result ) {
+                            vm.nameErrorMsg = result;
+
+                            // since a data source is really a VDB, replace VDB with Data Source so 
+                            // user will not be confused (see DatasourceWizardService.js for same code)
+                            if ( !_.isEmpty( vm.nameErrorMsg ) ) {
+                                vm.nameErrorMsg = vm.nameErrorMsg.replace( "VDB", $translate.instant( 'shared.Source' ) );
+                            }
+                        },
+                        function ( response ) {
+                            var errorMsg = $translate.instant( 'datasourceWizardService.validateDataSourceNameError' );
+                            throw RepoRestService.newRestException( errorMsg + "\n" + RepoRestService.responseMessage( response ) );
+                        }
+                    );
+                } catch ( error ) {
+                    var errorMsg = $translate.instant( 'datasourceWizardService.validateDataSourceNameError' );
+                    throw RepoRestService.newRestException( errorMsg + "\n" + error );
+                }
+            }
+        };
 
         /*
          * When loading finishes on copy / deploy
@@ -117,6 +158,8 @@
             } catch (error) {} finally {
             }
         }
+
+        vm.sourceNameChanged();
 
     }
 

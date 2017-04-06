@@ -7,15 +7,31 @@
 	    <div id="svcsource-clone-controls" ng-show="vm.cloneVdbInProgress==false" class="col-md-12 row">
 	      <div class="row">
 	          <h3>&nbsp;&nbsp;{{:: 'svcsource-clone.instructionsMsg' | translate}}</h3>
-	          <form class="form-horizontal">
+	          <form name="sourceCloneForm" class="form-horizontal">
 	              <div class="form-group">
-	                  <label class="col-md-2 control-label" for="textInput" translate="svcsource-clone.Name"></label>
+	                  <label class="col-md-1 control-label" for="sourceName" translate="svcsource-clone.Name"></label>
 	                  <div class="col-md-6">
-	                    <input type="text" ng-model="nameVar" class="form-control">
+	                    <input type="text"
+                               name="sourceName"
+                               ng-model="vm.sourceName"
+                               ng-change="vm.sourceNameChanged()"
+                               required
+                               autofocus
+                               class="form-control">
+                        <div ng-show="vm.hasInvalidName()"
+                             class="error-message"
+                             ng-if="sourceCloneForm.sourceName.$dirty || sourceCloneForm.sourceName.$touched">
+                            {{ vm.nameErrorMsg }}
+                        </div>
 	                  </div>
 	              </div>
 	          </form>
-	          <button class="btn btn-primary" ng-click="vm.onCloneSvcSourceClicked(vmmain.selectedServiceSource().keng__id, nameVar)" ng-class="{active:vmmain.selectedPage.id == 'svcsource-clone'}" translate="svcsource-clone.Create"></button>
+              <button class="btn btn-primary"
+                      ng-click="vm.onCloneSvcSourceClicked(vmmain.selectedServiceSource().keng__id, vm.sourceName)"
+                      ng-class="{active:vmmain.selectedPage.id == 'svcsource-clone'}"
+                      ng-disabled="vm.hasInvalidName()"
+                      translate="svcsource-clone.Create">
+              </button>
 	          <button class="btn btn-default" ng-click="vmmain.selectPage('datasource-summary')" ng-class="{active:vmmain.selectedPage.id == 'svcsource-clone'}" translate="svcsource-clone.Cancel"></button>
 	        </div>
 	      </div>
