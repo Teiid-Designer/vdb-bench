@@ -69,7 +69,11 @@
                 <span class="pficon pficon-ok"></span>
             </div>
             <h3 class="blank-slate-pf-main-action" translate="dsExportGitWizard.successfulExportMsg" />
-            <p class="blank-slate-pf-secondary-action">{{ vm.responseMsg }}</p>
+            <p class="blank-slate-pf-secondary-action">
+            {{ vm.responseMsg }}
+            <br>
+            <strong>{{:: 'shared.Repository' | translate}}:</strong>&nbsp;<a href={{vm.repoTargetUrl()}} target="_blank">{{vm.repoTargetUrl()}}</a>
+            </p>
         </div>
         <div
             class="wizard-pf-complete blank-slate-pf"
