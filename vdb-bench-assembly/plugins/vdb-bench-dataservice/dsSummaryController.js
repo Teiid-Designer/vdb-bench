@@ -19,8 +19,6 @@
         vm.sourcesLoading = SvcSourceSelectionService.isLoading();
         vm.hasSources = false;
         vm.hasServices = false;
-        vm.deploymentSuccess = false;
-        vm.deploymentMessage = null;
         vm.allItems = DSSelectionService.getDataServices();
         vm.items = vm.allItems;
         vm.confirmDeleteMsg = "";
@@ -246,44 +244,6 @@
          * Handle deploy dataservice click
          */
         var deployDataServiceClicked = function ( ) {
-            var selDS = DSSelectionService.selectedDataService();
-            var selDSName = selDS.keng__id;
-            var dsVdbName = DSSelectionService.selectedDataServiceVdbName();
-
-            DSSelectionService.setDeploying(true, selDSName, false, null);
-            try {
-                RepoRestService.deployDataService( selDSName ).then(
-                    function ( result ) {
-                        vm.deploymentSuccess = result.Information.deploymentSuccess == "true";
-                        if(vm.deploymentSuccess === true) {
-
-                            var successCallback = function() {
-                                DSSelectionService.setDeploying(false, selDSName, true, null);
-                            };
-                            var failCallback = function(failMessage) {
-                                DSSelectionService.setDeploying(false, selDSName, false, failMessage);
-                            };
-
-                            //
-                            // Monitor the service vdb of the dataservice to determine when its active
-                            //
-                            RepoRestService.pollForActiveVdb(dsVdbName, successCallback, failCallback);
-
-                        } else {
-                            DSSelectionService.setDeploying(false, selDSName, false, result.Information.ErrorMessage1);
-                        }
-                   },
-                    function (response) {
-                        DSSelectionService.setDeploying(false, selDSName, false, RepoRestService.responseMessage(response));
-                        throw RepoRestService.newRestException($translate.instant('dsSummaryController.deployFailedMsg', 
-                                                                                  {response: RepoRestService.responseMessage(response)}));
-                    });
-            } catch (error) {} finally {
-                vm.deploymentSuccess = false;
-                vm.deploymentMessage = null;
-                DSSelectionService.setDeploying(false);
-            }
-
             // Broadcast the pageChange
             $rootScope.$broadcast("dataServicePageChanged", 'dataservice-test');
         };

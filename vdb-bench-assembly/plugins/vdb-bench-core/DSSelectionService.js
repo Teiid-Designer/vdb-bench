@@ -227,7 +227,47 @@
             
             return ds.dataservice.serviceView;
         };
-        
+
+        /*
+         * deploy the currently selected dataservice
+         *   - loading notifications are broadcast when the loading state changes.
+         */
+        service.deploySelectedDataService = function() {
+            var selDS = service.selectedDataService();
+            var selDSName = selDS.keng__id;
+            var dsVdbName = service.selectedDataServiceVdbName();
+
+            service.setDeploying(true, selDSName, false, null);
+            try {
+                RepoRestService.deployDataService( selDSName ).then(
+                    function ( result ) {
+                        if(result.Information.deploymentSuccess == "true") {
+                            var successCallback = function() {
+                                service.setDeploying(false, selDSName, true, null);
+                            };
+                            var failCallback = function(failMessage) {
+                                service.setDeploying(false, selDSName, false, failMessage);
+                            };
+
+                            //
+                            // Monitor the service vdb of the dataservice to determine when its active
+                            //
+                            RepoRestService.pollForActiveVdb(dsVdbName, successCallback, failCallback);
+                        } else {
+                            service.setDeploying(false, selDSName, false, result.Information.ErrorMessage1);
+                        }
+                   },
+                    function (response) {
+                        service.setDeploying(false, selDSName, false, RepoRestService.responseMessage(response));
+                        throw RepoRestService.newRestException($translate.instant('DSSelectionService.deployFailedMsg', 
+                                                                                  {response: RepoRestService.responseMessage(response)}));
+                    });
+            } catch (error) {
+                service.setDeploying(false);
+                alert("An exception occurred:\n" + error.message);
+            }
+        };
+
         /*
          * Refresh the collection of data services.  If a pageId is supplied, the redirect is broadcast
          */
