@@ -361,6 +361,7 @@
         "clickNextCreateInstructionMsg" : "Click 'Next' to define filters",
         "clickNextEditInstructionMsg" : "Click 'Next' to edit filters",
         "createDatasourceFailedMsg" : "Failed to create the data source",
+        "initializingWizard" : "Initializing data source wizard",
         "updateDatasourceFailedMsg" : "Failed to update the data source",
         "sourceCreateFailedMsg" : "Failed to create the data source.",
         "sourceUpdateFailedMsg" : "Failed to update the data source.",

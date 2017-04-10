@@ -1,6 +1,6 @@
 <div ng-show="vm.deployInProgress==true || vm.wizardServiceReady==false" class="row">
     <div class="spinner spinner-lg spinner-inline" />
-    {{:: 'datasourceEditWizard.???' | translate}}
+    {{:: 'datasourceEditWizard.initializingWizard' | translate}}
 </div>
 
 <div ng-show="vm.deployInProgress==false && vm.wizardServiceReady==true">
