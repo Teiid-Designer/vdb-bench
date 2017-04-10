@@ -1,8 +1,9 @@
 <div id="outer" class="outer-wrapper">
 	<div id="svcsource-clone-container" class="container-fluid" ng-controller="SvcSourceCloneController as vm">
-	    <div id="svcsource-clone" ng-show="vm.cloneVdbInProgress==true" class="col-md-10 row">
-            <div class="spinner spinner-lg" />
-	    </div>
+        <div id="svcsource-clone" ng-show="vm.cloneVdbInProgress==true" class="col-md-10 row">
+            <div class="spinner spinner-lg spinner-inline" />
+            {{:: 'svcsource-clone.copyingDataSource' | translate}}
+        </div>
 	    
 	    <div id="svcsource-clone-controls" ng-show="vm.cloneVdbInProgress==false" class="col-md-12 row">
 	      <div class="row">

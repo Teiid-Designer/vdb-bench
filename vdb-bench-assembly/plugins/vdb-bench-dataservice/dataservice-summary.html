@@ -85,8 +85,10 @@
 	    <div id="ds-summary-table" class="col-md-10 row">
 	        <div pf-toolbar id="dataserviceToolbar" config="vm.toolbarConfig" ng-show="vm.hasServices==true"></div>
 	
-	        <div id="dataservice-summary-updating" ng-show="vm.dsLoading==true || vm.sourcesLoading==true" class="col-md-10 row">
-                <div class="spinner spinner-lg" />
+            <div id="dataservice-summary-updating"
+                 ng-show="vm.dsLoading==true || vm.sourcesLoading==true" class="col-md-10 row">
+                <div class="spinner spinner-lg spinner-inline" />
+                {{:: 'dataservice-summary.LoadingDataServices' | translate}}
 	        </div>
 	
 	        <div class="ds-summary-results-container" ng-show="vm.dsLoading==false && vm.sourcesLoading==false && vm.hasServices==true">

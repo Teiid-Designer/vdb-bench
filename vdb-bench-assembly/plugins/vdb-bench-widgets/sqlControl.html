@@ -38,7 +38,8 @@
 
     <!-- Show spinner while searching -->
     <div id="sql-search-progress-spinner" class="col-sm-4" ng-show="vm.inProgress==true">
-        <div class="spinner spinner-lg" />
+        <div class="spinner spinner-lg spinner-inline" />
+        {{:: 'sqlControl.runningSqlQuery' | translate}}
     </div>
 
     <div class="col-sm-8 sql-control-table" ng-show="! vm.errorMsg && vm.showResultsTable == true">

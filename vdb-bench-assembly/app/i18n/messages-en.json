@@ -120,6 +120,7 @@
         "codeSamplesDataService" : "Code Samples",
         "GitExport" : "Git Export",
         "importDataServiceMsg" : "You can also import an existing Data Service. To import a Data Service, click ",
+        "LoadingDataServices" : "Loading data services",
         "noDataServiceImportMsg" : "You can also import an existing Data Service. To import an existing Data Service, click <strong>Import Data Service</strong> below.",
         "noDataServicesExist" : "<i>No Data Services Found</i>",
         "noSourcesOrDataServicesExist" : "<i>No Data Sources or Data Services Found</i>",
@@ -142,6 +143,7 @@
         "connecting-odata" : "<strong>OData&nbsp;&nbsp;</strong>Deployed services are accessible using OData URLs. This service is accessible via: {{url}}.", 
         "java-instructions" : "<i>This <strong>Java</strong> code sample shows how to connect and query the data service from a java client.  You must include the Teiid driver jar file in your client's classpath.  See <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/JDBC_Support.html'>JDBC Support</a> in the <strong>Client Developers Guide</strong> for more information.</i>", 
         "javascript-instructions" : "<i>This <strong>Javascript</strong> code sample uses jquery to retrieve an OData result set. See <a target='_blank' href='https://jquery.com/'>http://jquery.com</a> for details.  The OData URL is protected using HTTP Basic security - the user is required to have a role of 'odata' defined for access.</i>",
+        "LoadingCodeSamples" : "Loading code samples",
         "node-instructions" : "<i>This <strong>node.js</strong> code sample uses the o.js javascript library available for node. See <a target='_blank' href='https://www.npmjs.com/package/odata'>http://www.npmjs.com/package/odata</a> for details.  The OData URL is protected using HTTP Basic security - the user is required to have a role of 'odata' defined for access.</i>",
         "python-instructions" : "<i>This <strong>Python</strong> code sample queries the data service via the OData URL. You will need to update the username and password in the provided code.  The OData URL is protected using HTTP Basic security - the user is required to have a role of 'odata' defined for access.</i>",
         "php-instructions" : "<i>This <strong>PHP</strong> code sample uses curl to query the data service via the OData URL. The appropriate Base64 encoded authentication string will need to be added in the provided code.  The OData URL is protected using HTTP Basic security - the user is required to have a role of 'odata' defined for access.</i>"
@@ -152,6 +154,7 @@
         "columnPlaceholder" : "column",
         "Columns" : "Columns",
         "conditionPlaceholder" : "condition",
+        "deployingDataService" : "Deploying data service",
         "DescendingChoice" : "Desc",
         "endpointNotAvailableMsg" : "The endpoint is not available",
         "enterQueryMsg" : "Enter an SQL query to test the Data Service",
@@ -162,12 +165,14 @@
         "resultLimitPlaceholder" : "Select result limit...",
         "resultsTabular": "Tabular",
         "resultsRaw": "Raw",
+        "runningOdataQuery" : "Running OData query",
         "runQueryAction" : "Submit",
         "Select" : "Select",
         "selectResultLimitMsg" : "Select the number of results to be initially returned",
         "selectViewMsg" : "Select the view to be queried",
         "selectViewPlaceholder" : "Select a view in the list...",
         "SQL" : "SQL",
+        "testingJdbcConnection" : "Testing JDBC connection",
         "urlPath": "Test URL",
         "valuePlaceholder" : "value",
         "Where" : "Where",
@@ -308,6 +313,7 @@
 
     "datasource-summary" : {
         "confirmDeleteTitle" : "Confirm Delete",
+        "loadingDataSources" : "Loading data sources",
         "welcomeMsg" : "Currently, no data sources exist. In order to create a data service you must create a data source.",
         "noSourcesExist" : "No Data Sources Found",
         "noSourcesInstructionsMsg" : "To get started, click <strong>New Data Source</strong> below to create your first data source.",
@@ -492,6 +498,7 @@
         "notJdbcMsg" : "'{{connName}}' is not a JDBC Connection",
         "noTables" : "No Tables",
         "optionMsg" : "Filter options for connection '{{connName}}'",
+        "resettingJdbcOptions" : "Resetting JDBC options",
         "tableFetchNoConnectionErrorMsg" : "Error fetching tables - null connection",
         "FilterLabel" : "Filter:",
         "help" : {
@@ -524,6 +531,7 @@
         "controlFailedMsg" : "Encountered query error: {{errorMsg}}",
         "instructionMsg" : "Enter query text then click Submit",
         "RecordLimit" : "Record Limit",
+        "runningSqlQuery" : "Running SQL query",
         "StartingRecordIndex" : "Starting Record Index",
         "help" : {
             "recordLimit" : "Limits the number of records returned from the query (-1 for no limit)",
@@ -535,6 +543,7 @@
 
     "svcsource-clone" : {
         "Cancel" : "@:shared.Cancel",
+        "copyingDataSource" : "Copying data source",
         "Create" : "@:shared.Create",
         "instructionsMsg" : "Enter a name for the new data source",
         "Name" : "@:shared.Name"
