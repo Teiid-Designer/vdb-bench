@@ -46,6 +46,11 @@
             UNKNOWN: 'unknown'
         })
 
+        .constant('STYLES', {
+            DSWIZARD_TABLE_NOT_SELECTED: 'table-selection-container',
+            DSWIZARD_TABLE_SELECTED: 'table-selection-container-selected'
+        })
+
         .constant('JOIN', {
             INNER: 'INNER',
             FULL_OUTER: 'FULL_OUTER',
