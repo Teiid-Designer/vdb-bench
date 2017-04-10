@@ -45,7 +45,8 @@
             <div pf-toolbar id="svcsourceToolbar" config="vm.toolbarConfig" ng-show="vm.srcLoading==true || vm.hasSources==true"></div>
     
             <div id="svcsource-summary-updating" ng-show="vm.srcLoading==true">
-                <div class="spinner spinner-lg" />
+                <div class="spinner spinner-lg spinner-inline" />
+                {{:: 'datasource-summary.loadingDataSources' | translate}}
             </div>
     
             <div class="svcsource-summary-results-container" ng-show="vm.srcLoading==false && vm.hasSources==true">

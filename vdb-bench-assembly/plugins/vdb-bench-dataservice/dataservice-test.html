@@ -6,7 +6,8 @@
 	      -->
 	    <!-- Show spinner while deploying -->
 	    <div id="deployment-spinner" ng-show="vm.dsDeploymentInProgress==true" class="col-md-10 row">
-            <div class="spinner spinner-lg" />
+            <div class="spinner spinner-lg spinner-inline" />
+            {{:: 'dataservice-test.deployingDataService' | translate}}
 	    </div>
 	    
 
@@ -225,7 +226,8 @@
 
 	            <!-- Show spinner while searching -->
 	            <div id="odata-search-progress-spinner" class="col-md-8" ng-show="vm.searchInProgress==true">
-                    <div class="spinner spinner-lg" />
+                    <div class="spinner spinner-lg spinner-inline" />
+                    {{:: 'dataservice-test.runningOdataQuery' | translate}}
 	            </div>
 
 	            <div id="odata-metadata-fetch-failure" class="col-sm-12"
@@ -236,10 +238,11 @@
 
 	        <uib-tab heading="{{:: 'dataservice-test.SQL' | translate}}"  ng-click="vm.onTabSelected('Advanced')">
 	         
-	           <div id="deployment-spinner" ng-show="vm.pinging == true" class="col-md-10 row">
-              		<div class="spinner spinner-lg" />
-	          </div>
-	         
+               <div id="deployment-spinner" ng-show="vm.pinging == true" class="col-md-10 row">
+                   <div class="spinner spinner-lg spinner-inline" />
+                   {{:: 'dataservice-test.testingJdbcConnection' | translate}}
+               </div>
+
 	           <div class="col-sm-12" ng-show="vm.pinging == false && vm.pinged == false">
 	               <span class="col-sm-12 row">&nbsp;</span>
 	               <span class="col-sm-12 row">&nbsp;</span>
