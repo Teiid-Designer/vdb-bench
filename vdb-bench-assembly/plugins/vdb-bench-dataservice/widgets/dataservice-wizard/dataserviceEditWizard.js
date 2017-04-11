@@ -10,7 +10,7 @@
 
     DataserviceEditWizard.$inject = ['CONFIG', 'SYNTAX'];
     DataserviceEditWizardController.$inject = ['$scope', '$rootScope', '$document', '$translate',
-                                               'RepoRestService', 'EditWizardService', 'DSSelectionService', 'SvcSourceSelectionService', 'REST_URI', 'SYNTAX'];
+                                               'RepoRestService', 'EditWizardService', 'DSSelectionService', 'SvcSourceSelectionService', 'REST_URI', 'SYNTAX', 'STYLES'];
 
     function DataserviceEditWizard(config, syntax) {
         var directive = {
@@ -27,7 +27,7 @@
     }
 
     function DataserviceEditWizardController($scope, $rootScope, $document, $translate,
-                                             RepoRestService, EditWizardService, DSSelectionService, SvcSourceSelectionService, REST_URI, SYNTAX) {
+                                             RepoRestService, EditWizardService, DSSelectionService, SvcSourceSelectionService, REST_URI, SYNTAX, STYLES) {
         var vm = this;
         vm.stepTitle = $translate.instant('dataserviceEditWizard.stepTitle');
         vm.nextButtonTitle = $translate.instant('shared.Next');
@@ -49,6 +49,8 @@
         
         vm.buildVdbs = [];
         vm.buildVdbIndex = 0;
+        vm.table1Style = STYLES.DSWIZARD_TABLE_NOT_SELECTED;
+        vm.table2Style = STYLES.DSWIZARD_TABLE_NOT_SELECTED;
 
         /*
          * page init here
@@ -139,14 +141,18 @@
          */
         vm.treeSelectionChanged = function(theNode, isSelected, parentNode) {
             vm.selectedTable = null;
+            vm.table1Style = STYLES.DSWIZARD_TABLE_NOT_SELECTED;
+            vm.table2Style = STYLES.DSWIZARD_TABLE_NOT_SELECTED;
             if(isSelected) {
                 // Node is a table (no children)
                 if(theNode.children.length===0) {
                     vm.selectedTable = theNode.name;
                     EditWizardService.addSourceTable(parentNode.name,theNode.name);
                     if(EditWizardService.sources()[0]===parentNode.name && EditWizardService.sourceTables()[0]===theNode.name) {
+                        vm.table1Style = STYLES.DSWIZARD_TABLE_SELECTED;
                         setSourceTableColumns(1, parentNode.name, theNode.sourceModel, theNode.name);
                     } else if(EditWizardService.sources()[1]===parentNode.name && EditWizardService.sourceTables()[1]===theNode.name) {
+                        vm.table2Style = STYLES.DSWIZARD_TABLE_SELECTED;
                         setSourceTableColumns(2, parentNode.name, theNode.sourceModel, theNode.name);
                     }
                 }
@@ -188,6 +194,8 @@
             }
             // Deselect tree selections
             vm.initialTreeNodeSelection = null;
+            vm.table1Style = STYLES.DSWIZARD_TABLE_NOT_SELECTED;
+            vm.table2Style = STYLES.DSWIZARD_TABLE_NOT_SELECTED;
             updateInstructionMessage();
             updateNextEnablementAndText();
         };
@@ -203,6 +211,8 @@
             vm.includeAllColumns = EditWizardService.includeAllSource1Columns();
             // Deselect tree selections
             vm.initialTreeNodeSelection = null;
+            vm.table1Style = STYLES.DSWIZARD_TABLE_NOT_SELECTED;
+            vm.table2Style = STYLES.DSWIZARD_TABLE_NOT_SELECTED;
             updateInstructionMessage();
             updateNextEnablementAndText();
         };
@@ -345,7 +355,6 @@
             for( var iSrc = 0; iSrc < vm.selectedSources.length; ++iSrc ) {
                 for( var i = 0; i < vm.treedata.length; ++i) {
                     if(vm.treedata[i].name === vm.selectedSources[iSrc]) {
-                        //expandSourceNode(vm.treedata[i]);
                         vm.initialTreeExpandedNodes.push(vm.treedata[i]);
                     }
                 }
@@ -495,6 +504,13 @@
                         for( var j = 0; j < sourceNode.children.length; ++j) {
                             if(sourceNode.children[j].name === tableNames[iTable]) {
                                 vm.initialTreeNodeSelection = sourceNode.children[j];
+                                vm.table1Style = STYLES.DSWIZARD_TABLE_NOT_SELECTED;
+                                vm.table2Style = STYLES.DSWIZARD_TABLE_NOT_SELECTED;
+                                if(EditWizardService.sources()[0]===sourceNames[iTable] && EditWizardService.sourceTables()[0]===tableNames[iTable]) {
+                                    vm.table1Style = STYLES.DSWIZARD_TABLE_SELECTED;
+                                } else if(EditWizardService.sources()[1]===sourceNames[iTable] && EditWizardService.sourceTables()[1]===tableNames[iTable]) {
+                                    vm.table2Style = STYLES.DSWIZARD_TABLE_SELECTED;
+                                }
                                 setSourceTableColumns(iTable+1, 
                                                       sourceNode.name, 
                                                       vm.initialTreeNodeSelection.sourceModel, 
