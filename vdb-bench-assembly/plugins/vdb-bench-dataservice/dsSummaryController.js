@@ -255,7 +255,28 @@
             // Need to select the item first
             DSSelectionService.selectDataService(item);
 
-            deployDataServiceClicked();
+            // Determine if the service can safely be deployed
+            try {
+                var selDSName = item.keng__id;
+                RepoRestService.getDataServiceDeployableStatus( selDSName ).then(
+                    function (result) {
+                        var deployableMessage = result.Information.deployableStatus;
+                        if(deployableMessage === "OK") {
+                            deployDataServiceClicked();
+                        } else {
+                            var msg = $translate.instant('dsSummaryController.unableToDeployMsg') + "\n\n" + 
+                                      deployableMessage;
+                            alert(msg);
+                        }
+                    },
+                    function (response) {
+                        throw RepoRestService.newRestException($translate.instant('dsSummaryController.deployFailedMsg', 
+                                                                                  {response: RepoRestService.responseMessage(response)}));
+                    });
+            } catch (error) {
+                throw RepoRestService.newRestException($translate.instant('dsSummaryController.deployFailedMsg', 
+                        {response: error.message}));
+            }
         };
         
         /**
