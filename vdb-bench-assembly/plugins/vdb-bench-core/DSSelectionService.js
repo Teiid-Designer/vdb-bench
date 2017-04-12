@@ -48,6 +48,7 @@
                 RepoRestService.getDataServices( ).then(
                     function (newDataServices) {
                         RepoRestService.copy(newDataServices, ds.dataservices);
+                        ds.dataservice = null;
                         setLoading(false);
                         if(pageId) {
                             // Broadcast the pageChange
@@ -57,17 +58,16 @@
                     function (response) {
                         // Some kind of error has occurred
                         ds.dataservices = [];
+                        ds.dataservice = null;
                         setLoading(false);
                         throw RepoRestService.newRestException("Failed to load data services from the host services.\n" + response.message);
                     });
             } catch (error) {
                 ds.dataservices = [];
+                ds.dataservice = null;
                 setLoading(false);
                 alert("An exception occurred:\n" + error.message);
             }
-
-            // Removes any outdated dataservice
-            service.selectDataService(null);
         }
 
         /*
