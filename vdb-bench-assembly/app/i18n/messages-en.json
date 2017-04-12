@@ -257,6 +257,8 @@
     "dsSummaryController" : {
         "confirmDeleteMsg" : "Are you sure you want to delete data service '{{serviceName}}'?",
         "deleteFailedMsg" : "Failed to remove the data service: {{response}}",
+        "deployFailedMsg" : "Error deploying the data service: {{response}}",
+        "unableToDeployMsg" : "Unable to deploy the Data Service.",
         "findSourceVdbsFailedMsg" : "Failed to find source VDBs: {{response}}",
         "findViewTablesFailedMsg" : "Failed to find view tables: {{response}}",
         "descriptionFilterPlaceholder" : "Filter by Description...",

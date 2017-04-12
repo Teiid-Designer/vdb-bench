@@ -1173,6 +1173,20 @@
         };
 
         /**
+         * Service: determine deployable status of a data service
+         */
+        service.getDataServiceDeployableStatus = function (dataserviceName) {
+            return getRestService().then(function (restService) {
+                if (!dataserviceName) {
+                    throw RestServiceException("Data service name is not defined");
+                }
+
+                var uri = REST_URI.TEIID + REST_URI.DATA_SERVICE + SYNTAX.FORWARD_SLASH + dataserviceName + SYNTAX.FORWARD_SLASH + REST_URI.DEPLOYABLE_STATUS;
+                return restService.one(uri).get();
+            });
+        };
+
+        /**
          * Service: Poll the teiid server for the point that the vdb becomes active
          * Has a timeout limit of 1 minute.
          */
