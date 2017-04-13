@@ -52,6 +52,7 @@
         vm.response = '';
         vm.showDetails = false;
         vm.detailsToggleTitle = $translate.instant("dsExportGitWizard.showErrorDetailTitle");
+        vm.dataService = DSSelectionService.selectedDataService();
  
         function setError(message) {
             vm.error = $sce.trustAsHtml(message);
@@ -78,20 +79,18 @@
         };
 
         vm.dataServiceName = function() {
-            var dataService = DSSelectionService.selectedDataService();
-            return dataService.keng__id;
+            return vm.dataService.keng__id;
         };
 
         function setResponse(response) {
             vm.response = response;
-            var dataService = DSSelectionService.selectedDataService();
 
             if (response === 'OK') {
                 vm.responseMsg = $translate.instant( 'dsExportGitWizard.successfulExportDetailMsg', 
-                                                     { dataServiceName: dataService.keng__id } );
+                                                     { dataServiceName: vm.dataService.keng__id } );
             } else {
                 vm.responseMsg = $translate.instant( 'dsExportGitWizard.failedExportDetailMsg', 
-                                                     { dataServiceName: dataService.keng__id,
+                                                     { dataServiceName: vm.dataService.keng__id,
                                                        repoPath: vm.repo.parameters[ 'repo-path-property' ] } );
             }
         }
@@ -195,13 +194,11 @@
         });
 
         function exportDataService() {
-            var dataservice = DSSelectionService.selectedDataService();
-
             // Display the progress bar
             vm.showProgress(true);
 
             try {
-                RepoRestService.export('git', vm.repo.parameters, dataservice).then(
+                RepoRestService.export('git', vm.repo.parameters, vm.dataservice).then(
                     function (exportStatus) {
                         vm.showProgress(false);
                         setResponse(exportStatus.success ? 'OK': 'Failed');
@@ -210,7 +207,7 @@
                             setError( null );
                         } else {
                             var msg = $translate.instant( 'dsExportGitWizard.failedNoDetailsMsg', 
-                                                          { dataServiceName: dataservice.keng__id } );
+                                                          { dataServiceName: vm.dataservice.keng__id } );
                             setError( msg );
                         }
                     },
