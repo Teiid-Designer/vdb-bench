@@ -374,9 +374,11 @@
          * Expand the specified source nodes
          */
         function expandSourceNodes(treeNodes) {
-            vm.buildVdbs = treeNodes;
-            vm.buildVdbIndex = 0;
-            buildTempVdbsAndModels();
+            if(treeNodes && treeNodes.length>0) {
+                vm.buildVdbs = treeNodes;
+                vm.buildVdbIndex = 0;
+                buildTempVdbsAndModels();
+            }
         }
 
         /*
