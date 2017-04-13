@@ -70,7 +70,7 @@
         };
 
         vm.exportFailure = function() {
-            return !vm.inProgress && vm.response === 'Failed';
+            return !vm.inProgress && vm.response !== 'OK';
         };
 
         vm.exportSuccess = function() {

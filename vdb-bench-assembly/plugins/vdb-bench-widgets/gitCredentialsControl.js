@@ -80,9 +80,7 @@
                 StorageService.setObject(GIT_REPOS_KEY, vm.repositories);
             }
 
-            if ( _.isEmpty( vm.repo ) || _.isEmpty( vm.repo.name ) ) {
-                vm.setSelected( vm.repositories[ 0 ] );
-            }
+            vm.setSelected( vm.repositories[ 0 ] );
         }
 
         function newRepository() {
