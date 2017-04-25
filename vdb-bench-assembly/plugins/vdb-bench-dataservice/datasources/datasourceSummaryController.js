@@ -8,11 +8,11 @@
         .module(pluginName)
         .controller('DatasourceSummaryController', DatasourceSummaryController);
 
-    DatasourceSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 
+    DatasourceSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSPageService', 
                                            'SvcSourceSelectionService', 'TranslatorSelectionService', 'DatasourceWizardService', 
                                            'ConnectionSelectionService', 'DownloadService', 'CredentialService', 'pfViewUtils'];
 
-    function DatasourceSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, 
+    function DatasourceSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, DSPageService, 
                                           SvcSourceSelectionService, TranslatorSelectionService, DatasourceWizardService, 
                                           ConnectionSelectionService, DownloadService, CredentialService, pfViewUtils) {
         var vm = this;
@@ -41,6 +41,15 @@
             // Nothing to do at the moment
         };
 
+        function setHelpId() {
+            var page = DSPageService.page(DSPageService.SERVICESOURCE_SUMMARY_PAGE);
+
+            if (!vm.hasSources)
+                DSPageService.setCustomHelpId(page.id, "datasource-summary-empty");
+            else
+                DSPageService.setCustomHelpId(page.id, null);
+        }
+
         /*
          * When the data services have been loaded
          */
@@ -55,6 +64,7 @@
             } else {
                 vm.hasSources = false;
             }
+            setHelpId();
         });
 
         /**
