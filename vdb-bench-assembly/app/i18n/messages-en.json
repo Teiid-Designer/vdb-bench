@@ -24,6 +24,7 @@
         "Edit" : "Edit",
         "EditWhat" : "Edit {{what}}",
         "Export" : "Export",
+        "ExportWhat" : "Export {{what}}",
         "Finish" : "Finish",
         "Forward" : ">>",
         "Import" : "Import",
@@ -113,12 +114,13 @@
 
     "dataservice-summary" : {
         "connectionsNumberToolTip" : "The number of native data connections, eg. JDBC databases, utilised by this dataservice",
-        "createDataServiceMsg" : "A Data Service is created using one or more Data Sources. To create your first Data Service, click <strong>New Data Service</strong> below.",
+        "createDataServiceMsg" : "A Data Service accesses one or more Data Sources. To create your first Data Service, click <strong>New Data Service</strong> below.  To import a Data Service from a git repository, click <strong>Import Data Service</strong>.",
         "createSourceMsg" : "A Data Service is created using one or more Data Sources. To create your first Data Source, click ",
         "confirmDeleteTitle" : "Confirm Delete",
         "codeSamplesDataServiceMsg" : "Code samples showing how to connect to your data service are available here.",
         "codeSamplesDataService" : "Code Samples",
         "GitExport" : "Git Export",
+        "GitImport" : "Git Import",
         "importDataServiceMsg" : "You can also import an existing Data Service. To import a Data Service, click ",
         "LoadingDataServices" : "Loading data services",
         "noDataServiceImportMsg" : "You can also import an existing Data Service. To import an existing Data Service, click <strong>Import Data Service</strong> below.",
@@ -225,7 +227,7 @@
         "exportProgressMsg" : "<strong>Export in Progress</strong>",
         "failedExportDetailMsg" : "Data service '{{dataServiceName}}' could not be exported to the git repository '{{repoPath}}'",
         "failedExportMsg" : "<strong>Export Failed</strong>",
-        "failedNoDetailsMsg" : "Data service '{{dataServiceName}}' failed for a unspecified reasons.'",
+        "failedNoDetailsMsg" : "Data service '{{dataServiceName}}' failed for unspecified reasons.'",
         "hideErrorDetailTitle" : "Hide Error Detail",
         "missingPathMsg" : "@:dsImportGitWizard.missingPathMsg",
         "missingRepositoryUrlMsg" : "@:dsImportGitWizard.missingRepositoryUrlMsg",
@@ -235,9 +237,18 @@
     },
 
     "dsImportGitWizard" : {
-        "invalidFileTypeMsg" : "{{fileName}}'s file type is not valid hence the file cannot be imported.",
-        "missingPathMsg" : "The relative file path property is required",
-        "missingRepositoryUrlMsg" : "The repository URL is required"
+        "importProgressDetailMsg" : "Data service is being imported ...",
+        "importProgressMsg" : "<strong>Import in Progress</strong>",
+        "failedImportDetailMsg" : "Data service could not be imported from the git repository '{{repoPath}}'",
+        "failedImportNodeExistsDetailMsg" : "Data Service '{{dsName}}' could not be imported from '{{repoPath}}' -- a Data Service with that name already exists!",
+        "failedImportMsg" : "<strong>Import Failed</strong>",
+        "failedNoDetailsMsg" : "Data service import failed for unspecified reasons.'",
+        "hideErrorDetailTitle" : "Hide Error Detail",
+        "showErrorDetailTitle" : "Show Error Detail",
+        "missingPathMsg" : "@:dsImportGitWizard.missingPathMsg",
+        "missingRepositoryUrlMsg" : "@:dsImportGitWizard.missingRepositoryUrlMsg",
+        "successfulImportDetailMsg" : "Data service was successfully imported from the git repository",
+        "successfulImportMsg" : "<strong>Successful Import</strong>"
     },
 
     "dsNewController" : {
@@ -481,11 +492,15 @@
     },
 
     "git-import-wizard" : {
-        "extractStepMsg" : "Import the artifact from the repository",
-        "extractStepTitle" : "Extract from Repository",
-        "repositoryDetailsStepMsg" : "Enter the details for the source git repository",
-        "repositoryDetailsStepTitle" : "Repository Properties",
-        "missingRepositoryUrlMsg" : "@:dsImportGitWizard.missingRepositoryUrlMsg"
+        "repoPropsStepMsg" : "Enter the details for the source git repository",
+        "repoPropsStepTitle" : "Repository Properties",
+        "importStepTitle" : "Authentication and Import",
+        "importStepMsg" : "If required, complete either the SSH or HTTP authentication. Click 'Import' to import the data service from the repository.",
+        "missingRepositoryUrlMsg" : "@:dsImportGitWizard.missingRepositoryUrlMsg",
+        "allowOverwrite" : "Allow Data Service Overwrite",
+        "help" : {
+            "allowOverwrite" : "If a Data Service with same name already exists, allow overwrite."
+        }
     },
 
     "git-preferences-config" : {

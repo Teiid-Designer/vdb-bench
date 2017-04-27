@@ -365,10 +365,10 @@
         /**
          * Handle import dataservice click
          */
-//        var importDataServiceClicked = function( ) {
-//            // Broadcast the pageChange
-//            $rootScope.$broadcast("dataServicePageChanged", 'dataservice-import');
-//        };
+        var importDataServiceClicked = function( ) {
+            // Broadcast the pageChange
+            $rootScope.$broadcast("dataServicePageChanged", 'dataservice-import');
+        };
 
         /**
          * Handle export dataservice click
@@ -385,14 +385,28 @@
             // Need to select the item first
             DSSelectionService.selectDataService(item);
 
-            ImportExportService.init();
+            ImportExportService.init("export");
+        };
+
+        /**
+         * Handle import dataservice button click
+         */
+        vm.importDataServiceButtonClicked = function() {
+            ImportExportService.init("import");
         };
 
         /*
-         * Notification that ImportExportService init has finished
+         * Notification that ImportExportService export init has finished
          */
-        $scope.$on('importExportInitFinished', function (event) {
+        $scope.$on('exportInitFinished', function (event) {
             exportDataServiceClicked();
+        });
+
+        /*
+         * Notification that ImportExportService import init has finished
+         */
+        $scope.$on('importInitFinished', function (event) {
+            importDataServiceClicked();
         });
 
         /** 
@@ -431,12 +445,17 @@
          */
        vm.actionsConfig = {
           primaryActions: [
-            {
-              name: $translate.instant('shared.New'),
-              title: $translate.instant('shared.NewWhat', {what: $translate.instant('shared.DataService')}),
-              actionFn: newDataServiceClicked,
-              isDisabled: false
-            }
+              {
+                  name: $translate.instant('shared.New'),
+                  title: $translate.instant('shared.NewWhat', {what: $translate.instant('shared.DataService')}),
+                  actionFn: newDataServiceClicked,
+                  isDisabled: false
+              },
+              {
+                  name: $translate.instant('shared.Import'),
+                  title: $translate.instant('shared.ImportWhat', {what: $translate.instant('shared.DataService')}),
+                  actionFn: vm.importDataServiceButtonClicked
+              }
           ],
           moreActions: [
 //            {
