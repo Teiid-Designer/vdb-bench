@@ -22,6 +22,7 @@
         vm.allItems = DSSelectionService.getDataServices();
         vm.items = vm.allItems;
         vm.confirmDeleteMsg = "";
+        vm.cannotEditMsg = "";
 
         function setHelpId() {
             var page = DSPageService.page(DSPageService.DATASERVICE_SUMMARY_PAGE);
@@ -300,7 +301,26 @@
          * Handle edit dataservice menu select
          */
         var editDataServiceMenuAction = function(action, item) {
-            vm.editDataService(item);
+            // Check the data service sources - to see if they exist.
+            var missingSources = [];
+            if( item.serviceViewTables ) {
+                for(var i = 0; i < item.serviceViewTables.length; ++i) {
+                    var tableName = item.serviceViewTables[i];
+                    var dotIndex = tableName.indexOf('.');
+                    var sourceName = tableName.substring(0,dotIndex);
+                    var hasSource = SvcSourceSelectionService.hasServiceSource(sourceName);
+                    if(!hasSource) {
+                        missingSources.push(sourceName);
+                    }
+                }
+            }
+            // If any data service sources are missing, disallow edit.
+            if( missingSources.length > 0 ) {
+                vm.cannotEditMsg = $translate.instant('dsSummaryController.cannotEditMissingSourcesMsg', {dsName: item.keng__id, srcList: missingSources.toString()});
+                $('#cannotEditModal').modal('show');
+            } else {
+                vm.editDataService(item);
+            }
         };
 
         /**

@@ -390,6 +390,20 @@
         };
 
         /*
+         * Determine if a service source with the specified name currently exists
+         */
+        service.hasServiceSource = function( svcSourceName ) {
+            var hasSource = false;
+            for(var i=0; i<svcSrc.serviceSources.length; i++) {
+                if(svcSrc.serviceSources[i].keng__id === svcSourceName) {
+                    hasSource = true;
+                    break;
+                }
+            }
+            return hasSource;
+        };
+
+        /*
          * Refresh the collection of service sources
          */
         service.refresh = function(pageId) {
