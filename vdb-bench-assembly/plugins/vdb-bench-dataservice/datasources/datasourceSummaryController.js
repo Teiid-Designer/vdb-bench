@@ -8,11 +8,11 @@
         .module(pluginName)
         .controller('DatasourceSummaryController', DatasourceSummaryController);
 
-    DatasourceSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSPageService', 
+    DatasourceSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSPageService', 'DSSelectionService',
                                            'SvcSourceSelectionService', 'TranslatorSelectionService', 'DatasourceWizardService', 
                                            'ConnectionSelectionService', 'DownloadService', 'CredentialService', 'pfViewUtils'];
 
-    function DatasourceSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, DSPageService, 
+    function DatasourceSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, DSPageService, DSSelectionService,
                                           SvcSourceSelectionService, TranslatorSelectionService, DatasourceWizardService, 
                                           ConnectionSelectionService, DownloadService, CredentialService, pfViewUtils) {
         var vm = this;
@@ -345,8 +345,15 @@
             // Need to select the item first
             SvcSourceSelectionService.selectServiceSource(item);
 
-            // show the delete confirmation modal
-            vm.confirmDeleteMsg = $translate.instant('datasourceSummaryController.confirmDeleteMsg', {sourceName: item.keng__id});
+            // Determine if any dataservices use this source.  List them in the confirmation message
+            var dsList = DSSelectionService.getDataservicesUsingSource(item.keng__id);
+            if( dsList.length > 0 ) {
+                vm.confirmDeleteMsg = $translate.instant('datasourceSummaryController.confirmDeleteDataservicesAffectedMsg', {sourceName: item.keng__id, dsList: dsList.toString()});
+            } else {
+                // show the delete confirmation modal
+                vm.confirmDeleteMsg = $translate.instant('datasourceSummaryController.confirmDeleteMsg', {sourceName: item.keng__id});
+            }
+
             $('#confirmDeleteModal').modal('show');
         };
  

@@ -20,6 +20,26 @@
           </div>
         </div>
 
+        <!-- Modal Dialog to inform user of missing source on edit attempt -->
+        <div class="modal fade dsb-modal" id="cannotEditModal" tabindex="-1" role="dialog" aria-labelledby="cannotEditModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                  <span class="pficon pficon-close"></span>
+                </button>
+                <h4 class="modal-title" id="cannotEditModalLabel" translate="dataservice-summary.cannotEditTitle"></h4>
+              </div>
+              <div class="modal-body">
+                  <span ng-bind-html="vm.cannotEditMsg" />
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" translate="shared.Dismiss"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
 	    <!-- Content shown if No Sources or DataServices yet -->
         <div class="blank-slate-pf" 
              id="dataservice-summary-nosources-noservices" 

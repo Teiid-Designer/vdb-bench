@@ -140,6 +140,28 @@
             return ds.editServiceSourceTableSelection;
         };
 
+        /**
+         * Get the names of the Dataservices that use the provided source name
+         */
+        service.getDataservicesUsingSource = function( sourceName ) {
+            var dataserviceNames = [];
+
+            for (var i = 0; i < ds.dataservices.length; ++i) {
+                if(ds.dataservices[i].serviceViewTables) {
+                    var viewTables = ds.dataservices[i].serviceViewTables;
+                    for (var j = 0; j < viewTables.length; ++j) {
+                        var viewTable = viewTables[j];
+                        if(viewTable.startsWith(sourceName+'.')) {
+                            dataserviceNames.push(ds.dataservices[i].keng__id);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return dataserviceNames;
+        };
+
         /*
          * Select the given dataservice
          */

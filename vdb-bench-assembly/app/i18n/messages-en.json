@@ -19,6 +19,7 @@
         "Delete" : "Delete",
         "DeleteWhat" : "Delete {{what}}",
         "Description" : "Description",
+        "Dismiss" : "Dismiss",
         "Download" : "Download",
         "Driver" : "Driver",
         "Edit" : "Edit",
@@ -116,6 +117,7 @@
         "connectionsNumberToolTip" : "The number of native data connections, eg. JDBC databases, utilised by this dataservice",
         "createDataServiceMsg" : "A Data Service accesses one or more Data Sources. To create your first Data Service, click <strong>New Data Service</strong> below.  To import a Data Service from a git repository, click <strong>Import Data Service</strong>.",
         "createSourceMsg" : "A Data Service is created using one or more Data Sources. To create your first Data Source, click ",
+        "cannotEditTitle" : "Cannot Edit Data Service",
         "confirmDeleteTitle" : "Confirm Delete",
         "codeSamplesDataServiceMsg" : "Code samples showing how to connect to your data service are available here.",
         "codeSamplesDataService" : "Code Samples",
@@ -131,8 +133,7 @@
         "viewSourcesToolTip" : "The source tables accessed by this data service",
         "welcomeMsg" : "Welcome to the <strong>Data Services Builder</strong>!"
     },
-    
-    
+
     "dataservice-documentation" : {
         "javaTab" : "Java",
         "javaScriptTab" : "Javascript",
@@ -266,6 +267,7 @@
     },
 
     "dsSummaryController" : {
+        "cannotEditMissingSourcesMsg" : "Data Service '{{dsName}}' cannot be edited because the following sources are not available:<br/>[{{srcList}}]<br/>",
         "confirmDeleteMsg" : "Are you sure you want to delete data service '{{serviceName}}'?",
         "deleteFailedMsg" : "Failed to remove the data service: {{response}}",
         "deployFailedMsg" : "Error deploying the data service: {{response}}",
@@ -352,6 +354,7 @@
         "actionTitleNew" : "Create a Data Source",
         "actionTitleRefresh" : "Refresh the Table",
         "confirmDeleteMsg" : "Are you sure you want to delete data source '{{sourceName}}'?",
+        "confirmDeleteDataservicesAffectedMsg" : "The following Data Service(s) utilize this source:<br/>[{{dsList}}]<br/>If you delete data source '{{sourceName}}', the data service(s) will not longer be editable.<br/><br/>Are you sure you want to delete '{{sourceName}}'?",
         "gettingDdlMsg" : "Fetching DDL...",
         "getDdlFailedMsg" : "Failed to get the DDL.",
         "removeLocalSourceFailedMsg" : "Failed to remove the local ServiceSource.",
