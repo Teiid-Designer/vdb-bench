@@ -20,6 +20,15 @@
 		<app.web.version>${project.version}</app.web.version>
 	</properties>
 
+	<profiles>
+		<profile>
+			<id>openshift</id>
+			<properties>
+				<frontend-maven-plugin-version>0.0.22</frontend-maven-plugin-version>
+			</properties>
+		</profile>
+	</profiles>
+
 	<build>
 
 		<plugins>
