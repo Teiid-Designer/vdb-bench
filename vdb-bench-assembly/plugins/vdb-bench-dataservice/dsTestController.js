@@ -95,17 +95,27 @@
             vm.pinging = true;
             vm.pinged = false;
 
+            /*
+             * To ensure the sql content is visible,
+             * signal the sql control to refresh its
+             * editor when finished. This is done by setting 
+             * vm.sql.refreshEditor to true
+             */
+
             try {
                 RepoRestService.ping("jdbc").then(
                     function (statusObj) {
                         setJdbcResult(statusObj.Information);
+                        vm.sql.refreshEditor = true;  // Refresh SQL Editor
                     },
                     function (response) {
                         // Some kind of error has occurred
                         setJdbcResult(response.message);
+                        vm.sql.refreshEditor = true;  // Refresh SQL Editor
                     });
             } catch (error) {
                 setJdbcResult(error.message);
+                vm.sql.refreshEditor = true;  // Refresh SQL Editor
             }
             vm.pinging = false;
         };
@@ -923,15 +933,6 @@
         vm.onTabSelected = function (tabId) {
             if (tabId === 'Advanced') {
             	 vm.ping();
-                /*
-                 * To ensure the sql content is visible,
-                 * signal the sql control should refresh its
-                 * editor. This is done by setting the var
-                 * assigned to the 'refresh' attribute to true
-                 */
-            	vm.sql.refreshEditor = true;
-            } else {
-            	
             }
         };
     }
