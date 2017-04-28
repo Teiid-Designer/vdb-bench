@@ -8,13 +8,13 @@
         .module(pluginName)
         .controller('DatasourceSummaryController', DatasourceSummaryController);
 
-    DatasourceSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 
+    DatasourceSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSPageService', 'DSSelectionService',
                                            'SvcSourceSelectionService', 'TranslatorSelectionService', 'DatasourceWizardService', 
-                                           'ConnectionSelectionService', 'DownloadService', 'pfViewUtils'];
+                                           'ConnectionSelectionService', 'DownloadService', 'CredentialService', 'pfViewUtils'];
 
-    function DatasourceSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, 
+    function DatasourceSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, DSPageService, DSSelectionService,
                                           SvcSourceSelectionService, TranslatorSelectionService, DatasourceWizardService, 
-                                          ConnectionSelectionService, DownloadService, pfViewUtils) {
+                                          ConnectionSelectionService, DownloadService, CredentialService, pfViewUtils) {
         var vm = this;
 
         vm.srcLoading = SvcSourceSelectionService.isLoading();
@@ -41,6 +41,15 @@
             // Nothing to do at the moment
         };
 
+        function setHelpId() {
+            var page = DSPageService.page(DSPageService.SERVICESOURCE_SUMMARY_PAGE);
+
+            if (!vm.hasSources)
+                DSPageService.setCustomHelpId(page.id, "datasource-summary-empty");
+            else
+                DSPageService.setCustomHelpId(page.id, null);
+        }
+
         /*
          * When the data services have been loaded
          */
@@ -55,6 +64,7 @@
             } else {
                 vm.hasSources = false;
             }
+            setHelpId();
         });
 
         /**
@@ -335,8 +345,15 @@
             // Need to select the item first
             SvcSourceSelectionService.selectServiceSource(item);
 
-            // show the delete confirmation modal
-            vm.confirmDeleteMsg = $translate.instant('datasourceSummaryController.confirmDeleteMsg', {sourceName: item.keng__id});
+            // Determine if any dataservices use this source.  List them in the confirmation message
+            var dsList = DSSelectionService.getDataservicesUsingSource(item.keng__id);
+            if( dsList.length > 0 ) {
+                vm.confirmDeleteMsg = $translate.instant('datasourceSummaryController.confirmDeleteDataservicesAffectedMsg', {sourceName: item.keng__id, dsList: dsList.toString()});
+            } else {
+                // show the delete confirmation modal
+                vm.confirmDeleteMsg = $translate.instant('datasourceSummaryController.confirmDeleteMsg', {sourceName: item.keng__id});
+            }
+
             $('#confirmDeleteModal').modal('show');
         };
  
@@ -494,7 +511,8 @@
                 name: $translate.instant('datasourceSummaryController.actionNameEdit'),
                 title: $translate.instant('datasourceSummaryController.actionTitleEdit'),
                 actionFn: editSvcSourceMenuAction,
-                include: false
+                include: false,
+                isDisabled: true
             }
         ];
 
@@ -530,7 +548,7 @@
           sortConfig: vm.sortConfig,
           actionsConfig: vm.actionsConfig
         };
-     
+
         /**
          * List and Card Configuration
          */
@@ -542,7 +560,37 @@
           onSelect: handleSelect,
           checkDisabled: false
         };
-        
+
+        /**
+         * Sets the listView button enablements
+         */
+        vm.enableButton = function(action, item) {
+            // Disable edit if a different user owns the datasource
+            if(action.name==='Edit') {
+                var owner = SvcSourceSelectionService.getServiceSourceOwner(item);
+                if( owner === CredentialService.credentials().username ) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        };
+
+        /**
+         * Sets the listView menu actions enablements
+         */
+        vm.enableMenuAction = function(action, item) {
+            // Disable delete if a different user owns the datasource
+            if(action.name==='Delete') {
+                var owner = SvcSourceSelectionService.getServiceSourceOwner(item);
+                if( owner === CredentialService.credentials().username ) {
+                    action.isDisabled = false;
+                } else {
+                    action.isDisabled = true;
+                }
+            }
+        };
+
         /**
          * Access to the collection of data services
          */

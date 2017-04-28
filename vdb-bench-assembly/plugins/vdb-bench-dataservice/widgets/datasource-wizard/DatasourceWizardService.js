@@ -264,6 +264,13 @@
                     RepoRestService.validateDataSourceName( uri ).then(
                         function ( result ) {
                             wiz.nameErrorMsg = result;
+
+                            // since a data source is really a VDB, replace VDB with Data Source so 
+                            // user will not be confused (see svcSourceCloneController.js for same code)
+                            if ( !_.isEmpty( wiz.nameErrorMsg ) ) {
+                                wiz.nameErrorMsg = wiz.nameErrorMsg.replace( "VDB", $translate.instant( 'shared.Source' ) );
+                            }
+
                             $rootScope.$broadcast( "datasourceWizardSourceNameChanged" );
                         },
                         function ( response ) {

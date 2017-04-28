@@ -49,6 +49,8 @@
         $scope.$on("wizard:stepChanged", function (e, parameters) {
             if ( parameters.step.stepId == 'data-service-export' ) {
                 vm.nextButtonTitle = $translate.instant( 'shared.Export' );
+            } else if (parameters.step.stepId.endsWith('data-service-import')) {
+                vm.nextButtonTitle = $translate.instant('shared.Import');
             } else if (parameters.step.stepId.endsWith('-final')) {
                 vm.nextButtonTitle = $translate.instant('shared.Finish');
             } else {

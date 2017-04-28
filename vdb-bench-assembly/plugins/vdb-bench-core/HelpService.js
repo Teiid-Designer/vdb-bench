@@ -42,6 +42,7 @@
         	'dataservice-summary': "dataservices-summary-help.html",
         	'dataservice-test': "dataservices-test-help.html",
         	'datasource-summary': "datasource-summary-help.html",
+        	'datasource-summary-empty': "datasource-summary-empty-help.html",
         	'git-preferences': "git-settings-help.html",
         	'svcsource-clone': "svcsource-clone-help.html",
         	'svcsource-edit': "svcsource-edit-help.html",

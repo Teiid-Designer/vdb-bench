@@ -14,7 +14,11 @@
 	                    -- Import Type Step
 	                    -->
 	                <div pf-wizard-step step-title="{{:: 'dataservice-import.importTypeStepTitle' | translate}}"
-	                        step-id="import-source">
+	                        step-id="import-source"
+                            step-priority="0"
+                            substeps="false"
+                            wz-disabled="{{ vm.storageTypes.length < 2 }}"
+                            ng-show="{{ vm.storageTypes.length > 1 }}">
 	                    <h1 translate="dataservice-import.instructionsMsg"></h1>
 	
 	                    <form class="ds-import-export-storage-types-form">
@@ -34,13 +38,13 @@
 	
 	                <!-- directive includes the file wizard steps -->
 	                <ds-import-file-wizard wizard-active="vm.fileWizard"></ds-import-file-wizard>
+	                
 	                <!-- directive includes the git wizard steps -->
-	                <ds-import-git-wizard wizard-active="vm.gitWizard"></ds-import-git-wizard>
+	                <ds-import-git-wizard wizard-active="vm.gitWizard"
+	                                      repo="vm.repo">
+	                </ds-import-git-wizard>
 	            </div>
 	        </div>
 	    </div>
 	</div>
 </div>
-	
-	 
-	        

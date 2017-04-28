@@ -462,7 +462,7 @@
                 // Property added to distinguish service sources
                 if (isSource)  {
                     payload.keng__properties = [{ "name": "dsbServiceSource",
-                                                  "value": "true"}];
+                                                  "value": CredentialService.credentials().username}];
                 }
 
                 var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName;
@@ -491,7 +491,7 @@
                 // Property added to distinguish service sources
                 if (isSource)  {
                     payload.keng__properties = [{ "name": "dsbServiceSource",
-                                                  "value": "true"}];
+                                                  "value": CredentialService.credentials().username}];
                 }
 
                 var uri = REST_URI.WORKSPACE + REST_URI.VDBS + SYNTAX.FORWARD_SLASH + vdbName;
@@ -729,11 +729,17 @@
          * Service: Import the given file
          * Returns: promise object for the imported item
          */
-        service.import = function(storageType, artifactPath, parameters, documentType, data) {
+        service.import = function(storageType, artifactPath, parameters, overwriteAllowed, documentType, data) {
             if (!storageType || !documentType)
                 return null;
 
             parameters = parameters || {};
+
+            if(overwriteAllowed) {
+                parameters['import-overwrite-property'] = 'OVERWRITE';
+            } else {
+                parameters['import-overwrite-property'] = 'RETURN';
+            }
 
             var url = REST_URI.IMPORT_EXPORT + REST_URI.IMPORT;
 
@@ -766,11 +772,11 @@
          * Service: Upload the given file data. Uses the file storage connector.
          * Returns: promise object for the uploaded item
          */
-        service.upload = function(documentType, artifactPath, parameters, data) {
+        service.upload = function(documentType, artifactPath, parameters, overwriteAllowed, data) {
             if (!documentType)
                 return null;
 
-            return service.import('file', artifactPath, parameters, documentType, data);
+            return service.import('file', artifactPath, parameters, overwriteAllowed, documentType, data);
         };
 
         /**
@@ -782,6 +788,12 @@
                 return null;
 
             parameters = parameters || {};
+
+            // If the repoBranchProperty is empty, default to 'master'
+            var repoBranchProp = parameters['repo-branch-property'];
+            if( !repoBranchProp || repoBranchProp.length === 0 ) {
+                parameters['repo-branch-property'] = 'master';
+            }
 
             var url = REST_URI.IMPORT_EXPORT + REST_URI.EXPORT;
 
@@ -1163,6 +1175,20 @@
 
                 var uri = REST_URI.TEIID + REST_URI.DATA_SERVICE;
                 return restService.all(uri).post(payload);
+            });
+        };
+
+        /**
+         * Service: determine deployable status of a data service
+         */
+        service.getDataServiceDeployableStatus = function (dataserviceName) {
+            return getRestService().then(function (restService) {
+                if (!dataserviceName) {
+                    throw RestServiceException("Data service name is not defined");
+                }
+
+                var uri = REST_URI.TEIID + REST_URI.DATA_SERVICE + SYNTAX.FORWARD_SLASH + dataserviceName + SYNTAX.FORWARD_SLASH + REST_URI.DEPLOYABLE_STATUS;
+                return restService.one(uri).get();
             });
         };
 

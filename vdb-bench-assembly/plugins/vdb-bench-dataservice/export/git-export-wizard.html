@@ -8,6 +8,7 @@
         wz-disabled="{{!vm.wizardActive}}"
         next-enabled="vm.validateRepoProps()"
         allow-click-nav="false"
+        substeps="false"
         ok-to-nav-away="vm.validateRepoProps()">
     <h1 class="step-message" translate="git-export-wizard.repoPropsStepMsg" />
 
@@ -25,6 +26,7 @@
 <div pf-wizard-step
      step-title="{{:: 'git-export-wizard.commitStepTitle' | translate}}"
      step-id="git-export-execute"
+     step-priority="2"
      allow-click-nav="false"
      substeps="true"
      wz-disabled="{{!vm.wizardActive}}">
@@ -69,7 +71,11 @@
                 <span class="pficon pficon-ok"></span>
             </div>
             <h3 class="blank-slate-pf-main-action" translate="dsExportGitWizard.successfulExportMsg" />
-            <p class="blank-slate-pf-secondary-action">{{ vm.responseMsg }}</p>
+            <p class="blank-slate-pf-secondary-action">
+            {{ vm.responseMsg }}
+            <br>
+            <strong>{{:: 'shared.Repository' | translate}}:</strong>&nbsp;<a href={{vm.repoTargetUrl()}} target="_blank">{{vm.repoTargetUrl()}}</a>
+            </p>
         </div>
         <div
             class="wizard-pf-complete blank-slate-pf"
