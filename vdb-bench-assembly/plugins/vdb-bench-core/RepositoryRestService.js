@@ -28,9 +28,10 @@
         service.cachedServices = {};
 
         function url(repo) {
+            var host = service.hostName(repo);
             return CONFIG.rest.protocol +
                         SYNTAX.COLON + SYNTAX.FORWARD_SLASH + SYNTAX.FORWARD_SLASH +
-                        repo.host + SYNTAX.COLON + repo.port + repo.baseUrl;
+                        host + repo.baseUrl;
         }
 
         function HostNotReachableException(host, reason) {
@@ -116,6 +117,21 @@
                 throw new HostNotReachableException(baseUrl, 'Status code: ' + response.status);
             });
         }
+
+        /**
+         * Service: derive the hostname
+         */
+        service.hostName = function(repo) {
+            if (_.isEmpty(repo)) {
+                return '';
+            }
+
+            if (repo.portRequired || repo.portRequired === 'true') {
+                return repo.host + SYNTAX.COLON + repo.port;
+            }
+
+            return repo.host;
+        };
 
         /**
          * Service: workspace patch

@@ -28,8 +28,7 @@
           * The odata endpoint
           */
          vm.odataUrl = function() {
-             var hostName = RepoSelectionService.getSelected().host;
-             var portValue = RepoSelectionService.getSelected().port;
+             var hostName = RepoRestService.hostName(RepoSelectionService.getSelected());
              var vdbName = DSSelectionService.selectedDataServiceVdbName();
              var vdbVersion = DSSelectionService.selectedDataServiceVdbVersion();
              var modelName = DSSelectionService.selectedDataServiceViewModel();
@@ -44,7 +43,7 @@
              if (vdbName === SYNTAX.UNKNOWN || vdbVersion === SYNTAX.UNKNOWN || modelName === SYNTAX.UNKNOWN)
                  return null;
 
-             return "https://" + hostName + SYNTAX.COLON + portValue + SYNTAX.FORWARD_SLASH +
+             return "https://" + hostName + SYNTAX.FORWARD_SLASH +
                                      "odata4" + SYNTAX.FORWARD_SLASH + vdbName + SYNTAX.DOT + vdbVersion + SYNTAX.FORWARD_SLASH +
                                      modelName + SYNTAX.FORWARD_SLASH + serviceView + "?$format=json";
          }();
