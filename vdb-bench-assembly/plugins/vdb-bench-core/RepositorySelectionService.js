@@ -19,6 +19,7 @@
         var defaultWorkspace = {
             name: 'default',
             host: $location.host(),
+            portRequired: 'true',
             port: config.rest.port,
             baseUrl: config.rest.baseUrl
         };
