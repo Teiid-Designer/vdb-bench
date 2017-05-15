@@ -143,8 +143,8 @@
         "connecting-heading1" : "There are multiple ways to connect to your data service including <strong>JDBC, ODBC, and OData</strong>.  Several code samples are provided below, which demonstrate how you can connect to your data service from different client applications.  For more information about the supported access methods, see the <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/Client_Developers_Guide.html'>Client Developers Guide</a>.  In the Client Developers Guide you can find specific support information for <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/JDBC_Support.html'>JDBC</a>, <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/ODBC_Support.html'>ODBC</a> and <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/OData_Support.html'>OData</a>.",
         "connection-detail-title" : "Connections for '{{dsName}}'",
         "connecting-java" : "<strong>JDBC&nbsp;&nbsp;</strong>To connect to your service using JDBC, use the following connection string in your client: <strong>{{connection_string}}</strong>",
-        "connecting-odata" : "<strong>OData&nbsp;&nbsp;</strong>Deployed services are accessible using OData URLs. This service is accessible via: {{url}}.", 
-        "java-instructions" : "<i>This <strong>Java</strong> code sample shows how to connect and query the data service from a java client.  You must include the Teiid driver jar file in your client's classpath.  See <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/JDBC_Support.html'>JDBC Support</a> in the <strong>Client Developers Guide</strong> for more information.</i>", 
+        "connecting-odata" : "<strong>OData&nbsp;&nbsp;</strong>Deployed services are accessible using OData URLs. This service is accessible via: {{url}}.",
+        "java-instructions" : "<i>This <strong>Java</strong> code sample shows how to connect and query the data service from a java client.  You must include the Teiid driver jar file in your client's classpath.  See <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/JDBC_Support.html'>JDBC Support</a> in the <strong>Client Developers Guide</strong> for more information.</i>",
         "javascript-instructions" : "<i>This <strong>Javascript</strong> code sample uses jquery to retrieve an OData result set. See <a target='_blank' href='https://jquery.com/'>http://jquery.com</a> for details.  The OData URL is protected using HTTP Basic security - the user is required to have a role of 'odata' defined for access.</i>",
         "LoadingCodeSamples" : "Loading code samples",
         "node-instructions" : "<i>This <strong>node.js</strong> code sample uses the o.js javascript library available for node. See <a target='_blank' href='https://www.npmjs.com/package/odata'>http://www.npmjs.com/package/odata</a> for details.  The OData URL is protected using HTTP Basic security - the user is required to have a role of 'odata' defined for access.</i>",
@@ -212,7 +212,7 @@
             "selectedTables" : "'<p>The selected tables for your data service</p>Clicking a data source table at left will add it to the selected tables<p></p><p>Clicking a selected table x will remove it</p>'"
         }
     },
-    
+
     "dsCloneController" : {
         "cloneFailedMsg" : "Failed to clone the data service: {{response}}"
     },
@@ -222,7 +222,7 @@
         "updateDataserviceFailedMsg" : "Failed to update the data service",
         "saveFailedMsg" : "Failed to update the data service: {{response}}"
     },
-    
+
     "dsExportGitWizard" : {
         "exportProgressDetailMsg" : "Data service '{{dataServiceName}}' is being exported ...",
         "exportProgressMsg" : "<strong>Export in Progress</strong>",
@@ -334,7 +334,7 @@
         "noSourcesInstructionsMsg" : "To get started, click <strong>New Data Source</strong> below to create your first data source.",
         "sourceSchema" : "Data Source Schema"
     },
-    
+
     "datasourceSummaryController" : {
         "actionNameCopy" : "@:shared.Copy",
         "actionNameDelete" : "@:shared.Delete",
@@ -426,11 +426,11 @@
         "invalidFileTypeMsg" : "{{fileName}}'s file type is not valid hence the file cannot be imported.",
         "selectFileMsg" : "Select the File to Import"
     },
-    
+
     "file-import-wizard" : {
         "importFromFileMsg" : "Import the dataservice from a file"
     },
-    
+
     "gitCredentialsControl" : {
         "authorEmailInvalid" : "Email is invalid",
         "authorEmailRequired" : "Email is required",
@@ -509,7 +509,7 @@
     "git-preferences-config" : {
         "tabTitle" : "Git Repository Configurations"
     },
-    
+
     "HelpService" : {
     	"inlineFramesNotSupportedMsg" : "Sorry your browser doesn't support inline frames."
     },
@@ -533,7 +533,7 @@
         "connectionFailedErrorMsg" : "Failed to get connection: {{error}}",
         "getTablesErrorMsg" : "Failed to get Tables: {{errorMsg}}"
     },
-    
+
     "loginPage" : {
         "rememberCredentials" : "Remember Credentials",
         "welcomeTitle" : "Welcome to Data Services Builder",
@@ -582,7 +582,7 @@
     "teiid-preference-config" : {
         "tabTitle" : "Teiid Settings"
     },
-    
+
     "teiid-preferences" : {
         "Administration" : "Administration",
         "adminPasswordPlaceholder" : "Enter the Teiid administration password",
@@ -591,6 +591,7 @@
         "jdbcSecureLabel" : "Is Secure:",
         "jdbcUserNamePlaceholder" : "Enter the Teiid JDBC user name",
         "StatusErrorLabel" : "Status Error:",
+        "UpdateBtn" : "Update",
         "TestAdminConnection" : "Test Admin Connection",
         "TestJdbcConnection" : "Test JDBC Connection",
         "help" : {

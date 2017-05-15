@@ -25,11 +25,25 @@
             jdbcSecure: false,
         };
 
+        vm.oldTeiid = _.clone(vm.teiid);
         vm.error = null;
 
         function setError(error) {
             vm.error = error;
         }
+
+        vm.needsUpdate = function() {
+            if (vm.loading === true)
+                return false;
+
+            var same = vm.teiid.adminUser === vm.oldTeiid.adminUser &&
+                vm.teiid.adminPasswd === vm.oldTeiid.adminPasswd &&
+                vm.teiid.jdbcUser === vm.oldTeiid.jdbcUser &&
+                vm.teiid.jdbcPasswd === vm.oldTeiid.jdbcPasswd &&
+                vm.teiid.jdbcSecure === vm.oldTeiid.jdbcSecure;
+
+            return !same;
+        };
 
         vm.submitCredentials = function() {
             setError(null);
@@ -37,6 +51,7 @@
             try {
                 RepoRestService.setTeiidCredentials(vm.teiid).then(
                     function (status) {
+                        vm.oldTeiid = _.clone(vm.teiid);
                     },
                     function (response) {
                         // Some kind of error has occurred
@@ -108,6 +123,9 @@
                         vm.teiid.jdbcUser = teiidStatus.tko__jdbcUser;
                         vm.teiid.jdbcPasswd = teiidStatus.tko__jdbcPswd;
                         vm.teiid.jdbcSecure = teiidStatus.tko__jdbcSecure;
+
+                        vm.oldTeiid = _.clone(vm.teiid);
+
                         setError(null);
 
                         vm.loading = false;
