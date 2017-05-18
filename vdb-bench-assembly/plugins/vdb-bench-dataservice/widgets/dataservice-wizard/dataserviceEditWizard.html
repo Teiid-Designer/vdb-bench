@@ -81,7 +81,7 @@
                     </div>
                     <!-- No Content Message -->
                     <div ng-show="vm.treeLoading==false && vm.treedata.length == 0 && !vm.hasTreeFetchError">
-                        <h4 translate="dataserviceEditWizard.noTreeContent"></h4>
+                        <h5 style="color:red" translate="dataserviceEditWizard.noTreeContent"></h5>
                     </div>
                     <!-- Fetch Content Error Message -->
                     <div ng-show="vm.treeLoading==false && vm.hasTreeFetchError">

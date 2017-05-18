@@ -266,8 +266,10 @@
             } else if ( wiz.sourceTables.length===1 && ( source !== wiz.sources[0] || sourceTable !== wiz.sourceTables[0] ) ) {
                 wiz.sources.push(source);
                 wiz.sourceTables.push(sourceTable);
-                // Set the criteria predicates based on the table selections
-                setCriteriaPredicatesFromTables(wiz.sourceTables[0],wiz.sourceTables[1]);
+                // If no criteria predicates have been set, attempt to set based on the table selections
+                if(!service.criteriaComplete()) {
+                  setCriteriaPredicatesFromTables(wiz.sourceTables[0],wiz.sourceTables[1]);
+                }
                 // Broadcast table change
                 $rootScope.$broadcast("editWizardTablesChanged");
             }
