@@ -1,9 +1,27 @@
 <div id="outer" class="outer-wrapper">
-	<div id="dataservice-edit-container" class="container-fluid" ng-controller="DSEditController as vm">
-	
-	    <div id="dsEdit-edit-controls" ng-show="vm.svcSourcesLoading==false" class="col-md-12 row">
+    <div id="dataservice-edit-container" class="container-fluid" ng-controller="DSEditController as vm">
+
+        <!-- Modal Dialog for user to confirm moving to expert tab -->
+        <div class="modal fade dsb-modal" id="confirmExpertModal" tabindex="-1" role="dialog" aria-labelledby="confirmExpertModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                  <span class="pficon pficon-close"></span>
+                </button>
+                <h4 class="modal-title" id="confirmExpertModalLabel" translate="dataservice-edit.confirmExpertTitle"></h4>
+              </div>
+              <div class="modal-body">{{vm.confirmExpertMsg}}</div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="vm.stayOnWizardTab()" translate="shared.Cancel"></button>
+                <button type="button" class="btn btn-primary" ng-click="vm.switchToExpertTab()" translate="shared.Confirm"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="dsEdit-edit-controls" ng-show="vm.svcSourcesLoading==false" class="col-md-12 row">
             <uib-tabset>
-                <uib-tab heading="{{:: 'dataservice-edit.wizardTab' | translate}}" active="vm.wizardTabActive">
+                <uib-tab heading="{{:: 'dataservice-edit.wizardTab' | translate}}" active="vm.wizardTabActive" disable="vm.disableWizardTab">
                     <dataservice-edit-wizard></dataservice-edit-wizard>
                 </uib-tab>
                 <uib-tab heading="{{:: 'dataservice-edit.expertTab' | translate}}" active="vm.expertTabActive" disable="vm.disableExpertTab" ng-click="vm.onExpertTabSelected()">

@@ -41,7 +41,7 @@
             <div class="col-md-3">
                 <select ng-model="criteriaPredicate.lhColName" ng-change="vm.lhColumnChanged( )">
                     <option value="" translate="criteriaBuilder.chooseCriteriaCol"></option>
-                    <option ng-selected="{{lhCol.keng__id == criteriaPredicate.lhColName}}"
+                    <option ng-selected="{{lhCol.keng__id === criteriaPredicate.lhColName}}"
                             ng-repeat="lhCol in vm.lhSourceCols"
                             value="{{lhCol.keng__id}}">
                             {{lhCol.keng__id}}
@@ -52,7 +52,7 @@
             <div class="col-md-2">
                 <select ng-model="criteriaPredicate.operatorName" ng-change="vm.operatorChanged( )">
                     <option value="" translate="criteriaBuilder.chooseOperator"></option>
-                    <option ng-selected="{{operator.name == criteriaPredicate.operatorName}}"
+                    <option ng-selected="{{operator.name === criteriaPredicate.operatorName}}"
                             ng-repeat="operator in vm.operatorOptions"
                             value="{{operator.name}}">
                             {{operator.name}}
@@ -63,7 +63,7 @@
             <div class="col-md-3">
                 <select ng-model="criteriaPredicate.rhColName" ng-change="vm.rhColumnChanged( )">
                     <option value="" translate="criteriaBuilder.chooseCriteriaCol"></option>
-                    <option ng-selected="{{rhCol.keng__id == criteriaPredicate.rhColName}}"
+                    <option ng-selected="{{rhCol.keng__id === criteriaPredicate.rhColName}}"
                             ng-repeat="rhCol in vm.rhSourceCols"
                             value="{{rhCol.keng__id}}">
                             {{rhCol.keng__id}}
