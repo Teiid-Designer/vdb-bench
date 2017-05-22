@@ -11,7 +11,8 @@
 
     BodyClickDirective.$inject = ['$parse', '$document'];
     DataServicePageController.$inject = ['$scope', 'SYNTAX', 'CONFIG', 'RepoRestService', 'DSSelectionService', 'DatasourceWizardService',
-                                         'EditWizardService', 'ConnectionSelectionService', 'SvcSourceSelectionService', 'DSPageService'];
+                                         'EditWizardService', 'ConnectionSelectionService', 'SvcSourceSelectionService', 'DSPageService',
+                                         'CredentialService'];
 
     /**
      * Designed to bind a click handler to body element which,
@@ -52,9 +53,10 @@
         };
         return directive;
     }
-    
+
     function DataServicePageController($scope, syntax, config, RepoRestService, DSSelectionService, DatasourceWizardService,
-                                       EditWizardService, ConnectionSelectionService, SvcSourceSelectionService, DSPageService) {
+                                       EditWizardService, ConnectionSelectionService, SvcSourceSelectionService, DSPageService,
+                                       CredentialService) {
         var vm = this;
 
         vm.dataserviceNav = "";
@@ -100,7 +102,17 @@
                 DSSelectionService.deploySelectedDataService();
             }
 
-            vm.prevPageId = vm.selectedPageId();
+            //
+            // If we have a previous page id then cache it in the session
+            //
+            if (! _.isEmpty(vm.selectedPageId()))
+                CredentialService.addSessionProperty('dsPreviousPageId', vm.selectedPageId());
+
+            //
+            // Cache the new page in the session to try and keep our place
+            //
+            CredentialService.addSessionProperty('dsPageId', pageId);
+
             vm.selectedPage = DSPageService.page(pageId);
             DSPageService.setCustomTitle(pageId, null);
             DSPageService.setCustomHelpId(pageId, null);
@@ -141,10 +153,7 @@
         };
 
         vm.previousPageId = function() {
-            if (_.isEmpty(vm.prevPageId))
-                return '';
-
-            return vm.prevPageId;
+            return CredentialService.sessionProperty('dsPreviousPageId');
         };
 
         vm.isPreferencePage = function() {
@@ -180,7 +189,7 @@
         vm.selectedDataservice = function () {
             return DSSelectionService.selectedDataService();
         };
-        
+
         /*
          * Service : get selected Service Source
          */
@@ -209,7 +218,11 @@
              vm.selectPage(DSPageService.DS_PREFERENCE_PAGE);
          };
 
-        vm.selectPage(DSPageService.DATASERVICE_SUMMARY_PAGE);
+         var pageId = CredentialService.sessionProperty('dsPageId');
+         if (_.isEmpty(pageId))
+            pageId = DSPageService.DATASERVICE_SUMMARY_PAGE;
+
+         vm.selectPage(pageId);
     }
 
 })();

@@ -41,8 +41,8 @@ var App;
     }
 
     App._module.factory('CredentialService', CredentialService);
-    CredentialService.$inject = ['localStorage', '$window'];
-    function CredentialService(localStorage, $window) {
+    CredentialService.$inject = ['localStorage', '$location', '$window'];
+    function CredentialService(localStorage, $location, $window) {
         /*
          * Service instance to be returned
          */
@@ -84,11 +84,34 @@ var App;
         service.reset = function() {
             user.username = null;
             user.password = null;
+            $window.sessionStorage.removeItem('dsb-session');
         };
+
+        function saveSession(session) {
+            if (_.isEmpty(user) || _.isEmpty(user.username))
+                return; // Cannot do much without a user
+
+            if (_.isEmpty(session))
+                session = {};
+
+            session.user = user.username;
+            session.location = $location.url();
+
+            $window.sessionStorage.setItem('dsb-session', angular.toJson(session));
+        }
 
         service.setCredentials = function(username, password, remember) {
             user.username = username;
             user.password = password;
+
+            //
+            // Will fire prior to an F5 refresh being invoked or
+            // the browser exiting, thereby saving the session
+            //
+            $window.onbeforeunload = function (event) {
+                saveSession(service.session());
+                return undefined;
+            };
 
             if (remember)
                 localStorage.userPrincipal = angular.toJson(user);
@@ -98,6 +121,36 @@ var App;
 
         service.isRemembered = function() {
             return 'userPrincipal' in localStorage;
+        };
+
+        service.inSession = function() {
+            var session = service.session();
+            if (_.isEmpty(session))
+                return false;
+
+            return true;
+        };
+
+        service.session = function() {
+            var session = $window.sessionStorage.getItem('dsb-session');
+            if (_.isEmpty(session))
+                return {};
+
+            return angular.fromJson(session);
+        };
+
+        service.addSessionProperty = function(key, value) {
+            var session = service.session();
+            session[key] = value;
+            saveSession(session);
+        };
+
+        service.sessionProperty = function(key) {
+            var session = service.session();
+            if (_.isEmpty(session))
+                return '';
+
+            return session[key];
         };
 
         return service;
@@ -122,31 +175,73 @@ var App;
             return authenticated;
         };
 
+        service.setLastLocation = function(location) {
+            lastLocation = location;
+        };
+
         service.lastLocation = function() {
             return lastLocation.url || '/';
         };
 
+        function isLoginPage(url) {
+            if (_.isEmpty(url))
+                return false;
+
+            return url.startsWith('/login') || url.startsWith('/re-login');
+        }
+
         var redirectCallback = function() {
-            if (! service.authenticated()) {
-                var currentUrl = $location.url();
-                if (!currentUrl.startsWith('/login')) {
-                    lastLocation.url = currentUrl;
-                    $location.url('/login');
+            var currentUrl = $location.url();
+            if (service.authenticated()) {
+                //
+                // Already authenticated
+                //
+                if (isLoginPage(currentUrl)) {
+                    var url = '/';
+                    if (angular.isDefined(lastLocation.url)) {
+                        //
+                        // Possible that previous url was the re-login page if user
+                        // has clicked the 'delete session' link and reverted to the
+                        // login page.
+                        //
+                        if (! isLoginPage(lastLocation.url))
+                            url = lastLocation.url;
+                    }
+                    $location.url(url);
+                } else if (CredentialService.inSession()) {
+                    //
+                    // Have logged in from the re-login page
+                    // so try and return to the page we left
+                    //
+                    var session = CredentialService.session();
+                    $location.url(session.location);
                 }
-                else {
+            }
+            else if (CredentialService.inSession()) {
+                //
+                // Previously authenticated but refreshed browser
+                //
+                $location.url('/re-login');
+            }
+            else {
+                //
+                // Not authenticated
+                //
+                if (currentUrl.startsWith('/login')) {
+                    //
+                    // Not much required as already on login page
+                    //
                     if (!$rootScope.reloaded) {
                         $route.reload();
                         $rootScope.reloaded = true;
                     }
                 }
-            }
-            else {
-                if ($location.url().startsWith('/login')) {
-                    var url = '/';
-                    if (angular.isDefined(lastLocation.url)) {
-                        url = lastLocation.url;
-                    }
-                    $location.url(url);
+                else {
+                    //
+                    // Some other url attempted but not authenticated
+                    //
+                    lastLocation.url = currentUrl;
+                    $location.url('/login');
                 }
             }
         };
@@ -181,8 +276,8 @@ var App;
         };
 
         service.logout = function() {
-            CredentialService.reset();
             authenticated = false;
+            CredentialService.reset();
             CredentialService.setLoggingOut(true);
             service.redirect();
         };
@@ -205,22 +300,26 @@ var App;
         $routeProvider
             .when('/login', {
                 templateUrl: App.templatePath + 'login.html'
+            })
+            .when('/re-login', {
+                templateUrl: App.templatePath + 're-login.html'
             });
-        
+
+
         // configure i18n
         $translateProvider.useSanitizeValueStrategy('sanitize');
         $translateProvider.useStaticFilesLoader({
             prefix: 'app/i18n/messages-',
             suffix: '.json'
         });
-        
+
         // default all en_* and every other locale to en right now
         $translateProvider.registerAvailableLanguageKeys(['en'], {
             'en_*': 'en',
             'en-*': 'en',
             '*': 'en'
          });
-        
+
         // try to get locale from browser
         var l_lang;
         if (navigator.languages !== undefined) { // Chrome
@@ -232,7 +331,7 @@ var App;
         } else {
         	l_lang = 'en'; // fallback
         }
-        
+
         // must set lang
         $translateProvider.preferredLanguage(l_lang);
         $translateProvider.fallbackLanguage('en');
@@ -325,6 +424,39 @@ var App;
 
         vm.toggleRepositoryConfig = function() {
             vm.showRepoConfig = !vm.showRepoConfig;
+        };
+    }
+
+    App.ReLoginController = App._module.controller('App.ReLoginController', ReLoginController);
+    ReLoginController.$inject = ['$rootScope', '$location', '$scope', 'branding', 'CredentialService', 'AuthService'];
+    function ReLoginController ($rootScope, $location, $scope, branding, CredentialService, AuthService) {
+        var vm = this;
+
+        vm.loginError = '';
+        vm.entity = {
+            username: '',
+            password: ''
+        };
+
+        var session = CredentialService.session();
+        vm.entity.username = session.user;
+
+        var onLoginSuccessful = function() {
+            vm.loginError = '';
+            $location.path(AuthService.lastLocation());
+            $apply($rootScope);
+        };
+
+        var onLoginFailure = function() {
+            vm.loginError = "Access Failure.<br>The username/password are incorrect.";
+        };
+
+        vm.doLogin = function () {
+            AuthService.login(vm.entity.username, vm.entity.password, CredentialService.isRemembered(), onLoginSuccessful, onLoginFailure);
+        };
+
+        vm.deleteSession = function() {
+            AuthService.logout();
         };
     }
 })(App || (App = {}));

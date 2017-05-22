@@ -540,6 +540,13 @@
         "welcomeDescription" : "A tool for creating, managing and deploying simple data services."
     },
 
+    "reloginPage" : {
+        "refreshed" : "The application page was refreshed.",
+        "enterPassword" : "Please enter your password to resume your session.",
+        "deleteSession1" : "Clear session",
+        "deleteSession2" : " and return to login page"
+    },
+
     "RepositoryRestService" : {
         "emptyDataServiceName" : "The data service name cannot be empty.",
         "emptyDataSourceName" : "The data source name cannot be empty.",

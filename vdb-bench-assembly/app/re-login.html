@@ -1,0 +1,56 @@
+<div id="vdb-login" ng-controller="App.ReLoginController as vm" style="background-image: url('app/content/img/bg-login.jpg');">
+
+    <div class="login-pf">
+
+        <span id="badge">
+            <img src="app/content/img/teiid-logo.svg" alt=" logo" />
+        </span>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="teiid-brand">
+                        <img src="app/content/img/teiid-dsb-banner.svg" alt="Data Services Builder">
+                    </div>
+                    <!--/#brand-->
+                </div>
+                <!--/.col-*-->
+                <div class="col-sm-7 col-md-6 col-lg-5 login">
+                    <form class="form-horizontal" role="form" ng-submit="vm.doLogin()">
+                        <div class="form-group">
+                            <label class="col-sm-2 col-md-2 control-label">{{'shared.Username' | translate}}</label>
+                            <label class="col-sm-10 col-md-10 control-label">{{vm.entity.username}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword" class="col-sm-2 col-md-2 control-label">{{'shared.Password' | translate}}</label>
+                            <div class="col-sm-10 col-md-10">
+                                <input type="password" class="form-control" id="inputPassword" placeholder="" tabindex="2" required ng-model="vm.entity.password" autofill>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div id="vdb-relogin-clear-session" class="col-xs-8 col-sm-offset-2 col-sm-6 col-md-offset-2 col-md-6">
+                                <a ng-click="vm.deleteSession()">{{'reloginPage.deleteSession1' | translate}}</a>{{'reloginPage.deleteSession2' | translate}}
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4 submit">
+                                <button type="submit" class="btn btn-primary btn-lg" tabindex="4">{{'shared.Login' | translate}}</button>
+                            </div>
+                            <div id="vdb-login-error" class="col-xs-6 col-sm-offset-6 col-sm-6 col-md-offset-6 col-md-6">
+                                <p ng-bind-html="vm.loginError"></p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!--/.col-*-->
+                <div class="col-sm-5 col-md-5 col-lg-5">
+                    <h2>{{'reloginPage.refreshed' | translate}}</h2>
+                    <h3>{{'reloginPage.enterPassword' | translate}}</h3>
+                </div>
+                <!--/.col-*-->
+            </div>
+            <!--/.row-->
+        </div>
+        <!--/.container-->
+    </div>
+
+
+</div>
