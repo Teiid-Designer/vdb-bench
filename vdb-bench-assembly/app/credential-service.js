@@ -2,9 +2,9 @@ var VdbBenchApp = (function(App) {
     'use strict';
 
     App._module.factory('CredentialService', CredentialService);
-    CredentialService.$inject = ['StorageService', 'CONFIG', 'KCService'];
+    CredentialService.$inject = ['StorageService', 'CONFIG', 'KCService', '$window', '$location'];
 
-    function CredentialService(StorageService, CONFIG, KCService) {
+    function CredentialService(StorageService, CONFIG, KCService, $window, $location) {
         /*
          * Service instance to be returned
          */
@@ -28,11 +28,19 @@ var VdbBenchApp = (function(App) {
             return authenticateType;
         };
 
-        service.isBasicAuth = function() {
-            if (angular.isUndefined(authenticateType))
+        /*
+         * Test either the given parameter for being
+         * the basic authentication type or with no
+         * parameter tests the CredentialService property
+         */
+        service.isBasicAuth = function(authType) {
+            if (_.isEmpty(authType))
+                authType = authenticateType;
+
+            if (angular.isUndefined(authType))
                 return false;
 
-            return authenticateType === CONFIG.rest.authTypes[0];
+            return authType === CONFIG.rest.authTypes[0];
         };
 
         service.isKCAuth = function() {
@@ -85,6 +93,7 @@ var VdbBenchApp = (function(App) {
 
         service.reset = function() {
             authOptions = {};
+            StorageService.sessionSetObject('dsb-session', null);
         };
 
         service.setAuthType = function(type) {
@@ -95,15 +104,38 @@ var VdbBenchApp = (function(App) {
             authOptions[key] = value;
         };
 
+        function saveSession(session) {
+            if (_.isEmpty(authOptions) || _.isEmpty(authOptions.username))
+                return; // Cannot do much without a user
+
+            if (_.isEmpty(session))
+                session = {};
+
+            session.user = authOptions.username;
+            session.location = $location.url();
+            session.authType = service.authType();
+
+            StorageService.sessionSetObject('dsb-session', session);
+        }
+
         service.setCredentials = function(credentials) {
             authOptions = {};
             for (var attrname in credentials)
                 { authOptions[attrname] = credentials[attrname]; } // ensure authOptions is always defined
 
+            //
+            // Will fire prior to an F5 refresh being invoked or
+            // the browser exiting, thereby saving the session
+            //
+            $window.onbeforeunload = function (event) {
+                saveSession(service.session());
+                return undefined;
+            };
+
             if (authOptions.remember)
-                StorageService.sessionSet('userPrincipal', angular.toJson(authOptions));
+                StorageService.sessionSetObject('userPrincipal', authOptions);
             else
-                StorageService.sessionSet('userPrincipal', null);
+                StorageService.sessionSetObject('userPrincipal', null);
         };
 
         service.isRemembered = function() {
@@ -116,6 +148,32 @@ var VdbBenchApp = (function(App) {
 
         service.eraseOptions = function(key) {
             StorageService.sessionSetObject(key, null);
+        };
+
+        service.inSession = function() {
+            var session = service.session();
+            if (_.isEmpty(session))
+                return false;
+
+            return true;
+        };
+
+        service.session = function() {
+            return StorageService.sessionGetObject('dsb-session', {});
+        };
+
+        service.addSessionProperty = function(key, value) {
+            var session = service.session();
+            session[key] = value;
+            saveSession(session);
+        };
+
+        service.sessionProperty = function(key) {
+            var session = service.session();
+            if (_.isEmpty(session))
+                return '';
+
+            return session[key];
         };
 
         return service;

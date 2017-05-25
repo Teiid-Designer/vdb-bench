@@ -21,11 +21,10 @@
         vm.sourcesLoading = SvcSourceSelectionService.isLoading();
         vm.hasSources = false;
         vm.hasServices = false;
-        vm.deploymentSuccess = false;
-        vm.deploymentMessage = null;
         vm.allItems = DSSelectionService.getDataServices();
         vm.items = vm.allItems;
         vm.confirmDeleteMsg = "";
+        vm.cannotEditMsg = "";
 
         function setHelpId() {
             var page = DSPageService.page(DSPageService.DATASERVICE_SUMMARY_PAGE);
@@ -248,44 +247,6 @@
          * Handle deploy dataservice click
          */
         var deployDataServiceClicked = function ( ) {
-            var selDS = DSSelectionService.selectedDataService();
-            var selDSName = selDS.keng__id;
-            var dsVdbName = DSSelectionService.selectedDataServiceVdbName();
-
-            DSSelectionService.setDeploying(true, selDSName, false, null);
-            try {
-                RepoRestService.deployDataService( selDSName ).then(
-                    function ( result ) {
-                        vm.deploymentSuccess = result.Information.deploymentSuccess == "true";
-                        if(vm.deploymentSuccess === true) {
-
-                            var successCallback = function() {
-                                DSSelectionService.setDeploying(false, selDSName, true, null);
-                            };
-                            var failCallback = function(failMessage) {
-                                DSSelectionService.setDeploying(false, selDSName, false, failMessage);
-                            };
-
-                            //
-                            // Monitor the service vdb of the dataservice to determine when its active
-                            //
-                            RepoRestService.pollForActiveVdb(dsVdbName, successCallback, failCallback);
-
-                        } else {
-                            DSSelectionService.setDeploying(false, selDSName, false, result.Information.ErrorMessage1);
-                        }
-                   },
-                    function (response) {
-                        DSSelectionService.setDeploying(false, selDSName, false, RepoRestService.responseMessage(response));
-                        throw RepoRestService.newRestException($translate.instant('dsSummaryController.deployFailedMsg', 
-                                                                                  {response: RepoRestService.responseMessage(response)}));
-                    });
-            } catch (error) {} finally {
-                vm.deploymentSuccess = false;
-                vm.deploymentMessage = null;
-                DSSelectionService.setDeploying(false);
-            }
-
             // Broadcast the pageChange
             $rootScope.$broadcast("dataServicePageChanged", 'dataservice-test');
         };
@@ -297,7 +258,28 @@
             // Need to select the item first
             DSSelectionService.selectDataService(item);
 
-            deployDataServiceClicked();
+            // Determine if the service can safely be deployed
+            try {
+                var selDSName = item.keng__id;
+                RepoRestService.getDataServiceDeployableStatus( selDSName ).then(
+                    function (result) {
+                        var deployableMessage = result.Information.deployableStatus;
+                        if(deployableMessage === "OK") {
+                            deployDataServiceClicked();
+                        } else {
+                            var msg = $translate.instant('dsSummaryController.unableToDeployMsg') + "\n\n" + 
+                                      deployableMessage;
+                            alert(msg);
+                        }
+                    },
+                    function (response) {
+                        throw RepoRestService.newRestException($translate.instant('dsSummaryController.deployFailedMsg', 
+                                                                                  {response: RepoRestService.responseMessage(response)}));
+                    });
+            } catch (error) {
+                throw RepoRestService.newRestException($translate.instant('dsSummaryController.deployFailedMsg', 
+                        {response: error.message}));
+            }
         };
         
         /**
@@ -321,7 +303,26 @@
          * Handle edit dataservice menu select
          */
         var editDataServiceMenuAction = function(action, item) {
-            vm.editDataService(item);
+            // Check the data service sources - to see if they exist.
+            var missingSources = [];
+            if( item.serviceViewTables ) {
+                for(var i = 0; i < item.serviceViewTables.length; ++i) {
+                    var tableName = item.serviceViewTables[i];
+                    var dotIndex = tableName.indexOf('.');
+                    var sourceName = tableName.substring(0,dotIndex);
+                    var hasSource = SvcSourceSelectionService.hasServiceSource(sourceName);
+                    if(!hasSource) {
+                        missingSources.push(sourceName);
+                    }
+                }
+            }
+            // If any data service sources are missing, disallow edit.
+            if( missingSources.length > 0 ) {
+                vm.cannotEditMsg = $translate.instant('dsSummaryController.cannotEditMissingSourcesMsg', {dsName: item.keng__id, srcList: missingSources.toString()});
+                $('#cannotEditModal').modal('show');
+            } else {
+                vm.editDataService(item);
+            }
         };
 
         /**
@@ -386,10 +387,10 @@
         /**
          * Handle import dataservice click
          */
-//        var importDataServiceClicked = function( ) {
-//            // Broadcast the pageChange
-//            $rootScope.$broadcast("dataServicePageChanged", 'dataservice-import');
-//        };
+        var importDataServiceClicked = function( ) {
+            // Broadcast the pageChange
+            $rootScope.$broadcast("dataServicePageChanged", 'dataservice-import');
+        };
 
         /**
          * Handle export dataservice click
@@ -406,14 +407,28 @@
             // Need to select the item first
             DSSelectionService.selectDataService(item);
 
-            ImportExportService.init();
+            ImportExportService.init("export");
+        };
+
+        /**
+         * Handle import dataservice button click
+         */
+        vm.importDataServiceButtonClicked = function() {
+            ImportExportService.init("import");
         };
 
         /*
-         * Notification that ImportExportService init has finished
+         * Notification that ImportExportService export init has finished
          */
-        $scope.$on('importExportInitFinished', function (event) {
+        $scope.$on('exportInitFinished', function (event) {
             exportDataServiceClicked();
+        });
+
+        /*
+         * Notification that ImportExportService import init has finished
+         */
+        $scope.$on('importInitFinished', function (event) {
+            importDataServiceClicked();
         });
 
         /** 
@@ -452,12 +467,17 @@
          */
        vm.actionsConfig = {
           primaryActions: [
-            {
-              name: $translate.instant('shared.New'),
-              title: $translate.instant('shared.NewWhat', {what: $translate.instant('shared.DataService')}),
-              actionFn: newDataServiceClicked,
-              isDisabled: false
-            }
+              {
+                  name: $translate.instant('shared.New'),
+                  title: $translate.instant('shared.NewWhat', {what: $translate.instant('shared.DataService')}),
+                  actionFn: newDataServiceClicked,
+                  isDisabled: false
+              },
+              {
+                  name: $translate.instant('shared.Import'),
+                  title: $translate.instant('shared.ImportWhat', {what: $translate.instant('shared.DataService')}),
+                  actionFn: vm.importDataServiceButtonClicked
+              }
           ],
           moreActions: [
 //            {

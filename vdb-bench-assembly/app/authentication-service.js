@@ -3,10 +3,11 @@ var VdbBenchApp = (function(App) {
 
     App._module.factory('AuthService', AuthService);
     AuthService.$inject = ['CONFIG', 'CredentialService', '$rootScope', '$location', '$route',
-                           'KCService', 'RepoRestService', 'RepoSelectionService'];
+                           'KCService', 'RepoRestService', 'RepoSelectionService'
+    ];
 
     function AuthService(CONFIG, CredentialService, $rootScope, $location, $route,
-                            KCService, RepoRestService, RepoSelectionService) {
+                         KCService, RepoRestService, RepoSelectionService) {
 
         /*
          * Service instance to be returned
@@ -43,11 +44,11 @@ var VdbBenchApp = (function(App) {
             /**
              * Test if user has ds-builder-access or admin roles
              */
-             if (! KCService.hasAccessRole() && ! KCService.hasAdminRole()) {
-                 return false; // user has no access or admin role
-             }
+            if (! KCService.hasAccessRole() && !KCService.hasAdminRole()) {
+                return false; // user has no access or admin role
+            }
 
-             return true;
+            return true;
         };
 
         service.connectToRepo = function() {
@@ -76,26 +77,76 @@ var VdbBenchApp = (function(App) {
             return lastLocation.url || '/';
         };
 
-        var redirectCallback = function() {
-            if (!service.hasAccess()) {
-                var currentUrl = $location.url();
+        service.setLastLocation = function(location) {
+            lastLocation = location;
+        };
 
-                if (!currentUrl.startsWith('/login')) {
-                    lastLocation.url = currentUrl;
-                    $location.url('/login');
-                } else {
+        function isLoginPage(url) {
+            if (_.isEmpty(url))
+                return false;
+
+            return url.startsWith('/login') || url.startsWith('/re-login');
+        }
+
+        var redirectCallback = function() {
+            var currentUrl = $location.url();
+            var session;
+            if (service.hasAccess()) {
+                //
+                // Already authenticated
+                //
+                if (CredentialService.inSession()) {
+                    //
+                    // Have logged in from the re-login page
+                    // so try and return to the page we left
+                    //
+                    session = CredentialService.session();
+                    $location.url(session.location);
+                } else if (isLoginPage(currentUrl)) {
+                    var url = '/';
+                    if (angular.isDefined(lastLocation.url)) {
+                        //
+                        // Possible that previous url was the re-login page if user
+                        // has clicked the 'delete session' link and reverted to the
+                        // login page.
+                        //
+                        if (!isLoginPage(lastLocation.url))
+                            url = lastLocation.url;
+                    }
+                    $location.url(url);
+                }
+            } else if (CredentialService.inSession()) {
+
+                session = CredentialService.session();
+                if (CredentialService.isBasicAuth(session.authType)) {
+                    //
+                    // Previously authenticated but refreshed browser
+                    // Basic authentication requires a re-login while
+                    // keycloak will not so in former case display the
+                    // re-login page
+                    //
+                    if (!currentUrl.startsWith('/re-login')) {
+                        $location.url('/re-login');
+                    }
+                }
+            } else {
+                //
+                // Not authenticated
+                //
+                if (currentUrl.startsWith('/login')) {
+                    //
+                    // Not much required as already on login page
+                    //
                     if (!$rootScope.reloaded) {
                         $route.reload();
                         $rootScope.reloaded = true;
                     }
-                }
-            } else {
-                if ($location.url().startsWith('/login')) {
-                    var url = '/';
-                    if (angular.isDefined(lastLocation.url)) {
-                        url = lastLocation.url;
-                    }
-                    $location.url(url);
+                } else {
+                    //
+                    // Some other url attempted but not authenticated
+                    //
+                    lastLocation.url = currentUrl;
+                    $location.url('/login');
                 }
             }
         };
@@ -112,8 +163,8 @@ var VdbBenchApp = (function(App) {
 
                             if (angular.isDefined(onFailure) && onFailure !== null) {
                                 /*
-                                * Failure to authenticate or connect to reposiory
-                                */
+                                 * Failure to authenticate or connect to reposiory
+                                 */
                                 onFailure();
                             }
 
@@ -133,6 +184,7 @@ var VdbBenchApp = (function(App) {
         }
 
         service.redirect = function() {
+
             if (CredentialService.loggingOut()) {
                 redirectCallback();
                 return;
@@ -191,12 +243,19 @@ var VdbBenchApp = (function(App) {
             CredentialService.eraseOptions(CONFIG.keycloak.sessionNode);
             CredentialService.setLoggingOut(true);
 
-            KCService.logout();
-
-            service.redirect();
+            if (CredentialService.isKCAuth()) {
+                //
+                // This will redirect (and so reload the page entirely) url
+                // back to hawtio default uri which will actually then call redirect
+                // to get back to the /login page
+                //
+                KCService.logout();
+            } else {
+                service.redirect();
+            }
         };
 
-        listener = $rootScope.$on('$routeChangeStart', function(event, args) {
+        listener = $rootScope.$on('$locationChangeStart', function(event, next, current) {
             service.redirect();
         });
 

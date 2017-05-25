@@ -57,6 +57,11 @@
                         'required': 'true',
                     }
                 },
+                'portRequired': {
+                    'type': 'boolean',
+                    'label': 'Port Required?',
+                    'default': 'true'
+                },
                 'port': {
                     'type': 'Integer',
                     'label': 'Port',
@@ -64,6 +69,9 @@
                         'required': 'true',
                         'min': 1000,
                         'max': 65535
+                    },
+                    'control-group-attributes': {
+                        'ng-hide': "entity.portRequired != true"
                     }
                 },
                 'baseUrl': {

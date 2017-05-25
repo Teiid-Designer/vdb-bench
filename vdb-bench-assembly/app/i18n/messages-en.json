@@ -8,6 +8,7 @@
         "changedConnectionFailedMsg" : "Failed to get connection: {{errorMsg}}",
         "CheckAll" : "Check All",
         "Close" : "Close",
+        "Confirm" : "Confirm",
         "Connection" : "Connection",
         "Connections" : "Connections",
         "Copy" : "Copy",
@@ -19,11 +20,13 @@
         "Delete" : "Delete",
         "DeleteWhat" : "Delete {{what}}",
         "Description" : "Description",
+        "Dismiss" : "Dismiss",
         "Download" : "Download",
         "Driver" : "Driver",
         "Edit" : "Edit",
         "EditWhat" : "Edit {{what}}",
         "Export" : "Export",
+        "ExportWhat" : "Export {{what}}",
         "Finish" : "Finish",
         "Forward" : ">>",
         "Import" : "Import",
@@ -39,6 +42,7 @@
         "Password" : "Password",
         "PasswordLabel" : "Password:",
         "Remove" : "Remove",
+        "Repository" : "Repository",
         "Save" : "Save",
         "Schemas" : "Schemas",
         "Search" : "Search",
@@ -64,6 +68,7 @@
     },
 
     "dataservice-edit" : {
+        "confirmExpertTitle" : "Confirm Switch to Expert",
         "instructionsMsg" : "Change the definition of your Data Service by choosing a different data source and table",
         "enableTextEditLbl" : "Enable Text Edit",
         "expertTab" : "Expert",
@@ -112,13 +117,16 @@
 
     "dataservice-summary" : {
         "connectionsNumberToolTip" : "The number of native data connections, eg. JDBC databases, utilised by this dataservice",
-        "createDataServiceMsg" : "A Data Service is created using one or more Data Sources. To create your first Data Service, click <strong>New Data Service</strong> below.",
+        "createDataServiceMsg" : "A Data Service accesses one or more Data Sources. To create your first Data Service, click <strong>New Data Service</strong> below.  To import a Data Service from a git repository, click <strong>Import Data Service</strong>.",
         "createSourceMsg" : "A Data Service is created using one or more Data Sources. To create your first Data Source, click ",
+        "cannotEditTitle" : "Cannot Edit Data Service",
         "confirmDeleteTitle" : "Confirm Delete",
         "codeSamplesDataServiceMsg" : "Code samples showing how to connect to your data service are available here.",
         "codeSamplesDataService" : "Code Samples",
         "GitExport" : "Git Export",
+        "GitImport" : "Git Import",
         "importDataServiceMsg" : "You can also import an existing Data Service. To import a Data Service, click ",
+        "LoadingDataServices" : "Loading data services",
         "noDataServiceImportMsg" : "You can also import an existing Data Service. To import an existing Data Service, click <strong>Import Data Service</strong> below.",
         "noDataServicesExist" : "<i>No Data Services Found</i>",
         "noSourcesOrDataServicesExist" : "<i>No Data Sources or Data Services Found</i>",
@@ -128,8 +136,7 @@
         "viewSourcesToolTip" : "The source tables accessed by this data service",
         "welcomeMsg" : "Welcome to the <strong>Data Services Builder</strong>!"
     },
-    
-    
+
     "dataservice-documentation" : {
         "javaTab" : "Java",
         "javaScriptTab" : "Javascript",
@@ -142,6 +149,7 @@
         "connecting-odata" : "<strong>OData&nbsp;&nbsp;</strong>Deployed services are accessible using OData URLs. This service is accessible via: {{url}}.",
         "java-instructions" : "<i>This <strong>Java</strong> code sample shows how to connect and query the data service from a java client.  You must include the Teiid driver jar file in your client's classpath.  See <a target='_blank' href='https://teiid.gitbooks.io/documents/content/client-dev/JDBC_Support.html'>JDBC Support</a> in the <strong>Client Developers Guide</strong> for more information.</i>",
         "javascript-instructions" : "<i>This <strong>Javascript</strong> code sample uses jquery to retrieve an OData result set. See <a target='_blank' href='https://jquery.com/'>http://jquery.com</a> for details.  The OData URL is protected using HTTP Basic security - the user is required to have a role of 'odata' defined for access.</i>",
+        "LoadingCodeSamples" : "Loading code samples",
         "node-instructions" : "<i>This <strong>node.js</strong> code sample uses the o.js javascript library available for node. See <a target='_blank' href='https://www.npmjs.com/package/odata'>http://www.npmjs.com/package/odata</a> for details.  The OData URL is protected using HTTP Basic security - the user is required to have a role of 'odata' defined for access.</i>",
         "python-instructions" : "<i>This <strong>Python</strong> code sample queries the data service via the OData URL. You will need to update the username and password in the provided code.  The OData URL is protected using HTTP Basic security - the user is required to have a role of 'odata' defined for access.</i>",
         "php-instructions" : "<i>This <strong>PHP</strong> code sample uses curl to query the data service via the OData URL. The appropriate Base64 encoded authentication string will need to be added in the provided code.  The OData URL is protected using HTTP Basic security - the user is required to have a role of 'odata' defined for access.</i>"
@@ -152,6 +160,7 @@
         "columnPlaceholder" : "column",
         "Columns" : "Columns",
         "conditionPlaceholder" : "condition",
+        "deployingDataService" : "Deploying data service",
         "DescendingChoice" : "Desc",
         "endpointNotAvailableMsg" : "The endpoint is not available",
         "enterQueryMsg" : "Enter an SQL query to test the Data Service",
@@ -163,12 +172,14 @@
         "resultLimitPlaceholder" : "Select result limit...",
         "resultsTabular": "Tabular",
         "resultsRaw": "Raw",
+        "runningOdataQuery" : "Running OData query",
         "runQueryAction" : "Submit",
         "Select" : "Select",
         "selectResultLimitMsg" : "Select the number of results to be initially returned",
         "selectViewMsg" : "Select the view to be queried",
         "selectViewPlaceholder" : "Select a view in the list...",
         "SQL" : "SQL",
+        "testingJdbcConnection" : "Testing JDBC connection",
         "urlPath": "Test URL",
         "valuePlaceholder" : "value",
         "Where" : "Where",
@@ -196,6 +207,7 @@
         "getVdbModelTablesFailedMsg" : "Failed to get Vdb model tables",
         "createDataserviceFailedMsg" : "Failed to create the data service",
         "updateDataserviceFailedMsg" : "Failed to update the data service",
+        "noTreeContent" : "No Active Data Sources!",
         "selectedTables" : "Selected Tables",
         "stepTitle" : "Choose Data Sources",
         "updateVdbFromDdlFailedMsg" : "Failed to construct temp Vdb from DDL",
@@ -205,35 +217,45 @@
             "selectedTables" : "'<p>The selected tables for your data service</p>Clicking a data source table at left will add it to the selected tables<p></p><p>Clicking a selected table x will remove it</p>'"
         }
     },
-    
+
     "dsCloneController" : {
         "cloneFailedMsg" : "Failed to clone the data service: {{response}}"
     },
 
     "dsEditController" : {
+        "confirmExpertMsg" : "Switching to Expert mode requires you to finish your edits in expert mode.  Please confirm.",
         "enterViewDefnMsg" : "Enter a View Definition",
         "updateDataserviceFailedMsg" : "Failed to update the data service",
         "saveFailedMsg" : "Failed to update the data service: {{response}}"
     },
-    
+
     "dsExportGitWizard" : {
         "exportProgressDetailMsg" : "Data service '{{dataServiceName}}' is being exported ...",
         "exportProgressMsg" : "<strong>Export in Progress</strong>",
-        "failedExportDetailMsg" : "Data service '{{dataServiceName}}' could not be exported to repository path '{{repoPath}}'",
+        "failedExportDetailMsg" : "Data service '{{dataServiceName}}' could not be exported to the git repository '{{repoPath}}'",
         "failedExportMsg" : "<strong>Export Failed</strong>",
-        "failedNoDetailsMsg" : "Data service '{{dataServiceName}}' failed for a unspecified reasons.'",
+        "failedNoDetailsMsg" : "Data service '{{dataServiceName}}' failed for unspecified reasons.'",
         "hideErrorDetailTitle" : "Hide Error Detail",
         "missingPathMsg" : "@:dsImportGitWizard.missingPathMsg",
         "missingRepositoryUrlMsg" : "@:dsImportGitWizard.missingRepositoryUrlMsg",
         "showErrorDetailTitle" : "Show Error Detail",
-        "successfulExportDetailMsg" : "Data service '{{dataServiceName}}' was exported to repository path '{{repoPath}}'",
+        "successfulExportDetailMsg" : "Data service '{{dataServiceName}}' was successfully exported to the git repository",
         "successfulExportMsg" : "<strong>Successful Export</strong>"
     },
 
     "dsImportGitWizard" : {
-        "invalidFileTypeMsg" : "{{fileName}}'s file type is not valid hence the file cannot be imported.",
-        "missingPathMsg" : "The relative file path property is required",
-        "missingRepositoryUrlMsg" : "The repository URL is required"
+        "importProgressDetailMsg" : "Data service is being imported ...",
+        "importProgressMsg" : "<strong>Import in Progress</strong>",
+        "failedImportDetailMsg" : "Data service could not be imported from the git repository '{{repoPath}}'",
+        "failedImportNodeExistsDetailMsg" : "Data Service '{{dsName}}' could not be imported from '{{repoPath}}' -- a Data Service with that name already exists!",
+        "failedImportMsg" : "<strong>Import Failed</strong>",
+        "failedNoDetailsMsg" : "Data service import failed for unspecified reasons.'",
+        "hideErrorDetailTitle" : "Hide Error Detail",
+        "showErrorDetailTitle" : "Show Error Detail",
+        "missingPathMsg" : "@:dsImportGitWizard.missingPathMsg",
+        "missingRepositoryUrlMsg" : "@:dsImportGitWizard.missingRepositoryUrlMsg",
+        "successfulImportDetailMsg" : "Data service was successfully imported from the git repository",
+        "successfulImportMsg" : "<strong>Successful Import</strong>"
     },
 
     "dsNewController" : {
@@ -251,13 +273,19 @@
     },
 
     "dsSummaryController" : {
+        "cannotEditMissingSourcesMsg" : "Data Service '{{dsName}}' cannot be edited because the following sources are not available:<br/>[{{srcList}}]<br/>",
         "confirmDeleteMsg" : "Are you sure you want to delete data service '{{serviceName}}'?",
         "deleteFailedMsg" : "Failed to remove the data service: {{response}}",
-        "deployFailedMsg" : "Failed to deploy the data service: {{response}}",
+        "deployFailedMsg" : "Error deploying the data service: {{response}}",
+        "unableToDeployMsg" : "Unable to deploy the Data Service.",
         "findSourceVdbsFailedMsg" : "Failed to find source VDBs: {{response}}",
         "findViewTablesFailedMsg" : "Failed to find view tables: {{response}}",
         "descriptionFilterPlaceholder" : "Filter by Description...",
         "nameFilterPlaceholder" : "Filter by Name..."
+    },
+
+    "DSSelectionService" : {
+        "deployFailedMsg" : "Failed to deploy the data service: {{response}}"
     },
 
     "dsTestController" : {
@@ -306,13 +334,14 @@
 
     "datasource-summary" : {
         "confirmDeleteTitle" : "Confirm Delete",
+        "loadingDataSources" : "Loading data sources",
         "welcomeMsg" : "Currently, no data sources exist. In order to create a data service you must create a data source.",
         "noSourcesExist" : "No Data Sources Found",
         "noSourcesInstructionsMsg" : "To get started, click <strong>New Data Source</strong> below to create your first data source.",
         "noUserAccess" : "User has insufficent access for creating new data sources",
         "sourceSchema" : "Data Source Schema"
     },
-    
+
     "datasourceSummaryController" : {
         "actionNameCopy" : "@:shared.Copy",
         "actionNameDelete" : "@:shared.Delete",
@@ -332,6 +361,7 @@
         "actionTitleNew" : "Create a Data Source",
         "actionTitleRefresh" : "Refresh the Table",
         "confirmDeleteMsg" : "Are you sure you want to delete data source '{{sourceName}}'?",
+        "confirmDeleteDataservicesAffectedMsg" : "The following Data Service(s) utilize this source:<br/>[{{dsList}}]<br/>If you delete data source '{{sourceName}}', the data service(s) will not longer be editable.<br/><br/>Are you sure you want to delete '{{sourceName}}'?",
         "gettingDdlMsg" : "Fetching DDL...",
         "getDdlFailedMsg" : "Failed to get the DDL.",
         "removeLocalSourceFailedMsg" : "Failed to remove the local ServiceSource.",
@@ -354,6 +384,7 @@
         "clickNextCreateInstructionMsg" : "Click 'Next' to define filters",
         "clickNextEditInstructionMsg" : "Click 'Next' to edit filters",
         "createDatasourceFailedMsg" : "Failed to create the data source",
+        "initializingWizard" : "Initializing data source wizard",
         "updateDatasourceFailedMsg" : "Failed to update the data source",
         "sourceCreateFailedMsg" : "Failed to create the data source.",
         "sourceUpdateFailedMsg" : "Failed to update the data source.",
@@ -402,11 +433,11 @@
         "invalidFileTypeMsg" : "{{fileName}}'s file type is not valid hence the file cannot be imported.",
         "selectFileMsg" : "Select the File to Import"
     },
-    
+
     "file-import-wizard" : {
         "importFromFileMsg" : "Import the dataservice from a file"
     },
-    
+
     "gitCredentialsControl" : {
         "authorEmailInvalid" : "Email is invalid",
         "authorEmailRequired" : "Email is required",
@@ -471,17 +502,21 @@
     },
 
     "git-import-wizard" : {
-        "extractStepMsg" : "Import the artifact from the repository",
-        "extractStepTitle" : "Extract from Repository",
-        "repositoryDetailsStepMsg" : "Enter the details for the source git repository",
-        "repositoryDetailsStepTitle" : "Repository Properties",
-        "missingRepositoryUrlMsg" : "@:dsImportGitWizard.missingRepositoryUrlMsg"
+        "repoPropsStepMsg" : "Enter the details for the source git repository",
+        "repoPropsStepTitle" : "Repository Properties",
+        "importStepTitle" : "Authentication and Import",
+        "importStepMsg" : "If required, complete either the SSH or HTTP authentication. Click 'Import' to import the data service from the repository.",
+        "missingRepositoryUrlMsg" : "@:dsImportGitWizard.missingRepositoryUrlMsg",
+        "allowOverwrite" : "Allow Data Service Overwrite",
+        "help" : {
+            "allowOverwrite" : "If a Data Service with same name already exists, allow overwrite."
+        }
     },
 
     "git-preferences-config" : {
         "tabTitle" : "Git Repository Configurations"
     },
-    
+
     "HelpService" : {
     	"inlineFramesNotSupportedMsg" : "Sorry your browser doesn't support inline frames."
     },
@@ -491,6 +526,7 @@
         "notJdbcMsg" : "'{{connName}}' is not a JDBC Connection",
         "noTables" : "No Tables",
         "optionMsg" : "Filter options for connection '{{connName}}'",
+        "resettingJdbcOptions" : "Resetting JDBC options",
         "tableFetchNoConnectionErrorMsg" : "Error fetching tables - null connection",
         "FilterLabel" : "Filter:",
         "help" : {
@@ -504,7 +540,7 @@
         "connectionFailedErrorMsg" : "Failed to get connection: {{error}}",
         "getTablesErrorMsg" : "Failed to get Tables: {{errorMsg}}"
     },
-    
+
     "loginPage" : {
         "rememberCredentials" : "Remember Credentials",
         "welcomeTitle" : "Welcome to Data Services Builder",
@@ -516,6 +552,13 @@
         "kcAuthenticationFailure" : "The user has failed to authenticate with the authentication server",
         "kcAuthorisationFailure" : "The user is not authorised to access this application. The user requires the 'ds-builder-access' or 'admin' roles",
         "kcAuthRepoConnectFailure" : "The user is unable to connect to the repository. The user requires at least the 'vdb-builder-auditor' role to allow access"
+    },
+
+    "reloginPage" : {
+        "refreshed" : "The application page was refreshed.",
+        "enterPassword" : "Please enter your password to resume your session.",
+        "deleteSession1" : "Clear session",
+        "deleteSession2" : " and return to login page"
     },
 
     "RepositoryRestService" : {
@@ -530,6 +573,7 @@
         "controlFailedMsg" : "Encountered query error: {{errorMsg}}",
         "instructionMsg" : "Enter query text then click Submit",
         "RecordLimit" : "Record Limit",
+        "runningSqlQuery" : "Running SQL query",
         "StartingRecordIndex" : "Starting Record Index",
         "help" : {
             "recordLimit" : "Limits the number of records returned from the query (-1 for no limit)",
@@ -541,6 +585,7 @@
 
     "svcsource-clone" : {
         "Cancel" : "@:shared.Cancel",
+        "copyingDataSource" : "Copying data source",
         "Create" : "@:shared.Create",
         "instructionsMsg" : "Enter a name for the new data source",
         "Name" : "@:shared.Name"
@@ -558,7 +603,7 @@
     "teiid-preference-config" : {
         "tabTitle" : "Teiid Settings"
     },
-    
+
     "teiid-preferences" : {
         "Administration" : "Administration",
         "adminPasswordPlaceholder" : "Enter the Teiid administration password",
@@ -567,6 +612,7 @@
         "jdbcSecureLabel" : "Is Secure:",
         "jdbcUserNamePlaceholder" : "Enter the Teiid JDBC user name",
         "StatusErrorLabel" : "Status Error:",
+        "UpdateBtn" : "Update",
         "TestAdminConnection" : "Test Admin Connection",
         "TestJdbcConnection" : "Test JDBC Connection",
         "help" : {

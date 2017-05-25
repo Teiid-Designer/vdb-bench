@@ -34,6 +34,8 @@
     function FileImportController($scope, $translate, SYNTAX, RepoRestService, $window) {
         var vm = this;
 
+        vm.overwriteAllowed = false;
+
         function setError(message) {
             if (message) {
                 message = message.replace(/<br\/>/g, SYNTAX.NEWLINE);
@@ -131,7 +133,7 @@
                     //
                     // Attempt to upload the file to the workspace
                     //
-                    RepoRestService.upload(documentType, "", parameters, data).then(
+                    RepoRestService.upload(documentType, "", parameters, vm.overwriteAllowed, data).then(
                         function (importStatus) {
                             vm.showProgress(false);
                             setError(null);

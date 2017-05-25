@@ -14,9 +14,9 @@
         .module(pluginName)
         .factory('HelpService', HelpService);
 
-    HelpService.$inject = ['SYNTAX', 'CONFIG', 'RepoSelectionService', '$location'];
+    HelpService.$inject = ['SYNTAX', 'CONFIG', 'RepoSelectionService', '$location', 'RepoRestService'];
 
-    function HelpService(SYNTAX, CONFIG, RepoSelectionService, $location) {
+    function HelpService(SYNTAX, CONFIG, RepoSelectionService, $location, RepoRestService) {
         var PAGE_NOT_FOUND = "PAGE_NOT_FOUND";
 
         /*
@@ -42,6 +42,7 @@
         	'dataservice-summary': "dataservices-summary-help.html",
         	'dataservice-test': "dataservices-test-help.html",
         	'datasource-summary': "datasource-summary-help.html",
+        	'datasource-summary-empty': "datasource-summary-empty-help.html",
         	'git-preferences': "git-settings-help.html",
         	'svcsource-clone': "svcsource-clone-help.html",
         	'svcsource-edit': "svcsource-edit-help.html",
@@ -52,13 +53,15 @@
 
         service.defaultHostUrl = function() {
             var protocol = $location.protocol();
-            var host = $location.host();
+            var hostname = $location.host();
             var port = $location.port();
             var baseUrl = CONFIG.help.baseUrl;
 
-             return protocol +
+            var host = _.isEmpty(port) ? hostname : hostname + SYNTAX.COLON + port;
+
+            return protocol +
                 SYNTAX.COLON + SYNTAX.FORWARD_SLASH + SYNTAX.FORWARD_SLASH +
-                host + SYNTAX.COLON + port + baseUrl;
+                host + baseUrl;
         };
 
         function init() {

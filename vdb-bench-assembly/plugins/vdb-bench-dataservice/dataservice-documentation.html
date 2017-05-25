@@ -4,7 +4,8 @@
 
 
         <div id="loading-spinner" ng-show="vm.isLoading==true">
-            <div class="spinner spinner-lg" />
+            <div class="spinner spinner-lg spinner-inline" />
+            {{:: 'dataservice-documentation.LoadingCodeSamples' | translate}}
 	    </div>
         <div translate="dataservice-documentation.connecting-heading1"></div>
         <h5>{{vm.connectionDetailTitle}}</h5>

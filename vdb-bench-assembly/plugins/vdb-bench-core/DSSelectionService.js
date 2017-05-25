@@ -48,6 +48,7 @@
                 RepoRestService.getDataServices( ).then(
                     function (newDataServices) {
                         RepoRestService.copy(newDataServices, ds.dataservices);
+                        ds.dataservice = null;
                         setLoading(false);
                         if(pageId) {
                             // Broadcast the pageChange
@@ -57,17 +58,16 @@
                     function (response) {
                         // Some kind of error has occurred
                         ds.dataservices = [];
+                        ds.dataservice = null;
                         setLoading(false);
                         throw RepoRestService.newRestException("Failed to load data services from the host services.\n" + response.message);
                     });
             } catch (error) {
                 ds.dataservices = [];
+                ds.dataservice = null;
                 setLoading(false);
                 alert("An exception occurred:\n" + error.message);
             }
-
-            // Removes any outdated dataservice
-            service.selectDataService(null);
         }
 
         /*
@@ -138,6 +138,28 @@
 
         service.getEditSourceTableSelection = function() {
             return ds.editServiceSourceTableSelection;
+        };
+
+        /**
+         * Get the names of the Dataservices that use the provided source name
+         */
+        service.getDataservicesUsingSource = function( sourceName ) {
+            var dataserviceNames = [];
+
+            for (var i = 0; i < ds.dataservices.length; ++i) {
+                if(ds.dataservices[i].serviceViewTables) {
+                    var viewTables = ds.dataservices[i].serviceViewTables;
+                    for (var j = 0; j < viewTables.length; ++j) {
+                        var viewTable = viewTables[j];
+                        if(viewTable.startsWith(sourceName+'.')) {
+                            dataserviceNames.push(ds.dataservices[i].keng__id);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return dataserviceNames;
         };
 
         /*
@@ -227,7 +249,47 @@
             
             return ds.dataservice.serviceView;
         };
-        
+
+        /*
+         * deploy the currently selected dataservice
+         *   - loading notifications are broadcast when the loading state changes.
+         */
+        service.deploySelectedDataService = function() {
+            var selDS = service.selectedDataService();
+            var selDSName = selDS.keng__id;
+            var dsVdbName = service.selectedDataServiceVdbName();
+
+            service.setDeploying(true, selDSName, false, null);
+            try {
+                RepoRestService.deployDataService( selDSName ).then(
+                    function ( result ) {
+                        if(result.Information.deploymentSuccess == "true") {
+                            var successCallback = function() {
+                                service.setDeploying(false, selDSName, true, null);
+                            };
+                            var failCallback = function(failMessage) {
+                                service.setDeploying(false, selDSName, false, failMessage);
+                            };
+
+                            //
+                            // Monitor the service vdb of the dataservice to determine when its active
+                            //
+                            RepoRestService.pollForActiveVdb(dsVdbName, successCallback, failCallback);
+                        } else {
+                            service.setDeploying(false, selDSName, false, result.Information.ErrorMessage1);
+                        }
+                   },
+                    function (response) {
+                        service.setDeploying(false, selDSName, false, RepoRestService.responseMessage(response));
+                        throw RepoRestService.newRestException($translate.instant('DSSelectionService.deployFailedMsg', 
+                                                                                  {response: RepoRestService.responseMessage(response)}));
+                    });
+            } catch (error) {
+                service.setDeploying(false);
+                alert("An exception occurred:\n" + error.message);
+            }
+        };
+
         /*
          * Refresh the collection of data services.  If a pageId is supplied, the redirect is broadcast
          */

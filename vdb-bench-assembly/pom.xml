@@ -35,8 +35,17 @@
 						</goals>
 						<phase>generate-resources</phase>
 						<configuration>
-							<nodeVersion>v0.12.2</nodeVersion>
-							<npmVersion>2.7.4</npmVersion>
+							<nodeVersion>v6.10.3</nodeVersion>
+							<npmVersion>4.6.1</npmVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm registry</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>config set registry https://registry.npmjs.org/</arguments>
 						</configuration>
 					</execution>
 					<execution>
@@ -45,7 +54,7 @@
 							<goal>npm</goal>
 						</goals>
 						<configuration>
-							<arguments>install</arguments>
+							<arguments>install -d</arguments>
 						</configuration>
 					</execution>
 					<execution>

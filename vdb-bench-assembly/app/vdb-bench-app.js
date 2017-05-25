@@ -52,6 +52,9 @@ var VdbBenchApp = (function (App) {
         $routeProvider
             .when('/login', {
                 templateUrl: App.templatePath + 'login.html'
+            })
+            .when('/re-login', {
+                templateUrl: App.templatePath + 're-login.html'
             });
 
         // configure i18n

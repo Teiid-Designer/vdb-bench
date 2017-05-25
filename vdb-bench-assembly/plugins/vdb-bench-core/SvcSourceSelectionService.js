@@ -12,10 +12,10 @@
         .factory('SvcSourceSelectionService', SvcSourceSelectionService);
 
     SvcSourceSelectionService.$inject = ['$rootScope', 'SYNTAX', 'REST_URI', 'VDB_KEYS', 
-                                         'RepoRestService', 'ConnectionSelectionService', 'TranslatorSelectionService', 'DownloadService'];
+                                         'RepoRestService', 'CredentialService', 'ConnectionSelectionService', 'TranslatorSelectionService', 'DownloadService'];
 
     function SvcSourceSelectionService($rootScope, SYNTAX, REST_URI, VDB_KEYS, 
-                                        RepoRestService, ConnectionSelectionService, TranslatorSelectionService, DownloadService) {
+                                        RepoRestService, CredentialService, ConnectionSelectionService, TranslatorSelectionService, DownloadService) {
 
         var svcSrc = {};
         svcSrc.loading = false;
@@ -113,7 +113,7 @@
                 alert("An exception occurred:\n" + error.message);
             }
         }
-        
+
         /**
          * Updates the Workspace VDB status based on teiid deployments
          */
@@ -150,7 +150,7 @@
                         for(var key in allVdbs[i].keng__properties) {
                             var test = allVdbs[i].keng__properties[key].name;
                             var value = allVdbs[i].keng__properties[key].value;
-                            if(test=='dsbServiceSource' && value=='true') {
+                            if(test=='dsbServiceSource') {
                                 isSource = true;
                             }
                             if(test=='dsbSourceTranslator') {
@@ -338,7 +338,71 @@
 
             return true;
         };
-        
+
+        /*
+         * determine if the supplied datasource is a service source vdb
+         */
+        service.isServiceSource = function ( datasource ) {
+            var isSource = false;
+            for(var key in datasource.keng__properties) {
+                var propName = datasource.keng__properties[key].name;
+                var propValue = datasource.keng__properties[key].value;
+                if(propName==='dsbServiceSource') {
+                    isSource = true;
+                    break;
+                }
+            }
+            return isSource;
+        };
+
+        /*
+         * return the serviceSource owner name
+         *    (defaults to current user if the dsbServiceSource property is not found)
+         */
+        service.getServiceSourceOwner = function ( datasource ) {
+            var owner = CredentialService.credentials().username;
+            for(var key in datasource.keng__properties) {
+                var propName = datasource.keng__properties[key].name;
+                var propValue = datasource.keng__properties[key].value;
+                if(propName==='dsbServiceSource') {
+                    owner = propValue;
+                    break;
+                }
+            }
+            return owner;
+        };
+
+        /*
+         * return the serviceSource status
+         *    (defaults to 'Unknown' if the dsbTeiidStatus property is not found)
+         */
+        service.getServiceSourceStatus = function ( datasource ) {
+            var status = "Unknown";
+            for(var key in datasource.keng__properties) {
+                var propName = datasource.keng__properties[key].name;
+                var propValue = datasource.keng__properties[key].value;
+                if(propName==='dsbTeiidStatus') {
+                    status = propValue;
+                    break;
+                }
+            }
+            return status;
+        };
+
+        /*
+         * Determine if a service source with the specified name currently exists
+         */
+        service.hasServiceSource = function( svcSourceName ) {
+            var hasSource = false;
+            for(var i=0; i<svcSrc.serviceSources.length; i++) {
+                if(svcSrc.serviceSources[i].keng__id === svcSourceName) {
+                    hasSource = true;
+                    break;
+                }
+            }
+            return hasSource;
+        };
+
         /*
          * Refresh the collection of service sources
          */

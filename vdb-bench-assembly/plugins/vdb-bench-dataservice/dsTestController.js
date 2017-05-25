@@ -62,9 +62,62 @@
         vm.dsDeploymentMessage = null;
         vm.searchInProgress = false;
         vm.resultsType = 'Tabular';
+        vm.pinging=true;
+        vm.pinged=false;
 
         vm.sql = {
             refreshEditor : false
+        };
+        
+        vm.pingJdbcResultStyleClass = "";
+
+        function setJdbcResult(status) {
+            if (!status) {
+                vm.jdbcPingResult = null;
+                return;
+            }
+
+            if (status.OK === "true") {
+               vm.pinged = true;
+            }
+            else {
+                vm.pinged = false;
+            	vm.pingJdbcResultStyleClass = "pficon pficon-error-circle-o";
+                vm.jdbcPingResult = status.Message + SYNTAX.NEWLINE + status.Exception;
+            }
+        }
+
+        /**
+         * Ping Teiid via JDBC URL/Credentials.
+         * Set error message on failure.
+         */
+        vm.ping = function() {
+            vm.pinging = true;
+            vm.pinged = false;
+
+            /*
+             * To ensure the sql content is visible,
+             * signal the sql control to refresh its
+             * editor when finished. This is done by setting 
+             * vm.sql.refreshEditor to true
+             */
+
+            try {
+                RepoRestService.ping("jdbc").then(
+                    function (statusObj) {
+                        setJdbcResult(statusObj.Information);
+                        vm.sql.refreshEditor = true;  // Refresh SQL Editor
+                    },
+                    function (response) {
+                        // Some kind of error has occurred
+                        setJdbcResult(response.message);
+                        vm.sql.refreshEditor = true;  // Refresh SQL Editor
+                    });
+            } catch (error) {
+                setJdbcResult(error.message);
+                vm.sql.refreshEditor = true;  // Refresh SQL Editor
+            }
+            vm.pinging = false;
         };
 
         vm.odata = {
@@ -406,7 +459,7 @@
 
             return value + SYNTAX.AMPERSAND;
         }
-
+        
         /**
          * Initialise the control panel by fetching the metadata from
          * the odata link
@@ -416,7 +469,6 @@
                 return;
 
             var url = vm.rootUrl() + '$metadata';
-
             RepoRestService.odataGet(url).then(
                 function(response) {
                     if (response.status === 200) {
@@ -429,7 +481,7 @@
                 }
             );
         }
-
+        
         /**
          * Tidy up the interval that might have been created
          */
@@ -499,7 +551,7 @@
 
             return cvColumns;
         }
-
+     
         /**
          * On receipt of the metadata traverse the node tree
          * and extract the available entities.
@@ -687,7 +739,7 @@
         vm.displayLinkContent = function(grid, row, column, link) {
             vm.fetchLinkedData(link, row.entity, column.field);
         };
-
+        
         /**
          * Returns true if the odata control widgets
          * should be displayed.
@@ -706,8 +758,7 @@
          * The root part of the odata endpoint
          */
         vm.rootUrl = function() {
-            var hostName = RepoSelectionService.getSelected().host;
-            var portValue = RepoSelectionService.getSelected().port;
+            var hostName = RepoRestService.hostName(RepoSelectionService.getSelected());
 
             var vdbName = DSSelectionService.selectedDataServiceVdbName();
             var vdbVersion = DSSelectionService.selectedDataServiceVdbVersion();
@@ -716,7 +767,7 @@
             if (vdbName === SYNTAX.UNKNOWN || vdbVersion === SYNTAX.UNKNOWN || modelName === SYNTAX.UNKNOWN)
                 return null;
 
-            return "https://" + hostName + SYNTAX.COLON + portValue + SYNTAX.FORWARD_SLASH +
+            return "https://" + hostName + SYNTAX.FORWARD_SLASH +
                                     "odata4" + SYNTAX.FORWARD_SLASH + vdbName + SYNTAX.DOT + vdbVersion + SYNTAX.FORWARD_SLASH +
                                     modelName + SYNTAX.FORWARD_SLASH;
         };
@@ -883,13 +934,7 @@
 
         vm.onTabSelected = function (tabId) {
             if (tabId === 'Advanced') {
-                /*
-                 * To ensure the sql content is visible,
-                 * signal the sql control should refresh its
-                 * editor. This is done by setting the var
-                 * assigned to the 'refresh' attribute to true
-                 */
-                vm.sql.refreshEditor = true;
+            	 vm.ping();
             }
         };
     }

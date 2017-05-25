@@ -28,7 +28,7 @@
          * Init the service.
          *   - Loads storage types and fires event when complete
          */
-        service.init = function ( ) {
+        service.init = function ( importExport ) {
                 // Gets the available storage types
                 try {
                     RepoRestService.availableStorageTypes().then(
@@ -38,18 +38,33 @@
                        impExp.storageTypes = sTypes.filter( function( storageType ) {
                            return ( storageType.name !== "file" );
                        } );
-                       // Broadcast table change
-                       $rootScope.$broadcast("importExportInitFinished");
+                       if(importExport === 'import') {
+                           // Broadcast init finished
+                           $rootScope.$broadcast("importInitFinished");
+                       } else if(importExport === 'export') {
+                           // Broadcast init finished
+                           $rootScope.$broadcast("exportInitFinished");
+                       }
                    },
                    function (response) {
                        alert(response.data.error);
-                       // Broadcast table change
-                       $rootScope.$broadcast("importExportInitFinished");
+                       if(importExport === 'import') {
+                           // Broadcast init finished
+                           $rootScope.$broadcast("importInitFinished");
+                       } else if(importExport === 'export') {
+                           // Broadcast init finished
+                           $rootScope.$broadcast("exportInitFinished");
+                       }
                    });
                } catch (error) {
                    alert("An exception occurred:\n" + error.message);
-                   // Broadcast table change
-                   $rootScope.$broadcast("importExportInitFinished");
+                   if(importExport === 'import') {
+                       // Broadcast init finished
+                       $rootScope.$broadcast("importInitFinished");
+                   } else if(importExport === 'export') {
+                       // Broadcast init finished
+                       $rootScope.$broadcast("exportInitFinished");
+                   }
                }
         };
 

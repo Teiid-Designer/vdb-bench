@@ -70,7 +70,7 @@
         };
 
         vm.exportFailure = function() {
-            return !vm.inProgress && vm.response === 'Failed';
+            return !vm.inProgress && vm.response !== 'OK';
         };
 
         vm.exportSuccess = function() {
@@ -88,12 +88,11 @@
 
             if (response === 'OK') {
                 vm.responseMsg = $translate.instant( 'dsExportGitWizard.successfulExportDetailMsg', 
-                                                     { dataServiceName: dataService.keng__id, 
-                                                       repoPath: vm.repo.parameters[ 'file-path-property' ] } );
+                                                     { dataServiceName: dataService.keng__id } );
             } else {
                 vm.responseMsg = $translate.instant( 'dsExportGitWizard.failedExportDetailMsg', 
                                                      { dataServiceName: dataService.keng__id,
-                                                       repoPath: vm.repo.parameters[ 'file-path-property' ] } );
+                                                       repoPath: vm.repo.parameters[ 'repo-path-property' ] } );
             }
         }
 
@@ -147,6 +146,27 @@
             }
 
             return true;
+        };
+
+        /**
+         * Returns full target URL including branch and folder
+         */
+        vm.repoTargetUrl = function() {
+            // git path propery (ends with .git)
+            var gitUrl = vm.repo.parameters['repo-path-property'];
+
+            // if path ends with .git, it is removed.  Then /tree/ is appended.
+            var baseUrl = gitUrl.replace(".git","").concat("/tree/");
+
+            // Add the branch name to the url
+            var branch = vm.repo.parameters['repo-branch-property'];
+            if( !branch || branch.length === 0 ) {
+                branch = 'master';
+            }
+
+            var folder = vm.repo.parameters['file-path-property'];
+
+            return baseUrl.concat(branch).concat("/"+folder);
         };
 
         /**

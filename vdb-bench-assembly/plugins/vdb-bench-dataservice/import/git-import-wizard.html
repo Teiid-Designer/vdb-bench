@@ -2,41 +2,102 @@
    -- Git Wizard Steps
    -->
 <div pf-wizard-step
-        step-title="{{:: 'git-import-wizard.repositoryDetailsStepTitle' | translate}}"
-        step-id="import-from-git-credentials"
+        step-title="{{:: 'git-import-wizard.repoPropsStepTitle' | translate}}"
+        step-id="git-import-repo-props"
         wz-disabled="{{!vm.wizardActive}}"
-        ok-to-nav-away="vm.validateCredentials">
-    <h1 translate="git-import-wizard.repositoryDetailsStepMsg" />
+        next-enabled="vm.validateRepoProps()"
+        step-priority="1"
+        allow-click-nav="false"
+        substeps="false"
+        ok-to-nav-away="vm.validateRepoProps()">
+    <h1 class="step-message" translate="git-import-wizard.repoPropsStepMsg" />
 
-    <git-credentials-control show-name="false"
-                                        show-file-path="true"
-                                        show-security-attributes="true"
-                                        on-selection="vm.onRepoSelection(selected)">
+    <git-credentials-control repo="vm.repo"
+                             show-security-attributes="false"
+                             show-repo-props="true"
+                             show-name="false"
+                             show-file-path="true"
+                             require-author-name="vm.requireAuthorName = true"
+                             require-author-email="vm.requireAuthorEmail = true"
+                             on-selection="vm.onRepoSelection(selected)">
     </git-credentials-control>
 </div>
 
 <div pf-wizard-step
-        step-title="{{:: 'git-import-wizard.extractStepTitle' | translate}}"
-        step-id="import-from-git-final"
-        wz-disabled="{{!vm.wizardActive}}">
-    <h1 translate="git-import-wizard.extractStepMsg" />
+     step-title="{{:: 'git-import-wizard.importStepTitle' | translate}}"
+     step-id="git-import-execute"
+     step-priority="2"
+     allow-click-nav="false"
+     substeps="true"
+     wz-disabled="{{!vm.wizardActive}}">
 
-    <div class="ds-import-git-page">
-        <!-- Show progress bar on import -->
-        <div class="ds-import-git-page-progress" ng-show="vm.inProgress">
-            <uib-progressbar class="progress-striped active" value="dynamic" type="info"></uib-progressbar>
+    <div pf-wizard-substep 
+         step-title="{{:: 'shared.Import' | translate}}"
+         next-enabled="vm.validateCredentials()"
+         prev-enabled="true"
+         allow-click-nav="false"
+         step-id="data-service-import"
+         step-priority="3"
+         ok-to-nav-away="true">
+        <h1 class="step-message" translate="git-import-wizard.importStepMsg" />
+        <git-credentials-control repo="vm.repo"
+                                 show-repo-props="false"
+                                 show-security-attributes="true"">
+        </git-credentials-control>
+        <!--  Filter Checkbox -->
+        <div>
+            <form>
+                <input type="checkbox" ng-model="vm.overwriteAllowed" ng-true-value=true ng-false-value=false>
+                <h4 style="display:inline"><strong translate="git-import-wizard.allowOverwrite"></strong></h4>
+                <label class="help-label">
+                    <span class="fa fa-info-circle" uib-tooltip="{{ 'git-import-wizard.help.allowOverwrite' | translate }}"
+                          tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                </label>
+            </form>
         </div>
-
-        <div ng-show="!vm.inProgress">
-            <div class="ds-import-git-page-button">
-                <a class="btn btn-default btn-primary" ng-click="vm.onImportDataServiceClicked()" translate="shared.Import" />
+    </div>
+    
+    <div
+        pf-wizard-substep
+        step-title="Progress"
+        next-enabled="vm.importSuccess()"
+        prev-enabled="vm.importFailure()"
+        allow-click-nav="false"
+        step-id="data-service-import-progress-final"
+        step-priority="4">
+        <div
+            class="wizard-pf-process blank-slate-pf"
+            ng-show="vm.inProgress">
+            <div class="spinner spinner-lg blank-slate-pf-icon"></div>
+            <h3 class="blank-slate-pf-main-action" translate="dsImportGitWizard.importProgressMsg" />
+            <p class="blank-slate-pf-secondary-action"
+               translate="dsImportGitWizard.importProgressDetailMsg">
+            </p>
+        </div>
+        <div
+            class="wizard-pf-complete blank-slate-pf"
+            ng-show="vm.importSuccess()">
+            <div class="wizard-pf-success-icon">
+                <span class="pficon pficon-ok"></span>
             </div>
-            <div class="ds-import-git-page-response">
-                <div ng-class="vm.responseStyleClass">{{vm.response}}</div>
+            <h3 class="blank-slate-pf-main-action" translate="dsImportGitWizard.successfulImportMsg" />
+            <p class="blank-slate-pf-secondary-action">
+            {{ vm.responseMsg }}
+            <br>
+            <strong>{{:: 'shared.Repository' | translate}}:</strong>&nbsp;<a href={{vm.repoTargetUrl()}} target="_blank">{{vm.repoTargetUrl()}}</a>
+            </p>
+        </div>
+        <div
+            class="wizard-pf-complete blank-slate-pf"
+            ng-show="vm.importFailure()">
+            <div class="wizard-pf-success-icon">
+                <span class="pficon pficon-error-circle-o"></span>
             </div>
-
-            <div class="ds-import-git-page-error">
-                {{vm.error}}
+            <h3 class="blank-slate-pf-main-action" translate="dsImportGitWizard.failedImportMsg" />
+            <p class="blank-slate-pf-secondary-action">{{ vm.responseMsg }}</p>
+            <a ng-click="vm.toggleDetails()" ng-show="vm.showDetailsToggle">{{vm.detailsToggleTitle}}</a>
+            <div ng-init="vm.showDetails = false" ng-show="vm.showDetails">
+                <p><div style="text-align:left" ng-bind-html="vm.error"></div></p>
             </div>
         </div>
     </div>

@@ -20,6 +20,8 @@
         vm.wizardTabActive = true;
         vm.expertTabActive = false;
         vm.disableExpertTab = EditWizardService.sourceTables().length === 0;
+        vm.disableWizardTab = false;
+        vm.confirmExpertMsg = "";
         vm.sourceNames = [];
         vm.tableNames = [];
         vm.disableFinish = false;
@@ -73,6 +75,7 @@
                 vm.expertTabActive = false;
             } else {
                 vm.wizardTabActive = false;
+                vm.disableWizardTab = true;
                 vm.expertTabActive = true;
             }
         }
@@ -81,8 +84,29 @@
          * Expert tab selected.  Get selections from EditWizardService to populate text view.
          */
         vm.onExpertTabSelected = function() {
+            // Show the expert mode confirmation modal
+            vm.confirmExpertMsg = $translate.instant('dsEditController.confirmExpertMsg');
+            $('#confirmExpertModal').modal('show');
+        };
+        
+        /**
+         * Switch to the Expert Tab after confirming
+         */
+        vm.switchToExpertTab = function( ) {
             setViewDdlFromEditor(false);
             loadTableColumnTree();
+            vm.disableWizardTab = true;
+            // dismiss the confirmation modal
+            $('#confirmExpertModal').modal('hide');
+        };
+
+        /**
+         * Stay on Wizard tab after confirm cancelled
+         */
+        vm.stayOnWizardTab = function( ) {
+            vm.wizardTabActive = true;
+            // dismiss the confirmation modal
+            $('#confirmExpertModal').modal('hide');
         };
 
         /**
