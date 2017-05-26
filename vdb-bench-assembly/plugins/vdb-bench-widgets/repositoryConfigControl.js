@@ -85,7 +85,8 @@
                 'authType': {
                     'type': 'string',
                     'label': 'Authentication Scheme',
-                    'enum': CONFIG.rest.authTypes
+                    'enum': CONFIG.rest.authTypes,
+                    'default': CONFIG.rest.authTypes[0]
                 },
                 'keycloakUrl': {
                     'type': 'string',
