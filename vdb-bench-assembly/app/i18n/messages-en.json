@@ -8,6 +8,7 @@
         "changedConnectionFailedMsg" : "Failed to get connection: {{errorMsg}}",
         "CheckAll" : "Check All",
         "Close" : "Close",
+        "Confirm" : "Confirm",
         "Connection" : "Connection",
         "Connections" : "Connections",
         "Copy" : "Copy",
@@ -67,6 +68,7 @@
     },
 
     "dataservice-edit" : {
+        "confirmExpertTitle" : "Confirm Switch to Expert",
         "instructionsMsg" : "Change the definition of your Data Service by choosing a different data source and table",
         "enableTextEditLbl" : "Enable Text Edit",
         "expertTab" : "Expert",
@@ -203,6 +205,7 @@
         "getVdbModelTablesFailedMsg" : "Failed to get Vdb model tables",
         "createDataserviceFailedMsg" : "Failed to create the data service",
         "updateDataserviceFailedMsg" : "Failed to update the data service",
+        "noTreeContent" : "No Active Data Sources!",
         "selectedTables" : "Selected Tables",
         "stepTitle" : "Choose Data Sources",
         "updateVdbFromDdlFailedMsg" : "Failed to construct temp Vdb from DDL",
@@ -218,6 +221,7 @@
     },
 
     "dsEditController" : {
+        "confirmExpertMsg" : "Switching to Expert mode requires you to finish your edits in expert mode.  Please confirm.",
         "enterViewDefnMsg" : "Enter a View Definition",
         "updateDataserviceFailedMsg" : "Failed to update the data service",
         "saveFailedMsg" : "Failed to update the data service: {{response}}"
