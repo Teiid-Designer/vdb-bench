@@ -214,17 +214,18 @@
         };
 
         var matchesFilter = function (item, filter) {
-          var match = true;
-     
+          var match = false;
+
           if (filter.id === 'name') {
-              if(item.keng__id !== null) {
+              if( angular.isDefined(item.keng__id) && item.keng__id !== null ) {
                   match = item.keng__id.match(filter.value) !== null;
               }
           } else if (filter.id === 'description') {
-              if(item.vdb__description !== null) {
+              if( angular.isDefined(item.vdb__description) && item.vdb__description !== null ) {
                   match = item.vdb__description.match(filter.value) !== null;
               }
           }
+
           return match;
         };
      
