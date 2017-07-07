@@ -405,8 +405,8 @@
 
     "jdbcFilterOptionsStep" : {
         "stepTitle" : "Define Filtering",
-        "clickFinishCreateInstructionMsg" : "Click on catalog/schema and enter a table filter, then click 'Finish' to create the data source.",
-        "clickFinishEditInstructionMsg" : "Click on catalog/schema and enter a table filter, then click 'Finish' to update the data source.",
+        "clickFinishCreateInstructionMsg" : "Click on catalog/schema, then enter a table filter to display one or more tables. Click 'Finish' to create the data source.",
+        "clickFinishEditInstructionMsg" : "Click on catalog/schema, then enter a table filter to display one or more tables. Click 'Finish' to update the data source.",
         "help" : {
             "dataSources" : "The available active data sources which can be used in a data service",
             "selectedTables" : "'<p>The selected tables for your data service</p>Clicking a data source table at left will add it to the selected tables<p></p><p>Clicking a selected table x will remove it</p>'"
