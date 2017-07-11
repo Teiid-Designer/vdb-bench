@@ -449,9 +449,11 @@
                                 SvcSourceSelectionService.refresh('datasource-summary');
                             };
                             //
-                            // Monitors the source vdb to determine when its active
+                            // Monitor the source every second for 5 seconds, checking for active state
                             //
-                            RepoRestService.pollForActiveVdb(vdbName, successCallback, failCallback);
+                            var pollingDurationSec = 5;
+                            var pollingIntervalSec = 1;
+                            RepoRestService.pollForActiveVdb(vdbName, pollingDurationSec, pollingIntervalSec, successCallback, failCallback);
                         } else {
                             SvcSourceSelectionService.setDeploying(false, vdbName, false, result.Information.ErrorMessage1);
                         }

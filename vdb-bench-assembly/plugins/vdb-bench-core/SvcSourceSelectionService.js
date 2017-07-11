@@ -390,6 +390,23 @@
         };
 
         /*
+         * return the serviceSource status message
+         *    (defaults to 'Unknown' if the dsbTeiidStatusMessage property is not found)
+         */
+        service.getServiceSourceStatusMessage = function ( datasource ) {
+            var statusMessage = "Unknown";
+            for(var key in datasource.keng__properties) {
+                var propName = datasource.keng__properties[key].name;
+                var propValue = datasource.keng__properties[key].value;
+                if(propName==='dsbTeiidStatusMessage') {
+                    statusMessage = propValue;
+                    break;
+                }
+            }
+            return statusMessage;
+        };
+
+        /*
          * Determine if a service source with the specified name currently exists
          */
         service.hasServiceSource = function( svcSourceName ) {

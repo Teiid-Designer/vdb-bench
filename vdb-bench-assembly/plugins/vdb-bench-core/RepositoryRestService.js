@@ -1209,10 +1209,13 @@
         };
 
         /**
-         * Service: Poll the teiid server for the point that the vdb becomes active
-         * Has a timeout limit of 1 minute.
+         * Service: Poll the teiid server until the specified VDB becomes active
+         * pollDurationSec - the total time (in seconds) to poll for active VDB
+         * pollIntervalSec - the pause between polling attempts in seconds
          */
-        service.pollForActiveVdb = function(vdbName, successCallback, failCallback) {
+        service.pollForActiveVdb = function(vdbName, pollDurationSec, pollIntervalSec, successCallback, failCallback) {
+            var pollIntervalMillis = pollIntervalSec * 1000;
+            var pollIterations = pollDurationSec / pollIntervalSec;
 
             var promise = $interval(function() {
                 service.getTeiidVdbStatus().then(
@@ -1247,7 +1250,12 @@
                         //
                         $interval.cancel(promise);
                     });
-            }, 2000, 30); // timeout after 30 iterations (or 60 seconds)
+            }, pollIntervalMillis, pollIterations); // timeout(sec) =  pollIntervalSec * pollIterations
+
+            // Handles iteration completion without success or fail.  failCallback with a timeout message
+            promise.then(function(){
+                failCallback("Timed Out");
+            });
         };
 
         /**
