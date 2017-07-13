@@ -10,6 +10,10 @@
         <span class="fa fa-fw {{vmmain.page('datasource-summary').icon}}"></span>
         <div class="dsb-vertical-nav-label" translate="shared.Sources"></div>
     </div>
+    <div id="dsb-nav-item-dashboard" class="dsb-nav-item {{vmmain.connectionNav}}" ng-click="vmmain.selectPage('connection-summary')" body-click="vmmain.selectNavItem(null);">
+        <span class="fa fa-fw {{vmmain.page('connection-summary').icon}}"></span>
+        <div class="dsb-vertical-nav-label" translate="shared.Connections"></div>
+    </div>
     <div id="dsb-nav-item-dashboard" class="dsb-nav-item {{vmmain.homeNav}}" ng-click="vmmain.selectPage('dataservice-home')" body-click="vmmain.selectNavItem(null);">
         <span class="fa fa-fw {{vmmain.page('dataservice-home').icon}}"></span>
         <div class="dsb-vertical-nav-label" translate="shared.Dashboard"></div>

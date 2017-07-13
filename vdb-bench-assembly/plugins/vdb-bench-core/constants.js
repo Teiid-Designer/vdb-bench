@@ -88,6 +88,9 @@
             CONNECTIONS_CLONE: '/connections/clone',
             CONNECTION: '/connection',
             CONNECTIONS: '/connections',
+            CONNECTIONS_FROM_TEIID: 'connectionsFromTeiid',
+            TEMPLATES: '/templates',
+            TEMPLATE_ENTRIES: '/entries',
             VDBS_CLONE: '/vdbs/clone',
             VDBS_FROM_TEIID: 'VdbsFromTeiid',
             DRIVER: '/driver',
@@ -115,6 +118,7 @@
             CREDENTIALS: '/credentials',
             PING: '/ping',
             NAME_VALIDATION: '/nameValidation',
+            VALIDATE: '/validate',
 
             //
             // Types used for whether a teiid vdb
@@ -171,6 +175,15 @@
             PROPERTIES: 'keng__properties',
             DDL: 'keng__ddl',
             HAS_CHILDREN: 'keng__hasChildren'
+        })
+
+        .constant('CONNECTION_KEYS', {
+            ID: 'keng__id',
+            DRIVER: 'dv__driverName',
+            JNDI: 'dv__jndiName',
+            PROPERTIES: 'keng__properties',
+            JNDI_PREFIX: 'java:/',
+            TEMPLATE_JDBC: 'isJdbc'
         })
 
         .constant('VDB_SCHEMA', {
