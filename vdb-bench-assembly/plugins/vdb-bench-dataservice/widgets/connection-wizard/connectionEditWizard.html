@@ -1,0 +1,200 @@
+<div ng-show="vm.wizardServiceReady==false" class="row">
+    <div class="spinner spinner-lg spinner-inline" />
+    {{:: 'connectionEditWizard.initializingWizard' | translate}}
+</div>
+
+<div ng-show="vm.wizardServiceReady==true">
+    <div class="wizard-pf-container dsb-wizard-container">
+        <div pf-wizard
+                on-finish="vm.finishPressed()"
+                on-cancel="vm.cancelPressed()"
+                back-callback="vm.backCallback"
+                next-callback="vm.nextCallback"
+                next-title="vm.nextButtonTitle"
+                hide-indicators="false"
+                embed-in-page="true"
+                content-height="'470px'">
+
+            <div pf-wizard-step
+                    step-title="{{vm.step[0].title}}"
+                    step-id="wizard-connection-name-type"
+                    allow-click-nav="false"
+                    wz-disabled="false"
+                    next-enabled = "vm.nextEnablement"
+                    prev-enabled = "false"
+                    ok-to-nav-away="true"
+                    id="wizard-step-container">
+
+                <div class="col-md-12 connectionWizardStep">
+                    <form name="connectionEditWizardForm" class="form-horizontal" ng-disabled="vm.connectionCreating">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="connectionWizardDriverTypes">Driver Type</label>
+                            <div class="col-md-6">
+                                <select
+                                    id="connectionWizardDriverTypes"
+                                    ng-model="vm.template"
+                                    ng-change="vm.driverTypeChanged()"
+                                    ng-options="template as template.keng__id for template in vm.templates | orderBy:'keng__id'">
+                                </select>
+                                <div ng-show="! vm.hasTemplate()"
+                                     class="error-message">
+                                     {{ vm.noTemplateErrorMessage() }}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <a href
+                                    id="connectionWizardNewDriver"
+                                    ng-click="vm.toggleAddNewDriver()">
+                                    <span class="pficon pficon-import">
+                                    </span>{{:: 'connectionEditWizard.newDriver' | translate}}
+                                    <div class="new-driver-page-slide-container"
+                                        pageslide ps-open="vm.showAddNewDriver"
+                                        ps-size="50%"
+                                        ps-key-listener="true"
+                                        ps-container="wizard-step-container">
+                                        <div class="row new-driver-slide-container">
+
+                                            <div class="new-driver-slide-controls">
+                                                <!-- Content of add new driver slider container -->
+                                                <h1 translate="connectionEditWizard.newDriverControlTitle" />
+
+                                                <p translate="connectionEditWizard.newDriverControlDescription" />
+
+                                                <div class="new-driver-import-controls">
+                                                    <file-import-control
+                                                        on-import-started="vm.onDriverImportStarted()"
+                                                        on-import-complete="vm.onDriverImportDone(result)"
+                                                        show-cancel=false
+                                                        show-title=false
+                                                        response="vm.driverImportResponse"
+                                                    </file-import-control>
+                                                </div>
+
+                                                <!-- Show progress bar on deployment of driver -->
+                                                <div class="new-driver-deploying-progress" ng-show="vm.driverDeploying">
+                                                    Deploying ...
+                                                    <uib-progressbar class="progress-striped active"
+                                                                     value="dynamic"
+                                                                     type="info">
+                                                    </uib-progressbar>
+                                                </div>
+
+                                                <div class="new-driver-deploying-complete"
+                                                        ng-class="vm.deploymentDriverStyleClass"
+                                                        ng-show="! vm.driverDeploying"
+                                                        ng-bind-html="vm.driverDeploymentStatus">
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row new-driver-slide-buttons">
+                                                <button class="btn btn-primary" ng-click="vm.toggleAddNewDriver()"
+                                                        translate="shared.Close" />
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="connectionName" translate="shared.Name"></label>
+                            <div class="col-md-9">
+                                <input type="text"
+                                       id="connectionName"
+                                       name="connectionName"
+                                       ng-readonly="vm.isEditing()"
+                                       ng-model="vm.connectionName"
+                                       ng-init="vm.connectionName"
+                                       ng-change="vm.connectionNameChanged()"
+                                       required
+                                       class="form-control">
+                                <div ng-show="vm.hasNameErrorMessage()"
+                                     class="error-message">
+                                    {{ vm.nameErrorMessage() }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="jndi" translate="connectionEditWizard.jndi"></label>
+                            <div class="col-md-9">
+                                <input type="text"
+                                       id="jndi"
+                                       name="jndi"
+                                       placeholder="{{vm.jndiPlaceHolder}}"
+                                       ng-model="vm.jndi"
+                                       ng-init="vm.jndi"
+                                       ng-change="vm.jndiChanged()"
+                                       required
+                                       class="form-control">
+                                <div ng-show="vm.hasJndiErrorMessage()"
+                                     class="error-message">
+                                     {{ vm.jndiErrorMessage() }}
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div pf-wizard-step
+                    step-title="{{vm.step[1].title}}"
+                    step-id="wizard-connection-metadata-properties"
+                    allow-click-nav="false"
+                    wz-disabled="false"
+                    next-enabled = "vm.nextEnablement"
+                    prev-enabled = "true"
+                    ok-to-nav-away="true"
+                    id="wizard-step-container">
+
+                    <div class="col-md-12 connectionWizardStep" ng-disabled="vm.connectionCreating">
+                        <h4 id="connectionWizardInstructionMsg">{{vm.instructionMessage}}</h4>
+
+                        <div hawtio-form-2="vm.templateConfig" entity="vm.connectionProperties"></div>
+                    </div>
+            </div>
+            <div pf-wizard-step
+                    step-title="{{vm.step[2].title}}"
+                    step-id="wizard-connection-deploy"
+                    allow-click-nav="false"
+                    wz-disabled="false"
+                    next-enabled = "vm.nextEnablement"
+                    prev-enabled = "true"
+                    ok-to-nav-away="true"
+                    id="wizard-step-container">
+
+                    <div class="col-md-12 connectionWizardStep">
+                        <h4 id="connectionWizardInstructionMsg">{{vm.instructionMessage}}</h4>
+
+                        <div class="new-connection-creation-progress" ng-show="vm.connectionCreating===true">
+                            Creating in Workspace ...
+                            <uib-progressbar class="progress-striped active"
+                                             value="dynamic"
+                                             type="info">
+                            </uib-progressbar>
+                        </div>
+
+                        <div class="new-connection-creation-complete"
+                                ng-class="vm.newConnectionCreateStyleClass"
+                                ng-show="! vm.connectionCreating"
+                                ng-bind-html="vm.newConnectionCreateStatus">
+                        </div>
+
+                        <div class="new-connection-deployment-progress" ng-show="vm.connectionDeploying===true">
+                            Deploying...
+                            <uib-progressbar class="progress-striped active"
+                                             value="dynamic"
+                                             type="info">
+                            </uib-progressbar>
+                        </div>
+
+                        <div class="new-connection-deployment-complete"
+                                ng-class="vm.newConnectionDeployStyleClass"
+                                ng-show="! vm.connectionDeploying"
+                                ng-bind-html="vm.newConnectionDeployStatus">
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>

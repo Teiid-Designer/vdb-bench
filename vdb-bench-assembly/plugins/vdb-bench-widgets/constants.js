@@ -51,10 +51,16 @@
         .constant('HAWTIO_FORM', {
             PROPERTIES: 'properties',
             INPUT_ATTR: 'input-attributes',
+            CONTROL_GROUP_ATTR: 'control-group-attributes',
             TYPE_AHEAD_DATA: 'typeaheadData',
             TYPE_AHEAD: 'typeahead',
             CONTROLS: 'controls',
-            TABS: 'tabs'
+            TABS: 'tabs',
+            ENUM: 'enum',
+            TYPE: {
+                TEXT: 'text',
+                PASSWORD: 'password'
+            }
         })
         .constant('JDBC_FILTER', {
             KEY_CATALOG: 'importer.catalog',

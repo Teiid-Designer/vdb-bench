@@ -279,10 +279,12 @@
                 msg = response.message;
             else if (response.data && response.data.error)
                 msg = response.data.error;
+            else if (response.data)
+                msg = response.data;
             else if (response.status && response.statusText)
-                msg = response.status + SYNTAX.COLON + response.statusText;
+                msg = response.status + SYNTAX.COLON + SYNTAX.SPACE + response.statusText;
 
-            if ( response.config.url ) {
+            if ( response.config && response.config.url ) {
                 var url = decodeURIComponent( response.config.url );
 
                 if ( _.isEmpty( msg ) ) {
@@ -434,11 +436,19 @@
         };
 
         /**
+         * Service: sync workspace connections from server
+         * Returns: promise object for the connection collection
+         */
+        service.copyTeiidConnectionsToWorkspace = function ( ) {
+            return getRestService().then(function (restService) {
+                var uri = REST_URI.TEIID + REST_URI.CONNECTIONS + SYNTAX.FORWARD_SLASH + REST_URI.CONNECTIONS_FROM_TEIID;
+                return restService.all(uri).post();
+            });
+        };
+
+        /**
          * Service: sync workspace VDBs from server
          * Returns: promise object for the vdb collection
-         */
-        /**
-         * Service: create a new VDB in the repository
          */
         service.copyServerVdbsToWorkspace = function ( ) {
             return getRestService().then(function (restService) {
@@ -656,7 +666,7 @@
         };
 
         /**
-         * Service: delete a vdb from the resposiory
+         * Service: delete a vdb from teiid
          */
         service.deleteTeiidVdb = function (vdbName) {
             if (!vdbName) {
@@ -1306,18 +1316,18 @@
        /**
          * Service: create a new connection in the repository
          */
-        service.createConnection = function (connectionName, jndiName, driverName) {
-            if (!connectionName || !driverName || !jndiName) {
-                throw new RestServiceException("Connection name, jndiName or driverName is not defined");
+        service.createConnection = function (connectionName, jndiName, driverName, isJdbc, parameters) {
+            if (!connectionName || !driverName || !jndiName || !parameters) {
+                throw new RestServiceException("Connection name, jndiName, driverName or parameters is not defined");
             }
 
+            parameters.dsbCreator = CredentialService.credentials().username;
             return getRestService().then(function (restService) {
                 var payload = {
-                    "keng__id": connectionName,
-                    "keng__dataPath": getUserWorkspacePath()+"/"+connectionName,
-                    "keng__kType": "Datasource",
                     "driverName": driverName,
-                    "jndiName": jndiName
+                    "jndiName": jndiName,
+                    "jdbc": isJdbc,
+                    "parameters": parameters
                 };
 
                 var uri = REST_URI.WORKSPACE + REST_URI.CONNECTIONS + SYNTAX.FORWARD_SLASH + connectionName;
@@ -1339,21 +1349,42 @@
             });
         };
 
-       /**
+        /**
          * Service: update an existing connection in the repository
          */
-        service.updateConnection = function (connectionName, jsonPayload) {
-            if (!connectionName || !jsonPayload) {
-                throw new RestServiceException("One of the inputs for update are not defined");
+        service.updateConnectionWithPayload = function (connectionName, payload) {
+            if (!connectionName || !payload) {
+                throw new RestServiceException("Connection name or data is not defined");
             }
             
             return getRestService().then(function (restService) {
-                return restService.all(REST_URI.WORKSPACE + REST_URI.CONNECTIONS + SYNTAX.FORWARD_SLASH + connectionName).customPUT(jsonPayload);
+
+                var uri = REST_URI.WORKSPACE + REST_URI.CONNECTIONS + SYNTAX.FORWARD_SLASH + connectionName;
+                return restService.all(uri).customPUT(payload);
             });
         };
 
         /**
-         * Service: delete a connection from the resposiory
+         * Service: update an existing connection in the repository
+         */
+        service.updateConnection = function (connectionName, jndiName, driverName, isJdbc, parameters) {
+            if (!connectionName || !driverName || !jndiName || !parameters) {
+                throw new RestServiceException("Connection name, jndiName, driverName or parameters is not defined");
+            }
+
+            parameters.dsbCreator = CredentialService.credentials().username;
+            var payload = {
+                "driverName": driverName,
+                "jndiName": jndiName,
+                "jdbc": isJdbc,
+                "parameters": parameters
+            };
+
+            return service.updateConnectionWithPayload(connectionName, payload);
+        };
+
+        /**
+         * Service: delete a connection from the repository
          */
         service.deleteConnection = function (connectionName) {
             if (!connectionName) {
@@ -1363,6 +1394,20 @@
             return getRestService().then(function (restService) {
 
                 return restService.one(REST_URI.WORKSPACE + REST_URI.CONNECTIONS + SYNTAX.FORWARD_SLASH + connectionName).remove();
+            });
+        };
+
+        /**
+         * Service: delete a connection from teiid
+         */
+        service.deleteTeiidConnection = function (connectionName) {
+            if (!connectionName) {
+                throw new RestServiceException("Connection name for delete is not defined");
+            }
+
+            return getRestService().then(function (restService) {
+
+                return restService.one(REST_URI.TEIID + REST_URI.CONNECTIONS + SYNTAX.FORWARD_SLASH + connectionName).remove();
             });
         };
 
@@ -1381,6 +1426,30 @@
 
                 var uri = REST_URI.TEIID + REST_URI.CONNECTION;
                 return restService.all(uri).post(payload);
+            });
+        };
+
+        /**
+         * Service: return the list of connection templates.
+         * Returns: promise object for the template collection
+         */
+        service.getConnectionTemplates = function () {
+            var url = REST_URI.TEIID + REST_URI.TEMPLATES;
+
+            return getRestService().then(function (restService) {
+                return restService.all(url).getList();
+            });
+        };
+
+        /**
+         * Service: return the list of entries that comprise the given connection template.
+         * Returns: promise object for the template entry collection
+         */
+        service.getTemplateEntries = function (templateName) {
+            var url = REST_URI.TEIID + REST_URI.TEMPLATES + SYNTAX.FORWARD_SLASH + templateName + REST_URI.TEMPLATE_ENTRIES;
+
+            return getRestService().then(function (restService) {
+                return restService.all(url).getList();
             });
         };
 
@@ -1693,6 +1762,51 @@
             return getRestService().then(
                 function( restService ) {
                     return restService.one( url ).get();
+                }
+            );
+        };
+
+        /**
+         * Validates the specified connection name. If the name contains valid characters and
+         * the name is unique, the service returns 'null'. Otherwise, a 'string' containing an
+         * error message is returned.
+         */
+        service.validateConnectionName = function( name ) {
+            if ( _.isEmpty( name ) ) {
+                return $translate.instant( 'RepositoryRestService.emptyConnectionName' );
+            }
+
+            var url = REST_URI.WORKSPACE +
+                      REST_URI.CONNECTIONS +
+                      REST_URI.NAME_VALIDATION +
+                      SYNTAX.FORWARD_SLASH +
+                      name;
+
+            return getRestService().then(
+                function( restService ) {
+                    return restService.one( url ).get();
+                }
+            );
+        };
+
+        /**
+         * Validates a general value. If the name contains valid characters
+         * the service returns 'null'. Otherwise, a 'string' containing an
+         * error message is returned.
+         */
+        service.validateValue = function(value) {
+            if (_.isEmpty(value)) {
+                return $translate.instant('RepositoryRestService.emptyValue');
+            }
+
+            var url = REST_URI.SERVICE +
+                      REST_URI.VALIDATE +
+                      SYNTAX.FORWARD_SLASH +
+                      value;
+
+            return getRestService().then(
+                function(restService) {
+                    return restService.one(url).get();
                 }
             );
         };

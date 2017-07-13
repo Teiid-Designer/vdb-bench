@@ -194,6 +194,7 @@
         pages[service.CONNECTION_SUMMARY_PAGE] = {
             id: service.CONNECTION_SUMMARY_PAGE,
             title: $translate.instant('shared.Connections'),
+            icon: 'fa-plug',
             helpId: service.CONNECTION_SUMMARY_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +

@@ -1,46 +1,7 @@
-<div class="container-fluid" ng-controller="ConnectionNewController as vm">
-    <ol class="breadcrumb">
-        <li><a ng-click="vmmain.selectPage('dataservice-summary')"><i class="fa fa-cubes fa-fw" aria-hidden="true"></i> DataServices</a></li>
-        <li><a ng-click="vmmain.selectPage('connection-summary')"><i class="fa fa-plug fa-fw" aria-hidden="true"></i> Connections</a></li>
-        <li>New Connection</li>
-    </ol>
-    
-    <div id="connection-new-updating" ng-show="vm.driversLoading==true" class="col-md-10 row">
-        <div class="spinner spinner-lg" />
-    </div>
-    
-    <div id="connection-new-controls" ng-show="vm.driversLoading==false" class="col-md-10 row">
-      <div class="row">
-        <div class="col-md-11">
-            <h1><i class="fa fa-plug" aria-hidden="true"></i>New Connection</h1>
-            <h3>&nbsp;&nbsp;Create a new Connection</h3>
-            <form class="form-horizontal">
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="textInput">Name</label>
-                    <div class="col-md-6">
-                        <input type="text" ng-model="nameVar" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="textInput">JNDI Name</label>
-                    <div class="col-md-6">
-                        <input type="text" ng-model="jndiNameVar" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="drivers">Type</label>
-                    <div class="col-md-6">
-                        <select id="drivers" ng-model="driverNameVar" ng-options="driver as driver.name for driver in vm.getDrivers()"></select>
-                    </div>
-                    <div class="col-md-2">
-                        <a href ng-click="vmmain.selectPage('driver-import',null)"><span class="pficon pficon-import"></span> New Driver</a>
-                    </div>
-                </div>
-            </form>
-            <button class="btn btn-primary" ng-click="vm.onCreateConnectionClicked(nameVar,jndiNameVar,driverNameVar.name)" ng-class="{active:vmmain.selectedPage.id == 'connection-new'}"> Create</button>
-            <button class="btn btn-default" ng-click="vmmain.selectPage('connection-summary')" ng-class="{active:vmmain.selectedPage.id == 'connection-new'}"> Cancel</button>
-        </div>
-      </div>
-    </div>
+<div id="outer" class="outer-wrapper">
+    <div id="connection-new-container" class="container-fluid" ng-controller="ConnectionNewController as vm">
 
+        <connection-edit-wizard edit="false" page-id="vmmain.selectedPageId()"></connection-edit-wizard>
+
+    </div>
 </div>
