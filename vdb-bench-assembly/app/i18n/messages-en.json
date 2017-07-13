@@ -386,6 +386,7 @@
         "sourceCreateFailedMsg" : "Failed to create the data source.",
         "sourceUpdateFailedMsg" : "Failed to update the data source.",
         "sourceDeployFailedMsg" : "Failed to deploy the data source.",
+        "sourceDeploymentInProgress" : "Source deployment in progress",
         "sourceModelCreateFailedMsg" : "Failed to create the data source model.",
         "sourceModelConnectionCreateFailedMsg" : "Failed to create the source model connection.",
         "sourceModelConnectionUpdateFailedMsg" : "Failed to update the source model connection.",

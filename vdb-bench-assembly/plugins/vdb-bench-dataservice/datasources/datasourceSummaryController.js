@@ -8,11 +8,11 @@
         .module(pluginName)
         .controller('DatasourceSummaryController', DatasourceSummaryController);
 
-    DatasourceSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSPageService', 'DSSelectionService',
+    DatasourceSummaryController.$inject = ['$scope', '$rootScope', '$translate', '$interval', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSPageService', 'DSSelectionService',
                                            'SvcSourceSelectionService', 'TranslatorSelectionService', 'DatasourceWizardService', 
                                            'ConnectionSelectionService', 'DownloadService', 'CredentialService', 'pfViewUtils'];
 
-    function DatasourceSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, DSPageService, DSSelectionService,
+    function DatasourceSummaryController($scope, $rootScope, $translate, $interval, RepoRestService, REST_URI, SYNTAX, DSPageService, DSSelectionService,
                                           SvcSourceSelectionService, TranslatorSelectionService, DatasourceWizardService, 
                                           ConnectionSelectionService, DownloadService, CredentialService, pfViewUtils) {
         var vm = this;
@@ -138,6 +138,72 @@
             setDDL();
         });
 
+        /**
+         * Background function that updates datasource status
+         * The check is performed every 45 seconds
+         */
+        function backgroundCheckSourceStatus() {
+            var statusChecker = $interval(function() {
+
+                try {
+                    // Update workspace VDBs from teiid, then update row statuses
+                    RepoRestService.updateWorkspaceVdbStatusFromTeiid().then(
+                        function (result) {
+                            updateRowStatuses();
+                        },
+                        function (response) {
+                            // Some kind of error has occurred
+                            throw RepoRestService.newRestException("Failed to update workspace sources.\n" + response.message);
+                        });
+                } catch (error) {
+                    alert("An error occurred:\n" + error.message);
+                }
+
+            }, 45000);
+        }
+
+        /**
+         * Update row status from workspace VDB status, if the status has changed
+         */
+        function updateRowStatuses() {
+            try {
+                RepoRestService.getVdbs(REST_URI.WKSP_SERVICE).then(
+                    // Get workspace VDBs
+                    function (wkspVdbs) {
+                        // Determine if any status have changed.  If so, update the status and message of the changed row
+                        for(var i = 0; i < wkspVdbs.length; i++) {
+                            if( SvcSourceSelectionService.isServiceSource(wkspVdbs[i]) ) {
+                                var srcName = wkspVdbs[i].keng__id;
+                                for(var iRow = 0; iRow < vm.items.length; iRow++) {
+                                    if(vm.items[iRow].keng__id === srcName) {
+                                        var teiidStatus = SvcSourceSelectionService.getServiceSourceStatus(wkspVdbs[i]);
+                                        var rowItemStatus = SvcSourceSelectionService.getServiceSourceStatus(vm.items[iRow]);
+                                        // If the teiid status is different than current row, update the row item to match
+                                        if(rowItemStatus !== teiidStatus) {
+                                            var teiidStatusMessage = SvcSourceSelectionService.getServiceSourceStatusMessage(wkspVdbs[i]);
+                                            for(var key in vm.items[iRow].keng__properties) {
+                                                var propName = vm.items[iRow].keng__properties[key].name;
+                                                if(propName=='dsbTeiidStatus') {
+                                                    vm.items[iRow].keng__properties[key].value = teiidStatus;
+                                                } else if(propName=='dsbTeiidStatusMessage') {
+                                                    vm.items[iRow].keng__properties[key].value = teiidStatusMessage;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    function (response) {
+                        // Some kind of error has occurred
+                        throw RepoRestService.newRestException("Failed to get sources for status update.\n" + response.message);
+                    });
+            } catch (error) {
+                alert("An error occurred:\n" + error.message);
+            }
+        }
+            
         /**
          * Delete the specified VDB from the server, then remove the repo VDB
          */
@@ -600,6 +666,8 @@
             vm.items = vm.allItems;
             vm.filterConfig.resultsCount = vm.items.length;
             vm.hasSources = vm.allItems.length>0;
+            // Starts background polling to check
+            backgroundCheckSourceStatus();
         };
 
         vm.refresh();
