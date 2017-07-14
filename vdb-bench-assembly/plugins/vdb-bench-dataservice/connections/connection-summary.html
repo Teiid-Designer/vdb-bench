@@ -1,65 +1,88 @@
-<div class="container-fluid" ng-controller="ConnectionSummaryController as vm">
+<div id="outer" class="outer-wrapper">
+    <div id="connection-summary-container" class="container-fluid" ng-controller="ConnectionSummaryController as vm">
 
-    <ol class="breadcrumb">
-        <li><a ng-click="vmmain.selectPage('dataservice-summary')"><i class="fa fa-cubes fa-fw" aria-hidden="true"></i> DataServices</a></li>
-        <li><i class="fa fa-plug fa-fw" aria-hidden="true"></i> Connections</li>        
-    </ol>
-    
-    <div id="connection-summary-table-row" class="col-md-10 row">
-        <h1><i class="fa fa-plug" aria-hidden="true"></i> Connections </h1>
-        <div id="connection-action-row">
-            <a href ng-click="vmmain.selectPage('connection-new',null)"><span class="fa fa-plus"></span> New Connection</a>&nbsp;&nbsp;
-            <a href ng-click="vmmain.selectPage('connection-import',null)"><span class="pficon pficon-import"></span> Import Connection</a>
+        <!-- Modal Dialog for user to confirm deletion of a data connection -->
+        <div class="modal fade dsb-modal" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            <span class="pficon pficon-close"></span>
+                        </button>
+                        <h4 class="modal-title" id="confirmDeleteModalLabel" translate="connection-summary.confirmDeleteTitle"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <span ng-bind-html="vm.confirmDeleteMsg" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" translate="shared.Cancel"></button>
+                        <button type="button" class="btn btn-primary" ng-click="vm.deleteSelectedConnection()" translate="shared.Delete"></button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="row">
-           <div class="col-md-12">
-             <div pf-toolbar id="connectionToolbar" config="vm.toolbarConfig"></div>
-           </div>
+
+        <!-- Content shown if No Connections yet -->
+        <div class="blank-slate-pf" id="connection-summary-noconnections" ng-show="vm.connLoading==false && vm.hasConnections==false">
+            <div class="blank-slate-pf-icon">
+                <span class="fa fa-database"></span>
+            </div>
+            <h1 ng-bind=":: 'connection-summary.noConnectionsExist' | translate" />
+            <h2 ng-bind-html=":: 'connection-summary.welcomeMsg' | translate"></h2>
+            <p>
+                <span translate="connection-summary.noConnectionsInstructionsMsg" />
+            </p>
+            <div class="blank-slate-pf-main-action">
+                <button class="btn btn-primary btn-lg" ng-click="vmmain.selectPage('connection-new')">
+                <span class="fa fa-fw {{vmmain.page('connection-new').icon}}"></span>
+                <span>{{vmmain.page('connection-new').title}}</span>
+            </button>
+            </div>
         </div>
-    </div>
-    
-    <div id="connection-summary-updating" ng-show="vm.connLoading==true" class="col-md-10 row">
-        <div class="spinner spinner-lg" />
-    </div>
-        
-    <div id="connection-summary-table-row" class="col-md-10 row" ng-show="vm.connLoading==false">
-       <div class="row">
-         <div class="col-md-12 list-view-container" ng-if="vm.viewType == 'listView'">
-           <div pf-list-view config="vm.listConfig" items="vm.getConnections()">
-             <div class="list-view-pf-description">
-               <div class="list-group-item-heading">
-                 {{item.keng__id}}
-               </div>
-               <div class="list-group-item-text">
-                   <table>
-                       <tr>
-                         <td width="15%"><span class="label label-info">New</span></td>
-                         <td width="10%">{{item.tko__driverName}}</td>
-                         <td width="10%">{{item.tko__jndiName}}</td>
-                       </tr>
-                   </table>
-               </div>
-             </div>
-             <!--
-             <div class="list-view-pf-additional-info">
-               <div class="list-view-pf-additional-info-item">
-                 {{item.tko__driverName}}
-               </div>
-               <div class="list-view-pf-additional-info-item">
-                 {{item.tko__jndiName}}
-               </div>
-             </div>
-             -->
-           </div>
-         </div>
-         <div class="col-md-12 card-view-container" ng-if="vm.viewType == 'cardView'">
-           <div pf-card-view config="vm.listConfig" items="vm.getConnections()">
-             <div class="col-md-12">
-               <span>{{item.keng__id}}</span>
-             </div>
-           </div>
-         </div>
-       </div>
-        
+
+        <div id="connection-summary-table" class="col-md-12 row">
+            <div pf-toolbar id="connectionToolbar" config="vm.toolbarConfig" ng-show="vm.connLoading==true || vm.hasConnections==true"></div>
+
+            <div id="connection-summary-updating" ng-show="vm.connLoading==true">
+                <div class="spinner spinner-lg spinner-inline"></div>
+                {{:: 'connection-summary.loadingConnections' | translate}}
+            </div>
+
+            <div class="connection-summary-results-container" ng-show="vm.connLoading==false && vm.hasConnections==true">
+                <div class="connection-summary-results">
+                    <div class="col-md-12 list-view-container" ng-if="vm.viewType == 'listView'">
+                        <div pf-list-view config="vm.listConfig" items="vm.getConnections()" action-buttons="vm.actionButtons" enable-button-for-item-fn="vm.enableButton" menu-actions="vm.menuActions" update-menu-action-for-item-fn="vm.enableMenuAction">
+                            <div class="list-view-pf-left">
+                                <span class="fa fa-plug list-view-pf-icon-sm"></span>
+                            </div>
+                            <div class="list-view-pf-body">
+                                <div class="list-view-pf-description display-block">
+                                    <div class="list-group-item-heading">
+                                        {{item.keng__id}}
+                                    </div>
+                                    <div ng-if="item.dv__jndiName" data-toggle="tooltip" data-placement="right" title="{{:: 'connection-summary.jndiDescription' | translate}}">
+                                        <div id="connection-summary-results-jndi-label" class="list-group-item-text" ng-if="item.dv__jndiName.length > 100">
+                                            {{item.dv__jndiName | limitTo : 100 : 0}} ...
+                                        </div>
+                                        <div id="connection-summary-results-jndi-label" class="list-group-item-text" ng-if="item.dv__jndiName.length <= 100">
+                                            {{item.dv__jndiName}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="list-view-pf-additional-info">
+                                    <div class="list-view-pf-additional-info-item" data-toggle="tooltip" data-placement="right" title="{{:: 'connection-summary.driverNameLabel' | translate}} : {{item.dv__driverName}}">
+                                        <img src="{{item.dsbConnectionImageLink}}" width="42" height="24"/>
+                                    </div>
+
+                                    <div class="list-view-pf-additional-info-item" data-toggle="tooltip" data-placement="right" title="The owner of this connection" ng-if="item.dsbCreator">
+                                        {{:: 'connection-summary.ownerLabel' | translate}} : {{item.dsbCreator}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

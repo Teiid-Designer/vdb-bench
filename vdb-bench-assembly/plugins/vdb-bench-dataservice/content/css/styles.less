@@ -224,6 +224,16 @@
     padding-top: 10px;
 }
 
+#svcsource-summary-updating,
+#connection-summary-updating {
+    padding-top: 10px;
+}
+
+#svcsource-summary-results-description-label,
+#connection-summary-results-jndi-label {
+    margin-top: 3px;
+}
+
 /*
  * Increases the width of the kebab in the summary page
  * to allow for easier clicking
@@ -241,7 +251,7 @@ button[id^='dropdownKebabRight_'] {
 }
 
 .ds-warning {
-    color: yellow;
+    color: rgb(255, 204, 0);
 }
 
 .ds-status {
@@ -250,7 +260,8 @@ button[id^='dropdownKebabRight_'] {
 
 
 #ds-summary-container, #ds-summary-table, #dataserviceToolbar,
-#svcsource-summary-container, #svcsource-summary-table, #svcsourceToolbar {
+#svcsource-summary-container, #svcsource-summary-table, #svcsourceToolbar,
+#connection-summary-container, #connection-summary-table, #connectionToolbar {
     margin-right: 0;
     margin-left: 0;
     padding-left: 0;
@@ -275,53 +286,63 @@ button[id^='dropdownKebabRight_'] {
 
 .ds-summary-results .list-group-item,
 .svcsource-summary-results .list-group-item,
+.connection-summary-results .list-group-item,
 .ds-summary-results .list-group-item:first-child,
-.svcsource-summary-results .list-group-item:first-child {
+.svcsource-summary-results .list-group-item:first-child,
+.connection-summary-results .list-group-item:first-child {
     margin-bottom: 0.25em;
     border-top: 1px solid #d8d8d8;
 }
 
 .ds-summary-results .list-group-item:hover,
-.svcsource-summary-results .list-group-item:hover {
+.svcsource-summary-results .list-group-item:hover,
+.connection-summary-results .list-group-item:hover {
     background-color: #def3ff;
 }
 
 .ds-summary-results .list-group-item.active,
-.svcsource-summary-results .list-group-item.active {
+.svcsource-summary-results .list-group-item.active,
+.connection-summary-results .list-group-item.active {
     background-color: #b3e3ff;
     color: white;
     border-color: transparent;
 }
 
-.svcsource-summary-results .list-group-item.hover > .list-view-pf-additional-info-item {
+.svcsource-summary-results .list-group-item.hover > .list-view-pf-additional-info-item,
+.connection-summary-results .list-group-item.hover > .list-view-pf-additional-info-item {
     background-color: #b3e3ff;
     color: white;
     border-color: transparent;
 }
 
-.svcsource-summary-results > .list-group-item.active > .list-view-pf-additional-info-item {
+.svcsource-summary-results > .list-group-item.active > .list-view-pf-additional-info-item,
+.connection-summary-results > .list-group-item.active > .list-view-pf-additional-info-item {
     background-color: #def3ff;
 }
 
 .ds-summary-results .list-view-pf-main-info,
-.svcsource-summary-results .list-view-pf-main-info {
+.svcsource-summary-results .list-view-pf-main-info,
+.connection-summary-results .list-view-pf-main-info {
     padding-top: 0.5em;
     padding-bottom: 0.5em;
 }
 
 .ds-summary-results .list-view-pf-actions,
-.svcsource-summary-results .list-view-pf-actions {
+.svcsource-summary-results .list-view-pf-actions,
+.connection-summary-results .list-view-pf-actions {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
 }
 
-.svcsource-summary-results-container {
+.svcsource-summary-results-container,
+.connection-summary-results-container {
     margin-top: 0.5em;
     display: flex;
     width: 100%;
 }
 
-.svcsource-summary-results {
+.svcsource-summary-results,
+.connection-summary-results {
     float: left;
     display: flex;
     width: 100%;
@@ -763,4 +784,83 @@ button[id^='dropdownKebabRight_'] {
 
 .dropdown-toggle {
     min-width: 100px;
+}
+
+.connectionWizardStep {
+    margin-top: 2em;
+}
+
+#connectionWizardDriverTypes {
+    width: 100%;
+    height: 2em;
+}
+
+#connectionWizardNewDriver {
+    display: table-cell;
+    height: 2em;
+    vertical-align: middle;
+}
+
+#connectionWizardInstructionMsg {
+    color: blue;
+    font-style: italic;
+}
+
+.new-driver-page-slide-container {
+    background-color: rgba(240, 240, 240, 0.8) !important;
+}
+
+.new-driver-slide-container {
+    padding-top: 1em;
+    height: 100%;
+    position: relative;
+}
+
+.new-driver-slide-controls {
+    margin-left: 1em;
+    font-weight: bold;
+}
+
+.new-driver-slide-controls p {
+    margin-left: 1em;
+}
+
+.new-driver-import-controls {
+    width: 80%;
+    margin-left: 1em;
+    margin-right: auto;
+}
+
+.new-driver-import-controls .import-control-button {
+    margin-left: 0 !important;
+}
+
+.new-driver-deploying-progress,
+.new-driver-deploying-complete {
+    width: 90%;
+    margin-left: 1em;
+    margin-right: auto;
+    margin-top: 3em;
+    padding-left: 0 !important;
+}
+
+.new-driver-slide-buttons {
+    position: absolute;
+    bottom: 1em;
+    right: 1em;
+}
+
+.new-connection-creation-progress,
+.new-connection-creation-complete,
+.new-connection-deployment-progress,
+.new-connection-deployment-complete {
+    display: block !important;
+    margin-top: 2em;
+}
+
+/*
+ * Override for spacing out hawtio form controls
+ */
+.help-block {
+    margin-bottom: 3em !important;
 }

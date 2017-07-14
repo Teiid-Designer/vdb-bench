@@ -17,9 +17,12 @@
             replace: true, // Replaces the <file-import-button> tag with the template
             scope: {},
             bindToController: {
+                'onImportStarted': '&',
                 'onImportComplete': '&',
                 'showCancel': '=',
-                'onCancel': '&'
+                'onCancel': '&',
+                'showTitle': '=',
+                'response': '='
             },
             controller: FileImportController,
             controllerAs: 'vm',
@@ -45,6 +48,9 @@
         }
 
         function setResponse(response) {
+            if (response === null)
+                vm.response = '';
+
             if (response) {
                 vm.response = "OK";
                 vm.responseStyleClass = "import-control-response-ok";
@@ -54,6 +60,13 @@
                 vm.responseStyleClass = "import-control-response-bad";
             }
         }
+
+        vm.displayTitle = function() {
+            if (angular.isUndefined(vm.showTitle))
+                return true;
+
+            return vm.showTitle;
+        };
 
         vm.showProgress = function(display) {
             vm.inProgress = display;
@@ -84,24 +97,34 @@
          * in browse button. The calling html input element is passed in.
          */
         vm.importFile = function (event) {
-            var files = event.target.files;
-            if (angular.isUndefined(files))
+            setResponse(null);
+
+            if (angular.isUndefined(event.target.files))
                 return;
 
-            if (files.length === 0)
+            if (event.target.files.length === 0)
                 return;
+
+            // Assign the selected file
+            var myFile = event.target.files[0];
+
+            // Reset the file chooser so the on-change
+            // event works for the same file
+            event.target.value = null;
 
             //
             // Called through $apply to ensure it does not freeze the UI
             //
             $scope.$apply(function (scope) {
+
+                vm.onImportStarted();
+
                 // Check for the various File API support.
                 if (! $window.File || ! $window.FileReader || ! $window.FileList || ! $window.Blob) {
                     setError($translate.instant('fileImportControl.fileApisNotSupportedMsg'));
                     return;
                 }
 
-                var myFile = files[0];
                 var fName = myFile.name;
                 var documentType = RepoRestService.documentType(fName);
                 if (documentType === null) {
@@ -182,7 +205,7 @@
                 try {
                     reader.readAsBinaryString(myFile);
                 } catch (exception) {
-                	var msg = $translate.instant('fileImportControl.binaryReadErrorMsg', 
+                	var msg = $translate.instant('fileImportControl.binaryReadErrorMsg',
                 			                     {fileName: myFile.name, errorMsg: exception.message});
                     setError(msg);
                     setResponse(false);
