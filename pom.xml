@@ -52,7 +52,10 @@
 		<module>vdb-bench-assembly</module>
 		<module>vdb-bench-war</module>
 		<module>vdb-bench-doc</module>
-		<module>vdb-bench-ear</module>
+    <!--
+      Disabled as not required for product
+		  <module>vdb-bench-ear</module>
+    -->
 	</modules>
 
 	<dependencyManagement>
