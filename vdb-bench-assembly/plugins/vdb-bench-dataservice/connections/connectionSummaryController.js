@@ -281,14 +281,18 @@
             // Need to select the item first
             ConnectionSelectionService.selectConnection(item);
 
+            // TODO : New function is required to check whether the dataservice needs the connection
             // Determine if any dataservices use this connection.  List them in the confirmation message
-            var dsList = DSSelectionService.getDataservicesUsingSource(item.keng__id);
-            if( dsList.length > 0 ) {
-                vm.confirmDeleteMsg = $translate.instant('datasourceSummaryController.confirmDeleteDataservicesAffectedMsg', {sourceName: item.keng__id, dsList: dsList.toString()});
-            } else {
-                // show the delete confirmation modal
-                vm.confirmDeleteMsg = $translate.instant('datasourceSummaryController.confirmDeleteMsg', {sourceName: item.keng__id});
-            }
+            //var dsList = DSSelectionService.getDataservicesUsingSource(item.keng__id);
+            //if( dsList.length > 0 ) {
+            //    vm.confirmDeleteMsg = $translate.instant('connectionSummaryController.confirmDeleteDataservicesAffectedMsg', {connectionName: item.keng__id, dsList: dsList.toString()});
+            //} else {
+            //   // show the delete confirmation modal
+            //   vm.confirmDeleteMsg = $translate.instant('connectionSummaryController.confirmDeleteMsg', {connectionName: item.keng__id});
+            //}
+
+            // show the delete confirmation modal
+            vm.confirmDeleteMsg = $translate.instant('connectionSummaryController.confirmDeleteMsg', {connectionName: item.keng__id});
 
             $('#confirmDeleteModal').modal('show');
         };
