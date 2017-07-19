@@ -39,6 +39,9 @@
         wiz.viewDdl = "";
         wiz.criteriaPredicates = [DEFAULT_PREDICATE];
 
+        wiz.readOnlyAccessOriginal = true;
+        wiz.readOnlyAccess = wiz.readOnlyAccessOriginal;
+
         /*
          * Service instance to be returned
          */
@@ -62,9 +65,33 @@
                 wiz.serviceName = dataservice.keng__id;
                 wiz.serviceDescription = dataservice.tko__description;
                 initServiceSelections(dataservice.keng__id, pageId);
+                initDataRole( dataservice.keng__id );
             }
         };
 
+        function initDataRole( dataServiceName ) {
+            try {
+                RepoRestService.getDefaultReadOnlyDataRole( dataServiceName ).then(
+                    function( dataRole ) {
+                        wiz.readOnlyAccessOriginal = true;
+                        wiz.readOnlyAccess = wiz.readOnlyAccessOriginal;
+                    },
+                    function( response ) {
+                    	if ( response.status === 404 ) {
+                            wiz.readOnlyAccessOriginal = false;
+                            wiz.readOnlyAccess = wiz.readOnlyAccessOriginal;
+                    	} else {
+                    		var errorMsg = $translate.instant( 'editWizardService.initTableSelectionsFailedMsg' );
+                    		throw RepoRestService.newRestException( errorMsg + "\n" + RepoRestService.responseMessage( response ) );
+                        }
+                    }
+                );
+            } catch ( error ) {
+                var errMsg = $translate.instant( 'editWizardService.initTableSelectionsFailedMsg' );
+                throw RepoRestService.newRestException( errMsg + "\n" + error );
+            }
+        }
+        
         /*
          * Reset user selections
          */
@@ -86,6 +113,9 @@
 
             // reset service name
             service.setServiceName( "" );
+
+            wiz.readOnlyAccessOriginal = true;
+            wiz.readOnlyAccess = wiz.readOnlyAccessOriginal;
         }
 
         /*
@@ -112,6 +142,20 @@
          */
         service.isEditing = function() {
             return wiz.isEdit;
+        };
+
+        /*
+         * Indicates if the data sources can only be accessed in a read-only mode.
+         */
+        service.isReadOnlyAccess = function() {
+            return wiz.readOnlyAccess;
+        };
+
+        /*
+         * Sets the data source read-only access.
+         */
+        service.setReadOnlyAccess = function( readOnly ) {
+            wiz.readOnlyAccess = readOnly;
         };
 
         /*
@@ -250,6 +294,10 @@
             wiz.src2AvailableColumns = [];
             // Reset the criteria
             resetPredicates();
+            
+            wiz.readOnlyAccessOriginal = true;
+            wiz.readOnlyAccess = wiz.readOnlyAccessOriginal;
+
             // Broadcast table change
             $rootScope.$broadcast("editWizardTablesChanged");
         };
