@@ -200,6 +200,7 @@
         "clickSourceTableInstructionMsg" : "Click on a source table to add it to your selections",
         "dataSources" : "Data Sources",
         "enterNameInstructionMsg" : "Enter a name for your data service",
+        "IncludeAllColumns" : "Include All Columns",
         "invalidNameInstructionMsg" : "Data service name has invalid characters or already exists",
         "getVdbModelsFailedMsg" : "Failed to get Vdb models",
         "getVdbModelTablesFailedMsg" : "Failed to get Vdb model tables",
@@ -495,10 +496,15 @@
     },
 
     "editWizardService" : {
+        "dataSourcesUpdatableMsg" : "When <strong>Read-only Access</strong> is unchecked, this data service has update and delete access to your source data.",
         "initTableSelectionsFailedMsg" : "Error initializing data service source table selections.",
         "getJoinCriteriaFailedMsg" : "Error retrieving join criteria.",
         "nameRequired" : "@:shared.nameRequired",
-        "validateDataServiceNameError" : "Error validating data service name."
+         "ReadOnlyAccess" : "Read-only Access",
+        "validateDataServiceNameError" : "Error validating data service name.",
+        "help" : {
+            "readOnlyAccess" : "When checked, data sources have read-only access and cannot be updated."
+        }
     },
 
     "fileImportControl" : {
@@ -633,6 +639,8 @@
     },
 
     "RepositoryRestService" : {
+        "createDefaultDataRoleMissingArgs" : "Then data service name and at least one model name must be defined when creating the default read-only access data role.",
+        "deleteDataRoleMissingArgs" : "The data service name and the data role name must be defined for delete.",
         "emptyDataServiceName" : "The data service name cannot be empty.",
         "emptyDataSourceName" : "The data source name cannot be empty.",
         "emptyConnectionName" : "The connection name cannot be empty.",

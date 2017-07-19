@@ -24,6 +24,9 @@
          */
         var service = {};
 
+        var READ_ONLY_DATA_ROLE_NAME = "DefaultReadOnlyDataRole";
+        var VIEW_MODEL = "views"; // must match KomodoDataserviceService.SERVICE_VDB_VIEW_MODEL
+        
         // Restangular services keyed by host:port/baseUrl
         service.cachedServices = {};
 
@@ -390,6 +393,153 @@
 
             return getRestService().then(function (restService) {
                 return restService.all(url).getList();
+            });
+        };
+        
+        function getServiceVdbName( dataServiceName ) {
+            return dataServiceName + "VDB";
+        }
+
+        /**
+         * Obtain the data roles for the service VDB of the specified data service.
+         */
+        service.getDataRoles = function ( dataServiceName ) {
+            return getRestService().then( function ( restService ) {
+                if ( !dataserviceName ) {
+                    throw new RestServiceException( $translate.instant( 'RepositoryRestService.emptyDataServiceName' ) );
+                }
+
+                var vdbName = getServiceVdbName( dataServiceName );
+                var url = REST_URI.WORKSPACE + 
+                          REST_URI.VDBS + SYNTAX.FORWARD_SLASH + 
+                          vdbName + 
+                          REST_URI.DATA_ROLES;
+                return restService.all( url ).getList();
+            });
+        };
+
+        /**
+         * Obtain the specified data role for the service VDB of the specified data service. The data role may or may not exist.
+         */
+        service.getDataRole = function ( dataServiceName, dataRoleName ) {
+            return getRestService().then( function ( restService ) {
+                if ( !dataServiceName ) {
+                    throw new RestServiceException( $translate.instant( 'RepositoryRestService.emptyDataServiceName' ) );
+                }
+
+                var vdbName = getServiceVdbName( dataServiceName );
+                var url = REST_URI.WORKSPACE + 
+                          REST_URI.VDBS + SYNTAX.FORWARD_SLASH + 
+                          vdbName + 
+                          REST_URI.DATA_ROLES + SYNTAX.FORWARD_SLASH +
+                          dataRoleName;
+                return restService.one( url ).get();
+            });
+        };
+
+        /**
+         * Obtain the default read-only data role for the service VDB of the specified data service. The data role may or may not exist.
+         */
+        service.getDefaultReadOnlyDataRole = function ( dataServiceName ) {
+        	return service.getDataRole( dataServiceName, READ_ONLY_DATA_ROLE_NAME );
+        };
+
+        /**
+         * Delete the specified data role from the service VDB of the specified data service.
+         */
+        service.deleteDataRole = function ( dataServiceName, dataRoleName ) {
+            if ( !dataServiceName || !dataRoleName ) {
+                throw new RestServiceException( $translate.instant( 'RepositoryRestService.deleteDataRoleMissingArgs' ) );
+            }
+
+            return getRestService().then( function ( restService ) {
+                var vdbName = getServiceVdbName( dataServiceName );
+                var url = REST_URI.WORKSPACE + 
+                          REST_URI.VDBS + SYNTAX.FORWARD_SLASH + 
+                          vdbName + 
+                          REST_URI.DATA_ROLES + SYNTAX.FORWARD_SLASH + 
+                          dataRoleName;
+                return restService.one( url ).remove();
+            });
+        };
+
+        /**
+         * Delete the default data role from the service VDB of the specified data service.
+         */
+        service.deleteDefaultReadOnlyDataRole = function ( dataServiceName ) {
+        	return service.deleteDataRole( dataServiceName, READ_ONLY_DATA_ROLE_NAME );
+        };
+
+        /**
+         * Create the default read-only access data role in the service VDB of the specified data service. Creates a permission for each model passed in.
+         */
+        service.createDefaultReadOnlyDataRole = function ( dataServiceName, model1Name, model2Name ) {
+            if ( !dataServiceName || !model1Name ) {
+                throw new RestServiceException( $translate.instant( 'RepositoryRestService.createDefaultDataRoleMissingArgs' ) );
+            }
+
+            return getRestService().then( function ( restService ) {
+                var vdbName = getServiceVdbName( dataServiceName );
+                var payload = {
+                    "keng__id": READ_ONLY_DATA_ROLE_NAME,
+                    "keng__kType": "VdbDataRole",
+                    "keng__dataPath": getUserWorkspacePath() + "/" + vdbName + "/vdb:dataRoles/" + READ_ONLY_DATA_ROLE_NAME,
+                    "vdb__dataRole": READ_ONLY_DATA_ROLE_NAME,
+                    "vdb__description": "The default read-only access data role.",
+                    "vdb__permissions": [
+                        {
+                            "keng__id": VIEW_MODEL,
+                            "keng__kType": "VdbPermission",
+                            "keng__dataPath": getUserWorkspacePath() + "/" + vdbName + "/vdb:dataRoles/" + READ_ONLY_DATA_ROLE_NAME + "/vdb:permissions/" + VIEW_MODEL,
+                            "vdb__permission": VIEW_MODEL,
+                            "vdb__allowAlter": false,
+                            "vdb__allowCreate": false,
+                            "vdb__allowDelete": false,
+                            "vdb__allowExecute": false,
+                            "vdb__allowLanguage": false,
+                            "vdb__allowRead": true,
+                            "vdb__allowUpdate": false
+                        },
+                        {
+                            "keng__id": model1Name,
+                            "keng__kType": "VdbPermission",
+                            "keng__dataPath": getUserWorkspacePath() + "/" + vdbName + "/vdb:dataRoles/" + READ_ONLY_DATA_ROLE_NAME + "/vdb:permissions/" + model1Name,
+                            "vdb__permission": model1Name,
+                            "vdb__allowAlter": false,
+                            "vdb__allowCreate": false,
+                            "vdb__allowDelete": false,
+                            "vdb__allowExecute": false,
+                            "vdb__allowLanguage": false,
+                            "vdb__allowRead": true,
+                            "vdb__allowUpdate": false
+                        }
+                    ]
+                };
+                
+                if ( model2Name && ( model1Name !== model2Name ) ) {
+                	payload.vdb__permissions.push(
+                        {
+	                        "keng__id": model2Name,
+	                        "keng__kType": "VdbPermission",
+	                        "keng__dataPath": getUserWorkspacePath() + "/" + vdbName + "/vdb:dataRoles/" + READ_ONLY_DATA_ROLE_NAME + "/vdb:permissions/" + model2Name,
+	                        "vdb__permission": model2Name,
+	                        "vdb__allowAlter": false,
+	                        "vdb__allowCreate": false,
+	                        "vdb__allowDelete": false,
+	                        "vdb__allowExecute": false,
+	                        "vdb__allowLanguage": false,
+	                        "vdb__allowRead": true,
+	                        "vdb__allowUpdate": false
+                        }
+                    );
+                }
+
+                var url = REST_URI.WORKSPACE + 
+                          REST_URI.VDBS + SYNTAX.FORWARD_SLASH + 
+                          vdbName + 
+                          REST_URI.DATA_ROLES + SYNTAX.FORWARD_SLASH + 
+                          READ_ONLY_DATA_ROLE_NAME;
+                return restService.all( url ).post( payload );
             });
         };
 
