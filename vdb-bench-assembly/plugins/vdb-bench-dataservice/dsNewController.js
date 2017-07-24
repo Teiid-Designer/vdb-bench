@@ -67,8 +67,19 @@
          * Expert tab selected.  Get selections from EditWizardService to populate text view.
          */
         vm.onExpertTabSelected = function() {
-            setViewDdlFromEditor();
-            loadTableColumnTree();
+            if(!vm.disableExpertTab) {
+                if(!EditWizardService.selectionsComplete()) {
+                    var incompleteSelectionsMsg = $translate.instant('dsNewController.incompleteSelectionsMsg');
+                    alert(incompleteSelectionsMsg);
+                    vm.wizardTabActive = true;
+                    vm.expertTabActive = false;
+                } else {
+                    vm.wizardTabActive = false;
+                    vm.expertTabActive = true;
+                    setViewDdlFromEditor();
+                    loadTableColumnTree();
+                }
+            }
         };
 
         /**
