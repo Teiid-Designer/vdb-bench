@@ -541,6 +541,63 @@
             return true;
         };
 
+        /*
+         * 'true' if wizard selections are complete.  'complete' means the selections are defined enough to generate valid DDL.
+         */
+        service.selectionsComplete = function( ) {
+            // Service Name must be defined
+            if(wiz.serviceName.length===0) return false;
+
+            // Must have at least one table selection
+            if(!wiz.sourceTables || wiz.sourceTables.length===0) return false;
+
+            // One source, must have at least one selected Column
+            if(wiz.sourceTables.length===1) {
+                if (!wiz.includeAllSource1Columns) {
+                    if(!hasSrc1ColumnSelection()) {
+                        return false;
+                    }
+                } 
+            // If two source table selections, must be 
+            //   - columns selected from source 1 or source 2
+            //   - a completed join criteria
+            } else {
+                if( ( !hasSrc1ColumnSelection() && !hasSrc2ColumnSelection() ) || !service.criteriaComplete() ) {
+                    return false;
+                }
+            }
+
+            return true;
+        };
+
+        /**
+         * Determine if at least one src1 column is selected
+         */
+        function hasSrc1ColumnSelection() {
+            var hasOne = false;
+            for(var i=0; i<wiz.src1AvailableColumns.length; i++) {
+                if(wiz.src1AvailableColumns[i].selected) {
+                    hasOne = true;
+                    break;
+                }
+            }
+            return hasOne;
+        }
+
+        /**
+         * Determine if at least one src1 column is selected
+         */
+        function hasSrc2ColumnSelection() {
+            var hasOne = false;
+            for(var i=0; i<wiz.src2AvailableColumns.length; i++) {
+                if(wiz.src2AvailableColumns[i].selected) {
+                    hasOne = true;
+                    break;
+                }
+            }
+            return hasOne;
+        }
+
         /**
          * Sets the predicate criteria based on the currently selected tables.
          * This will make a REST call to use the PK - FK relationships on the tables to determine the join criteria.

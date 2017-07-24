@@ -221,6 +221,7 @@
     },
 
     "dsEditController" : {
+        "incompleteSelectionsMsg" : "Please complete all wizard selections before switching to expert tab.",
         "confirmExpertMsg" : "Switching to Expert mode requires you to finish your edits in expert mode.  Please confirm.",
         "enterViewDefnMsg" : "Enter a View Definition",
         "updateDataserviceFailedMsg" : "Failed to update the data service",
@@ -257,6 +258,7 @@
     },
 
     "dsNewController" : {
+        "incompleteSelectionsMsg" : "Please complete all wizard selections before switching to expert tab.",
         "createDataserviceFailedMsg" : "Failed to create the data service",
         "enterViewDefnMsg" : "Enter a View Definition",
         "saveFailedMsg" : "Failed to update the data service: {{response}}"

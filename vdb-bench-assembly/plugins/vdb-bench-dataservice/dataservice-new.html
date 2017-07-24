@@ -19,10 +19,10 @@
                 <span>{{vmmain.page('svcsource-new').title}}</span></a>
             </h4>
             <uib-tabset>
-                <uib-tab heading="{{:: 'dataservice-new.wizardTab' | translate}}">
+                <uib-tab heading="{{:: 'dataservice-new.wizardTab' | translate}}" active="vm.wizardTabActive">
                     <dataservice-edit-wizard></dataservice-edit-wizard>
                 </uib-tab>
-                <uib-tab heading="{{:: 'dataservice-new.expertTab' | translate}}" disable="vm.disableExpertTab" ng-click="vm.onExpertTabSelected()">
+                <uib-tab heading="{{:: 'dataservice-new.expertTab' | translate}}" active="vm.expertTabActive" disable="vm.disableExpertTab" ng-click="vm.onExpertTabSelected()">
                     <div class="col-md-12">
                         <h4 class="pull-left">{{'dataservice-new.viewDdlTitle' | translate}}</h4>
                     </div>
