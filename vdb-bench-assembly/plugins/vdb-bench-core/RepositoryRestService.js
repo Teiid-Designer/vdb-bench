@@ -486,6 +486,9 @@
                     "keng__dataPath": getUserWorkspacePath() + "/" + vdbName + "/vdb:dataRoles/" + READ_ONLY_DATA_ROLE_NAME,
                     "vdb__dataRole": READ_ONLY_DATA_ROLE_NAME,
                     "vdb__description": "The default read-only access data role.",
+                    "vdb__grantAll": false,
+                    "vdb__anyAuthenticated": true,
+                    "vdb__allowCreateTemporaryTables": false,
                     "vdb__permissions": [
                         {
                             "keng__id": VIEW_MODEL,
@@ -496,7 +499,6 @@
                             "vdb__allowCreate": false,
                             "vdb__allowDelete": false,
                             "vdb__allowExecute": false,
-                            "vdb__allowLanguage": false,
                             "vdb__allowRead": true,
                             "vdb__allowUpdate": false
                         },
@@ -509,7 +511,6 @@
                             "vdb__allowCreate": false,
                             "vdb__allowDelete": false,
                             "vdb__allowExecute": false,
-                            "vdb__allowLanguage": false,
                             "vdb__allowRead": true,
                             "vdb__allowUpdate": false
                         }
@@ -527,7 +528,6 @@
 	                        "vdb__allowCreate": false,
 	                        "vdb__allowDelete": false,
 	                        "vdb__allowExecute": false,
-	                        "vdb__allowLanguage": false,
 	                        "vdb__allowRead": true,
 	                        "vdb__allowUpdate": false
                         }
