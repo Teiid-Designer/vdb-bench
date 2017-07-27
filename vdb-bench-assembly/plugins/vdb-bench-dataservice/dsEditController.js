@@ -84,11 +84,20 @@
          * Expert tab selected.  Get selections from EditWizardService to populate text view.
          */
         vm.onExpertTabSelected = function() {
-            // Show the expert mode confirmation modal
-            vm.confirmExpertMsg = $translate.instant('dsEditController.confirmExpertMsg');
-            $('#confirmExpertModal').modal('show');
+            if(!vm.disableExpertTab) {
+                if(!EditWizardService.selectionsComplete()) {
+                    var incompleteSelectionsMsg = $translate.instant('dsEditController.incompleteSelectionsMsg');
+                    alert(incompleteSelectionsMsg);
+                    vm.wizardTabActive = true;
+                    vm.expertTabActive = false;
+                } else {
+                // Show the expert mode confirmation modal
+                    vm.confirmExpertMsg = $translate.instant('dsEditController.confirmExpertMsg');
+                    $('#confirmExpertModal').modal('show');
+                }
+            }
         };
-        
+
         /**
          * Switch to the Expert Tab after confirming
          */
