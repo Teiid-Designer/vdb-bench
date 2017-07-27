@@ -57,7 +57,7 @@
             var port = $location.port();
             var baseUrl = CONFIG.help.baseUrl;
 
-            var host = _.isEmpty(port) ? hostname : hostname + SYNTAX.COLON + port;
+            var host = port ? hostname + SYNTAX.COLON + port : hostname;
 
             return protocol +
                 SYNTAX.COLON + SYNTAX.FORWARD_SLASH + SYNTAX.FORWARD_SLASH +
