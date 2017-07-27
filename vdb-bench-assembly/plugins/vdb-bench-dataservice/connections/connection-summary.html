@@ -71,7 +71,8 @@
                                 </div>
                                 <div class="list-view-pf-additional-info">
                                     <div class="list-view-pf-additional-info-item" data-toggle="tooltip" data-placement="right" title="{{:: 'connection-summary.driverNameLabel' | translate}} : {{item.dv__driverName}}">
-                                        <img src="{{item.dsbConnectionImageLink}}" width="42" height="24"/>
+                                        <!-- use ng-src rather than src to handle if item has no dsbConnectionImageLink -->
+                                        <img ng-src="{{item.dsbConnectionImageLink}}" width="42" height="24"/>
                                     </div>
 
                                     <div class="list-view-pf-additional-info-item" data-toggle="tooltip" data-placement="right" title="The owner of this connection" ng-if="item.dsbCreator">
