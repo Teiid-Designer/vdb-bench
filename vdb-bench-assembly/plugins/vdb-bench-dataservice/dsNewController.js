@@ -292,7 +292,7 @@
                     var relativeModelSourcePath = sourceName+"/"+selSvcSourceModelName+"/vdb:sources/"+selSvcSourceModelName;
                     var relativeTablePath = sourceName+"/"+selSvcSourceModelName+"/"+tableName;
 
-                    setDataServiceVdbForSingleTable(dataserviceName, selSvcSourceModelName, relativeModelSourcePath, vm.viewDdl, relativeTablePath);
+                    setDataServiceVdbForSingleTable(dataserviceName, sourceName, relativeModelSourcePath, vm.viewDdl, relativeTablePath);
                 };
 
                 // Failure callback
@@ -322,7 +322,7 @@
                     var rhRelativeModelSourcePath = vm.sourceNames[1]+"/"+rhSourceModelName+"/vdb:sources/"+rhSourceModelName;
                     var rhRelativeTablePath = vm.sourceNames[1]+"/"+rhSourceModelName+"/"+vm.tableNames[1];
 
-                    setDataServiceVdbForJoinTables(dataserviceName, lhSourceModelName, lhRelativeModelSourcePath, rhSourceModelName, rhRelativeModelSourcePath, vm.viewDdl,
+                    setDataServiceVdbForJoinTables(dataserviceName, vm.sourceNames[0], lhRelativeModelSourcePath, vm.sourceNames[1], rhRelativeModelSourcePath, vm.viewDdl,
                                                                     lhRelativeTablePath, rhRelativeTablePath);
                 };
 

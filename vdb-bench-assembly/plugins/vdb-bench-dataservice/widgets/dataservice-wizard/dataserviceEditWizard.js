@@ -633,7 +633,7 @@
                     try {
                         RepoRestService.setDataServiceVdbForSingleTable( dataserviceName, relativeModelSourcePath, null, relativeTablePath, columnNames ).then(
                             function () {
-                            	setDefaultReadOnlyDataRole( dataserviceName, vm.readOnlyAccess, selSvcSourceModelName, null );
+                            	setDefaultReadOnlyDataRole( dataserviceName, vm.readOnlyAccess, sourceNames[0], null );
                             },
                             function (response) {
                                 throw RepoRestService.newRestException($translate.instant('dsNewController.saveFailedMsg', 
@@ -689,7 +689,7 @@
                                                                                          rhRelativeTablePath, rhColumnNames, 
                                                                                          joinType, criteriaPredicates).then(
                             function () {
-                            	setDefaultReadOnlyDataRole( dataserviceName, vm.readOnlyAccess, lhSourceModelName, rhSourceModelName );
+                            	setDefaultReadOnlyDataRole( dataserviceName, vm.readOnlyAccess, sourceNames[0], sourceNames[1] );
                             },
                             function (response) {
                                 throw RepoRestService.newRestException($translate.instant('dsNewController.saveFailedMsg', 
