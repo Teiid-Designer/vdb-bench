@@ -24,8 +24,10 @@
          */
         var service = {
             PAGE_NOT_FOUND : "help-page-not-found.html",
-        	'connection-clone': "connection-clone-help.html",
-        	'connection-new': "connection-new-help.html",
+        	'connection-clone': "connections-clone-help.html",
+        	'connection-new': "connections-new-help.html",
+        	'connection-summary-empty' : "connections-summary-empty-help.html",
+        	'connection-summary' : "connections-summary-help.html",
         	'dataservice-clone': "dataservices-clone-help.html",
         	'dataservice-documentation': "dataservices-documentation-help.html",
         	'dataservice-edit': "dataservices-edit-help.html",
