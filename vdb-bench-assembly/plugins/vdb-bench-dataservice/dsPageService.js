@@ -204,6 +204,7 @@
         pages[service.NEW_CONNECTION_PAGE] = {
             id: service.NEW_CONNECTION_PAGE,
             title: $translate.instant('shared.NewWhat', {what: $translate.instant('shared.Connection')}),
+            icon: 'fa-plus',
             helpId: service.NEW_CONNECTION_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
@@ -213,6 +214,7 @@
         pages[service.IMPORT_CONNECTION_PAGE] = {
             id: service.IMPORT_CONNECTION_PAGE,
             title: $translate.instant('shared.ImportWhat', {what: $translate.instant('shared.Connection')}),
+            icon: 'pficon-import',
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
                             'connections' + syntax.FORWARD_SLASH +
@@ -221,6 +223,7 @@
         pages[service.EDIT_CONNECTION_PAGE] = {
             id: service.EDIT_CONNECTION_PAGE,
             title: $translate.instant('shared.EditWhat', {what: $translate.instant('shared.Connection')}),
+            icon: 'pficon-edit',
             helpId: service.EDIT_CONNECTION_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +
@@ -230,6 +233,7 @@
         pages[service.CLONE_CONNECTION_PAGE] = {
             id: service.CLONE_CONNECTION_PAGE,
             title: $translate.instant('shared.CopyWhat', {what: $translate.instant('shared.Connection')}),
+            icon: 'fa-copy',
             helpId: service.CLONE_CONNECTION_PAGE,
             template: config.pluginDir + syntax.FORWARD_SLASH +
                             pluginDirName + syntax.FORWARD_SLASH +

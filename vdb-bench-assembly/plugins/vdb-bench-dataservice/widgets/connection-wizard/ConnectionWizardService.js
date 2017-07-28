@@ -444,6 +444,7 @@
                             $rootScope.$broadcast("connectionDeploymentFinished", true, msg);
                         } else {
                             ConnectionSelectionService.setDeploying(false, service.connectionName(), false, result.Information.ErrorMessage1);
+                            var errorMsg = $translate.instant('connectionWizardService.deployConnectionFailure');
                             errorMsg = '<p>' + errorMsg + '</p><p>' + result.Information.ErrorMessage1  + '</p>';
                             $rootScope.$broadcast("connectionDeploymentFinished", false, errorMsg);
                         }
