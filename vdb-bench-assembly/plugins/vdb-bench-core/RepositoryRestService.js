@@ -1318,7 +1318,7 @@
          */
         service.createConnection = function (connectionName, jndiName, driverName, isJdbc, parameters) {
             if (!connectionName || !driverName || !jndiName || !parameters) {
-                throw new RestServiceException("Connection name, jndiName, driverName or parameters is not defined");
+                throw new RestServiceException("The connection name, jndi name, driver or set of parameters is not defined");
             }
 
             parameters.dsbCreator = CredentialService.credentials().username;
@@ -1369,7 +1369,7 @@
          */
         service.updateConnection = function (connectionName, jndiName, driverName, isJdbc, parameters) {
             if (!connectionName || !driverName || !jndiName || !parameters) {
-                throw new RestServiceException("Connection name, jndiName, driverName or parameters is not defined");
+                throw new RestServiceException("The connection name, jndi name, driver or set of parameters is not defined");
             }
 
             parameters.dsbCreator = CredentialService.credentials().username;

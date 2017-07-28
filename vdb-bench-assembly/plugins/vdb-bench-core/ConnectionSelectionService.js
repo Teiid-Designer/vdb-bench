@@ -84,9 +84,8 @@
         }
 
         /**
-         * Initialize the workspace VDBs
-         * 1) copys any server VDBs into repo that do not exist
-         * 2) sets the vdb status
+         * Initialize the workspace connections
+         * 1) copys any server connections into repo that do not exist
          */
         function initConnections(resetSelection) {
             conn.connections = [];

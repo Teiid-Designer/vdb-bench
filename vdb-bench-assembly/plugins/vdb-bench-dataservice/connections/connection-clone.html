@@ -1,27 +1,50 @@
-<div class="container-fluid" ng-controller="ConnectionCloneController as vm">
-    <ol class="breadcrumb">
-        <li><a ng-click="vmmain.selectPage('dataservice-summary')"><i class="fa fa-cubes fa-fw" aria-hidden="true"></i> DataServices</a></li>
-        <li><a ng-click="vmmain.selectPage('connection-summary')"><i class="fa fa-plug fa-fw" aria-hidden="true"></i> Connections</a></li>
-        <li>Copy DataService</li>
-    </ol>
-    
-    <div class="row">
-        <div class="col-sm-8 col-md-9">                
+<div id="outer" class="outer-wrapper">
+    <div id="connection-clone-container" class="container-fluid" ng-controller="ConnectionCloneController as vm">
+        <div id="connection-clone" ng-show="vm.cloneConnInProgress==true" class="col-md-10 row">
+            <div class="spinner spinner-lg spinner-inline" />
+            {{:: 'connection-clone.copyingConnection' | translate}}
+        </div>
+
+        <div id="connection-clone-controls" ng-show="vm.cloneConnInProgress==false" class="col-md-12 row">
             <div class="row">
-                <div class="col-sm-9">
-                    <h1><i class="fa fa-plug" aria-hidden="true"></i>Copy Connection '{{vmmain.selectedConnection().keng__id}}'</h1>
-                    <h3>&nbsp;&nbsp;Enter a name for the new connection</h3>
-                    <form class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-2 control-label" for="textInput">Name</label>
-                            <div class="col-md-6">
-                              <input type="text" ng-model="nameVar" class="form-control">
-                            </div>
+                <h3>&nbsp;&nbsp;{{:: 'connection-clone.instructionsMsg' | translate}}</h3>
+                <form name="connCloneForm" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-1 control-label" for="connName" translate="connection-clone.Name"></label>
+                        <div class="col-md-6">
+                          <input type="text"
+                                 name="connName"
+                                 ng-model="vm.connName"
+                                 ng-change="vm.connNameChanged()"
+                                 required
+                                 autofocus
+                                 class="form-control">
+                          <div ng-show="vm.hasInvalidName()"
+                               class="error-message"
+                               ng-if="connCloneForm.connName.$dirty || connCloneForm.connName.$touched">
+                              {{ vm.nameErrorMsg }}
+                          </div>
                         </div>
-                    </form>
-                    <button class="btn btn-primary" ng-click="vm.onCloneConnectionClicked(vmmain.selectedConnection().keng__id, nameVar)" ng-class="{active:vmmain.selectedPage.id == 'connection-clone'}"> Create</button>
-                    <button class="btn btn-default" ng-click="vmmain.selectPage('connection-summary')" ng-class="{active:vmmain.selectedPage.id == 'connection-clone'}"> Cancel</button>
+                    </div>
+                </form>
+
+                <button class="btn btn-primary"
+                        ng-click="vm.onCloneConnectionClicked(vmmain.selectedConnection().keng__id, vm.connName)"
+                        ng-class="{active:vmmain.selectedPage.id == 'connection-clone'}"
+                        ng-disabled="vm.hasInvalidName() || vm.cloneOperationFinished"
+                        translate="connection-clone.Create">
+                </button>
+                <button class="btn btn-default"
+                        ng-click="vmmain.selectPage('connection-summary')"
+                        ng-class="{active:vmmain.selectedPage.id == 'connection-clone'}"
+                        translate="svcsource-clone.Cancel"></button>
                 </div>
+            </div>
+
+            <div class="connection-clone-complete"
+                    ng-class="vm.connectionCloneStyleClass"
+                    ng-show="! vm.cloneConnInProgress"
+                    ng-bind-html="vm.connectionCloneStatus">
             </div>
         </div>
     </div>

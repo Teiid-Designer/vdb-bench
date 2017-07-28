@@ -181,6 +181,7 @@
             ID: 'keng__id',
             DRIVER: 'dv__driverName',
             JNDI: 'dv__jndiName',
+            TYPE: 'dv__type',
             PROPERTIES: 'keng__properties',
             JNDI_PREFIX: 'java:/',
             TEMPLATE_JDBC: 'isJdbc'

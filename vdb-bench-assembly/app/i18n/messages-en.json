@@ -428,6 +428,21 @@
         "ownerLabel" : "Owner"
     },
 
+    "connection-clone" : {
+        "Cancel" : "@:shared.Cancel",
+        "copyingConnection" : "Copying connection",
+        "Create" : "@:shared.Create",
+        "instructionsMsg" : "Enter a name for the new connection",
+        "Name" : "@:shared.Name"
+    },
+
+    "connectionCloneController" : {
+        "createConnectionSuccess" : "The connection was created successfully.",
+        "createConnectionFailure" : "The connection failed to be created.",
+        "deployConnectionSuccess" : "The connection was deployed successfully.",
+        "deployConnectionFailure" : "The connection failed to be deployed."
+    },
+
     "connectionSummaryController" : {
         "actionNameCopy" : "@:shared.Copy",
         "actionNameDelete" : "@:shared.Delete",

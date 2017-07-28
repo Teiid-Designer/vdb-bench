@@ -48,7 +48,7 @@
                 vm.hasConnections = vm.allItems.length>0;
             } else {
                 vm.hasConnections = false;
-           }
+            }
             setHelpId();
         });
 
