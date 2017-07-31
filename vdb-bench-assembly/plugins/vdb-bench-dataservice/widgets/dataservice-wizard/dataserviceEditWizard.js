@@ -51,6 +51,8 @@
         vm.buildVdbIndex = 0;
         vm.table1Style = STYLES.DSWIZARD_TABLE_NOT_SELECTED;
         vm.table2Style = STYLES.DSWIZARD_TABLE_NOT_SELECTED;
+        
+        vm.readOnlyAccess = EditWizardService.isReadOnlyAccess();
 
         /*
          * page init here
@@ -631,8 +633,7 @@
                     try {
                         RepoRestService.setDataServiceVdbForSingleTable( dataserviceName, relativeModelSourcePath, null, relativeTablePath, columnNames ).then(
                             function () {
-                                // Reinitialise the list of data services
-                                DSSelectionService.refresh('dataservice-summary');
+                            	setDefaultReadOnlyDataRole( dataserviceName, vm.readOnlyAccess, sourceNames[0], null );
                             },
                             function (response) {
                                 throw RepoRestService.newRestException($translate.instant('dsNewController.saveFailedMsg', 
@@ -688,8 +689,7 @@
                                                                                          rhRelativeTablePath, rhColumnNames, 
                                                                                          joinType, criteriaPredicates).then(
                             function () {
-                                // Reinitialise the list of data services
-                                DSSelectionService.refresh('dataservice-summary');
+                            	setDefaultReadOnlyDataRole( dataserviceName, vm.readOnlyAccess, sourceNames[0], sourceNames[1] );
                             },
                             function (response) {
                                 throw RepoRestService.newRestException($translate.instant('dsNewController.saveFailedMsg', 
@@ -706,6 +706,51 @@
 
                 // get models for sources
                 EditWizardService.getModelsForSourceVdbs(EditWizardService.sources(), joinSuccessCallback, joinFailureCallback);
+            }
+        }
+
+        function setDefaultReadOnlyDataRole( dataServiceName, readOnly, model1Name, model2Name ) {
+            try {
+        		if ( readOnly ) {
+                	// always delete since when readOnly it is not needed or when !readOnly the models may have changed
+            		RepoRestService.deleteDefaultReadOnlyDataRole( dataServiceName ).then(
+                        function () {
+                    		RepoRestService.createDefaultReadOnlyDataRole( dataServiceName, model1Name, model2Name ).then(
+                                function () {
+                                    // Reinitialise the list of data services
+                                    DSSelectionService.refresh( 'dataservice-summary' );
+                                },
+                                function ( response ) {
+                                    vm.showDdlError = true;
+                                    vm.ddlErrorMsg = RepoRestService.responseMessage( response );
+                                    RepoRestService.deleteDataService( dataServiceName );
+                                }
+                            );
+                        },
+                        function ( response ) {
+                            vm.showDdlError = true;
+                            vm.ddlErrorMsg = RepoRestService.responseMessage( response );
+                            RepoRestService.deleteDataService( dataServiceName );
+                        }
+            		);
+            	} else {
+            		RepoRestService.deleteDefaultReadOnlyDataRole( dataServiceName ).then(
+                        function () {
+                            DSSelectionService.refresh( 'dataservice-summary' );
+                        },
+                        function ( response ) {
+                        	if ( response.status != 404 ) {
+	                            vm.showDdlError = true;
+	                            vm.ddlErrorMsg = RepoRestService.responseMessage( response );
+	                            RepoRestService.deleteDataService( dataServiceName );
+                        	}
+                        }
+                    );
+            	}
+            } catch ( error ) {
+                vm.showDdlError = true;
+                vm.ddlErrorMsg = RepoRestService.responseMessage(response);
+                RepoRestService.deleteDataService( dataServiceName );
             }
         }
 
@@ -741,6 +786,10 @@
 
             updateInstructionMessage();
         }
+
+        $scope.$watch( 'vm.readOnlyAccess', function( newValue, oldValue ) {
+            EditWizardService.setReadOnlyAccess( newValue );
+        });
 
         /**
          * Handles next button enablement and text whenever the service name changes.

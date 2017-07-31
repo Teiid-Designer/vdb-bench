@@ -29,6 +29,7 @@
         vm.ddlErrorMsg = "";
         vm.treedata = [];
         vm.initialExpandedNodes = [];
+        vm.readOnlyAccess = EditWizardService.isReadOnlyAccess();
 
         /*
          * Set a custom title to the page including the data service's id
@@ -354,7 +355,7 @@
                     var relativeModelSourcePath = vm.sourceNames[0]+"/"+selSvcSourceModelName+"/vdb:sources/"+selSvcSourceModelName;
                     var relativeTablePath = vm.sourceNames[0]+"/"+selSvcSourceModelName+"/"+vm.tableNames[0];
 
-                    setDataServiceVdbForSingleTable(dataserviceName, relativeModelSourcePath, vm.viewDdl, relativeTablePath);
+                    setDataServiceVdbForSingleTable(dataserviceName, vm.sourceNames[0], relativeModelSourcePath, vm.viewDdl, relativeTablePath);
                 };
 
                 // Failure callback
@@ -387,7 +388,7 @@
                     // Join type
                     var joinType = EditWizardService.joinType();
 
-                    setDataServiceVdbForJoinTables(dataserviceName, lhRelativeModelSourcePath, rhRelativeModelSourcePath, vm.viewDdl,
+                    setDataServiceVdbForJoinTables(dataserviceName, vm.sourceNames[0], lhRelativeModelSourcePath, vm.sourceNames[1], rhRelativeModelSourcePath, vm.viewDdl,
                             lhRelativeTablePath, rhRelativeTablePath);
                 };
 
@@ -429,15 +430,50 @@
             mode: 'text/x-sql'
         };
 
+        function setDefaultReadOnlyDataRole( dataServiceName, readOnly, model1Name, model2Name ) {
+            try {
+        		if ( readOnly ) {
+                	// always delete since if readOnly it is not needed or if !readOnly the models may have changed
+//            		RepoRestService.deleteDefaultReadOnlyDataRole( dataServiceName );
+
+            		RepoRestService.createDefaultReadOnlyDataRole( dataServiceName, model1Name, model2Name ).then(
+                        function () {
+                            // Reinitialise the list of data services
+                            DSSelectionService.refresh( 'dataservice-summary' );
+                        },
+                        function ( response ) {
+                            vm.showDdlError = true;
+                            vm.ddlErrorMsg = RepoRestService.responseMessage( response );
+                            RepoRestService.deleteDataService( dataServiceName );
+                        }
+                    );
+            	} else {
+            		RepoRestService.deleteDefaultReadOnlyDataRole( dataServiceName ).then(
+                        function () {
+                            DSSelectionService.refresh( 'dataservice-summary' );
+                        },
+                        function ( response ) {
+                            vm.showDdlError = true;
+                            vm.ddlErrorMsg = RepoRestService.responseMessage( response );
+                            RepoRestService.deleteDataService( dataServiceName );
+                        }
+                    );
+            	}
+            } catch ( error ) {
+                vm.showDdlError = true;
+                vm.ddlErrorMsg = RepoRestService.responseMessage(response);
+                RepoRestService.deleteDataService( dataServiceName );
+            }
+        }
+
         /**
          * Set the dataservice VDB.  If fails, delete the dataservice
          */
-        function setDataServiceVdbForSingleTable( dataserviceName, relativeModelSourcePath, ddl, relativeTablePath ) {
+        function setDataServiceVdbForSingleTable( dataserviceName, modelName, relativeModelSourcePath, ddl, relativeTablePath ) {
             try {
                 RepoRestService.setDataServiceVdbForSingleTable( dataserviceName, relativeModelSourcePath, ddl, relativeTablePath, null ).then(
                     function () {
-                        // Reinitialise the list of data services
-                        DSSelectionService.refresh('dataservice-summary');
+                        setDefaultReadOnlyDataRole( dataserviceName, vm.readOnlyAccess, modelName, null );
                     },
                     function (response) {
                         vm.showDdlError = true;
@@ -452,14 +488,13 @@
         /**
          * Set the dataservice VDB.  If fails, delete the dataservice
          */
-        function setDataServiceVdbForJoinTables(dataserviceName, lhRelativeModelSourcePath, rhRelativeModelSourcePath, ddl,
+        function setDataServiceVdbForJoinTables(dataserviceName, lhModelName, lhRelativeModelSourcePath, rhModelName, rhRelativeModelSourcePath, ddl,
                 lhRelativeTablePath, rhRelativeTablePath) {
             try {
                 RepoRestService.setDataServiceVdbForJoinTables( dataserviceName, lhRelativeModelSourcePath, rhRelativeModelSourcePath, ddl,
                                                                 lhRelativeTablePath, null, rhRelativeTablePath, null, null, null, null).then(
                     function () {
-                        // Reinitialise the list of data services
-                        DSSelectionService.refresh('dataservice-summary');
+                        setDefaultReadOnlyDataRole( dataserviceName, vm.readOnlyAccess, lhModelName, rhModelName );
                     },
                     function (response) {
                         vm.showDdlError = true;
@@ -470,6 +505,10 @@
                 vm.ddlErrorMsg = RepoRestService.responseMessage(response);
             }
         }
+
+        $scope.$watch( 'vm.readOnlyAccess', function( newValue, oldValue ) {
+            EditWizardService.setReadOnlyAccess( newValue );
+        });
 
     }
     

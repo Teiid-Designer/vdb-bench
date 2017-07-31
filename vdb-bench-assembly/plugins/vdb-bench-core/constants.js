@@ -98,6 +98,7 @@
             MODEL: '/Model',
             MODELS: '/Models',
             MODEL_SOURCES: '/VdbModelSources',
+            DATA_ROLES: '/VdbDataRoles',
             SAVE_SEARCH: 'saveSearch',
             SAVED_SEARCHES: '/savedSearches',
             SEARCH_CONTAINS: 'contains',
