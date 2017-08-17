@@ -123,6 +123,7 @@
         "confirmDeleteTitle" : "Confirm Delete",
         "codeSamplesDataServiceMsg" : "Code samples showing how to connect to your data service are available here.",
         "codeSamplesDataService" : "Code Samples",
+        "deleteServerVdbCheckbox" : "Undeploy from server (if deployed)",
         "GitExport" : "Git Export",
         "GitImport" : "Git Import",
         "importDataServiceMsg" : "You can also import an existing Data Service. To import a Data Service, click ",

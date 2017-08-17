@@ -23,6 +23,7 @@
         vm.items = vm.allItems;
         vm.confirmDeleteMsg = "";
         vm.cannotEditMsg = "";
+        vm.deleteServerVdb = true;
 
         function setHelpId() {
             var page = DSPageService.page(DSPageService.DATASERVICE_SUMMARY_PAGE);
@@ -208,14 +209,34 @@
          */
         vm.deleteSelectedDataService = function( ) {
             var selDSName = DSSelectionService.selectedDataService().keng__id;
+            var selDSVdbName = DSSelectionService.selectedDataServiceVdbName();
 
             // dismiss the delete confirmation modal
             $('#confirmDeleteModal').modal('hide');
+            
             try {
                 RepoRestService.deleteDataService( selDSName ).then(
                     function () {
-                        // Refresh the list of data services
-                        DSSelectionService.refresh(null);
+                        if(vm.deleteServerVdb) {
+                          try {
+                              vm.dsLoading = true;
+                              RepoRestService.deleteTeiidVdb( selDSVdbName ).then(
+                              function () {
+                                  // Refresh the list of data services
+                                  DSSelectionService.refresh(null);
+                              },
+                              function (response) {
+                                  // Refresh the list of data services
+                                  DSSelectionService.refresh(null);
+                              });
+                          } catch (error) {
+                              // Refresh the list of data services
+                              DSSelectionService.refresh(null);
+                          }
+                        } else {
+                          // Refresh the list of data services
+                          DSSelectionService.refresh(null);
+                        }
                     },
                     function (response) {
                         throw RepoRestService.newRestException($translate.instant('dsSummaryController.deleteFailedMsg', 
