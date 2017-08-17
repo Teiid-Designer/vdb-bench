@@ -493,9 +493,9 @@
          * When a data service is currently being deployed
          */
         $scope.$on('deployDataServiceChanged', function (event, dsDeployInProgress) {
+            vm.dsDeploymentMessage = DSSelectionService.deploymentMessage();
             vm.dsDeploymentInProgress = dsDeployInProgress;
             vm.dsDeploymentSuccess = DSSelectionService.deploymentSuccess();
-            vm.dsDeploymentMessage = DSSelectionService.deploymentMessage();
         });
 
         /**
