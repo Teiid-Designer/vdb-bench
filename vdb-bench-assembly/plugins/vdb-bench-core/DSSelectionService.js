@@ -274,7 +274,9 @@
                             //
                             // Monitor the service vdb of the dataservice to determine when its active
                             //
-                            RepoRestService.pollForActiveVdb(dsVdbName, successCallback, failCallback);
+                            var pollDurationSec = 120;
+                            var pollIntervalSec = 2;
+                            RepoRestService.pollForActiveVdb(dsVdbName, pollDurationSec, pollIntervalSec, successCallback, failCallback);
                         } else {
                             service.setDeploying(false, selDSName, false, result.Information.ErrorMessage1);
                         }

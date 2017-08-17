@@ -294,6 +294,8 @@
                 updateFilterProperties(vm.catalogFilter, vm.schemaFilter, vm.tableFilter);
                 vm.allTables = [];
                 vm.tables = [];
+                // Broadcast the loading value for any interested clients
+                $rootScope.$broadcast("jdbcFilterOptionTablesChanged", 0);
             }
         };
 
@@ -338,16 +340,22 @@
                         vm.allTables = tableNames;
                         vm.tables = vm.allTables;
                         vm.tablesLoading = false;
+                        // Broadcast the loading value for any interested clients
+                        $rootScope.$broadcast("jdbcFilterOptionTablesChanged", tableNames.length);
                     },
                     function (response) {
                         vm.hasTableFetchError = true;
                         vm.tableFetchErrorMsg = RepoRestService.responseMessage(response);
                         vm.tablesLoading = false;
+                        // Broadcast the loading value for any interested clients
+                        $rootScope.$broadcast("jdbcFilterOptionTablesChanged", 0);
                     });
             } catch (error) {
                 vm.tablesLoading = false;
                 vm.hasTableFetchError = true;
                 vm.tableFetchErrorMsg = error.message;
+                // Broadcast the loading value for any interested clients
+                $rootScope.$broadcast("jdbcFilterOptionTablesChanged", 0);
             } finally {
             }
         }

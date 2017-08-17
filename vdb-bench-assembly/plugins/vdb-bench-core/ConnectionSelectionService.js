@@ -11,9 +11,11 @@
         .module('vdb-bench.core')
         .factory('ConnectionSelectionService', ConnectionSelectionService);
 
-    ConnectionSelectionService.$inject = ['SYNTAX', 'REST_URI', 'RepoRestService', 'DownloadService', '$rootScope'];
+    ConnectionSelectionService.$inject = ['SYNTAX', 'REST_URI', 'CONNECTION_KEYS', 'RepoRestService', 'DownloadService',
+                                          '$rootScope', 'CredentialService', 'TranslatorSelectionService'];
 
-    function ConnectionSelectionService(SYNTAX, REST_URI, RepoRestService, DownloadService, $rootScope) {
+    function ConnectionSelectionService(SYNTAX, REST_URI, CONNECTION_KEYS, RepoRestService, DownloadService,
+                                        $rootScope, CredentialService, TranslatorSelectionService) {
 
         var conn = {};
         conn.loading = false;
@@ -53,14 +55,14 @@
         /**
          * Fetch the connections from CachedTeiid
          */
-        function initConnections(resetSelection) {
+        function initWkspConnections(resetSelection) {
             setLoading(true);
 
             try {
-                RepoRestService.getConnections(REST_URI.TEIID_SERVICE).then(
+                RepoRestService.getConnections(REST_URI.WKSP_SERVICE).then(
                     function (newConnections) {
                         RepoRestService.copy(newConnections, conn.connections);
-                        conn.connections = sortByKey(conn.connections, 'keng__id');
+                        conn.connections = sortByKey(conn.connections, CONNECTION_KEYS.ID);
                         setLoading(false);
                     },
                     function (response) {
@@ -81,12 +83,40 @@
             }
         }
 
+        /**
+         * Initialize the workspace VDBs
+         * 1) copys any server VDBs into repo that do not exist
+         * 2) sets the vdb status
+         */
+        function initConnections(resetSelection) {
+            conn.connections = [];
+             try {
+                RepoRestService.copyTeiidConnectionsToWorkspace().then(
+                    // Get workspace connections
+                    function (result) {
+                        initWkspConnections(resetSelection);
+                    },
+                    function (response) {
+                        throw RepoRestService.newRestException("Failed to sync workspace connections with server.\n" + response.message);
+                    });
+            } catch (error) {
+                alert("An exception occurred:\n" + error.message);
+            }
+        }
+
         function sortByKey(array, key) {
             return array.sort(function(a, b) {
                 var x = a[key]; var y = b[key];
                 return ((x < y) ? -1 : ((x > y) ? 1 : 0));
             });
         }
+
+        /*
+         * Set the loading flag on the service
+         */
+        service.setLoading = function(isLoading) {
+            setLoading(isLoading);
+        };
 
         /*
          * Are the connections currently loading
@@ -135,10 +165,26 @@
             $rootScope.$broadcast("deployConnectionChanged", conn.deploymentInProgress);
         };
 
+        function addDriverImageLink(connection) {
+            if (connection.dsbConnectionImageLink)
+                return;
+
+            var imageLink = TranslatorSelectionService.getImageLink(connection[CONNECTION_KEYS.DRIVER]);
+            // Use image link found in map.  If not found, use transparent image.
+            if(imageLink === null)
+                imageLink = "plugins/vdb-bench-core/content/img/Transparent_70x40.png";
+
+            connection.dsbConnectionImageLink = imageLink;
+        }
+
         /*
          * Get the connections
          */
         service.getConnections = function() {
+            for(var i = 0; i < conn.connections.length; i++) {
+                addDriverImageLink(conn.connections[i]);
+            }
+
             return conn.connections;
         };
 
@@ -249,6 +295,23 @@
          */
         service.refresh = function(resetSelection) {
             initConnections(resetSelection);
+        };
+
+        /*
+         * return the connection owner name
+         *    (defaults to current user if the dsbConnection property is not found)
+         */
+        service.getConnectionOwner = function ( connection ) {
+            var owner = CredentialService.credentials().username;
+            for(var key in connection.keng__properties) {
+                var propName = connection.keng__properties[key].name;
+                var propValue = connection.keng__properties[key].value;
+                if(propName==='dsbConnection') {
+                    owner = propValue;
+                    break;
+                }
+            }
+            return owner;
         };
 
         // Initialise connection collection on loading

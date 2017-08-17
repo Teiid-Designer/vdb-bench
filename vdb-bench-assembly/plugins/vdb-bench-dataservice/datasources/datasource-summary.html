@@ -47,7 +47,7 @@
             <div pf-toolbar id="svcsourceToolbar" config="vm.toolbarConfig" ng-show="vm.srcLoading==true || vm.hasSources==true"></div>
     
             <div id="svcsource-summary-updating" ng-show="vm.srcLoading==true">
-                <div class="spinner spinner-lg spinner-inline" />
+                <div class="spinner spinner-lg spinner-inline"></div>
                 {{:: 'datasource-summary.loadingDataSources' | translate}}
             </div>
     
@@ -73,10 +73,10 @@
                                         {{item.keng__id}}
                                     </div>
                                     <div ng-if="item.vdb__description">
-                                        <div class="list-group-item-text" ng-if="item.vdb__description.length > 100">
+                                        <div id="svcsource-summary-results-description-label" class="list-group-item-text" ng-if="item.vdb__description.length > 100">
                                             {{item.vdb__description | limitTo : 100 : 0}} ...
                                         </div>
-                                        <div class="list-group-item-text" ng-if="item.vdb__description.length <= 100">
+                                        <div id="svcsource-summary-results-description-label" class="list-group-item-text" ng-if="item.vdb__description.length <= 100">
                                             {{item.vdb__description}}
                                         </div>
                                     </div>

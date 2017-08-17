@@ -358,7 +358,7 @@
         "actionTitleNew" : "Create a Data Source",
         "actionTitleRefresh" : "Refresh the Table",
         "confirmDeleteMsg" : "Are you sure you want to delete data source '{{sourceName}}'?",
-        "confirmDeleteDataservicesAffectedMsg" : "The following Data Service(s) utilize this source:<br/>[{{dsList}}]<br/>If you delete data source '{{sourceName}}', the data service(s) will not longer be editable.<br/><br/>Are you sure you want to delete '{{sourceName}}'?",
+        "confirmDeleteDataservicesAffectedMsg" : "The following Data Service(s) utilize this source:<br/>[{{dsList}}]<br/>If you delete data source '{{sourceName}}', the data service(s) will no longer be editable.<br/><br/>Are you sure you want to delete '{{sourceName}}'?",
         "gettingDdlMsg" : "Fetching DDL...",
         "getDdlFailedMsg" : "Failed to get the DDL.",
         "removeLocalSourceFailedMsg" : "Failed to remove the local ServiceSource.",
@@ -386,6 +386,7 @@
         "sourceCreateFailedMsg" : "Failed to create the data source.",
         "sourceUpdateFailedMsg" : "Failed to update the data source.",
         "sourceDeployFailedMsg" : "Failed to deploy the data source.",
+        "sourceDeploymentInProgress" : "Source deployment in progress",
         "sourceModelCreateFailedMsg" : "Failed to create the data source model.",
         "sourceModelConnectionCreateFailedMsg" : "Failed to create the source model connection.",
         "sourceModelConnectionUpdateFailedMsg" : "Failed to update the source model connection.",
@@ -405,12 +406,90 @@
 
     "jdbcFilterOptionsStep" : {
         "stepTitle" : "Define Filtering",
-        "clickFinishCreateInstructionMsg" : "Click on catalog/schema and enter a table filter, then click 'Finish' to create the data source.",
-        "clickFinishEditInstructionMsg" : "Click on catalog/schema and enter a table filter, then click 'Finish' to update the data source.",
+        "clickFinishCreateInstructionMsg" : "Click on catalog/schema, then enter a table filter to display one or more tables. Click 'Finish' to create the data source.",
+        "clickFinishEditInstructionMsg" : "Click on catalog/schema, then enter a table filter to display one or more tables. Click 'Finish' to update the data source.",
         "help" : {
             "dataSources" : "The available active data sources which can be used in a data service",
             "selectedTables" : "'<p>The selected tables for your data service</p>Clicking a data source table at left will add it to the selected tables<p></p><p>Clicking a selected table x will remove it</p>'"
         }
+    },
+
+    "connection-summary" : {
+        "confirmDeleteTitle" : "Confirm Delete",
+        "loadingConnections" : "Loading connections",
+        "welcomeMsg" : "Currently, no connections exist. In order to create a data source you must create a connection.",
+        "noConnectionsExist" : "No Connections Found",
+        "noConnectionsInstructionsMsg" : "To get started, click <strong>New Connection</strong> below to create your first connection.",
+        "connectionSchema" : "Connection Schema",
+        "jndiDescription" : "The Java Naming and Directory Interface (JDNI) identifier of this connection",
+        "driverNameLabel" : "Driver",
+        "ownerLabel" : "Owner"
+    },
+
+    "connectionSummaryController" : {
+        "actionNameCopy" : "@:shared.Copy",
+        "actionNameDelete" : "@:shared.Delete",
+        "actionNameEdit" : "@:shared.Edit",
+        "actionNameExport" : "@:shared.Download",
+        "actionNameImport" : "@:shared.Import",
+        "actionNameNew" : "@:shared.New",
+        "actionNameRefresh" : "Refresh",
+        "actionTitleCopy" : "Copy the Connection",
+        "actionTitleDelete" : "Delete the Connection",
+        "actionTitleEdit" : "Edit the Connection",
+        "actionTitleExport" : "Export the Connection",
+        "actionTitleImport" : "Import a Connection",
+        "actionTitleNew" : "Create a Connection",
+        "actionTitleRefresh" : "Refresh the Table",
+        "confirmDeleteMsg" : "Are you sure you want to delete the connection '{{connectionName}}'?",
+        "confirmDeleteDataservicesAffectedMsg" : "The following Data Service(s) utilize this connection:<br/>[{{dsList}}]<br/>If you delete the connection '{{connecitonName}}', the data service(s) will no longer be editable.<br/><br/>Are you sure you want to delete '{{connectionName}}'?",
+        "removeLocalConnectionFailedMsg" : "The local connection was not removed. It may not have existed..",
+        "removeServerDeploymentFailedMsg" : "The deployed connection was not removed. It may not have existed."
+    },
+
+    "connectionEditWizard" : {
+        "chooseConnectionType" : "-- choose type --",
+        "connectionCreateFailedMsg" : "Failed to create the connection.",
+        "connectionDeployFailedMsg" : "Failed to deploy the connection.",
+        "connectionUpdateFailedMsg" : "Failed to update the connection.",
+        "createConnectionFailedMsg" : "Failed to create the connection",
+        "enterJndiInstructionMsg" : "Enter the jndi identifier for the connection",
+        "enterNameInstructionMsg" : "Enter the connection name",
+        "help" : {
+
+        },
+        "initializingWizard" : "Initializing connection wizard",
+        "invalidJndiInstructionMsg" : "The jndi identifier is invalid",
+        "invalidNameInstructionMsg" : "Connection name has invalid characters or already exists",
+        "jndi" : "JNDI Identifier",
+        "newDriver" : "New Driver",
+        "newDriverControlDescription" : "Choose the JDBC Type4 driver jar to import from your file system and deploy to Teiid",
+        "newDriverControlTitle" : "Import and Deploy Driver",
+        "noTemplateInstructionMsg" : "A driver type needs to be selected",
+        "requiredProperty" : "The required property '{{property}}' needs a value",
+        "step1Title" : "General Connection Properties",
+        "step2Title" : "Specific Connection Properties",
+        "step3Title" : "Create the Connection",
+        "updateConnectionFailedMsg" : "Failed to update the connection",
+        "deploymentInProgress" : "The connection is being uploaded and deployed"
+    },
+
+    "connectionWizardService" : {
+        "jndiComponentRequired" : "A unique identifier must follow the java:/ protocol prefix.",
+        "jndiRequired" : "A jndi identifier is required.",
+        "jndiPrefixRequired" : "The jndi identifier must start with 'java:/'",
+        "jndiValidating" : "The jndi identifier is being validated...",
+        "nameRequired" : "@:shared.nameRequired",
+        "nameValidating" : "The connection name is being validated...",
+        "templateGetFailedMsg" : "Failed to get available driver connection templates from teiid: {{error}}",
+        "validateConnectionNameError" : "Error validating connection name.",
+        "validateJndiError" : "Error validating jndi identifier.",
+        "createConnectionSuccess" : "The connection was created successfully.",
+        "updateConnectionSuccess" : "The connection was updated successfully.",
+        "createConnectionFailure" : "The connection failed to be created.",
+        "updateConnectionFailure" : "The connection failed to be updated.",
+        "deployConnectionSuccess" : "The connection was deployed successfully.",
+        "deployConnectionFailure" : "The connection failed to be deployed."
     },
 
     "editWizardService" : {
@@ -554,6 +633,8 @@
     "RepositoryRestService" : {
         "emptyDataServiceName" : "The data service name cannot be empty.",
         "emptyDataSourceName" : "The data source name cannot be empty.",
+        "emptyConnectionName" : "The connection name cannot be empty.",
+        "emptyValue" : "The value being validated cannot be empty.",
         "errorWithUrl" : "{{error}} URL: {{url}}",
         "unknownError" : "Unknown Error.",
         "unknownErrorWithUrl" : "Unknown Error. Make sure URL does not have slashes or backslashes. URL: {{url}}"

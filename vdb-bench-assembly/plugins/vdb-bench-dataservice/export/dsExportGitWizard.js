@@ -154,6 +154,9 @@
         vm.repoTargetUrl = function() {
             // git path propery (ends with .git)
             var gitUrl = vm.repo.parameters['repo-path-property'];
+            if(!angular.isDefined(gitUrl)) {
+                gitUrl = "";
+            }
 
             // if path ends with .git, it is removed.  Then /tree/ is appended.
             var baseUrl = gitUrl.replace(".git","").concat("/tree/");

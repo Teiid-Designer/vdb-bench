@@ -57,6 +57,15 @@
 
 		<license.folder>docs/licenses-datavirt-vdb-bench</license.folder>
 	</properties>
+	<modules>
+		<module>vdb-bench-assembly</module>
+		<module>vdb-bench-war</module>
+		<module>vdb-bench-doc</module>
+    <!--
+      Disabled as not required for product
+		  <module>vdb-bench-ear</module>
+    -->
+	</modules>
 
 	<dependencyManagement>
 		<dependencies>
