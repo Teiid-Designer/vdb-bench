@@ -159,6 +159,7 @@
         "columnPlaceholder" : "column",
         "Columns" : "Columns",
         "conditionPlaceholder" : "condition",
+        "dataServiceDeploymentFailedMessage" : "The Data Service failed to activate.  Please correct the problem and retry",
         "deployingDataService" : "Deploying data service",
         "DescendingChoice" : "Desc",
         "endpointNotAvailableMsg" : "The endpoint is not available",
