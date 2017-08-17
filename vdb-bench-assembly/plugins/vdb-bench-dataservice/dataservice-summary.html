@@ -11,7 +11,15 @@
                 </button>
                 <h4 class="modal-title" id="confirmDeleteModalLabel" translate="dataservice-summary.confirmDeleteTitle"></h4>
               </div>
-              <div class="modal-body">{{vm.confirmDeleteMsg}}</div>
+              <div class="modal-body">
+                <div class="col-md-12">{{vm.confirmDeleteMsg}}</div>
+                <div class="col-md-1"></div>
+                <div class="col-md-11 checkbox">
+                  <label>
+                    <input type="checkbox" ng-model="vm.deleteServerVdb"> {{'dataservice-summary.deleteServerVdbCheckbox' | translate}}
+                  </label>
+                </div>
+              </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" translate="shared.Cancel"></button>
                 <button type="button" class="btn btn-primary" ng-click="vm.deleteSelectedDataService()" translate="shared.Delete"></button>
