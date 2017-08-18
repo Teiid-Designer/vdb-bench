@@ -31,9 +31,15 @@
                             <div id="vdb-relogin-clear-session" class="col-xs-8 col-sm-offset-2 col-sm-6 col-md-offset-2 col-md-6">
                                 <a ng-click="vm.deleteSession()">{{'reloginPage.deleteSession1' | translate}}</a>{{'reloginPage.deleteSession2' | translate}}
                             </div>
-                            <div class="col-xs-4 col-sm-4 col-md-4 submit">
+                            <div class="col-xs-4 col-sm-4 col-md-4 submit" ng-show="!vm.authorizing">
                                 <button type="submit" class="btn btn-primary btn-lg" tabindex="4">{{'shared.Login' | translate}}</button>
                             </div>
+				            <div class = "col-xs-4 col-sm-4 col-md-4"
+				                 id = "login-in-progress"
+				                 ng-show = "vm.authorizing">
+				                <div class = "spinner spinner-lg spinner-inline spinner-inverse" />
+				                {{ 'loginPage.authorizingMsg' | translate }}
+					        </div>
                             <div id="vdb-login-error" class="col-xs-6 col-sm-offset-6 col-sm-6 col-md-offset-6 col-md-6">
                                 <p ng-bind-html="vm.loginError"></p>
                             </div>

@@ -643,6 +643,7 @@
     },
 
     "loginPage" : {
+        "authorizingMsg" : "Authorizing...",
         "rememberCredentials" : "Remember Credentials",
         "welcomeTitle" : "Welcome to Data Services Builder",
         "welcomeDescription" : "A tool for creating, managing and deploying simple data services."
