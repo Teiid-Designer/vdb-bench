@@ -1394,7 +1394,12 @@
                                 return;
                             } else if (vdb.failed) {
                                 if (failCallback) {
-                                    failCallback("Failed");
+                                    // If specific errors are available, use the first one
+                                    var msg = "Please consult the server log.";
+                                    if(vdb.errors && vdb.errors.length>0) {
+                                        msg = vdb.errors[0];
+                                    }
+                                    failCallback(msg);
                                 }
                                 $interval.cancel(promise);
                             }
