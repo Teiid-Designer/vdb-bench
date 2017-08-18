@@ -36,9 +36,15 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="col-xs-4 col-sm-4 col-md-4 submit">
+                            <div class="col-xs-4 col-sm-4 col-md-4 submit" ng-show="!vm.authorizing">
                                 <button type="submit" class="btn btn-primary btn-lg" tabindex="4">{{'shared.Login' | translate}}</button>
                             </div>
+				            <div class = "col-xs-4 col-sm-4 col-md-4"
+				                 id = "login-in-progress"
+				                 ng-show = "vm.authorizing">
+				                <div class = "spinner spinner-lg spinner-inline spinner-inverse" />
+				                {{ 'loginPage.authorizingMsg' | translate }}
+					        </div>
                             <div id="vdb-login-forgotten-userpwd" class="col-xs-12 col-sm-offset-2 col-sm-10 col-md-offset-2 col-md-10">
                                 Forgot <a ng-click="vm.showForgottenUserPwd()">username</a> or <a ng-click="vm.showForgottenUserPwd()">password</a>?
                             </div>
