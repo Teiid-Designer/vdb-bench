@@ -97,7 +97,7 @@
                         var contentType = fileType === "zip" ? 'application/zip' : 'text/plain;charset=utf-8';                        
                         var dataBlob = b64toBlob(enc, contentType);
                         
-                        var fileExt = ( fileType == "-vdb.xml" ) ? fileType : SYNTAX.DOT + fileType;
+                        var fileExt = ( fileType == "-vdb.xml" || fileType == "-connection.xml" ) ? fileType : SYNTAX.DOT + fileType;
 
                         FileSaver.saveAs(dataBlob, name + fileExt);
                     },

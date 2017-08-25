@@ -386,6 +386,7 @@ var App;
         vm.loginError = '';
         vm.userPwdForgotten = false;
         vm.showRepoConfig = false;
+        vm.authorizing = false;
 
         vm.entity = {
             username: '',
@@ -401,12 +402,14 @@ var App;
         vm.branding = branding;
 
         var onLoginSuccessful = function() {
+            vm.authorizing = false;
             vm.loginError = '';
             $location.path(AuthService.lastLocation());
             $apply($rootScope);
         };
 
         var onLoginFailure = function() {
+            vm.authorizing = false;
             vm.loginError = "Access Failure.<br>Either the username/password are incorrect or the repository cannot be contacted.";
         };
 
@@ -415,7 +418,13 @@ var App;
                 vm.loginError = 'A user name is required';
             }
 
-            AuthService.login(vm.entity.username, vm.entity.password, vm.rememberMe, onLoginSuccessful, onLoginFailure);
+            vm.authorizing = true;
+
+            try {
+                AuthService.login(vm.entity.username, vm.entity.password, vm.rememberMe, onLoginSuccessful, onLoginFailure);
+        	} finally {
+        		vm.authorizing = false;
+        	}
         };
 
         vm.showForgottenUserPwd = function() {
@@ -432,6 +441,7 @@ var App;
     function ReLoginController ($rootScope, $location, $scope, branding, CredentialService, AuthService) {
         var vm = this;
 
+        vm.authorizing = false;
         vm.loginError = '';
         vm.entity = {
             username: '',
@@ -442,17 +452,25 @@ var App;
         vm.entity.username = session.user;
 
         var onLoginSuccessful = function() {
+            vm.authorizing = false;
             vm.loginError = '';
             $location.path(AuthService.lastLocation());
             $apply($rootScope);
         };
 
         var onLoginFailure = function() {
+            vm.authorizing = false;
             vm.loginError = "Access Failure.<br>The username/password are incorrect.";
         };
 
         vm.doLogin = function () {
-            AuthService.login(vm.entity.username, vm.entity.password, CredentialService.isRemembered(), onLoginSuccessful, onLoginFailure);
+            vm.authorizing = true;
+            
+            try {
+            	AuthService.login(vm.entity.username, vm.entity.password, CredentialService.isRemembered(), onLoginSuccessful, onLoginFailure);
+            } finally {
+                vm.authorizing = false;
+            }
         };
 
         vm.deleteSession = function() {

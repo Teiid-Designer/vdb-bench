@@ -55,76 +55,104 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-md-4">
-                    <h3><strong translate="dataserviceEditWizard.dataSources" />
-                        <label class="help-label">
-                            <span class="fa fa-info-circle" uib-tooltip="{{ 'dataserviceEditWizard.help.dataSources' | translate }}"
-                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
-                        </label>
-                    </h3>
-                </div>
-                <div class="col-md-6">
-                    <h3><strong translate="dataserviceEditWizard.selectedTables" />
-                        <label class="help-label">
-                            <span class="fa fa-info-circle" uib-tooltip-html="{{ 'dataserviceEditWizard.help.selectedTables' | translate }}"
-                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
-                        </label>
-                    </h3>
-                </div>
-                <div class="col-md-2">
-                </div>
-                <!-- Source-Table Tree Control -->
-                <div class="tree-control-container col-md-4">
-                    <!-- Spinner when loading -->
-                    <div ng-show="vm.treeLoading==true">
-                        <div class="spinner spinner-lg" />
-                    </div>
-                    <!-- No Content Message -->
-                    <div ng-show="vm.treeLoading==false && vm.treedata.length == 0 && !vm.hasTreeFetchError">
-                        <h5 style="color:red" translate="dataserviceEditWizard.noTreeContent"></h5>
-                    </div>
-                    <!-- Fetch Content Error Message -->
-                    <div ng-show="vm.treeLoading==false && vm.hasTreeFetchError">
-                        <h4>{{vm.treeFetchErrorMsg}}</h4>
-                    </div>
-                    <div class="tree-control-inner-container" ng-show="vm.treeLoading==false">
-                        <!-- tree control for catalog and schema -->
-                        <treecontrol class="tree-light tree-control-results" 
-                             tree-model="vm.treedata" 
-                             selected-node="vm.initialTreeNodeSelection" 
-                             on-selection="vm.treeSelectionChanged(node,selected,$parentNode)" 
-                             expanded-nodes="vm.initialTreeExpandedNodes" 
-                             on-node-toggle="vm.treeExpansionChanged(node,expanded)">
-                             <span ng-switch="" on="node.type">
-                                 <span ng-switch-when="source" class="fa fa-database" aria-hidden="true"></span>
-                                 <span ng-switch-when="table" class="fa fa-table" aria-hidden="true"></span>
-                                 <span ng-switch-when="loading" class="spinner spinner-lg" aria-hidden="true"></span>
-                             </span>
-                            {{node.name}}
-                        </treecontrol>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="{{vm.table1Style}}">
-                        <div class="col-md-1 pull-right">
-                            <button id="btn-remove-table1-selection" class="btn btn-xs pficon pficon-close" ng-click="vm.removeTable1Selection()"></button>
+                <div class = "row">
+	                <div class="col-md-5 dsb-wizard-sources-container">
+	                    <h3><strong translate="dataserviceEditWizard.dataSources" />
+	                        <label class="help-label">
+	                            <span class="fa fa-info-circle" uib-tooltip="{{ 'dataserviceEditWizard.help.dataSources' | translate }}"
+	                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+	                        </label>
+	                    </h3>
+		                <!-- Source-Table Tree Control -->
+		                <div class="tree-control-container">
+		                    <!-- Spinner when loading -->
+		                    <div ng-show="vm.treeLoading==true">
+		                        <div class="spinner spinner-lg" />
+		                    </div>
+		                    <!-- No Content Message -->
+		                    <div ng-show="vm.treeLoading==false && vm.treedata.length == 0 && !vm.hasTreeFetchError">
+		                        <h5 style="color:red" translate="dataserviceEditWizard.noTreeContent"></h5>
+		                    </div>
+		                    <!-- Fetch Content Error Message -->
+		                    <div ng-show="vm.treeLoading==false && vm.hasTreeFetchError">
+		                        <h4>{{vm.treeFetchErrorMsg}}</h4>
+		                    </div>
+		                    <div class="tree-control-inner-container" ng-show="vm.treeLoading==false">
+		                        <!-- tree control for catalog and schema -->
+		                        <treecontrol class="tree-light tree-control-results" 
+		                             tree-model="vm.treedata" 
+		                             selected-node="vm.initialTreeNodeSelection" 
+		                             on-selection="vm.treeSelectionChanged(node,selected,$parentNode)" 
+		                             expanded-nodes="vm.initialTreeExpandedNodes" 
+		                             on-node-toggle="vm.treeExpansionChanged(node,expanded)">
+		                             <span ng-switch="" on="node.type">
+		                                 <span ng-switch-when="source" class="fa fa-database" aria-hidden="true"></span>
+		                                 <span ng-switch-when="table" class="fa fa-table" aria-hidden="true"></span>
+		                                 <span ng-switch-when="loading" class="spinner spinner-lg" aria-hidden="true"></span>
+		                             </span>
+		                            {{node.name}}
+		                        </treecontrol>
+		                    </div>
+		                </div>
+	                </div>
+	                <div class="col-md-7 dsb-wizard-sources-container">
+	                    <h3><strong translate="dataserviceEditWizard.selectedTables" />
+	                        <label class="help-label">
+	                            <span class="fa fa-info-circle" uib-tooltip-html="{{:: 'dataserviceEditWizard.help.selectedTables' | translate }}"
+	                                  tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+	                        </label>
+	                    </h3>
+		                
+		                <!-- Warning message when the data sources are updatable -->
+                        <div class = "row toast-pf alert alert-warning"
+                             ng-show = "!vm.readOnlyAccess">
+                            <span class = "pficon pficon-warning-triangle-o" />
+                            <span translate = "editWizardService.dataSourcesUpdatableMsg" />
                         </div>
-                        <h4><strong>{{vm.selectedSources[0]}}</strong></h4>
-                        <h3>&nbsp;&nbsp;{{vm.selectedTables[0]}}</h4>
+	
+		                <div class = "col-md-8">
+		                    <div class="{{vm.table1Style}}">
+		                        <div class="col-md-1 pull-right">
+		                            <button id="btn-remove-table1-selection" class="btn btn-xs pficon pficon-close" ng-click="vm.removeTable1Selection()"></button>
+		                        </div>
+		                        <h4><strong>{{vm.selectedSources[0]}}</strong></h4>
+		                        <h3>&nbsp;&nbsp;{{vm.selectedTables[0]}}</h4>
+		                    </div>
+		                    <div class="{{vm.table2Style}}">
+		                        <div class="col-md-1 pull-right">
+		                            <button id="btn-remove-table2-selection" class="btn btn-xs pficon pficon-close" ng-click="vm.removeTable2Selection()"></button>
+		                        </div>
+		                        <h4><strong>{{vm.selectedSources[1]}}</strong></h4>
+		                        <h3>&nbsp;&nbsp;{{vm.selectedTables[1]}}</h4>
+		                    </div>
+		                </div>
+      
+	                    <div class = "col-md-4">
+		                    <div class = "checkbox checkbox-primary"
+		                         ng-show = "vm.selectedTables != 0">
+			                    <input type = "checkbox"
+			                           ng-model = "vm.readOnlyAccess"
+			                           ng-init = "vm.readOnlyAccess">
+		                        <h4 style = "display:inline">
+		                            <strong translate = "editWizardService.ReadOnlyAccess" />
+	                                <label class = "help-label"
+	                                       style = "padding-left: 5px;">
+	                                    <span class = "fa fa-info-circle"
+	                                          uib-tooltip = "{{ 'editWizardService.help.readOnlyAccess' | translate }}"
+	                                          tooltip-class = "custom-tooltip"
+	                                          tooltip-append-to-body = "true">
+	                                    </span>
+	                                </label>
+		                        </h4>
+		                    </div>
+		                    <div class = "checkbox checkbox-primary" ng-show="vm.selectedTables.length==1">
+		                        <input type="checkbox" ng-model="vm.includeAllColumns" ng-true-value=true ng-false-value=false ng-change="vm.includeAllColumnsCheckboxChanged()">
+		                        <h4 style="display:inline">
+		                            <strong translate = "dataserviceEditWizard.IncludeAllColumns" />
+		                        </h4>
+		                    </div>
+		                </div>
                     </div>
-                    <div class="{{vm.table2Style}}">
-                        <div class="col-md-1 pull-right">
-                            <button id="btn-remove-table2-selection" class="btn btn-xs pficon pficon-close" ng-click="vm.removeTable2Selection()"></button>
-                        </div>
-                        <h4><strong>{{vm.selectedSources[1]}}</strong></h4>
-                        <h3>&nbsp;&nbsp;{{vm.selectedTables[1]}}</h4>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <form ng-show="vm.selectedTables.length==1">
-                        <input type="checkbox" ng-model="vm.includeAllColumns" ng-true-value=true ng-false-value=false ng-change="vm.includeAllColumnsCheckboxChanged()">
-                        <h4 style="display:inline"><strong>Include All Columns</strong></h4><h4>
-                    </form>
                 </div>
             </div>
 

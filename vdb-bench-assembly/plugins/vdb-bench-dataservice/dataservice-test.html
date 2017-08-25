@@ -1,15 +1,25 @@
 <div id="outer" class="outer-wrapper">
 	<div id="dataservice-test-container" class="container-fluid" ng-controller="DSTestController as vm">
 
-	    <!--
-	      -- Deployment
-	      -->
-	    <!-- Show spinner while deploying -->
-	    <div id="deployment-spinner" ng-show="vm.dsDeploymentInProgress==true" class="col-md-10 row">
+        <!--
+          -- Deployment
+          -->
+        <!-- Show spinner while deploying -->
+        <div id="deployment-spinner" ng-show="vm.dsDeploymentInProgress==true" class="col-md-10 row">
             <div class="spinner spinner-lg spinner-inline" />
             {{:: 'dataservice-test.deployingDataService' | translate}}
-	    </div>
-	    
+        </div>
+        
+        <!-- Deployment failure -->
+        <div id="deployment-failure" ng-show="vm.dsDeploymentInProgress==false && vm.dsDeploymentSuccess==false">
+            <!-- Error message when the vdb fails to activate -->
+            <div class = "row toast-pf alert alert-danger">
+                <span class = "pficon pficon-error-circle-o" />
+                <span translate = "dataservice-test.dataServiceDeploymentFailedMessage" />
+            </div>
+            <h4><strong>ERROR : <em>{{vm.dsDeploymentMessage}}</em></strong></h4>
+        </div>
+        
 
 	    <div id="deployed-test-search-tabs" ng-show="vm.dsDeploymentInProgress==false && vm.dsDeploymentSuccess==true">
 	        <uib-tabset>

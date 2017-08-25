@@ -39,6 +39,9 @@
         wiz.viewDdl = "";
         wiz.criteriaPredicates = [DEFAULT_PREDICATE];
 
+        wiz.readOnlyAccessOriginal = true;
+        wiz.readOnlyAccess = wiz.readOnlyAccessOriginal;
+
         /*
          * Service instance to be returned
          */
@@ -62,9 +65,33 @@
                 wiz.serviceName = dataservice.keng__id;
                 wiz.serviceDescription = dataservice.tko__description;
                 initServiceSelections(dataservice.keng__id, pageId);
+                initDataRole( dataservice.keng__id );
             }
         };
 
+        function initDataRole( dataServiceName ) {
+            try {
+                RepoRestService.getDefaultReadOnlyDataRole( dataServiceName ).then(
+                    function( dataRole ) {
+                        wiz.readOnlyAccessOriginal = true;
+                        wiz.readOnlyAccess = wiz.readOnlyAccessOriginal;
+                    },
+                    function( response ) {
+                    	if ( response.status === 404 ) {
+                            wiz.readOnlyAccessOriginal = false;
+                            wiz.readOnlyAccess = wiz.readOnlyAccessOriginal;
+                    	} else {
+                    		var errorMsg = $translate.instant( 'editWizardService.initTableSelectionsFailedMsg' );
+                    		throw RepoRestService.newRestException( errorMsg + "\n" + RepoRestService.responseMessage( response ) );
+                        }
+                    }
+                );
+            } catch ( error ) {
+                var errMsg = $translate.instant( 'editWizardService.initTableSelectionsFailedMsg' );
+                throw RepoRestService.newRestException( errMsg + "\n" + error );
+            }
+        }
+        
         /*
          * Reset user selections
          */
@@ -86,6 +113,9 @@
 
             // reset service name
             service.setServiceName( "" );
+
+            wiz.readOnlyAccessOriginal = true;
+            wiz.readOnlyAccess = wiz.readOnlyAccessOriginal;
         }
 
         /*
@@ -112,6 +142,20 @@
          */
         service.isEditing = function() {
             return wiz.isEdit;
+        };
+
+        /*
+         * Indicates if the data sources can only be accessed in a read-only mode.
+         */
+        service.isReadOnlyAccess = function() {
+            return wiz.readOnlyAccess;
+        };
+
+        /*
+         * Sets the data source read-only access.
+         */
+        service.setReadOnlyAccess = function( readOnly ) {
+            wiz.readOnlyAccess = readOnly;
         };
 
         /*
@@ -250,6 +294,10 @@
             wiz.src2AvailableColumns = [];
             // Reset the criteria
             resetPredicates();
+            
+            wiz.readOnlyAccessOriginal = true;
+            wiz.readOnlyAccess = wiz.readOnlyAccessOriginal;
+
             // Broadcast table change
             $rootScope.$broadcast("editWizardTablesChanged");
         };
@@ -540,6 +588,63 @@
             }
             return true;
         };
+
+        /*
+         * 'true' if wizard selections are complete.  'complete' means the selections are defined enough to generate valid DDL.
+         */
+        service.selectionsComplete = function( ) {
+            // Service Name must be defined
+            if(wiz.serviceName.length===0) return false;
+
+            // Must have at least one table selection
+            if(!wiz.sourceTables || wiz.sourceTables.length===0) return false;
+
+            // One source, must have at least one selected Column
+            if(wiz.sourceTables.length===1) {
+                if (!wiz.includeAllSource1Columns) {
+                    if(!hasSrc1ColumnSelection()) {
+                        return false;
+                    }
+                } 
+            // If two source table selections, must be 
+            //   - columns selected from source 1 or source 2
+            //   - a completed join criteria
+            } else {
+                if( ( !hasSrc1ColumnSelection() && !hasSrc2ColumnSelection() ) || !service.criteriaComplete() ) {
+                    return false;
+                }
+            }
+
+            return true;
+        };
+
+        /**
+         * Determine if at least one src1 column is selected
+         */
+        function hasSrc1ColumnSelection() {
+            var hasOne = false;
+            for(var i=0; i<wiz.src1AvailableColumns.length; i++) {
+                if(wiz.src1AvailableColumns[i].selected) {
+                    hasOne = true;
+                    break;
+                }
+            }
+            return hasOne;
+        }
+
+        /**
+         * Determine if at least one src1 column is selected
+         */
+        function hasSrc2ColumnSelection() {
+            var hasOne = false;
+            for(var i=0; i<wiz.src2AvailableColumns.length; i++) {
+                if(wiz.src2AvailableColumns[i].selected) {
+                    hasOne = true;
+                    break;
+                }
+            }
+            return hasOne;
+        }
 
         /**
          * Sets the predicate criteria based on the currently selected tables.

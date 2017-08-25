@@ -98,6 +98,7 @@
             MODEL: '/Model',
             MODELS: '/Models',
             MODEL_SOURCES: '/VdbModelSources',
+            DATA_ROLES: '/VdbDataRoles',
             SAVE_SEARCH: 'saveSearch',
             SAVED_SEARCHES: '/savedSearches',
             SEARCH_CONTAINS: 'contains',
@@ -181,6 +182,7 @@
             ID: 'keng__id',
             DRIVER: 'dv__driverName',
             JNDI: 'dv__jndiName',
+            TYPE: 'dv__type',
             PROPERTIES: 'keng__properties',
             JNDI_PREFIX: 'java:/',
             TEMPLATE_JDBC: 'isJdbc'
